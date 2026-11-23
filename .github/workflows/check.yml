@@ -1,0 +1,20 @@
+name: check
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly link check, Mondays
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Style and structure
+        run: python3 tools/check_content.py
+      - name: Links
+        if: github.event_name == 'schedule'
+        run: python3 tools/check_content.py --links
+      - name: Site builds
+        run: python3 site/build.py

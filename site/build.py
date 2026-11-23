@@ -33,9 +33,9 @@ def page(title, body, depth=0, here=""):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap">
 <link rel="stylesheet" href="{up}style.css"></head>
 <body><header class="top"><div class="bar"><a class="brand" href="{up}index.html">ML Compilers From Zero</a>
-<nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a></nav></div></header>
+<nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a><a href="{up}about.html"{' class="on"' if here=='about' else ''}>About</a></nav></div></header>
 <main class="wrap">{body}</main>
-<footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU.</footer>
+<footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU. <a href="{up}about.html">How this was made</a> · <a href="https://github.com/jsivark/ml-compilers-course/issues">Report a mistake</a></footer>
 </body></html>"""
 
 def link(t, u):
@@ -170,6 +170,7 @@ def assignments():
   md = open(os.path.join(ROOT, "README.md")).read()
   md = md.split("\n", 1)[1]  # drop H1
   intro = ('<h1>Assignments</h1><p class="lede">The compiler you build across Part III. Get the starter repo, which has the specs, test suites and a test runner:</p>'
+           '<p><b>The tests start at Module 18.</b> Modules 0–17 rely on the labs and test suites linked from each module. Test folders are numbered by the real course\'s weeks: Module 18 is <code>tests/week01</code> (<code>python3 run_tests.py 1</code>), Module 19 is <code>week02</code>, and so on through Module 24 (<code>week07</code>). Modules 25–28 are graded by measured milestones.</p>'
            '<pre>git clone https://github.com/jsivark/ml-compilers-course.git\ncd ml-compilers-course\npython3 run_tests.py 1   # runs ./compile on tests/week01</pre>')
   return page("Assignments · ML Compilers From Zero", intro + md_to_html(md), 0, "assign")
 
@@ -186,7 +187,7 @@ def main():
   w("index.html", index(mods))
   w("assignments.html", assignments())
   w("portfolio.html", portfolio(mods))
-  for name, here, title in (("projects.html", "projects", "Final projects"), ("library.html", "library", "Library")):
+  for name, here, title in (("projects.html", "projects", "Final projects"), ("library.html", "library", "Library"), ("about.html", "about", "About")):
     w(name, page(f"{title} · ML Compilers From Zero", static(name), 0, here))
   for i, m in mods.items(): w(f"modules/{i:02d}.html", module_page(m, mods))
   print(f"built {len(mods)} modules into {OUT}")

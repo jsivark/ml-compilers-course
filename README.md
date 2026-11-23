@@ -1,10 +1,34 @@
-# ML Compilers From Zero: starter repo
+# ML Compilers From Zero
 
-The companion repo for the course site. It has the compiler assignments for Part III, the test suites, and a test runner.
+**Course website: https://jsivark.github.io/ml-compilers-course/**
+
+A free, self-paced path from intermediate Python and basic C to building your own machine-learning compiler, modelled on CMU 10-411 *Compilers for Machine Learning*. The website has all 40 modules with step-by-step instructions and portfolio projects. This repo holds the website's source and the compiler assignments with their tests.
+
+## When the tests apply
+
+**The automated tests start at Module 18.** Modules 0–17 (orientation, foundations and bridge) have no tests here. They use the labs, puzzle sets and test suites linked from each module page, such as the CS:APP labs, Tensor Puzzles and Nora Sandler's C compiler tests.
+
+From Module 18 on, you build one compiler, and the tests in this repo check it. The test folders are numbered by the real course's weeks:
+
+| Course module | Test folder | Run with |
+|---|---|---|
+| 18 | `tests/week01` | `python3 run_tests.py 1` |
+| 19 | `tests/week02` | `python3 run_tests.py 2` |
+| 20 | `tests/week03` | `python3 run_tests.py 3` |
+| 21 | `tests/week04` | `python3 run_tests.py 4` |
+| 22 | `tests/week05` | `python3 run_tests.py 5` |
+| 23 | `tests/week06` | `python3 run_tests.py 6` |
+| 24 | `tests/week07` | `python3 run_tests.py 7` |
+| 25–28 | none | graded by measured milestones (see each module page) |
+
+Module 18 has a full suite of 65 tests, checked against a reference implementation. Modules 19–24 have starter sets whose answers were worked out by hand. See the [About page](https://jsivark.github.io/ml-compilers-course/about.html) for what has and hasn't been checked.
 
 ```
 run_tests.py        run a week's tests against ./compile (or any command)
 tests/weekNN/       .uir test programs; the filename prefix gives the expected outcome
+curriculum/         the course content (one JSON file per part)
+site/               the website generator; python3 site/build.py writes docs/
+tools/              content and link checker
 ```
 
 ## The contract
@@ -26,7 +50,7 @@ The expected outcome comes from the filename prefix:
 | `rejected_` | `REJECTED` (invalid before it runs) |
 | `overbudget_` | `OVERBUDGET` |
 
-To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). Every week must also keep passing all earlier weeks' tests.
+To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number is the test folder (the course week), not the module number: Module 18 is `1`. Every week must also keep passing all earlier weeks' tests.
 
 **Rules, the same as the real course.** No BLAS/cuBLAS, PyTorch, Triton, MLIR or tinygrad inside your compiler. You can use clang, LLVM, the CUDA driver/runtime APIs and cuda-python. Don't let an AI write the compiler for you. Use it to explain things, to debug, and to write tests.
 
