@@ -1,25 +1,6 @@
-<h1>About this course</h1>
-<p class="lede">How the course was made, what has been checked, what hasn't, and how to fix it when it's wrong.</p>
+<h1>About</h1>
+<p class="lede">A free, independent rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, with the background a beginner needs to take it on. It isn't affiliated with CMU.</p>
 
-<h2>What it is</h2>
-<p>An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i> (Spring 2027, George Hotz). The real course's lectures and tests aren't public. This course follows its public <a href="https://10-411.com/">topic list</a>, its <a href="https://10-411.com/assignments/week1.pdf">Week 1 handout</a> and its <a href="https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d">technical syllabus</a>, and adds the background a beginner needs before starting it. It is not affiliated with CMU.</p>
+<p>It follows the course's public <a href="https://10-411.com/">topic list</a> and <a href="https://10-411.com/assignments/week1.pdf">Week 1 handout</a>. It was put together with AI assistance and reviewed by a person working through it. Links are checked weekly.</p>
 
-<h2>How it was made</h2>
-<p>The curriculum was put together with heavy help from an AI assistant (Claude), directed and reviewed by a person who is working through it. We say so plainly because unreviewed AI output is a real problem, and you deserve to know what you're relying on. Here is what we did about it:</p>
-<ul>
-<li><b>Every link is checked by a script</b> (<code>tools/check_content.py --links</code>), and the check runs automatically every week. A few sites refuse automated checkers; those are marked and checked by hand.</li>
-<li><b>Every module was reviewed against its sources.</b> Chapter numbers, lecture titles, problem names and section references were compared with the actual pages. Claims that couldn't be confirmed were rewritten or removed.</li>
-<li><b>The Module 18 tests were checked against a reference implementation</b> written for that purpose. All 65 expected outcomes agree with it.</li>
-<li><b>A style check rejects filler.</b> It fails on boilerplate phrases and on lines repeated across modules.</li>
-</ul>
-
-<h2>Known limitations</h2>
-<ul>
-<li><b>The tests for Modules 19–24 are starter sets.</b> Their expected answers were worked out by hand, and some depend on rules this course chose where the real course hasn't published a spec (marked <i>(convention)</i> on the assignments page). They will grow and be checked against reference implementations over time.</li>
-<li><b>Effort estimates are estimates.</b> They're based on published lab and lecture lengths where those exist. Your pace will differ.</li>
-<li><b>Links rot.</b> The weekly check catches dead links, but a page can move while its URL still works.</li>
-<li><b>Some modules need hardware you may not own.</b> GPU modules need an NVIDIA GPU, and Module 33 needs a Hopper-class GPU (rentable by the hour).</li>
-</ul>
-
-<h2>Found a mistake?</h2>
-<p>Please <a href="https://github.com/jsivark/ml-compilers-course/issues">open an issue</a>. Include the module number, the step, and what's wrong. Pull requests are welcome. Content lives in <code>curriculum/*.json</code>, and <code>python3 site/build.py</code> rebuilds the site.</p>
+<p>Found a mistake? <a href="https://github.com/jsivark/ml-compilers-course/issues">Open an issue</a>.</p>
