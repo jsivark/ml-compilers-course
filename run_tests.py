@@ -8,7 +8,7 @@
 The expected outcome comes from the filename prefix:
   (none) MATCH · mismatch_ MISMATCH · rejected_ REJECTED · overbudget_ OVERBUDGET
 """
-import argparse, glob, os, shlex, subprocess, sys
+import argparse, glob, os, shlex, shutil, subprocess, sys
 
 def expected(path):
   b = os.path.basename(path)
@@ -25,6 +25,11 @@ a = ap.parse_args()
 here = os.path.dirname(os.path.abspath(__file__))
 files = sorted(glob.glob(os.path.join(here, "tests", f"week{a.week:02d}", "*.uir")))
 if not files: sys.exit(f"no tests for week {a.week}")
+cmd = shlex.split(a.compiler)
+if not shutil.which(cmd[0]) and not os.path.isfile(cmd[0]):
+  sys.exit(f"Can't find your compiler: {cmd[0]!r}.\n"
+           "Build an executable ./compile in the repo root (any language; a shell script that runs\n"
+           "`python3 my_compiler.py \"$@\"` is fine), or pass --compiler \"python3 my_compiler.py\".")
 ok = 0
 for f in files:
   rel = os.path.relpath(f)
