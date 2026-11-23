@@ -1,0 +1,9 @@
+%c = extern [2 2] slot=0 dtype=f32
+%i = range 2 slot=0 axis=GLOBAL
+%j = range 2 slot=1 axis=GLOBAL
+%r = range 2 slot=2 axis=LOOP
+%a = index [[1.0 2.0] [3.0 4.0]] %i %r
+%b = index [[5.0 6.0] [7.0 8.0]] %r %j
+%old = load (index (after %c %r) %i %j)
+%k = end (store (index %c %i %j) (add %old (mul %a %b))) %r %j %i
+%t = assert (after %c (call %k)) [[19.0 22.0] [43.0 50.0]]

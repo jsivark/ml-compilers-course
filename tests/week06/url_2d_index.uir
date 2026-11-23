@@ -1,0 +1,2 @@
+%buf = extern [2 2] slot=0 dtype=f32 url=data/x.bin
+%t = assert (load (index %buf 1 0)) 3.0

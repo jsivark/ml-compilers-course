@@ -1,0 +1,4 @@
+%acc = extern [] slot=0 dtype=i32
+%i = range 8 slot=0 axis=LOOP
+%k = end (store %acc (add (load (after %acc %i)) %i)) %i
+%t = assert (load (after %acc (call %k))) 28

@@ -1,0 +1,4 @@
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%a = index %x 0
+%loss = reduce (mul [%a %a] [2.0 3.0]) op=add pop=1
+%t = assert (gradient %loss %x) [5.0 0.0 0.0 0.0]

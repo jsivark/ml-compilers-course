@@ -1,0 +1,6 @@
+# %old does not depend on %i, so it runs once, before the loop
+%acc = extern [] slot=0 dtype=i32
+%i = range 4 slot=0
+%old = load %acc
+%w = store %acc (add %old (add %i 1))
+%t = assert (load (after %acc (end %w %i))) 4

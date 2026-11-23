@@ -1,0 +1,2 @@
+# left to right: (16777216 + 1) + 1 = 16777216 in f32
+%t = assert (reduce [16777216.0 1.0 1.0] op=add pop=1) 16777216.0

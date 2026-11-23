@@ -1,0 +1,2 @@
+# in f32 (unlike f64) 0.1 + 0.2 rounds to the same value as 0.3
+%t = assert (add 0.1 0.2) 0.3

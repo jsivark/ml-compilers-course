@@ -1,0 +1,3 @@
+# y[i] = x[i-1] + x[i] + x[i+1], zero padded
+%x = pad [1 2 3] [[1 1]]
+%t = assert (add (add (shrink %x [[0 3]]) (shrink %x [[1 4]])) (shrink %x [[2 5]])) [3 6 5]

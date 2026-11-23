@@ -1,0 +1,3 @@
+# loss costs 600000; gradient costs 600000 more
+%loss = reduce (mul (expand 1.0 [300000]) (expand 2.0 [300000])) op=add pop=1
+%t = assert (gradient %loss 2.0) 300000.0

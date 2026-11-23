@@ -1,0 +1,4 @@
+# the add inside the scope and the one outside are the same node
+%a = { %x = add 2 3 }
+%b = add 2 3
+%t = assert (mul %a %b) 25

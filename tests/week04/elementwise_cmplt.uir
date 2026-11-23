@@ -1,0 +1,1 @@
+%t = assert (cmplt [1 5 2] [2 2 2]) [true false false]

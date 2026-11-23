@@ -1,0 +1,4 @@
+# asserting a buffer (no load) compares its contents
+%buf = extern 2 slot=0 dtype=i32
+%w = store %buf [4 5]
+%t = assert (after %buf %w) [4 5]

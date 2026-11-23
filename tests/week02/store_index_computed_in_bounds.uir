@@ -1,0 +1,4 @@
+# mod 10 3 has exact bounds [1 1], so the store is provably in range
+%buf = extern 3 slot=0 dtype=i32
+%w = store (index %buf (mod 10 3)) 5
+%t = assert (after %buf %w) [0 5 0]

@@ -1,0 +1,1 @@
+%t = assert (cmplt (log2 0.0) -3.0e38) true

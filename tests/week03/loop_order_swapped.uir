@@ -1,0 +1,7 @@
+# same body, i is now the inner loop
+%acc = extern [] slot=0 dtype=i32
+%i = range 2 slot=0
+%j = range 2 slot=1
+%old = load (after %acc %i %j)
+%w = store %acc (add (mul %old 10) (add (mul %i 2) (add %j 1)))
+%t = assert (load (after %acc (end %w %i %j))) 1324

@@ -1,0 +1,5 @@
+# the path through i32 carries no gradient
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%a = index %x 3
+%loss = add (cast (cast %a dtype=i32) dtype=f32) (mul %a 2.0)
+%t = assert (gradient %loss %a) 2.0

@@ -1,0 +1,4 @@
+%acc = extern [] slot=0 dtype=f32
+%i = range 4 slot=0
+%w = store %acc (add (load (after %acc %i)) (cast %i dtype=f32))
+%t = assert (load (after %acc (end %w %i))) 6.0

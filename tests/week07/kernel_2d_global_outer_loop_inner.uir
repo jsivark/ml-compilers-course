@@ -1,0 +1,5 @@
+%buf = extern [2 3] slot=0 dtype=i32
+%i = range 2 slot=0 axis=GLOBAL
+%j = range 3 slot=1 axis=LOOP
+%k = end (store (index %buf %i %j) (add (mul %i 10) %j)) %j %i
+%t = assert (after %buf (call %k)) [[0 1 2] [10 11 12]]

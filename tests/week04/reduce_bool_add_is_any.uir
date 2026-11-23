@@ -1,0 +1,1 @@
+%t = assert [(reduce [false true false] op=add pop=1) (reduce [false false] op=max pop=1)] [true false]

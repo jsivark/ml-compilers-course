@@ -1,0 +1,6 @@
+# the store alone runs 1000*1000 times
+%buf = extern 1000 slot=0 dtype=i32
+%i = range 1000 slot=0
+%j = range 1000 slot=1
+%w = store (index %buf %i) %j
+%t = assert (index (load (after %buf (end %w %j %i))) 0) 999

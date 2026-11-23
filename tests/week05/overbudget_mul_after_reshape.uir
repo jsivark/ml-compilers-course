@@ -1,0 +1,2 @@
+%x = reshape (expand 2 1000000) [1000 1000]
+%t = assert (reduce (mul %x %x) op=add pop=2) 4000000

@@ -1,0 +1,5 @@
+# loads must be ordered with every store to the buffer, even one to another element
+%buf = extern 2 slot=0 dtype=i32
+%w = store (index %buf 0) 5
+%x = load (index %buf 1)
+%t = assert (add %x (load (index (after %buf %w) 0))) 5

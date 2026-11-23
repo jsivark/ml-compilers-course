@@ -1,0 +1,1 @@
+%t = assert (reduce (reshape [4 5 6] [3 1]) op=max pop=1) [4 5 6]

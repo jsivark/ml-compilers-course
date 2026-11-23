@@ -1,0 +1,9 @@
+%c = extern [2 2] slot=0 dtype=i32
+%i = range 2 slot=0
+%j = range 2 slot=1
+%k = range 2 slot=2
+%a = index [[1 2] [3 4]] %i %k
+%b = index [[5 6] [7 8]] %k %j
+%old = load (index (after %c %k) %i %j)
+%w = store (index %c %i %j) (add %old (mul %a %b))
+%t = assert (after %c (end %w %k %j %i)) [[19 43] [22 50]]

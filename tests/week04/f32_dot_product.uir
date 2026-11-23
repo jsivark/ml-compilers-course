@@ -1,0 +1,1 @@
+%t = assert (reduce (mul [1.5 2.0] [2.0 0.25]) op=add pop=1) 3.5

@@ -1,0 +1,4 @@
+# 2.0 is one node, used twice: d/ds = (1 + 2 + 3) through the expand, plus 2 through the stack = 8
+%s = 2.0
+%loss = reduce (mul (expand %s [3]) [1.0 2.0 3.0]) op=add pop=1
+%t = assert (gradient %loss %s) 8.0

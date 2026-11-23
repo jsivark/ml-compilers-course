@@ -1,0 +1,6 @@
+# week 4/5 values work inside kernels too
+%buf = extern [2 2] slot=0 dtype=i32
+%i = range 2 slot=0 axis=GLOBAL
+%row = mul (index [[1 2] [3 4]] %i) (expand (add %i 1) 2)
+%k = end (store (index %buf %i) %row) %i
+%t = assert (after %buf (call %k)) [[1 2] [6 8]]

@@ -1,0 +1,2 @@
+# reshape after permute sees the permuted order, not the original memory
+%t = assert (reshape (permute (reshape [1 2 3 4 5 6] [2 3]) [1 0]) [6]) [1 4 2 5 3 6]

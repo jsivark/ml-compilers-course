@@ -1,0 +1,4 @@
+%buf = extern 3 slot=0 dtype=i32
+%i = range 3 slot=0
+%w = store (index %buf %i) 1
+%t = assert (after %buf %w) [1 1 1]

@@ -1,0 +1,4 @@
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%y = permute (reshape %x [2 2]) [1 0]
+%loss = reduce (mul %y [[1.0 2.0] [3.0 4.0]]) op=add pop=2
+%t = assert (gradient %loss %x) [1.0 3.0 2.0 4.0]

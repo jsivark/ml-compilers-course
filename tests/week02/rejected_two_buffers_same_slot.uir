@@ -1,0 +1,3 @@
+%a = extern [] slot=0 dtype=i32
+%b = extern 3 slot=0 dtype=i32
+%t = assert (add (load %a) (load (index %b 0))) 0

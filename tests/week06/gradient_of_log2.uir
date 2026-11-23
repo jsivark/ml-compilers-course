@@ -1,0 +1,2 @@
+%x = 2.0
+%t = assert (gradient (log2 %x) %x) 0.7213475

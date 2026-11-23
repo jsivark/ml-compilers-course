@@ -1,0 +1,2 @@
+%buf = extern [] slot=0 dtype=i32
+%t = assert (load (after %buf (store %buf (add 2 3)))) 5

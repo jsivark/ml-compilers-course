@@ -30,7 +30,7 @@
     "kind": "implement",
     "title": "Interned UOp(op, src, arg)",
     "url": "",
-    "detail": "Build nodes through one constructor keyed by (op, src, arg) so equal triples return the same object. hashcons_same_node.uir gives 36 either way, so also assert in a unit test that %a is %b for that file. Count distinct nodes and source edges here; overbudget_many_nodes needs the count.",
+    "detail": "Build nodes through one constructor keyed by (op, src, arg) so equal triples return the same object. hashcons_node_budget.uir (120 copies of add 2 4) only passes if equal triples are shared. Count distinct nodes and source edges here; overbudget_many_nodes needs the count.",
     "bot_block": false
    },
    {
@@ -106,8 +106,8 @@
   ],
   "build": "./compile parses, validates, bounds-checks, costs, evaluates and constant-folds Week 1 UIR files.",
   "check": [
-   "python3 run_tests.py 1 prints 65/65 passed",
-   "A unit test shows the two add 2 4 nodes in hashcons_same_node.uir are the same object",
+   "python3 run_tests.py 1 prints 66/66 passed",
+   "hashcons_node_budget.uir and hashcons_cost_shared_call.uir pass, which only happens if identical nodes are shared",
    "Every MATCH test rewrites to assert c c through your PatternMatcher",
    "10+ own tests in tests/week01 with hand-derived expected outcomes"
   ],

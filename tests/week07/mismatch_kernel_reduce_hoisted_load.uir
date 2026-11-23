@@ -1,0 +1,5 @@
+# without (after %acc %i) the load is hoisted out of the loop
+%acc = extern [] slot=0 dtype=i32
+%i = range 8 slot=0 axis=LOOP
+%k = end (store %acc (add (load %acc) %i)) %i
+%t = assert (load (after %acc (call %k))) 28

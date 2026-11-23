@@ -1,0 +1,6 @@
+%acc = extern [] slot=0 dtype=i32
+%init = store %acc 100
+%i = range 3 slot=0
+%old = load (after %acc %init %i)
+%w = store (after %acc %init) (add %old %i)
+%t = assert (load (after %acc (end %w %i))) 103

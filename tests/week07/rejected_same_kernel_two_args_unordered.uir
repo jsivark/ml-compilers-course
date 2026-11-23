@@ -1,0 +1,6 @@
+# two calls of one kernel both write the buffer and nothing orders them
+%buf = extern 2 slot=0 dtype=i32
+%p = param [] [0 9] slot=0 dtype=i32 addrspace=ALU
+%i = range 2 slot=0 axis=GLOBAL
+%k = end (store (index %buf %i) %p) %i
+%t = assert (after %buf (call %k 1) (call %k 2)) [2 2]

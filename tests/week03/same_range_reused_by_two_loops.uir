@@ -1,0 +1,7 @@
+# one range node, two loops: the second reads what the first wrote
+%a = extern 3 slot=0 dtype=i32
+%b = extern 3 slot=1 dtype=i32
+%i = range 3 slot=0
+%d1 = end (store (index %a %i) (mul %i 10)) %i
+%d2 = end (store (index %b %i) (add (load (index (after %a %d1) %i)) 1)) %i
+%t = assert (after %b %d2) [1 11 21]

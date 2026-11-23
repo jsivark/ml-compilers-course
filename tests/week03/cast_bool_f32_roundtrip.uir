@@ -1,0 +1,1 @@
+%t = assert [(cast true dtype=f32) (cast (cast -0.5 dtype=bool) dtype=f32) (cast (cast 0.0 dtype=bool) dtype=f32)] [1.0 1.0 0.0]

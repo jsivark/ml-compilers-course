@@ -1,0 +1,5 @@
+%x = extern 4 slot=0 dtype=f32 url=data/x.bin
+%y = extern 4 slot=1 dtype=f32
+%i = range 4 slot=0 axis=GLOBAL
+%k = end (store (index %y %i) (mul (load (index %x %i)) 2.0)) %i
+%t = assert (after %y (call %k)) [2.0 4.0 6.0 8.0]

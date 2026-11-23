@@ -1,0 +1,3 @@
+%buf = extern 2 slot=0 dtype=bool
+%w = store (index %buf 0) 1
+%t = assert (after %buf %w) [true false]

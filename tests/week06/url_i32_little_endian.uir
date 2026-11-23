@@ -1,0 +1,2 @@
+%buf = extern 3 slot=0 dtype=i32 url=data/ints.bin
+%t = assert %buf [1 -2 3]

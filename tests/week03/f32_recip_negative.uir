@@ -1,0 +1,1 @@
+%t = assert (recip -2.0) -0.5

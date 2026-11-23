@@ -1,0 +1,6 @@
+# i + p is in [0 4]: the arg is 1, but the store isn't provably in range
+%buf = extern 4 slot=0 dtype=i32
+%p = param [] [0 2] slot=0 dtype=i32 addrspace=ALU
+%i = range 3 slot=0 axis=GLOBAL
+%k = end (store (index %buf (add %i %p)) 1) %i
+%t = assert (after %buf (call %k 1)) [0 1 1 1]

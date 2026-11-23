@@ -1,0 +1,1 @@
+%t = assert [(cast 2.7 dtype=i32) (cast -2.7 dtype=i32)] [2 -2]

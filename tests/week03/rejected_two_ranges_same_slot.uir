@@ -1,0 +1,4 @@
+%buf = extern 6 slot=0 dtype=i32
+%i = range 2 slot=0
+%j = range 3 slot=0
+%t = assert (after %buf (end (store (index %buf (add (mul %i 3) %j)) 1) %j %i)) [1 1 1 1 1 1]

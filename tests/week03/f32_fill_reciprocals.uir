@@ -1,0 +1,4 @@
+%buf = extern 4 slot=0 dtype=f32
+%i = range 4 slot=0
+%w = store (index %buf %i) (recip (cast (add %i 1) dtype=f32))
+%t = assert (after %buf (end %w %i)) [1.0 0.5 0.33333334 0.25]

@@ -1,0 +1,2 @@
+# f32 expected values must be written with a '.'
+%t = assert (recip 2.0) 0

@@ -1,0 +1,5 @@
+%src = extern 2 slot=0 dtype=i32
+%dst = extern 2 slot=1 dtype=i32
+%w1 = store %src [3 4]
+%w2 = store %dst (load (after %src %w1))
+%t = assert (after %dst %w2) [3 4]

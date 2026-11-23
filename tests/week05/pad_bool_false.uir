@@ -1,0 +1,1 @@
+%t = assert (pad [true] [[0 2]]) [true false false]

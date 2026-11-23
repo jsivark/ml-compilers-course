@@ -1,0 +1,4 @@
+# the trip count must be an integer literal
+%buf = extern 3 slot=0 dtype=i32
+%i = range (add 1 2) slot=0
+%t = assert (after %buf (end (store (index %buf %i) 1) %i)) [1 1 1]

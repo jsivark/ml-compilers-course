@@ -1,0 +1,7 @@
+%buf = extern 8 slot=0 dtype=i32
+%i = range 2 slot=0 axis=GLOBAL
+%j = range 2 slot=1 axis=LOOP
+%u = range 2 slot=2 axis=UPCAST
+%n = add (add (mul %i 4) (mul %j 2)) %u
+%k = end (store (index %buf %n) (mul %n 3)) %u %j %i
+%t = assert (after %buf (call %k)) [0 3 6 9 12 15 18 21]

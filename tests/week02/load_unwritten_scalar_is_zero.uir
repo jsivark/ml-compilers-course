@@ -1,0 +1,3 @@
+# buffers start zero-filled
+%buf = extern [] slot=0 dtype=i32
+%t = assert (load %buf) 0

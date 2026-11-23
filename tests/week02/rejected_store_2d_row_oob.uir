@@ -1,0 +1,3 @@
+%buf = extern [2 3] slot=0 dtype=i32
+%w = store (index %buf 2 0) 7
+%t = assert (load (index (after %buf %w) 1)) [0 0 7]

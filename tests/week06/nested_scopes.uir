@@ -1,0 +1,5 @@
+%a = { %x = 2
+       %y = { %z = mul %x 10
+              %w = add %z 1 }
+       %v = mul %y 2 }
+%t = assert %a 42

@@ -1,0 +1,1 @@
+%t = assert (reduce [3 9 2] op=max pop=1) 3

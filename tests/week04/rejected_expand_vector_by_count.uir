@@ -1,0 +1,2 @@
+# expand x n broadcasts a scalar; a vector can't be expanded by a count
+%t = assert (expand [1 2] 2) [1 2 1 2]

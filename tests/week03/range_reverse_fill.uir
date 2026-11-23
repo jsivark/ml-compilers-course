@@ -1,0 +1,4 @@
+# index 2 - i has bounds [0 2]
+%buf = extern 3 slot=0 dtype=i32
+%i = range 3 slot=0
+%t = assert (after %buf (end (store (index %buf (add (mul %i -1) 2)) %i) %i)) [2 1 0]

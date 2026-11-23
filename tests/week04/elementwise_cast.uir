@@ -1,0 +1,1 @@
+%t = assert (cast [0 2 -1] dtype=bool) [false true true]

@@ -1,0 +1,1 @@
+%t = assert (load 5) 5

@@ -1,0 +1,2 @@
+# the sum is 2, but its bounds are [0 3]: not provably in range
+%t = assert (index [10 20 30] (reduce [0 1 1] op=add pop=1)) 30

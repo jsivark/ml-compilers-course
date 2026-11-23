@@ -1,0 +1,4 @@
+%buf = extern 4 slot=0 dtype=i32
+%i = range 4 slot=0 axis=UPCAST
+%kernel = end (store (index %buf %i) (mul %i %i)) %i
+%t = assert (after %buf (call %kernel)) [0 1 4 9]

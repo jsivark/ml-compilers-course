@@ -1,0 +1,2 @@
+# expand costs 0; the reduce reads 999999 elements
+%t = assert (reduce (expand 1 999999) op=add pop=1) 999999

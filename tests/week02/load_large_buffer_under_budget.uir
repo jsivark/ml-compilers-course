@@ -1,0 +1,3 @@
+# load costs one per element: 999990 + 1 (index) < 1,000,000
+%buf = extern 999990 slot=0 dtype=i32
+%t = assert (index (load %buf) 999989) 0

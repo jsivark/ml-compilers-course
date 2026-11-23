@@ -1,0 +1,3 @@
+# x.bin holds 16 bytes, 3 f32 need 12
+%buf = extern 3 slot=0 dtype=f32 url=data/x.bin
+%t = assert %buf [1.0 2.0 3.0]

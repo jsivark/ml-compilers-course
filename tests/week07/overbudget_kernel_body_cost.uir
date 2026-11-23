@@ -1,0 +1,5 @@
+%buf = extern [1000 1000] slot=0 dtype=i32
+%i = range 1000 slot=0 axis=GLOBAL
+%j = range 1000 slot=1 axis=LOOP
+%k = end (store (index %buf %i %j) 1) %j %i
+%t = assert (index (load (after %buf (call %k))) 0 0) 1

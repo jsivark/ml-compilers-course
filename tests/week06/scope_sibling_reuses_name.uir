@@ -1,0 +1,3 @@
+%a = { %tmp = add 1 1 }
+%b = { %tmp = add 2 2 }
+%t = assert (add %a %b) 6

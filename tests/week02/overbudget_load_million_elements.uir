@@ -1,0 +1,2 @@
+%buf = extern 1000000 slot=0 dtype=i32
+%t = assert (index (load %buf) 0) 0

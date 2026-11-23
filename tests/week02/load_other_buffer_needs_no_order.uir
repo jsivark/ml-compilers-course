@@ -1,0 +1,5 @@
+# ordering is per buffer: %b is never stored to
+%a = extern [] slot=0 dtype=i32
+%b = extern [] slot=1 dtype=i32
+%w = store %a 4
+%t = assert (add (load %b) (load (after %a %w))) 4

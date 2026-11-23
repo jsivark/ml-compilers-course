@@ -1,0 +1,2 @@
+%p = pad [1 2] [[1 1]]
+%t = assert [(index %p 0) (index %p 1) (index %p 2) (index %p 3)] [0 1 2 0]

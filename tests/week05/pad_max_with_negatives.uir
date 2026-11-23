@@ -1,0 +1,2 @@
+# the padded zeros take part in the max
+%t = assert (reduce (pad [-5 -6] [[1 0]]) op=max pop=1) 0

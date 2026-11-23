@@ -1,0 +1,5 @@
+# every range listed in end must be used by the effect
+%buf = extern 3 slot=0 dtype=i32
+%i = range 3 slot=0
+%j = range 2 slot=1
+%t = assert (after %buf (end (store (index %buf %i) 1) %i %j)) [1 1 1]

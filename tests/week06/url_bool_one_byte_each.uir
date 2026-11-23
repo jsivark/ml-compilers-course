@@ -1,0 +1,2 @@
+%buf = extern 4 slot=0 dtype=bool url=data/mask.bin
+%t = assert %buf [true false true true]

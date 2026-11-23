@@ -1,0 +1,7 @@
+# one kernel, two loops: the second reads what the first wrote
+%a = extern 3 slot=0 dtype=i32
+%b = extern 3 slot=1 dtype=i32
+%i = range 3 slot=0 axis=GLOBAL
+%first = end (store (index %a %i) (mul %i 2)) %i
+%k = end (store (index %b %i) (add (load (index (after %a %first) %i)) 1)) %i
+%t = assert (after %b (call %k)) [1 3 5]

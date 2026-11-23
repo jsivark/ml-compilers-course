@@ -1,0 +1,5 @@
+# (add 1 1) has bounds [2 2]: both stores may write element 2
+%buf = extern 3 slot=0 dtype=i32
+%w1 = store (index %buf (add 1 1)) 1
+%w2 = store (index %buf 2) 2
+%t = assert (after %buf %w1 %w2) [0 0 2]

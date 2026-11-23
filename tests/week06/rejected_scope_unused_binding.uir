@@ -1,0 +1,4 @@
+# %dead is a node nothing reaches
+%a = { %dead = mul 7 7
+       %x = add 1 2 }
+%t = assert %a 3

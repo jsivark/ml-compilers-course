@@ -1,0 +1,6 @@
+%x = param [] slot=0 dtype=i32 addrspace=ALU
+%sq = mul %x %x
+%buf = extern 4 slot=0 dtype=i32
+%i = range 4 slot=0 axis=GLOBAL
+%k = end (store (index %buf %i) (call %sq %i)) %i
+%t = assert (after %buf (call %k)) [0 1 4 9]

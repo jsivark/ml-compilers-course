@@ -1,0 +1,4 @@
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%c = cmplt %x (expand 2.5 [4])
+%loss = reduce (where %c %x (mul %x %x)) op=add pop=1
+%t = assert (gradient %loss %x) [1.0 1.0 6.0 8.0]

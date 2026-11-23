@@ -1,0 +1,5 @@
+# identical extern lines are one node (hash-consing), so this is one buffer
+%a = extern [] slot=0 dtype=i32
+%b = extern [] slot=0 dtype=i32
+%w = store %a 11
+%t = assert (load (after %b %w)) 11

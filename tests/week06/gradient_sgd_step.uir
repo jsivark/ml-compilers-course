@@ -1,0 +1,4 @@
+# x - 0.5 * d/dx sum(x*x) = x - x = 0
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%g = gradient (reduce (mul %x %x) op=add pop=1) %x
+%t = assert (add %x (mul %g (expand -0.5 [4]))) [0.0 0.0 0.0 0.0]

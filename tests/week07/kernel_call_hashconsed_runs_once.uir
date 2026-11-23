@@ -1,0 +1,6 @@
+# (call %k) written twice is one node, so the kernel runs once
+%acc = extern [] slot=0 dtype=i32
+%k = store %acc (add (load %acc) 1)
+%a = load (after %acc (call %k))
+%b = load (after %acc (call %k))
+%t = assert (add %a %b) 2

@@ -1,0 +1,5 @@
+# autodiff only works on pure graphs: this path goes through store/after/load
+%b = extern [] slot=0 dtype=f32
+%c = 3.0
+%loss = load (after %b (store %b (mul %c %c)))
+%t = assert (gradient %loss %c) 6.0

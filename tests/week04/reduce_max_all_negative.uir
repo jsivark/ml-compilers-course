@@ -1,0 +1,2 @@
+# a max that starts from 0 gets this wrong
+%t = assert (reduce [-5 -2 -9] op=max pop=1) -2

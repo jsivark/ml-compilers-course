@@ -7,6 +7,9 @@
 
 The expected outcome comes from the filename prefix:
   (none) MATCH · mismatch_ MISMATCH · rejected_ REJECTED · overbudget_ OVERBUDGET
+
+Each run sets UIR_WEEK=<week> in the environment, so a compiler can apply that week's
+rules (only week01/rejected_alu_on_vector.uir needs it: ALU ops on vectors become valid in week 4).
 """
 import argparse, glob, os, shlex, shutil, subprocess, sys
 
@@ -30,11 +33,12 @@ if not shutil.which(cmd[0]) and not os.path.isfile(cmd[0]):
   sys.exit(f"Can't find your compiler: {cmd[0]!r}.\n"
            "Build an executable ./compile in the repo root (any language; a shell script that runs\n"
            "`python3 my_compiler.py \"$@\"` is fine), or pass --compiler \"python3 my_compiler.py\".")
+env = dict(os.environ, UIR_WEEK=str(a.week))
 ok = 0
 for f in files:
   rel = os.path.relpath(f)
   try:
-    r = subprocess.run(shlex.split(a.compiler) + [rel], capture_output=True, text=True, timeout=a.timeout)
+    r = subprocess.run(shlex.split(a.compiler) + [rel], capture_output=True, text=True, timeout=a.timeout, env=env)
     got = (r.stdout.strip().split() or ["(no output)"])[0]
   except subprocess.TimeoutExpired:
     got = "TIMEOUT"

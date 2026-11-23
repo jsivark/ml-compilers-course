@@ -1,0 +1,4 @@
+# ties in max send half the gradient each way
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%loss = reduce (max %x [1.0 0.0 5.0 4.0]) op=add pop=1
+%t = assert (gradient %loss %x) [0.5 1.0 0.0 0.5]

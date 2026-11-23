@@ -1,0 +1,2 @@
+%x = load (extern 4 slot=0 dtype=f32 url=data/x.bin)   # [1.0 2.0 3.0 4.0]
+%t = assert (gradient (reduce (mul %x [2.0 0.5 -1.0 3.0]) op=add pop=1) %x) [2.0 0.5 -1.0 3.0]

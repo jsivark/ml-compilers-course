@@ -10,18 +10,18 @@ A free, self-paced path from intermediate Python and basic C to building your ow
 
 From Module 18 on, you build one compiler, and the tests in this repo check it. The test folders are numbered by the real course's weeks:
 
-| Course module | Test folder | Run with |
-|---|---|---|
-| 18 | `tests/week01` | `python3 run_tests.py 1` |
-| 19 | `tests/week02` | `python3 run_tests.py 2` |
-| 20 | `tests/week03` | `python3 run_tests.py 3` |
-| 21 | `tests/week04` | `python3 run_tests.py 4` |
-| 22 | `tests/week05` | `python3 run_tests.py 5` |
-| 23 | `tests/week06` | `python3 run_tests.py 6` |
-| 24 | `tests/week07` | `python3 run_tests.py 7` |
-| 25–28 | none | graded by measured milestones (see each module page) |
+| Course module | Test folder | Tests | Run with |
+|---|---|---|---|
+| 18 | `tests/week01` | 66 | `python3 run_tests.py 1` |
+| 19 | `tests/week02` | 57 | `python3 run_tests.py 2` |
+| 20 | `tests/week03` | 60 | `python3 run_tests.py 3` |
+| 21 | `tests/week04` | 54 | `python3 run_tests.py 4` |
+| 22 | `tests/week05` | 60 | `python3 run_tests.py 5` |
+| 23 | `tests/week06` | 63 | `python3 run_tests.py 6` |
+| 24 | `tests/week07` | 41 | `python3 run_tests.py 7` |
+| 25–28 | none | | graded by measured milestones (see each module page) |
 
-Module 18 has a full suite of 65 tests, checked against a reference implementation. Modules 19–24 have starter sets whose answers were worked out by hand.
+Every test in Modules 18–24 has been checked against a reference implementation that follows the rules below, including the places marked *(convention)*. The tests cover normal programs, edge cases an obvious-but-wrong compiler gets wrong, and `rejected_`, `mismatch_` and `overbudget_` variants.
 
 ```
 run_tests.py        run a week's tests against ./compile (or any command)
@@ -51,6 +51,8 @@ The expected outcome comes from the filename prefix:
 | `overbudget_` | `OVERBUDGET` |
 
 To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number is the test folder (the course week), not the module number: Module 18 is `1`. Every week must also keep passing all earlier weeks' tests.
+
+*(convention)* Each test is judged by the rules of its own week, and `run_tests.py` sets the environment variable `UIR_WEEK` to that week. Later weeks only add features, so this matters for exactly one test: ALU ops on vectors are an error in Week 1 (`week01/rejected_alu_on_vector.uir`) and valid from Week 4. Read `UIR_WEEK` (default: the latest week you support) to tell the two apart.
 
 **Rules, the same as the real course.** No BLAS/cuBLAS, PyTorch, Triton, MLIR or tinygrad inside your compiler. You can use clang, LLVM, the CUDA driver/runtime APIs and cuda-python. Don't let an AI write the compiler for you. Use it to explain things, to debug, and to write tests.
 
@@ -85,6 +87,9 @@ To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number 
 - File larger than 4096 bytes: OVERBUDGET.
 - After parsing, 100 or more distinct nodes, or 300 or more source edges: OVERBUDGET.
 - Static cost of 1,000,000 or more: OVERBUDGET.
+- *(convention)* These budgets stay in force for every week's tests, with the cost rules extended in each week below. Turn them off (for example with a flag) when you run your own big programs such as `gemm_256.uir` or MNIST.
+
+Hash-consing shows up in the budgets: `hashcons_node_budget.uir` has 120 bindings of the same `add 2 4` (one node, not 120), and in `hashcons_cost_shared_call.uir` an expensive call written twice is charged once.
 
 **Build it in this order.**
 1. Tokenizer and parser.
@@ -96,7 +101,7 @@ To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number 
 
 **Reading.** tinygrad's `tinygrad/uop/ops.py` (the UOp, UPat, PatternMatcher and graph_rewrite classes) and its tests in `test/null/test_pattern_matcher.py` and `test/null/test_uop_vmin_vmax.py`. Read them after your own attempt.
 
-**Done when:** `python3 run_tests.py 1` passes 65/65, and you've written 10 or more tests of your own.
+**Done when:** `python3 run_tests.py 1` passes 66/66, and you've written 10 or more tests of your own.
 
 ## Week 2 (course wk 19): loads, stores, memory; render C
 
@@ -108,9 +113,19 @@ To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number 
 - `index buf i` on a buffer gives an addressable element.
 - Nested `(op ...)` expressions are now allowed anywhere an operand can go.
 
-**Ordering rules.**
-- A `load` must be ordered by `after` relative to every store to that buffer *(convention: an unordered load is REJECTED)*.
-- Stores must be provably in range, just as indexing is in Week 1.
+**Shapes and values.**
+- The shape operand of `extern` is an integer `n` (shape `(n,)`), a list `[2 3]`, or `[]` for a scalar. Every dimension must be at least 1 *(convention)*.
+- Buffers start zero-filled *(convention)*. Two different buffers may not share a slot *(convention)*. Identical `extern` lines are one node, so one buffer.
+- `extern`, `index` of a buffer and `after` are buffer (GLOBAL) values. ALU ops, `reduce` and movement ops need ALU values: `load` the buffer first. `store dst v` needs a buffer `dst` and an ALU value `v` of the same dtype and shape (no implicit casts), and yields an effect. `after`'s extra operands must be effects (Week 3 also allows ranges), and there must be at least one.
+- `assert` of a buffer value compares the buffer's contents (as in the official Week 3 example) *(convention)*.
+
+**Ordering rules.** "Ordered" means one node is reachable from the other through operands.
+- A `load` must be ordered with every store to that buffer, even a store to a different element *(convention: otherwise REJECTED)*. So a load that should see a store goes through `after`, and a load that must happen *before* a later store has to feed that store's value. Reading an old version that a later, unrelated store overwrites is REJECTED, not a stale read.
+- Two stores to the same buffer must be ordered unless their index bounds are disjoint on some axis *(convention)*. A store to the whole buffer overlaps everything.
+- Stores and loads must be provably in range, just as indexing is in Week 1.
+- With these rules any topological order gives the same answer.
+
+**Cost** *(convention)*. `load` and `store` cost the number of elements moved. `extern`, `after` cost 0. `index` costs 1, as in Week 1. A shape literal such as `[2 3]` is a stack and costs its elements.
 
 **Renderer.** Starting this week, *execute by generating C*:
 1. Topologically sort the graph.
@@ -127,10 +142,19 @@ Keep your Week 1 interpreter as a second backend and cross-check the two.
 ## Week 3 (course wk 20): loops, floats, runtime; matmul and conv
 
 **New ops.**
-- `range n slot=k`: a loop variable over 0..n-1, with bounds [0, n−1].
-- `end effect range...`: closes loops, innermost first.
-- `recip x`, for f32 only.
-- Dtype `f32`. Float literals contain a `.`.
+- `range n slot=k`: a loop variable over 0..n-1, with bounds [0, n−1]. `n` is an integer literal of at least 1 *(convention)*. Different ranges must use different slots *(convention)*; the same `range` line written twice is one node and can drive two separate loops.
+- `end effect range...`: closes loops, innermost first. The effect must be a store, end or call, and every listed range must still be open in it *(convention)*. A range that reaches the `assert` without being closed is REJECTED.
+- `recip x`, for f32 only. `recip 0.0` is infinity.
+- Dtype `f32`. Float literals contain a `.`, like `0.5`, `-2.0` or `3.0e38` *(convention: digits, `.`, digits, optional exponent)*. A literal outside the f32 range is REJECTED. `div`, `mod`, `shl` and `xor` stay integer-only.
+
+**Loop semantics** *(convention)*. A node runs once per iteration of exactly the ranges it depends on, and is hoisted out of the others. That is the README's "place each computation in the innermost loop it depends on". So a `load %acc` that doesn't depend on `%i` is read once, before the loop. To re-read a buffer every iteration (an accumulator), write `load (after %acc %i)`: a range in `after` makes the buffer depend on it. Iterations run in order, outermost range last in the `end` list, so the order of an `end`'s ranges can change the result.
+
+**Floats** *(convention)*.
+- Every f32 op rounds to f32 (IEEE round-to-nearest-even). Don't let clang fuse multiply-adds: compile with `-ffp-contract=off`.
+- `cast` f32→i32 truncates toward zero, i32→f32 rounds to nearest, and f32→bool is `x != 0`.
+- An f32 `assert` is exact after rounding the expected literal to f32. So `assert (add 0.1 0.2) 0.3` matches in f32. Expected f32 values must be written with a `.`: `assert (recip 2.0) 0` is a dtype mismatch.
+
+**Cost** *(convention)*. A node's cost is multiplied by the trip counts of the ranges it depends on. `range` and `end` cost 0.
 
 **What to build.**
 - Render ranges as C `for` loops, and place each computation in the innermost loop it depends on.
@@ -143,9 +167,10 @@ Keep your Week 1 interpreter as a second backend and cross-check the two.
 ## Week 4 (course wk 21): rangeify, reduce, materialization
 
 **New ops.**
-- `expand x n`: broadcast a scalar to shape (n,).
-- `reduce x op=add|max pop=n`: reduce the last n axes *(convention)*.
-- ALU ops now accept rank-1 inputs.
+- `expand x n`: broadcast a scalar to shape (n,), with n ≥ 1.
+- `reduce x op=add|max pop=n`: reduce the last n axes *(convention)*. `pop` is required, with 1 ≤ n ≤ rank. On bool, both `add` and `max` act as "any". An f32 `add` sums in index order, left to right *(convention)*, so `reduce [16777216.0 1.0 1.0]` is `16777216.0`. Bounds: `max` keeps the input's bounds, and `add` multiplies them by the number of elements reduced.
+- ALU ops now accept rank-1 inputs. All operands must have exactly the same shape: there is no implicit broadcasting, so `add [1 2] 1` is REJECTED *(convention)*. Use `expand`.
+- Cost *(convention)*: an elementwise op costs its elements, `reduce` costs its input's elements, and `expand` costs 0.
 
 **The core pass, *rangeify*.** Rewrite every shaped op into scalar code over explicit ranges, then decide what gets **materialized**:
 - Fuse elementwise chains into a single loop.
@@ -160,12 +185,13 @@ Keep your Week 1 interpreter as a second backend and cross-check the two.
 ## Week 5 (course wk 22): movement ops
 
 **New ops.**
-- `reshape x [shape]`.
-- `permute x [order]`.
-- `pad x [[before after] ...]`, padding with zeros *(convention)*.
-- `shrink x [[start end] ...]`.
-- `expand x [shape]`.
-- Shapes of any rank.
+- `reshape x [shape]`. The element counts must match. `[]` is the scalar shape.
+- `permute x [order]`. The order must be a permutation of 0..rank−1. `p = permute x order` has `p.shape[k] = x.shape[order[k]]`.
+- `pad x [[before after] ...]`, padding with zeros (false for bool) *(convention)*. There is one pair per axis, and each amount is ≥ 0. A padded value's bounds include 0.
+- `shrink x [[start end] ...]`, keeping `start ≤ i < end`, with `0 ≤ start < end ≤ dim` *(convention: half-open and non-empty)*.
+- `expand x [shape]`: same rank, each axis equal or 1 → any size. A scalar can expand to any shape *(convention)*.
+- Shapes of any rank. No dimension may be 0 *(convention)*.
+- The shape and order operands are literal lists. Movement ops take ALU values (load a buffer first) and cost 0 *(convention)*.
 
 **What to build.**
 - Movement ops never copy. Each one becomes index arithmetic, plus a validity mask for pad.
@@ -179,10 +205,16 @@ Keep your Week 1 interpreter as a second backend and cross-check the two.
 ## Week 6 (course wk 23): autodiff, real models
 
 **New syntax and ops.**
-- `{ ... }` lexical scopes, whose value is the last binding.
-- `extern ... url=path`, which loads a file-backed buffer.
-- `gradient loss wrt`.
-- Transcendental ops: `exp2`, `log2`, `sqrt`, `sin`, implemented yourself, for example with range reduction plus a polynomial.
+- `{ ... }` lexical scopes, whose value is the last binding. A scope can stand anywhere a value can. Names bound inside are invisible after the `}`. Rebinding a name that is visible from outside is REJECTED *(convention)*, as is an empty scope. Unused inner bindings are unreachable nodes, as in Week 1.
+- `extern ... url=path`, which loads a file-backed buffer. *(convention)* The path is relative to the `.uir` file. The file holds raw little-endian elements (4 bytes for f32 and i32, 1 byte for bool), and its size must match the shape exactly. A missing file is REJECTED.
+- `gradient loss wrt`: d loss / d wrt, with wrt's shape. *(convention)*
+  - `loss` must be an f32 scalar and `wrt` an f32 value.
+  - Every node between them must be pure (ALU, movement, `reduce`, `stack`, `index` of a value, `cast`, `where`). A path through `load`, `store`, `after`, `range`, `call` or another `gradient` is REJECTED.
+  - Gradients flow only through f32 nodes, so a cast to i32 stops them. If loss doesn't depend on wrt, the result is zeros.
+  - Ties in `max` and in `reduce op=max` split the gradient evenly.
+  - Hash-consing applies: `wrt` is a node, so every use of that node counts.
+  - A `gradient` costs the cost of its loss again.
+- Transcendental ops: `exp2`, `log2`, `sqrt`, `sin`, for f32 only, implemented yourself, for example with range reduction plus a polynomial. *(convention)* An f32 assert whose actual side uses any of them compares within `1e-5 + 1e-5·|expected|`. All other f32 asserts stay exact.
 
 **Milestones.** These are the real 10-411 Week 6 goals:
 1. `gradient` as a graph rewrite, with a rule per op. Test it against finite differences on 20 random graphs.
@@ -195,6 +227,13 @@ Keep your Week 1 interpreter as a second backend and cross-check the two.
 ## Week 7 (course wk 24): CPU memory hierarchy, threads
 
 **New syntax.** `range ... axis=GLOBAL|LOOP|UPCAST`. A `call` of a kernel launches it.
+
+*(convention)*
+- `axis` is a scheduling hint and doesn't change results. It defaults to `LOOP`, and any other value (including lowercase, or `LOCAL`, which is Week 8) is REJECTED.
+- A kernel is a body whose value is an effect (an `end` or a `store`), with all of its ranges closed. `call kernel args...` runs it and is itself an effect, so use it in `after` and `end`, never as a value. Args fill `param` slots exactly as in Week 1, including the limit checks, so index bounds inside the kernel use the params' limits.
+- `(call %k)` written twice is one node, so the kernel runs once.
+- A call counts as a store to every buffer its body stores to. Loads and other stores of those buffers must be ordered with the call, and two calls that store the same buffer must be ordered with each other. Two calls of one kernel with different args can never be ordered, so they are REJECTED if the kernel stores.
+- Cost: a call costs 1 plus its body's cost, as in Week 1.
 
 **What to build.**
 - Tiling, loop reordering, unrolling (UPCAST), SIMD-friendly code (vector types or `#pragma clang loop vectorize`), and multithreading over GLOBAL axes with pthreads.

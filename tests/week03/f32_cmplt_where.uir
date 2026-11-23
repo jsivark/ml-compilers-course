@@ -1,0 +1,1 @@
+%t = assert (where (cmplt 0.1 0.2) 1.5 2.5) 1.5

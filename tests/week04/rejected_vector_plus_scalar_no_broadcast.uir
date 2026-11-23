@@ -1,0 +1,2 @@
+# no implicit broadcasting: write (expand 1 2)
+%t = assert (add [1 2] 1) [2 3]

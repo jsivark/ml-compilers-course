@@ -1,0 +1,2 @@
+%buf = extern 4 slot=0 dtype=f32 url=data/x.bin
+%t = assert (gradient (reduce (load %buf) op=add pop=1) %buf) [1.0 1.0 1.0 1.0]

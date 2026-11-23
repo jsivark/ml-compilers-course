@@ -1,0 +1,8 @@
+%a = extern 2 slot=0 dtype=i32
+%b = extern 2 slot=1 dtype=i32
+%i = range 2 slot=0 axis=GLOBAL
+%ka = end (store (index %a %i) 3) %i
+%kb = end (store (index %b %i) 4) %i
+%sa = reduce (load (after %a (call %ka))) op=add pop=1
+%sb = reduce (load (after %b (call %kb))) op=add pop=1
+%t = assert (add %sa %sb) 14

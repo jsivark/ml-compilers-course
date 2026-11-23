@@ -1,0 +1,6 @@
+# store and index run 300*300 times each, plus a 90000-element load: 270001 < 1,000,000
+%buf = extern [300 300] slot=0 dtype=i32
+%i = range 300 slot=0
+%j = range 300 slot=1
+%w = store (index %buf %i %j) 1
+%t = assert (index (load (after %buf (end %w %j %i))) 299 299) 1

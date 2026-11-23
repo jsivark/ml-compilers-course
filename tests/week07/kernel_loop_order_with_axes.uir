@@ -1,0 +1,6 @@
+%acc = extern [] slot=0 dtype=i32
+%i = range 2 slot=0 axis=LOOP
+%j = range 2 slot=1 axis=UPCAST
+%old = load (after %acc %i %j)
+%k = end (store %acc (add (mul %old 10) (add (mul %i 2) (add %j 1)))) %i %j
+%t = assert (load (after %acc (call %k))) 1324

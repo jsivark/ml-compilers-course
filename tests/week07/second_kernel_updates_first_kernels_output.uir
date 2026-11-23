@@ -1,0 +1,6 @@
+%buf = extern 3 slot=0 dtype=i32
+%i = range 3 slot=0 axis=GLOBAL
+%c1 = call (end (store (index %buf %i) 5) %i)
+%v = index (after %buf %c1) %i
+%c2 = call (end (store %v (add (load %v) %i)) %i)
+%t = assert (after %buf %c2) [5 6 7]

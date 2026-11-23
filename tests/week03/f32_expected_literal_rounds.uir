@@ -1,0 +1,2 @@
+# 16777217.0 is not an f32: the literal rounds to 16777216.0
+%t = assert (add 16777216.0 1.0) 16777217.0

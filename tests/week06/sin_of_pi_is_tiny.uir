@@ -1,0 +1,2 @@
+# transcendental results compare within 1e-5 (absolute plus relative)
+%t = assert (sin 3.1415927) 0.0

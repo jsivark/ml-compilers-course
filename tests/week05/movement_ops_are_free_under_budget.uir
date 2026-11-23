@@ -1,0 +1,3 @@
+# movement ops cost 0: the reduce reads 999900 elements, and the
+# [990 1010] shape literal is a stack of 2 (cost 2): 999902 < 1,000,000
+%t = assert (reduce (reshape (expand 1 999900) [990 1010]) op=add pop=2) 999900

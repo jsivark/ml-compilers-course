@@ -1,0 +1,6 @@
+# a call costs 1 + the cost of its body: 1 + 2 * 200 * 200 (store and index)
+%buf = extern [200 200] slot=0 dtype=i32
+%i = range 200 slot=0 axis=GLOBAL
+%j = range 200 slot=1 axis=LOOP
+%k = end (store (index %buf %i %j) 1) %j %i
+%t = assert (index (load (after %buf (call %k))) 199 199) 1

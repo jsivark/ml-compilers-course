@@ -1,0 +1,1 @@
+%t = assert (reduce (add (expand 1 1000000) (expand 2 1000000)) op=add pop=1) 3000000

@@ -1,0 +1,2 @@
+%i = range 3 slot=0
+%t = assert %i 0

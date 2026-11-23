@@ -1,0 +1,8 @@
+# %x is read before %w2 overwrites the buffer, because %w2 uses %x
+%buf = extern [] slot=0 dtype=i32
+%w1 = store %buf 1
+%b1 = after %buf %w1
+%x = load %b1
+%w2 = store %b1 (add %x 10)
+%y = load (after %b1 %w2)
+%t = assert (add %x %y) 12

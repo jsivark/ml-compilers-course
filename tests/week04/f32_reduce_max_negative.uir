@@ -1,0 +1,1 @@
+%t = assert (reduce [-1.5 -0.5 -2.0] op=max pop=1) -0.5
