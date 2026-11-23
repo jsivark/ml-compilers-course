@@ -33,7 +33,7 @@ tools/              content and link checker
 
 ## The contract
 
-Build one program, `./compile`, in any language. It takes `.uir` files and prints one line for each file:
+Build one program, `./compile`, in any language. Everything here runs on macOS and Linux; on Windows, use WSL2. It takes `.uir` files and prints one line for each file:
 
 ```
 $ ./compile tests/week01/add_fold.uir tests/week01/rejected_assert_dtype_mismatch.uir

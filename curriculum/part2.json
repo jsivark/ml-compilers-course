@@ -277,7 +277,7 @@
     "kind": "do",
     "title": "Install the test suite and run --check-setup",
     "url": "https://github.com/nlsandler/writing-a-c-compiler-tests",
-    "detail": "Clone nlsandler/writing-a-c-compiler-tests and run './test_compiler --check-setup'. The suite follows the book's chapters, not the blog: it needs x86-64 (Rosetta on Apple Silicon), 'int main(void)', and the gcc-like driver plus --lex/--parse/--validate/--tacky/--codegen stage flags described in the README.",
+    "detail": "Clone nlsandler/writing-a-c-compiler-tests and run './test_compiler --check-setup'. The suite follows the book's chapters, not the blog: it needs an x86-64 toolchain (native on Intel/AMD Linux and in WSL; Rosetta on Apple Silicon Macs; an x86-64 VM or container on ARM Linux), 'int main(void)', and the gcc-like driver plus --lex/--parse/--validate/--tacky/--codegen stage flags described in the README.",
     "bot_block": false
    },
    {
@@ -381,7 +381,7 @@
    "Segfault on call: rsp must be 16-byte aligned at the call instruction (System V ABI).",
    "Values clobbered after a call: caller-saved registers (rax, rcx, rdx, rsi, rdi, r8-r11) are not preserved.",
    "Blog examples use int main() and 32-bit registers; the suite expects int main(void) and x86-64.",
-   "On Apple Silicon, run the suite and gcc under Rosetta ('arch -x86_64 zsh'); the runner refuses native arm64. Mach-O symbols need a leading underscore."
+   "The suite refuses native arm64. On Apple Silicon Macs run it and gcc under Rosetta ('arch -x86_64 zsh'), and remember Mach-O symbols need a leading underscore. On ARM Linux use an x86-64 VM or container. Intel/AMD Linux and WSL work as is."
   ],
   "project": {
    "title": "Three-address IR and peephole pass for mycc, measured against naive codegen",
@@ -1740,7 +1740,7 @@
   "outcomes": [
    "Compute your CPU's theoretical peak FLOP/s and a kernel's arithmetic intensity, and place it on a roofline.",
    "Optimize a CPU SGEMM with blocking, packing, SIMD and threads, and report GFLOP/s per stage.",
-   "Use perf (or Instruments on macOS) counters to explain a speedup, such as cache misses dropping after a loop interchange.",
+   "Use hardware counters (perf on Linux, Instruments on macOS, VTune or uProf on Windows) to explain a speedup, such as cache misses dropping after a loop interchange.",
    "Benchmark with warmup, repeated runs, and median plus spread."
   ],
   "stuck": [

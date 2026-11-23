@@ -8,14 +8,14 @@
     "kind": "watch",
     "title": "Missing Semester 2020, Lecture 1: Course overview + the shell",
     "url": "https://missing.csail.mit.edu/2020/course-shell/",
-    "detail": "Windows users: install WSL2 first (next step) and work inside it. Do the exercises at the bottom of the page.",
+    "detail": "Use the terminal on macOS or Linux. On Windows, set up WSL2 first (next step) and work inside it. Do the exercises at the bottom of the page.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Install WSL2 (Windows only)",
+    "title": "Set up a Unix-like environment (macOS, Linux or Windows)",
     "url": "https://learn.microsoft.com/en-us/windows/wsl/install",
-    "detail": "Run `wsl --install`, then keep your course files inside the Linux filesystem (~/), not /mnt/c, or builds will be slow. macOS users: install Xcode Command Line Tools and Homebrew instead.",
+    "detail": "macOS: run `xcode-select --install` for clang, make, git and lldb, then install Homebrew for everything else. Linux: install the build tools with your package manager, e.g. `sudo apt install build-essential clang gdb git` (Debian/Ubuntu) or `sudo dnf install gcc clang gdb git make` (Fedora). Windows: run `wsl --install` (this page), then follow the Linux line inside WSL and keep your course files under ~/ in the Linux filesystem, not /mnt/c, or builds will be slow.",
     "bot_block": false
    },
    {
@@ -62,9 +62,9 @@
    },
    {
     "kind": "do",
-    "title": "C toolchain + debugger: GDB docs or the LLDB tutorial",
+    "title": "C toolchain + debugger: LLDB tutorial or GDB docs",
     "url": "https://lldb.llvm.org/use/tutorial.html",
-    "detail": "Install clang (or gcc) and make. Compile a buggy program with -g -O0 -fsanitize=address, then set a breakpoint, step, print a variable and get a backtrace. Linux users can use gdb instead (https://www.gnu.org/software/gdb/documentation/).",
+    "detail": "Make sure clang (or gcc) and make work. Compile a buggy program with -g -O0 -fsanitize=address, then set a breakpoint, step, print a variable and get a backtrace. Use lldb on macOS (it ships with the Command Line Tools) and gdb on Linux or WSL (https://www.gnu.org/software/gdb/documentation/); the commands map almost one to one.",
     "bot_block": false
    },
    {
@@ -920,7 +920,7 @@
   "stuck": [
    "Timings are noisy: warm up, repeat, report the median, pin to a core, and do not run with a browser open on a laptop on battery.",
    "Cache Lab 64x64 transpose: 8x8 blocking, which works for 32x32, gets conflict misses here because rows 4 apart map to the same sets. Split each 8x8 block into 4x4 sub-blocks.",
-   "Apple Silicon and some laptops lack perf: use Instruments or measure on a Linux box/cloud VM; the concepts transfer.",
+   "No perf on your machine: perf runs on Linux (and inside WSL with limits). On macOS use Instruments' CPU Counters template; on Windows use Intel VTune or AMD uProf, or measure on a Linux cloud VM. The concepts transfer.",
    "The compiler may optimize your benchmark away; consume the result (print a checksum) and check the asm.",
    "Bandwidth-bound vs latency-bound: a sequential scan is limited by bandwidth, a pointer chase by latency. Ostrovsky's Example 1 and Example 4 separate the two."
   ],
