@@ -174,7 +174,119 @@
      "url": "https://graphviz.org/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad uop/uir.py: parse_uir",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/uir.py#L158",
+    "note": "tinygrad's own reader for the UIR text format, which its docstring says also parses studentgrad's hand-written %names, nested (op ...) and [stacks]; compare tokenizing, literal handling and how each line becomes a hash-consed UOp.",
+    "for": "Tokenizer and parser"
+   },
+   {
+    "title": "tinygrad test/null/test_uir_render.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uir_render.py",
+    "note": "Round-trip tests asserting parse_uir(render_uir(x)) is x, a ready-made test pattern for your parser and interning.",
+    "for": "Interned UOp(op, src, arg)"
+   },
+   {
+    "title": "tinygrad uop/spec.py: type_verify and spec_shared",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/spec.py#L33",
+    "note": "How tinygrad expresses dtype and structure rules as a PatternMatcher and rejects graphs that match none; compare with your validator's reject list.",
+    "for": "Lazy dtype and shape + validator"
+   },
+   {
+    "title": "tinygrad uop/validate.py: validate_index_with_z3",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/validate.py#L96",
+    "note": "Translates UOps to z3 with bounded variables to prove an index in range, the exact check your bounds give you cheaply; useful for differential-testing your vmin/vmax.",
+    "for": "Bounds and index safety"
+   },
+   {
+    "title": "tinygrad uop/upat.py: upat_compile",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/upat.py#L173",
+    "note": "Compiles UPat patterns into straight Python source for speed; read after your interpreted rewrite engine works.",
+    "for": "Rewrite engine"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "Provably Correct Peephole Optimizations with Alive",
+    "by": "Nuno Lopes, David Menendez, Santosh Nagarakatte, John Regehr",
+    "url": "https://web.ist.utl.pt/nuno.lopes/pubs/alive-pldi15.pdf",
+    "note": "Sections 2-3 show how to state a rewrite rule with preconditions and check it with an SMT solver, the discipline your symbolic rules need."
+   },
+   {
+    "kind": "repo",
+    "title": "Alive2",
+    "by": "AliveToolkit",
+    "url": "https://github.com/AliveToolkit/alive2",
+    "note": "The successor tool that checks real LLVM optimizations; browse its bug list to see how often confident rewrites are wrong."
+   },
+   {
+    "kind": "blog",
+    "title": "Testing Dataflow Analyses for Precision and Soundness",
+    "by": "John Regehr",
+    "url": "https://blog.regehr.org/archives/1709",
+    "note": "Shows how to fuzz an abstract domain (known bits, ranges) for soundness and precision; apply it directly to your vmin/vmax."
+   },
+   {
+    "kind": "repo",
+    "title": "LLVM ConstantRange.cpp",
+    "by": "LLVM project",
+    "url": "https://github.com/llvm/llvm-project/blob/main/llvm/lib/IR/ConstantRange.cpp",
+    "note": "Production interval arithmetic with wrap-around; read add, multiply, udiv and shl to compare with the handout's bounds table."
+   },
+   {
+    "kind": "repo",
+    "title": "LLVM KnownBits.cpp",
+    "by": "LLVM project",
+    "url": "https://github.com/llvm/llvm-project/blob/main/llvm/lib/Support/KnownBits.cpp",
+    "note": "The bit-level domain that complements ranges; its xor/and/shl transfer functions are tighter than intervals for bit ops."
+   },
+   {
+    "kind": "blog",
+    "title": "Abstract interpretation in the Toy Optimizer",
+    "by": "Max Bernstein",
+    "url": "https://bernsteinbear.com/blog/toy-abstract-interpretation/",
+    "note": "A small runnable abstract interpreter over an SSA IR; the clearest bridge from your bounds pass to the general theory."
+   },
+   {
+    "kind": "paper",
+    "title": "Abstract Interpretation: A Unified Lattice Model for Static Analysis of Programs",
+    "by": "Patrick Cousot, Radhia Cousot",
+    "url": "https://www.di.ens.fr/~cousot/COUSOTpapers/publications.www/CousotCousot-POPL-77-ACM-p238--252-1977.pdf",
+    "note": "The founding paper; read the interval example and the widening section to see why overflowing bounds become I."
+   },
+   {
+    "kind": "paper",
+    "title": "Type-Safe Modular Hash-Consing",
+    "by": "Jean-Christophe Filliatre, Sylvain Conchon",
+    "url": "https://www.lri.fr/~filliatr/ftp/publis/hash-consing2.pdf",
+    "note": "Short paper on hash-consing with weak tables; the section on memory explains why tinygrad needs weakrefs in its UOp cache."
+   },
+   {
+    "kind": "paper",
+    "title": "Better Together: Unifying Datalog and Equality Saturation",
+    "by": "Yihong Zhang et al.",
+    "url": "https://arxiv.org/abs/2304.04332",
+    "note": "egglog: rewrites plus analyses such as intervals in one engine; read after egg to see bounds-aware rewriting done declaratively."
+   },
+   {
+    "kind": "repo",
+    "title": "Sea of Nodes: Simple",
+    "by": "Cliff Click et al.",
+    "url": "https://github.com/SeaOfNodes/Simple",
+    "note": "A chapter-by-chapter hash-consed graph IR with peephole rewrites and type lattices, the closest relative of a UOp graph in a classic compiler."
+   },
+   {
+    "kind": "repo",
+    "title": "Souper",
+    "by": "Google",
+    "url": "https://github.com/google/souper",
+    "note": "A superoptimizer that synthesizes missing peephole rules; a source of ideas for discovering rules instead of hand-writing them."
+   }
+  ],
+  "stretch": "Write a rule fuzzer: generate random UOp expressions over bounded variables, apply your rewrite set, and check every result against the original with z3 (or exhaustive evaluation for small ranges). Report soundness bugs and measure bounds precision as the mean interval width ratio versus the true range over 10,000 random expressions, and drive it below 1.2."
  },
  {
   "id": 19,
@@ -322,7 +434,84 @@
      "url": "https://hypothesis.readthedocs.io/en/latest/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad runtime/support/compiler_cpu.py: ClangCompiler",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/support/compiler_cpu.py#L5",
+    "note": "The flags and invocation tinygrad uses to turn rendered C into machine code.",
+    "for": "Compile with clang"
+   },
+   {
+    "title": "tinygrad runtime/ops_cpu.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/ops_cpu.py",
+    "note": "How tinygrad loads the compiled code and calls it with buffer pointers; compare with your ctypes runtime.",
+    "for": "Load and call through ctypes"
+   },
+   {
+    "title": "tinygrad uop/spec.py: validate_index",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/spec.py#L9",
+    "note": "The out-of-bounds load/store check built on vmin/vmax, matching rejected_store_oob.",
+    "for": "Ordering validator"
+   },
+   {
+    "title": "teenygrad",
+    "url": "https://github.com/tinygrad/teenygrad",
+    "note": "A roughly 1000-line ancestor of tinygrad with a NumPy backend; a small whole-system reference for lazy graph to executed buffers.",
+    "for": "Interpreter support for memory"
+   },
+   {
+    "title": "llama2.c run.c",
+    "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
+    "note": "Plain C kernels with buffers passed as pointers, the shape of code your emitter should produce.",
+    "for": "Toposort + C emitter"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "repo",
+    "title": "chibicc",
+    "by": "Rui Ueyama",
+    "url": "https://github.com/rui314/chibicc",
+    "note": "A small C compiler built in incremental commits; read its codegen to see what C constructs your emitter can rely on."
+   },
+   {
+    "kind": "course",
+    "title": "CS 6120: The Self-Guided Course",
+    "by": "Adrian Sampson",
+    "url": "https://www.cs.cornell.edu/courses/cs6120/2023fa/self-guided/",
+    "note": "Lessons on SSA, dataflow and memory; focus on the alias analysis and memory lessons for why load/store ordering is hard."
+   },
+   {
+    "kind": "paper",
+    "title": "MLIR: A Compiler Infrastructure for the End of Moore's Law",
+    "by": "Chris Lattner et al.",
+    "url": "https://arxiv.org/abs/2002.11054",
+    "note": "Section on side effects and regions shows how a production IR models memory effects that AFTER makes explicit."
+   },
+   {
+    "kind": "repo",
+    "title": "Sea of Nodes: Simple",
+    "by": "Cliff Click et al.",
+    "url": "https://github.com/SeaOfNodes/Simple",
+    "note": "The memory chapters thread a memory edge through loads and stores, an alternative design to AFTER worth comparing."
+   },
+   {
+    "kind": "book",
+    "title": "Optimizing software in C++",
+    "by": "Agner Fog",
+    "url": "https://www.agner.org/optimize/optimizing_cpp.pdf",
+    "note": "The chapters on pointer aliasing and what compilers can optimize explain how restrict changes the C you emit."
+   },
+   {
+    "kind": "repo",
+    "title": "llm.c",
+    "by": "Andrej Karpathy",
+    "url": "https://github.com/karpathy/llm.c",
+    "note": "train_gpt2.c is a full model as plain C loops over pointer buffers, a target for what your backend could eventually emit."
+   }
+  ],
+  "stretch": "Add a restrict-aware emitter and an alias checker: prove from your AFTER graph which buffers never alias, emit __restrict__ only for those, and show with clang -O3 -Rpass=loop-vectorize on 5 kernels that vectorization appears where it did not before, with measured speedup."
  },
  {
   "id": 20,
@@ -465,7 +654,84 @@
      "url": "https://siboehm.com/articles/22/Fast-MMM-on-CPU"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "darknet im2col.c",
+    "url": "https://github.com/pjreddie/darknet/blob/master/src/im2col.c",
+    "note": "The classic im2col loop in about 40 lines, to compare with your direct conv indexing.",
+    "for": "Hand-write conv3x3.uir"
+   },
+   {
+    "title": "darknet convolutional_layer.c",
+    "url": "https://github.com/pjreddie/darknet/blob/master/src/convolutional_layer.c",
+    "note": "Shows im2col followed by gemm as a full conv forward pass.",
+    "for": "Hand-write conv3x3.uir"
+   },
+   {
+    "title": "llama2.c run.c: matmul",
+    "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
+    "note": "A minimal float32 matmul loop with an accumulator, the reference shape for gemm_256.",
+    "for": "Hand-write gemm_256.uir"
+   },
+   {
+    "title": "tinygrad test/null/test_linearizer.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_linearizer.py",
+    "note": "Tests of range placement and loop structure in tinygrad's linearizer, useful as test ideas for your ranges property.",
+    "for": "Render ranges as nested for loops"
+   },
+   {
+    "title": "how-to-optimize-gemm",
+    "url": "https://github.com/flame/how-to-optimize-gemm",
+    "note": "Step-by-step C versions of gemm from naive to blocked, each a small diff.",
+    "for": "Hand-write gemm_256.uir"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "Anatomy of High-Performance Matrix Multiplication",
+    "by": "Kazushige Goto, Robert van de Geijn",
+    "url": "https://www.cs.utexas.edu/~flame/pubs/GotoTOMS_revision.pdf",
+    "note": "The packing and blocking design behind every fast CPU gemm; read sections 3-4 after your naive loop works."
+   },
+   {
+    "kind": "blog",
+    "title": "Making Deep Learning Go Brrrr From First Principles",
+    "by": "Horace He",
+    "url": "https://horace.io/brrr_intro.html",
+    "note": "Compute, memory and overhead bound regimes; use it to predict how slow your naive gemm should be."
+   },
+   {
+    "kind": "course",
+    "title": "CS 6120: The Self-Guided Course",
+    "by": "Adrian Sampson",
+    "url": "https://www.cs.cornell.edu/courses/cs6120/2023fa/self-guided/",
+    "note": "The loop optimization lesson covers loop-invariant code motion, which is what your innermost-placement rule does."
+   },
+   {
+    "kind": "book",
+    "title": "Optimizing software in C++",
+    "by": "Agner Fog",
+    "url": "https://www.agner.org/optimize/optimizing_cpp.pdf",
+    "note": "Floating-point and loop chapters show why float vs double and summation order change speed and results."
+   },
+   {
+    "kind": "repo",
+    "title": "Halide",
+    "by": "Halide team",
+    "url": "https://github.com/halide/Halide",
+    "note": "Its tutorials lessons 5 and 8 show loop nests and compute placement as a schedule, the generalization of your ranges placement."
+   },
+   {
+    "kind": "blog",
+    "title": "GPU Glossary",
+    "by": "Modal",
+    "url": "https://modal.com/gpu-glossary",
+    "note": "Look up arithmetic intensity and roofline terms before Part IV moves these loops to the GPU."
+   }
+  ],
+  "stretch": "Write a loop-order autotuner for gemm_256: enumerate all 6 permutations of the three ranges plus 2-level tiling with tile sizes in {8,16,32,64}, compile each, and report GFLOP/s against NumPy. Target at least 30 percent of NumPy single-thread float32 throughput with a schedule your compiler emits."
  },
  {
   "id": 21,
@@ -606,7 +872,85 @@
      "url": "https://jax-ml.github.io/scaling-book/roofline/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "teenygrad lazy.py",
+    "url": "https://github.com/tinygrad/teenygrad/blob/main/teenygrad/lazy.py",
+    "note": "The tiny lazy buffer that decides when to realize, the materialization question in its simplest form.",
+    "for": "Materialization decision"
+   },
+   {
+    "title": "tinygrad codegen/indexing.py (pinned)",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/indexing.py",
+    "note": "The whole rangeify indexing file; read beyond the linked functions for how reduce ranges are created and closed.",
+    "for": "Rangeify pass"
+   },
+   {
+    "title": "Halide apps/blur",
+    "url": "https://github.com/halide/Halide/tree/main/apps/blur",
+    "note": "The paper's two-stage blur as runnable code with several schedules, to compare fused vs staged output.",
+    "for": "Materialization decision"
+   },
+   {
+    "title": "PyTorch Inductor scheduler.py",
+    "url": "https://github.com/pytorch/pytorch/blob/main/torch/_inductor/scheduler.py",
+    "note": "Production fuse-or-not logic (can_fuse, score_fusion) for comparison with your rule.",
+    "for": "Materialization decision"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "Triton: An Intermediate Language and Compiler for Tiled Neural Network Computations",
+    "by": "Philippe Tillet, H.T. Kung, David Cox",
+    "url": "https://www.eecs.harvard.edu/~htk/publication/2019-mapl-tillet-kung-cox.pdf",
+    "note": "Shows fusion at tile granularity; read the language and compiler sections."
+   },
+   {
+    "kind": "blog",
+    "title": "Making Deep Learning Go Brrrr From First Principles",
+    "by": "Horace He",
+    "url": "https://horace.io/brrr_intro.html",
+    "note": "The operator fusion section quantifies why staging an elementwise chain costs memory bandwidth."
+   },
+   {
+    "kind": "repo",
+    "title": "Halide",
+    "by": "Halide team",
+    "url": "https://github.com/halide/Halide",
+    "note": "Tutorial lesson 8 (scheduling multi-stage pipelines) is compute_at/store_at, the exact fuse-or-stage decision."
+   },
+   {
+    "kind": "repo",
+    "title": "Apache TVM",
+    "by": "Apache",
+    "url": "https://github.com/apache/tvm",
+    "note": "Its operator fusion pass (FuseOps) classifies ops as injective, reduction or opaque, a rule set to compare with yours."
+   },
+   {
+    "kind": "blog",
+    "title": "XLA operation semantics",
+    "by": "OpenXLA",
+    "url": "https://openxla.org/xla/operation_semantics",
+    "note": "Reduce, Broadcast and Reshape definitions in a production IR; check your reduce semantics against Reduce."
+   },
+   {
+    "kind": "paper",
+    "title": "MLIR: A Compiler Infrastructure for the End of Moore's Law",
+    "by": "Chris Lattner et al.",
+    "url": "https://arxiv.org/abs/2002.11054",
+    "note": "How linalg-style ops carry iteration spaces, the same idea as attaching ranges to ops."
+   },
+   {
+    "kind": "blog",
+    "title": "Introducing Triton: Open-source GPU programming for neural networks",
+    "by": "Philippe Tillet (OpenAI)",
+    "url": "https://openai.com/index/triton/",
+    "note": "The fused softmax example shows a reduce read twice without a staged buffer."
+   }
+  ],
+  "stretch": "Implement a cost-model-driven materializer: estimate bytes moved and recomputed flops for fuse vs stage per node, choose the minimum, and evaluate on softmax, layernorm and a 2-stage blur. Report bytes moved and wall time for all-fuse, all-stage and your model, and beat both baselines on at least two of three."
  },
  {
   "id": 22,
@@ -747,7 +1091,91 @@
      "url": "https://github.com/Z3Prover/z3"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad mixin/movement.py: MovementMixin",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/movement.py#L12",
+    "note": "The user-facing reshape/permute/pad/shrink/expand argument checks and shape rules.",
+    "for": "Shapes of any rank + shape rules for 5 movement ops"
+   },
+   {
+    "title": "tinygrad uop/movement.py: mop_cleanup",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/movement.py#L5",
+    "note": "Rules that merge and cancel chains of movement ops before indexing.",
+    "for": "Movement ops as index rewrites"
+   },
+   {
+    "title": "tinygrad v0.9.0 shape/view.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/v0.9.0/tinygrad/shape/view.py",
+    "note": "The older View class with shape, strides, offset and mask, plus reshape merging; the stride-based version of the same problem.",
+    "for": "Movement ops as index rewrites"
+   },
+   {
+    "title": "tinygrad test/null/test_indexing.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_indexing.py",
+    "note": "Indexing tests to port as checks for your index rewrites.",
+    "for": "Bounds-driven div/mod simplification"
+   },
+   {
+    "title": "teenygrad shape/",
+    "url": "https://github.com/tinygrad/teenygrad/tree/main/teenygrad/shape",
+    "note": "A minimal ShapeTracker implementation small enough to read in one sitting.",
+    "for": "Movement ops as index rewrites"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "Linear Layouts: Robust Code Generation of Efficient Tensor Computation Using F2",
+    "by": "Keren Zhou et al.",
+    "url": "https://arxiv.org/abs/2505.23819",
+    "note": "Triton's layout system as linear maps over bits; read sections 2-3 to see index rewrites made algebraic."
+   },
+   {
+    "kind": "blog",
+    "title": "CuTe Layouts",
+    "by": "NVIDIA CUTLASS",
+    "url": "https://github.com/NVIDIA/cutlass/blob/main/media/docs/cpp/cute/01_layout.md",
+    "note": "Shape:stride layouts with hierarchical modes; the coalesce and composition parts generalize your reshape div/mod."
+   },
+   {
+    "kind": "blog",
+    "title": "CuTe Layout Algebra",
+    "by": "Lei Mao",
+    "url": "https://leimao.github.io/article/CuTe-Layout-Algebra/",
+    "note": "Worked proofs of layout composition and complement; focus on when a reshape stays expressible as strides."
+   },
+   {
+    "kind": "blog",
+    "title": "Stride Visualizer",
+    "by": "Edward Z. Yang",
+    "url": "https://ezyang.github.io/stride-visualizer/",
+    "note": "Interactive view of how sizes and strides map indices to storage; test your transpose_index by hand here."
+   },
+   {
+    "kind": "blog",
+    "title": "numpy.lib.stride_tricks.as_strided",
+    "by": "NumPy",
+    "url": "https://numpy.org/doc/stable/reference/generated/numpy.lib.stride_tricks.as_strided.html",
+    "note": "Build sliding windows (conv) from strides alone; the warnings section shows overlapping views."
+   },
+   {
+    "kind": "problems",
+    "title": "GPU Puzzles",
+    "by": "Sasha Rush",
+    "url": "https://github.com/srush/GPU-Puzzles",
+    "note": "The follow-on to Tensor Puzzles; puzzles 1-10 practice the same index arithmetic on threads."
+   },
+   {
+    "kind": "repo",
+    "title": "Halide",
+    "by": "Halide team",
+    "url": "https://github.com/halide/Halide",
+    "note": "Its bounds inference and BoundaryConditions show pad as a clamped or masked index, like your where on validity."
+   }
+  ],
+  "stretch": "Write a movement-op canonicalizer and prove it: for random chains of up to 6 movement ops on shapes with up to 4 dims, compare your generated index expressions to NumPy on every element, and count / and % ops in the emitted C. Make 100 percent of reshape-then-inverse-reshape chains compile to div/mod-free code, and report the fraction for general chains."
  },
  {
   "id": 23,
@@ -903,7 +1331,105 @@
      "url": "https://karpathy.github.io/2019/04/25/recipe/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "micrograd engine.py",
+    "url": "https://github.com/karpathy/micrograd/blob/master/micrograd/engine.py",
+    "note": "Scalar reverse-mode autodiff in about 100 lines: per-op _backward closures plus a reverse topological sort, the same shape as your gradient rewrite.",
+    "for": "gradient as a rewrite"
+   },
+   {
+    "title": "tinygrad beautiful_mnist.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/beautiful_mnist.py",
+    "note": "A complete MNIST training script on tinygrad's lazy graph and autograd, useful to compare your UIR training loop and accuracy target.",
+    "for": "MNIST MLP training"
+   },
+   {
+    "title": "teenygrad",
+    "url": "https://github.com/tinygrad/teenygrad",
+    "note": "A sub-1000-line tinygrad with the same Function-per-op backward rules, easier to read end to end than full tinygrad.",
+    "for": "gradient as a rewrite"
+   },
+   {
+    "title": "llm.c train_gpt2.c",
+    "url": "https://github.com/karpathy/llm.c/blob/master/train_gpt2.c",
+    "note": "Hand-written forward and backward for every GPT-2 layer in plain C; check your generated backward kernels for layernorm, softmax and matmul against it.",
+    "for": "stories15M / real models build"
+   },
+   {
+    "title": "SLEEF",
+    "url": "https://github.com/shibatch/sleef",
+    "note": "Production vectorized libm with documented ULP bounds; compare its range reduction and polynomial choices with your exp2/log2/sin.",
+    "for": "exp2/log2/sqrt/sin yourself"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "video",
+    "title": "The spelled-out intro to neural networks and backpropagation: building micrograd",
+    "by": "Andrej Karpathy",
+    "url": "https://www.youtube.com/watch?v=VMj-3S1tku0",
+    "note": "Builds reverse-mode autodiff live; watch the backward-pass and topological-sort sections."
+   },
+   {
+    "kind": "video",
+    "title": "Building makemore Part 4: Becoming a Backprop Ninja",
+    "by": "Andrej Karpathy",
+    "url": "https://www.youtube.com/watch?v=q8SA3rM6ckI",
+    "note": "Derives every gradient of an MLP with batchnorm and cross-entropy by hand, which is exactly the per-op rule table you write."
+   },
+   {
+    "kind": "paper",
+    "title": "You Only Linearize Once: Tangents Transpose to Gradients",
+    "by": "Radul, Paszke, Frostig, Johnson, Maclaurin",
+    "url": "https://arxiv.org/abs/2204.10923",
+    "note": "The formal version of JAX's linearize-plus-transpose design; read sections 2-4 to see why reverse mode needs only forward rules plus transposition."
+   },
+   {
+    "kind": "blog",
+    "title": "Calculus on Computational Graphs: Backpropagation",
+    "by": "Christopher Olah",
+    "url": "https://colah.github.io/posts/2015-08-Backprop/",
+    "note": "Short visual argument for why reverse mode costs one backward sweep; read the forward vs reverse factoring section."
+   },
+   {
+    "kind": "blog",
+    "title": "Evaluating the gradient is as fast as evaluating the function",
+    "by": "Tim Vieira",
+    "url": "https://timvieira.github.io/blog/post/2016/09/25/evaluating-fx-is-as-fast-as-fx/",
+    "note": "Explains the cheap gradient principle with code; use it to bound the cost of your generated backward graph."
+   },
+   {
+    "kind": "lecture",
+    "title": "CS231n: Backpropagation, Intuitions",
+    "by": "Stanford CS231n",
+    "url": "https://cs231n.github.io/optimization-2/",
+    "note": "Gradient patterns for add, mul, max and matmul with dimension analysis; focus on the vectorized operations section."
+   },
+   {
+    "kind": "paper",
+    "title": "SLEEF: A Portable Vectorized Library of C Standard Mathematical Functions",
+    "by": "Naoki Shibata, Francesco Petrogalli",
+    "url": "https://arxiv.org/abs/2001.09258",
+    "note": "How a real libm does Payne-Hanek and Cody-Waite reduction with error bounds; read the sections on trig reduction and accuracy testing."
+   },
+   {
+    "kind": "repo",
+    "title": "HIPS/autograd",
+    "by": "Maclaurin, Duvenaud, Johnson",
+    "url": "https://github.com/HIPS/autograd",
+    "note": "The predecessor of JAX autodiff; autograd/numpy/numpy_vjps.py is a complete table of NumPy VJP rules to cross-check yours."
+   },
+   {
+    "kind": "video",
+    "title": "Let's reproduce GPT-2 (124M)",
+    "by": "Andrej Karpathy",
+    "url": "https://www.youtube.com/watch?v=l8pRSuU81PU",
+    "note": "Full training of a real model with performance work along the way; watch the speedup section for which optimizations matter when you move past MNIST."
+   }
+  ],
+  "stretch": "Add forward-mode (jvp) and derive reverse mode from linearize plus a transpose pass, as in YOLO, then compute Hessian-vector products by composing them. Verify HVPs against finite differences on the MNIST MLP and train it with a few steps of Newton-CG; report gradient-graph size vs forward-graph size for every model in the project."
  },
  {
   "id": 24,
@@ -1045,7 +1571,126 @@
      "url": "https://siboehm.com/articles/22/Fast-MMM-on-CPU"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "flame/how-to-optimize-gemm source",
+    "url": "https://github.com/flame/how-to-optimize-gemm",
+    "note": "The C code for each Optimization_* step of the wiki, so you can diff your generated micro-kernel against the matching step.",
+    "for": "UPCAST: unroll + register accumulators"
+   },
+   {
+    "title": "salykova/matmul.c",
+    "url": "https://github.com/salykova/matmul.c",
+    "note": "The author's code for the matmul-cpu post: packing, cache blocking, an AVX2/FMA micro-kernel and OpenMP threading that matches OpenBLAS.",
+    "for": "SIMD and pthreads; Autotuner project baseline"
+   },
+   {
+    "title": "tinygrad search.py (BEAM)",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py",
+    "note": "tinygrad's beam search over kernel opts with a timing cache, a working reference for the project's search and tuning database.",
+    "for": "Autotuner project"
+   },
+   {
+    "title": "tinygrad postrange.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/postrange.py",
+    "note": "Where tinygrad applies opts (UPCAST, UNROLL, LOCAL) by splitting ranges, the same split-and-permute rewrite you implement.",
+    "for": "Loop reorder + tiling as rewrites"
+   },
+   {
+    "title": "BLIS",
+    "url": "https://github.com/flame/blis",
+    "note": "Production BLAS whose kernels/ directory holds per-architecture micro-kernels in the Goto layout.",
+    "for": "UPCAST micro-kernel"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "Anatomy of High-Performance Matrix Multiplication",
+    "by": "Kazushige Goto, Robert van de Geijn",
+    "url": "https://www.cs.utexas.edu/~flame/pubs/GotoTOMS_revision.pdf",
+    "note": "The source of the packing plus micro-kernel design used by every fast BLAS; focus on the layered cache-blocking argument."
+   },
+   {
+    "kind": "paper",
+    "title": "Halide: A Language and Compiler for Optimizing Parallelism, Locality, and Recomputation",
+    "by": "Jonathan Ragan-Kelley et al.",
+    "url": "https://people.csail.mit.edu/jrk/halide-pldi13.pdf",
+    "note": "The algorithm/schedule split that your axis knobs imitate; read the scheduling section and autotuning results."
+   },
+   {
+    "kind": "book",
+    "title": "What Every Programmer Should Know About Memory",
+    "by": "Ulrich Drepper",
+    "url": "https://www.akkadia.org/drepper/cpumemory.pdf",
+    "note": "Deep treatment of caches, TLBs and prefetching; read section 3 (CPU caches) and section 6.2 (cache access, with the matmul example)."
+   },
+   {
+    "kind": "talk",
+    "title": "Cpu Caches and Why You Care",
+    "by": "Scott Meyers",
+    "url": "https://www.youtube.com/watch?v=WDIkqP4JbkE",
+    "note": "An hour on cache lines, false sharing and prefetching; watch the false sharing part before threading your GLOBAL axes."
+   },
+   {
+    "kind": "talk",
+    "title": "Data-Oriented Design and C++",
+    "by": "Mike Acton",
+    "url": "https://www.youtube.com/watch?v=rX0ItVEVjHc",
+    "note": "Argues layout dictates performance with real cache-miss counts; focus on the worked examples in the second half."
+   },
+   {
+    "kind": "talk",
+    "title": "Efficiency with Algorithms, Performance with Data Structures",
+    "by": "Chandler Carruth",
+    "url": "https://www.youtube.com/watch?v=fHNmRkzxHWs",
+    "note": "Explains why contiguous memory wins on modern CPUs; watch the latency numbers section."
+   },
+   {
+    "kind": "book",
+    "title": "Software optimization resources",
+    "by": "Agner Fog",
+    "url": "https://www.agner.org/optimize/",
+    "note": "Instruction tables and microarchitecture guides; use the instruction tables to compute FMA throughput for your peak estimate."
+   },
+   {
+    "kind": "problems",
+    "title": "uops.info",
+    "by": "Andreas Abel, Jan Reineke",
+    "url": "https://uops.info/",
+    "note": "Measured latency, throughput and ports for every x86 instruction; look up your vfmadd variant to size the accumulator count."
+   },
+   {
+    "kind": "paper",
+    "title": "TVM: An Automated End-to-End Optimizing Compiler for Deep Learning",
+    "by": "Tianqi Chen et al.",
+    "url": "https://arxiv.org/abs/1802.04799",
+    "note": "Schedule primitives plus a learned cost model for tuning; read the ML-based cost model section for your autotuner project."
+   },
+   {
+    "kind": "course",
+    "title": "Performance-Aware Programming",
+    "by": "Casey Muratori",
+    "url": "https://www.computerenhance.com/p/table-of-contents",
+    "note": "A course on reasoning from hardware up; the SIMD and cache bandwidth parts map directly onto this module."
+   },
+   {
+    "kind": "course",
+    "title": "MIT 6.172 Performance Engineering of Software Systems",
+    "by": "Charles Leiserson, Julian Shun",
+    "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/",
+    "note": "Lecture 1 walks matmul from Python to 50000x faster; later lectures cover caches, vectorization and multicore."
+   },
+   {
+    "kind": "blog",
+    "title": "Performance Matters",
+    "by": "Travis Downs",
+    "url": "https://travisdowns.github.io/",
+    "note": "Careful microbenchmark posts on store buffers, AVX frequency and memory; read the posts on AVX-512 frequency before choosing SIMD width."
+   }
+  ],
+  "stretch": "Replace the autotuner's measurement loop with a learned cost model (gradient-boosted trees or a small MLP over loop features, as in TVM/Ansor) and show it reaches within 5% of the best measured schedule with 10x fewer real runs. Extend the micro-kernel to AVX-512 or NEON and report percentage of measured peak on 2048^3 GEMM next to OpenBLAS and BLIS."
  },
  {
   "id": 25,
@@ -1192,7 +1837,86 @@
      "url": "https://siboehm.com/articles/22/CUDA-MMM"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad ops_cuda.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/ops_cuda.py",
+    "note": "tinygrad's CUDA runtime: NVRTC compile, module load and kernel launch with grid/block dims, a template for your launcher.",
+    "for": "CUDA renderer + NVRTC via cuda-python"
+   },
+   {
+    "title": "NVIDIA cuda-samples",
+    "url": "https://github.com/NVIDIA/cuda-samples",
+    "note": "Includes the reduction sample with Mark Harris's kernel variants in runnable form.",
+    "for": "Reductions / kernels 4-6"
+   },
+   {
+    "title": "NVIDIA CCCL (CUB)",
+    "url": "https://github.com/NVIDIA/cccl",
+    "note": "CUB's BlockReduce and DeviceReduce are the production reduction kernels to benchmark your generated ones against.",
+    "for": "GPU kernel lab project"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "blog",
+    "title": "GPU Glossary",
+    "by": "Modal",
+    "url": "https://modal.com/gpu-glossary",
+    "note": "Linked definitions from SM and warp to occupancy and memory coalescing; read the device hardware and performance sections."
+   },
+   {
+    "kind": "blog",
+    "title": "Making Deep Learning Go Brrrr From First Principles",
+    "by": "Horace He",
+    "url": "https://horace.io/brrr_intro.html",
+    "note": "Splits runtime into compute, memory bandwidth and overhead; use its framing to classify every kernel you generate here."
+   },
+   {
+    "kind": "paper",
+    "title": "Dissecting the NVIDIA Volta GPU Architecture via Microbenchmarking",
+    "by": "Jia, Maggioni, Staiger, Scarpazza",
+    "url": "https://arxiv.org/abs/1804.06826",
+    "note": "Measured cache sizes, latencies and bank behaviour; read the memory hierarchy chapter to set realistic bandwidth targets."
+   },
+   {
+    "kind": "problems",
+    "title": "LeetGPU",
+    "by": "LeetGPU",
+    "url": "https://leetgpu.com/",
+    "note": "Browser CUDA problems with timing on real GPUs; do the reduction and softmax problems and compare with your compiler output."
+   },
+   {
+    "kind": "problems",
+    "title": "GPU MODE kernel leaderboards",
+    "by": "GPU MODE",
+    "url": "https://www.gpumode.com/",
+    "note": "Ranked kernel competitions on real hardware; read top submissions for the problems that match this module."
+   },
+   {
+    "kind": "video",
+    "title": "GPU MODE lectures (YouTube)",
+    "by": "GPU MODE",
+    "url": "https://www.youtube.com/@GPUMODE",
+    "note": "Recorded lectures by kernel engineers; pick the PMPP chapter series and the Triton and profiling lectures."
+   },
+   {
+    "kind": "blog",
+    "title": "Lei Mao's Log Book",
+    "by": "Lei Mao",
+    "url": "https://leimao.github.io/",
+    "note": "Precise CUDA posts on shared-memory bank conflicts and coalescing; search the CUDA tag for bank conflicts."
+   },
+   {
+    "kind": "blog",
+    "title": "Chips and Cheese",
+    "by": "Chester Lam et al.",
+    "url": "https://chipsandcheese.com/",
+    "note": "Microbenchmark deep dives on GPU architectures; read the article for the GPU you run on to learn its cache and bandwidth numbers."
+   }
+  ],
+  "stretch": "Add a Triton or PTX backend next to CUDA C and generate a single-pass reduction with decoupled look-back (as in CUB), then show elementwise, reduce and softmax each reaching 90% or more of measured DRAM bandwidth on two GPU generations. Publish ncu sections proving where the last 10% goes."
  },
  {
   "id": 26,
@@ -1357,7 +2081,119 @@
      "url": "https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "siboehm/SGEMM_CUDA",
+    "url": "https://github.com/siboehm/SGEMM_CUDA",
+    "note": "The author's code for every kernel in the CUDA matmul worklog, including warptiling and autotuning scripts.",
+    "for": "Shared-memory tiled GEMM; Register tiling"
+   },
+   {
+    "title": "spatters/mma-matmul",
+    "url": "https://github.com/spatters/mma-matmul",
+    "note": "The source for the Ada tensor-core post: mma.sync, ldmatrix, permuted shared-memory layout and cp.async pipelining.",
+    "for": "mma.sync emission + double buffering"
+   },
+   {
+    "title": "pranjalssh/fast.cu",
+    "url": "https://github.com/pranjalssh/fast.cu",
+    "note": "Kernels from the H100 worklog that beat cuBLAS using TMA, WGMMA and warp specialization.",
+    "for": "GEMM vs cuBLAS (Hopper)"
+   },
+   {
+    "title": "Dao-AILab/flash-attention",
+    "url": "https://github.com/Dao-AILab/flash-attention",
+    "note": "Official FlashAttention-2/3 code; the forward kernel is the target for your fused attention benchmark.",
+    "for": "Flash attention project"
+   },
+   {
+    "title": "HazyResearch/ThunderKittens",
+    "url": "https://github.com/HazyResearch/ThunderKittens",
+    "note": "Tile-based kernels with short readable attention and GEMM implementations, a middle ground between minimal and production code.",
+    "for": "Flash attention / tensor-core tiles"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "blog",
+    "title": "Inside NVIDIA GPUs: Anatomy of high performance matmul kernels",
+    "by": "Aleksa Gordic",
+    "url": "https://www.aleksagordic.com/blog/matmul",
+    "note": "Long walk from GPU memory model to Hopper TMA and WGMMA kernels; focus on the Hopper section."
+   },
+   {
+    "kind": "paper",
+    "title": "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision",
+    "by": "Shah, Bikshandi, Zhang, Thakkar, Ramani, Dao",
+    "url": "https://arxiv.org/abs/2407.08608",
+    "note": "Warp specialization and pingpong scheduling of softmax and GEMM on Hopper; read section 3."
+   },
+   {
+    "kind": "talk",
+    "title": "FlashAttention - Tri Dao | Stanford MLSys #67",
+    "by": "Tri Dao",
+    "url": "https://www.youtube.com/watch?v=gMOAud7hZg4",
+    "note": "The author explaining IO-aware tiling and recomputation; watch the algorithm part before writing your fused kernel."
+   },
+   {
+    "kind": "talk",
+    "title": "Optimizing attention for modern hardware",
+    "by": "Tri Dao",
+    "url": "https://www.youtube.com/watch?v=cPwt1Y10gjI",
+    "note": "Covers FA2 and FA3 design choices on newer GPUs; focus on work partitioning across warps."
+   },
+   {
+    "kind": "paper",
+    "title": "Online normalizer calculation for softmax",
+    "by": "Maxim Milakov, Natalia Gimelshein",
+    "url": "https://arxiv.org/abs/1805.02867",
+    "note": "The one-pass softmax trick flash attention rests on; reproduce algorithm 3 in your compiler."
+   },
+   {
+    "kind": "repo",
+    "title": "NVIDIA CUTLASS",
+    "by": "NVIDIA",
+    "url": "https://github.com/NVIDIA/cutlass",
+    "note": "CuTe layouts and the examples/ directory show how production GEMMs tile for every architecture; start with the CuTe tutorial examples."
+   },
+   {
+    "kind": "blog",
+    "title": "Colfax Research",
+    "by": "Colfax International",
+    "url": "https://research.colfax-intl.com/",
+    "note": "CUTLASS/CuTe tutorials on WGMMA, TMA and FlashAttention-3 internals; read the WGMMA tutorial."
+   },
+   {
+    "kind": "repo",
+    "title": "DeepGEMM",
+    "by": "DeepSeek",
+    "url": "https://github.com/deepseek-ai/DeepGEMM",
+    "note": "Compact FP8 GEMM kernels with JIT compilation; read the main kernel to see a short production-grade Hopper GEMM."
+   },
+   {
+    "kind": "paper",
+    "title": "ThunderKittens: Simple, Fast, and Adorable AI Kernels",
+    "by": "Spector et al.",
+    "url": "https://arxiv.org/abs/2410.20399",
+    "note": "Argues 16x16 tiles as the programming primitive; relevant if your scheduler targets tiles instead of scalars."
+   },
+   {
+    "kind": "problems",
+    "title": "KernelBench",
+    "by": "Ouyang et al.",
+    "url": "https://arxiv.org/abs/2502.10517",
+    "note": "250 PyTorch workloads to beat with custom kernels; run your compiler on the level 1 and 2 tasks as an outside benchmark."
+   },
+   {
+    "kind": "lecture",
+    "title": "Triton tutorial: Matrix Multiplication",
+    "by": "Triton",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html",
+    "note": "Block-level GEMM with grouped ordering for L2 reuse; copy the grouped program-id swizzle into your scheduler."
+   }
+  ],
+  "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, wgmma or tcgen05, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at 8192^3 and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."
  },
  {
   "id": 27,
@@ -1498,7 +2334,106 @@
      "url": "https://github.com/NVIDIA/nccl-tests"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad beautiful_mnist_multigpu.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/beautiful_mnist_multigpu.py",
+    "note": "Data-parallel MNIST on tinygrad's shard API, the direct counterpart of the data-parallel lab.",
+    "for": "Data-parallel MNIST on 2+ GPUs"
+   },
+   {
+    "title": "huggingface/picotron",
+    "url": "https://github.com/huggingface/picotron",
+    "note": "Minimal educational 4D parallelism (data, tensor, pipeline, context) in a few short files, written alongside the Ultrascale Playbook.",
+    "for": "Tensor-parallel matmul; Sharding planner project"
+   },
+   {
+    "title": "NVIDIA Megatron-LM",
+    "url": "https://github.com/NVIDIA/Megatron-LM",
+    "note": "The reference column/row-parallel linear layers; compare with your tensor-parallel matmul and collective placement.",
+    "for": "Tensor-parallel matmul"
+   },
+   {
+    "title": "pytorch/torchtitan",
+    "url": "https://github.com/pytorch/torchtitan",
+    "note": "PyTorch-native FSDP2, TP and pipeline parallel composed on a DeviceMesh, readable end to end.",
+    "for": "Sharding planner project"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "GSPMD: General and Scalable Parallelization for ML Computation Graphs",
+    "by": "Xu et al.",
+    "url": "https://arxiv.org/abs/2105.04663",
+    "note": "Sharding annotations plus propagation in XLA, the production version of your pass; read the propagation rules section."
+   },
+   {
+    "kind": "paper",
+    "title": "Alpa: Automating Inter- and Intra-Operator Parallelism",
+    "by": "Zheng et al.",
+    "url": "https://arxiv.org/abs/2201.12023",
+    "note": "Formulates sharding choice as an ILP over a cost model, a direct template for the project's planner."
+   },
+   {
+    "kind": "paper",
+    "title": "Mesh-TensorFlow: Deep Learning for Supercomputers",
+    "by": "Shazeer et al.",
+    "url": "https://arxiv.org/abs/1811.02084",
+    "note": "Early named-dimension sharding over a device mesh; read the layout and communication sections."
+   },
+   {
+    "kind": "paper",
+    "title": "GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism",
+    "by": "Huang et al.",
+    "url": "https://arxiv.org/abs/1811.06965",
+    "note": "Micro-batch pipeline parallelism and its bubble cost; adds a third axis to your planner."
+   },
+   {
+    "kind": "paper",
+    "title": "PyTorch FSDP: Experiences on Scaling Fully Sharded Data Parallel",
+    "by": "Zhao et al.",
+    "url": "https://arxiv.org/abs/2304.11277",
+    "note": "Engineering details of FSDP in production: prefetching, overlap and memory; read the system design section."
+   },
+   {
+    "kind": "book",
+    "title": "How to Scale Your Model: How to Think About GPUs",
+    "by": "Austin et al. (Google DeepMind)",
+    "url": "https://jax-ml.github.io/scaling-book/gpus/",
+    "note": "GPU networking (NVLink, InfiniBand) and collective costs; use its bandwidth numbers in your cost model."
+   },
+   {
+    "kind": "lecture",
+    "title": "JAX: Manual parallelism with shard_map",
+    "by": "JAX team",
+    "url": "https://docs.jax.dev/en/latest/notebooks/shard_map.html",
+    "note": "Per-device programs with explicit collectives; use it to check your inserted collectives against JAX on the same matmul."
+   },
+   {
+    "kind": "blog",
+    "title": "How to Train Really Large Models on Many GPUs?",
+    "by": "Lilian Weng",
+    "url": "https://lilianweng.github.io/posts/2021-09-25-train-large/",
+    "note": "Survey of data, pipeline, tensor and expert parallelism with references; good map before reading primary papers."
+   },
+   {
+    "kind": "repo",
+    "title": "stas00/ml-engineering",
+    "by": "Stas Bekman",
+    "url": "https://github.com/stas00/ml-engineering",
+    "note": "Practical notes from training large models; read the network and debugging chapters for multi-GPU failure modes."
+   },
+   {
+    "kind": "repo",
+    "title": "DualPipe",
+    "by": "DeepSeek",
+    "url": "https://github.com/deepseek-ai/DualPipe",
+    "note": "Bidirectional pipeline schedule that overlaps compute and communication from DeepSeek-V3; read the schedule diagram in the README."
+   }
+  ],
+  "stretch": "Extend the planner to choose among data, tensor, pipeline and FSDP sharding with an ILP or DP search (as in Alpa) and overlap collectives with compute. On 4+ GPUs, show the chosen plan for a 1B-parameter transformer lies within 10% of measured best across all enumerated plans and reach at least 40% MFU."
  },
  {
   "id": 28,
@@ -1661,7 +2596,127 @@
      "url": "https://github.com/karpathy/llama2.c"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "andrewkchan/yalm",
+    "url": "https://github.com/andrewkchan/yalm",
+    "note": "Code for the Fast LLM Inference From Scratch post: CPU and CUDA inference with quantization and fused kernels.",
+    "for": "KV cache; int8 weights; batching"
+   },
+   {
+    "title": "gpt-fast generate.py",
+    "url": "https://github.com/pytorch-labs/gpt-fast/blob/main/generate.py",
+    "note": "Speculative decoding with draft model accept/reject in a few dozen lines, plus the KV-cache decode loop.",
+    "for": "Speculative decoding"
+   },
+   {
+    "title": "tinygrad examples/llama.py",
+    "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/llama.py",
+    "note": "LLaMA inference on tinygrad with KV cache and JIT, showing how a tensor compiler runs decode.",
+    "for": "KV cache on your compiler"
+   },
+   {
+    "title": "llama.cpp",
+    "url": "https://github.com/ggml-org/llama.cpp",
+    "note": "Production quantized inference; ggml's Q8_0 format and its dot kernels are a reference for your int8 path.",
+    "for": "int8 weights"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "Orca: A Distributed Serving System for Transformer-Based Generative Models",
+    "by": "Yu et al. (OSDI 22)",
+    "url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "note": "Introduced iteration-level (continuous) batching; read the scheduling section before building the project's server."
+   },
+   {
+    "kind": "blog",
+    "title": "Flash-Decoding for long-context inference",
+    "by": "Tri Dao, Daniel Haziza, Francisco Massa, Grigory Sizov",
+    "url": "https://crfm.stanford.edu/2023/10/12/flashdecoding.html",
+    "note": "Splits the KV sequence across blocks for decode-time attention; implement it once batch size is small and context long."
+   },
+   {
+    "kind": "paper",
+    "title": "SGLang: Efficient Execution of Structured Language Model Programs",
+    "by": "Zheng et al.",
+    "url": "https://arxiv.org/abs/2312.07104",
+    "note": "RadixAttention for prefix KV reuse; read the radix tree cache section for an extension to your paged cache."
+   },
+   {
+    "kind": "paper",
+    "title": "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers",
+    "by": "Frantar et al.",
+    "url": "https://arxiv.org/abs/2210.17323",
+    "note": "Second-order 4-bit weight quantization; the step past your per-channel int8."
+   },
+   {
+    "kind": "paper",
+    "title": "AWQ: Activation-aware Weight Quantization",
+    "by": "Lin et al.",
+    "url": "https://arxiv.org/abs/2306.00978",
+    "note": "Shows scaling salient channels by activation statistics preserves accuracy at 4 bits; read section 3."
+   },
+   {
+    "kind": "paper",
+    "title": "SmoothQuant",
+    "by": "Xiao et al.",
+    "url": "https://arxiv.org/abs/2211.10438",
+    "note": "Moves activation outliers into weights to enable int8 activations too; needed if you quantize activations."
+   },
+   {
+    "kind": "paper",
+    "title": "EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty",
+    "by": "Li et al.",
+    "url": "https://arxiv.org/abs/2401.15077",
+    "note": "Feature-level drafting with higher acceptance than a separate small model; compare its acceptance rates with your stories15M draft."
+   },
+   {
+    "kind": "paper",
+    "title": "DistServe: Disaggregating Prefill and Decoding",
+    "by": "Zhong et al.",
+    "url": "https://arxiv.org/abs/2401.09670",
+    "note": "Separates prefill and decode onto different GPUs to meet latency SLOs; read the goodput definition for your latency study."
+   },
+   {
+    "kind": "paper",
+    "title": "FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving",
+    "by": "Ye et al.",
+    "url": "https://arxiv.org/abs/2501.01005",
+    "note": "Block-sparse format unifying paged KV and prefix sharing with JIT-generated kernels, close to what your compiler would emit."
+   },
+   {
+    "kind": "repo",
+    "title": "vLLM",
+    "by": "vLLM project",
+    "url": "https://github.com/vllm-project/vllm",
+    "note": "The production PagedAttention server; read its scheduler to compare preemption and batching policies."
+   },
+   {
+    "kind": "repo",
+    "title": "SGLang",
+    "by": "SGLang project",
+    "url": "https://github.com/sgl-project/sglang",
+    "note": "Fast serving runtime; its benchmark scripts give a standard load generator for your server."
+   },
+   {
+    "kind": "repo",
+    "title": "modded-nanogpt (NanoGPT speedrun)",
+    "by": "Keller Jordan et al.",
+    "url": "https://github.com/KellerJordan/modded-nanogpt",
+    "note": "Record log of GPT-2 training speedups (Muon, FlexAttention, FP8); read the record history for the training side of SOTA."
+   },
+   {
+    "kind": "talk",
+    "title": "Unlocking GPU Performance with CUDA Tile",
+    "by": "NVIDIA Developer",
+    "url": "https://www.youtube.com/watch?v=uiIdk61UxEs",
+    "note": "NVIDIA's tile-based programming model aimed at kernels like these; useful context for where kernel compilers are heading."
+   }
+  ],
+  "stretch": "Run a 1B-class Llama model on your compiler with a paged KV cache, continuous batching, 4-bit weights (GPTQ or AWQ) and EAGLE-style drafting. Match vLLM's throughput within 25% at equal p99 latency on the same GPU and report perplexity within 2% of fp16."
  },
  {
   "id": 29,
@@ -1789,7 +2844,105 @@
      "url": "https://jax-ml.github.io/scaling-book/roofline/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad search.py (pinned)",
+    "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py",
+    "note": "Full source of beam_search, including candidate generation, timing with warmup and caching of results; compare your search loop against it.",
+    "for": "Idea A, kernel search"
+   },
+   {
+    "title": "tinygrad process_replay.py (pinned)",
+    "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/external/process_replay/process_replay.py",
+    "note": "How tinygrad diffs generated kernels between HEAD and master in CI; a model for the correctness half of your harness.",
+    "for": "Benchmark harness"
+   },
+   {
+    "title": "egg (Rust e-graph library)",
+    "url": "https://github.com/egraphs-good/egg",
+    "note": "Reference implementation of the egg paper with tests and examples of rewrite rules and cost-based extraction.",
+    "for": "Idea C, e-graph rewriting"
+   },
+   {
+    "title": "flash-attention-minimal",
+    "url": "https://github.com/tspeterkim/flash-attention-minimal",
+    "note": "About 100 lines of CUDA forward FlashAttention; a readable baseline before attempting the FA3 idea.",
+    "for": "Idea B, attention"
+   },
+   {
+    "title": "llama2.c",
+    "url": "https://github.com/karpathy/llama2.c",
+    "note": "run.c is the token-exact reference for the stories15M milestone and a small baseline workload.",
+    "for": "Baseline"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "TVM: An Automated End-to-End Optimizing Compiler for Deep Learning",
+    "by": "Tianqi Chen et al.",
+    "url": "https://arxiv.org/abs/1802.04799",
+    "note": "Read section 5 (automated optimization) to see how a search space plus a cost model is framed, which shapes a good project scope."
+   },
+   {
+    "kind": "paper",
+    "title": "Learning to Optimize Tensor Programs",
+    "by": "Tianqi Chen et al.",
+    "url": "https://arxiv.org/abs/1805.08166",
+    "note": "AutoTVM: learned cost models for schedule search; the evaluation section shows how to present search results against vendor baselines."
+   },
+   {
+    "kind": "problems",
+    "title": "KernelBench",
+    "by": "Stanford Scaling Intelligence Lab",
+    "url": "https://github.com/ScalingIntelligence/KernelBench",
+    "note": "250 PyTorch reference ops with a correctness and speedup harness; a ready-made baseline suite and a design to copy for your harness."
+   },
+   {
+    "kind": "problems",
+    "title": "GPU MODE reference kernels",
+    "by": "GPU MODE",
+    "url": "https://github.com/gpu-mode/reference-kernels",
+    "note": "Problem definitions and reference code for the GPU MODE leaderboards; pick one as a project with a public ranking as the metric."
+   },
+   {
+    "kind": "repo",
+    "title": "modded-nanogpt (nanoGPT speedrun)",
+    "by": "Keller Jordan et al.",
+    "url": "https://github.com/KellerJordan/modded-nanogpt",
+    "note": "A record log where each entry is one measured change to time-to-loss; read the record history as a model of a scoped, measurable claim."
+   },
+   {
+    "kind": "blog",
+    "title": "Systems Benchmarking Crimes",
+    "by": "Gernot Heiser",
+    "url": "https://gernot-heiser.org/benchmarking-crimes.html",
+    "note": "A checklist of benchmarking mistakes (selective subsets, no variance, wrong baseline); check your proposal against it."
+   },
+   {
+    "kind": "blog",
+    "title": "How to Scale Your Model",
+    "by": "Austin, Douglas, et al. (Google DeepMind)",
+    "url": "https://jax-ml.github.io/scaling-book/",
+    "note": "Chapters on transformer math and inference let you compute the roofline bound for an LLM-scale project target."
+   },
+   {
+    "kind": "blog",
+    "title": "Modal GPU Glossary",
+    "by": "Modal",
+    "url": "https://modal.com/gpu-glossary",
+    "note": "Short linked definitions of GPU hardware and software terms; use it to write precise proposal language about SMs, tensor cores and memory."
+   },
+   {
+    "kind": "lecture",
+    "title": "You and Your Research",
+    "by": "Richard Hamming",
+    "url": "https://www.cs.virginia.edu/~robins/YouAndYourResearch.html",
+    "note": "Hamming on choosing important problems; read it before picking between ideas A-D."
+   }
+  ],
+  "stretch": "Turn Idea A into a learned search: train a small cost model (gradient-boosted trees or an MLP over kernel features) on timings from your beam search, and show it reaches within 5% of full-beam kernel speed on 20+ KernelBench level-1 ops while timing at least 5x fewer candidates. Publish the dataset of (kernel, features, time) so others can reproduce."
  },
  {
   "id": 30,
@@ -1891,7 +3044,92 @@
      "url": "https://karpathy.github.io/2019/04/25/recipe/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "modded-nanogpt records",
+    "url": "https://github.com/KellerJordan/modded-nanogpt",
+    "note": "Each record is a commit with a measured change and a log; a public example of one-change-per-commit iteration.",
+    "for": "Iterate: one change per commit"
+   },
+   {
+    "title": "siboehm/SGEMM_CUDA",
+    "url": "https://github.com/siboehm/SGEMM_CUDA",
+    "note": "Ten kernels each building on the last with a benchmark script; shows how to structure incremental, ablatable optimizations.",
+    "for": "Ablations"
+   },
+   {
+    "title": "gpt-fast",
+    "url": "https://github.com/pytorch-labs/gpt-fast",
+    "note": "Under 1000 lines where each speedup (torch.compile, int8, speculative decoding, tensor parallel) is a flag you can toggle; a template for an ablation table.",
+    "for": "Ablations"
+   },
+   {
+    "title": "tinygrad process_replay.py (pinned)",
+    "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/external/process_replay/process_replay.py",
+    "note": "Regression checking by replaying and diffing generated kernels; adapt it for your regression suite.",
+    "for": "Regression suite"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "blog",
+    "title": "The USE Method",
+    "by": "Brendan Gregg",
+    "url": "https://www.brendangregg.com/usemethod.html",
+    "note": "Check utilization, saturation and errors for every resource before guessing; apply it to SMs, memory bandwidth and PCIe."
+   },
+   {
+    "kind": "blog",
+    "title": "Performance Analysis Methodology",
+    "by": "Brendan Gregg",
+    "url": "https://www.brendangregg.com/methodology.html",
+    "note": "A catalog of methods and anti-methods (streetlight, random change); use it to justify each profiling step in your notebook."
+   },
+   {
+    "kind": "blog",
+    "title": "Accelerating Generative AI with PyTorch II: GPT, Fast",
+    "by": "PyTorch team (Horace He et al.)",
+    "url": "https://pytorch.org/blog/accelerating-generative-ai-2/",
+    "note": "A worked iteration log from 25 to 240+ tokens/s, one technique at a time with numbers; copy its write-up format."
+   },
+   {
+    "kind": "blog",
+    "title": "Outperforming cuBLAS on H100: a Worklog",
+    "by": "Pranjal Shankhdhar",
+    "url": "https://cudaforfun.substack.com/p/outperforming-cublas-on-h100-a-worklog",
+    "note": "A kernel-by-kernel worklog with TFLOPS after every step; a model for a public lab notebook."
+   },
+   {
+    "kind": "blog",
+    "title": "How to Scale Your Model",
+    "by": "Austin, Douglas, et al. (Google DeepMind)",
+    "url": "https://jax-ml.github.io/scaling-book/",
+    "note": "Beyond the roofline chapter, the transformer and inference chapters give the FLOP and byte counts you need to place each iteration on the roofline."
+   },
+   {
+    "kind": "blog",
+    "title": "Modal GPU Glossary",
+    "by": "Modal",
+    "url": "https://modal.com/gpu-glossary",
+    "note": "Look up each Nsight Compute metric you cite (occupancy, warp stalls, memory throughput) with clear explanations."
+   },
+   {
+    "kind": "blog",
+    "title": "Systems Benchmarking Crimes",
+    "by": "Gernot Heiser",
+    "url": "https://gernot-heiser.org/benchmarking-crimes.html",
+    "note": "Use it to audit your ablation table for missing variance, cherry-picked shapes and improper baselines."
+   },
+   {
+    "kind": "problems",
+    "title": "KernelBench",
+    "by": "Stanford Scaling Intelligence Lab",
+    "url": "https://github.com/ScalingIntelligence/KernelBench",
+    "note": "Run your compiler across its level 1-3 problems as a broad regression and speedup suite beyond your chosen target."
+   }
+  ],
+  "stretch": "Submit your optimized kernel to a GPU MODE leaderboard (https://www.gpumode.com) and place in the top 10 for its problem, or show a reproducible speedup over the current top entry. Document every submission in the lab notebook with its measured time."
  },
  {
   "id": 31,
@@ -1992,6 +3230,77 @@
      "url": "https://www.microsoft.com/en-us/research/academic-program/give-great-research-talk/"
     }
    ]
-  }
+  },
+  "solutions": [
+   {
+    "title": "tinygrad beautiful_mnist.py (pinned)",
+    "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/beautiful_mnist.py",
+    "note": "tinygrad MNIST training script reaching 98%+; compare model, optimizer and JIT setup with your MNIST demo.",
+    "for": "End-to-end demo: MNIST"
+   },
+   {
+    "title": "llama2.c run.c",
+    "url": "https://github.com/karpathy/llama2.c",
+    "note": "The reference generator your stories15M tokens must match; also a model README with one-command reproduction.",
+    "for": "End-to-end demo: stories15M"
+   },
+   {
+    "title": "tinygrad llama.py (pinned)",
+    "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/llama.py",
+    "note": "How tinygrad loads LLaMA weights and samples; a compiler-side reference for the generation demo.",
+    "for": "End-to-end demo: stories15M"
+   },
+   {
+    "title": "KernelBench",
+    "url": "https://github.com/ScalingIntelligence/KernelBench",
+    "note": "A research repo with a paper, leaderboard and scripts that reproduce every table; a template for your README and report.",
+    "for": "Clean up code and README"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "paper",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+    "by": "Tri Dao et al.",
+    "url": "https://arxiv.org/abs/2205.14135",
+    "note": "A model systems paper: one key idea, an IO-complexity argument, then benchmarks and ablations; mirror its structure in your 4 pages."
+   },
+   {
+    "kind": "paper",
+    "title": "TVM: An Automated End-to-End Optimizing Compiler for Deep Learning",
+    "by": "Tianqi Chen et al.",
+    "url": "https://arxiv.org/abs/1802.04799",
+    "note": "Study how the evaluation compares against vendor libraries across hardware for your related-work and results sections."
+   },
+   {
+    "kind": "paper",
+    "title": "Flex Attention: A Programming Model for Generating Optimized Attention Kernels",
+    "by": "Juechu Dong, Boyuan Feng, Driss Guessous, Yanbo Liang, Horace He",
+    "url": "https://arxiv.org/abs/2412.05496",
+    "note": "A short compiler paper with clear claims against hand-written kernels; a good length and style reference."
+   },
+   {
+    "kind": "blog",
+    "title": "Accelerating Generative AI with PyTorch II: GPT, Fast",
+    "by": "PyTorch team (Horace He et al.)",
+    "url": "https://pytorch.org/blog/accelerating-generative-ai-2/",
+    "note": "A post that leads with a headline number and a single chart per step; the format to use for your public post."
+   },
+   {
+    "kind": "lecture",
+    "title": "You and Your Research",
+    "by": "Richard Hamming",
+    "url": "https://www.cs.virginia.edu/~robins/YouAndYourResearch.html",
+    "note": "The section on selling your work explains why presentation matters as much as results."
+   },
+   {
+    "kind": "blog",
+    "title": "Systems Benchmarking Crimes",
+    "by": "Gernot Heiser",
+    "url": "https://gernot-heiser.org/benchmarking-crimes.html",
+    "note": "Run your final tables and plots past this list before publishing."
+   }
+  ],
+  "stretch": "Submit the report as a 4-page workshop paper (for example an MLSys or NeurIPS ML-for-systems workshop) with an artifact that an independent person reproduces within 10% of your headline number. Record the review feedback and the reproduction in the README."
  }
 ]

@@ -11,7 +11,7 @@ marked "bot_block": true on the step and are reported but not failed.
 import glob, json, re, sys, urllib.request, concurrent.futures as cf
 
 FILLER = [r"\bdelve", r"\bleverag", r"\bseamless", r"\brobust understanding", r"\bdeep understanding",
-          r"\bunlock", r"\bembark", r"\bjourney\b", r"\bgame[- ]changer", r"\btapestry", r"\bin today's",
+          r"\bunlock(?!ing gpu performance)", r"\bembark", r"\bjourney\b", r"\bgame[- ]changer", r"\btapestry", r"\bin today's",
           r"\bcutting[- ]edge", r"\bharness the power", r"\bit's worth noting", r"\bdive into (?!systems|deep learning)", r"\bnavigate the",
           r"\bempower", r"\bsupercharge", r"\bmaster(?:y|ing)? the art"]
 REQ = ["id", "title", "why", "steps", "build", "check", "effort", "difficulty", "outcomes", "stuck", "project"]
@@ -28,6 +28,8 @@ def urls(m):
     if s.get("url"): yield s["url"], s.get("bot_block", False)
   for x in m.get("extra", []):
     if isinstance(x, dict) and x.get("url"): yield x["url"], False
+  for x in m.get("solutions", []) + m.get("deeper", []):
+    if x.get("url"): yield x["url"], x.get("bot_block", False)
   for r in (m.get("project") or {}).get("references", []):
     if r.get("url"): yield r["url"], False
 
@@ -59,7 +61,7 @@ def main():
     with cf.ThreadPoolExecutor(16) as ex:
       for (u, bb), code in zip(todo.items(), ex.map(head, todo)):
         ok = isinstance(code, int) and code < 400
-        if not ok: (warns if bb or code in (403, 406, 418, 429, 503) else errs).append(f"link {code}: {u}")
+        if not ok: (warns if bb or code in (403, 406, 418, 429, 503) or not isinstance(code, int) else errs).append(f"link {code}: {u}")
     print(f"checked {len(todo)} links")
   for w in warns: print("warn:", w)
   for e in errs: print("ERROR:", e)

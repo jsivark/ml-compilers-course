@@ -62,3 +62,5 @@ th{font-family:var(--head);font-weight:500}
 .pf li a{font-family:var(--head);font-weight:500;color:var(--fg);text-decoration:none}
 .pf li p{margin:4px 0 0;color:var(--muted);font-size:15.5px}
 @media (max-width:520px){.rub{grid-template-columns:1fr}.proj{padding:4px 14px 10px}}
+.n{color:var(--muted);font-size:.92em}
+.extra li{margin:8px 0}

@@ -62,6 +62,15 @@ def module_page(m, mods):
   check = "".join(f"<li>{E(c)}</li>" for c in m.get("check", []))
   ex = lambda x: f"<li>{E(x)}</li>" if isinstance(x, str) else f'<li>{link(x["title"], x.get("url"))}{" — " + E(x["note"]) if x.get("note") else ""}</li>'
   extra = "".join(ex(x) for x in m.get("extra", []))
+  sol = "".join(f'<li>{link(x["title"], x.get("url"))}{" <span class=n>(" + E(x["for"]) + ")</span>" if x.get("for") else ""}{"<br><span class=n>" + E(x["note"]) + "</span>" if x.get("note") else ""}</li>' for x in m.get("solutions", []))
+  KO = ["lecture", "course", "talk", "video", "paper", "book", "blog", "repo", "problems"]
+  KN = {"lecture": "Lectures", "course": "Courses", "talk": "Talks", "video": "Videos", "paper": "Papers", "book": "Books", "blog": "Blogs and articles", "repo": "Code to read", "problems": "Problem sets"}
+  groups = {}
+  for x in m.get("deeper", []): groups.setdefault(x.get("kind", "blog"), []).append(x)
+  deeper = "".join(
+    f'<h3>{KN.get(k, k.title())}</h3><ul class="extra">' + "".join(
+      f'<li>{link(x["title"], x.get("url"))}{" <span class=n>· " + E(x["by"]) + "</span>" if x.get("by") else ""}{"<br><span class=n>" + E(x["note"]) + "</span>" if x.get("note") else ""}</li>' for x in groups[k]) + "</ul>"
+    for k in sorted(groups, key=lambda k: KO.index(k) if k in KO else 99))
   cw = f' · 10-411 week {m["course_week"]}' if m.get("course_week") else ""
   meta = " · ".join(x for x in [m.get("effort") and f'about {m["effort"]}', m.get("difficulty") and "difficulty " + "●"*int(m["difficulty"]) + "○"*(5-int(m["difficulty"]))] if x)
   outcomes = "".join(f"<li>{E(o)}</li>" for o in m.get("outcomes", []))
@@ -89,7 +98,10 @@ def module_page(m, mods):
 {proj}
 {f'<h2>If you get stuck</h2><ul class="check">{stuck}</ul>' if stuck else ''}
 {f'<h2>Ready to move on when</h2><ul class="check">{check}</ul>' if check else ''}
-{f'<h2>Going deeper (optional)</h2><ul class="extra">{extra}</ul>' if extra else ''}
+{f'<h2>Reference implementations</h2><p class="hint">Make a real attempt first. When you are stuck, or after you finish, compare your work with these.</p><ul class="extra">{sol}</ul>' if sol else ''}
+{f'<h2>Going deeper</h2><p class="hint">Optional. The best talks, papers, code and writing on this module topic, from people who shaped the field.</p>{deeper}' if deeper else ''}
+{f'<h3>More reading</h3><ul class="extra">{extra}</ul>' if extra and deeper else (f'<h2>Going deeper (optional)</h2><ul class="extra">{extra}</ul>' if extra else '')}
+{f'<h2>Stretch project</h2><p class="build">{E(m.get("stretch"))}</p>' if m.get("stretch") else ''}
 <nav class="pn">{prev}{nxt}</nav>"""
   return page(f'{i:02d} {m["title"]} · ML Compilers From Zero', body, 1)
 
