@@ -523,6 +523,27 @@
     "by": "Alexis Engelke, TUM",
     "url": "https://db.in.tum.de/teaching/ws2526/codegen",
     "note": "Recent lecture slides plus a script covering LLVM-IR, instruction selection, register allocation, JIT and vectorization; the register allocation and JIT lectures fit this module best."
+   },
+   {
+    "kind": "blog",
+    "title": "A New Backend for Cranelift, Part 1: Instruction Selection",
+    "by": "Chris Fallin",
+    "url": "https://hacks.mozilla.org/2020/10/a-new-backend-for-cranelift-part-1-instruction-selection/",
+    "note": "How a production code generator lowers IR to machine instructions by tree matching; read after Sandler part 9."
+   },
+   {
+    "kind": "blog",
+    "title": "How the Optimizing Compiler Works: Back-End",
+    "by": "wazero",
+    "url": "https://wazero.io/docs/how_the_optimizing_compiler_works/backend/",
+    "note": "A clear tour of lowering, linear-scan register allocation and finalization in a real compiler; good preparation for the register allocator project."
+   },
+   {
+    "kind": "lecture",
+    "title": "CSE 401 Back-end lecture (Autumn 2025)",
+    "by": "University of Washington",
+    "url": "https://courses.cs.washington.edu/courses/cse401/25au/lectures/Q-backend.pdf",
+    "note": "Instruction selection, scheduling and graph-coloring register allocation in one deck."
    }
   ],
   "stretch": "Add a register allocator (linear scan or graph coloring with coalescing) and a TACKY-style three-address IR to mycc, then pass the book suite through chapter 20. Measure runtime and instruction count against your stack-machine output and gcc -O0/-O1 on 5 compute-heavy C programs."
@@ -760,6 +781,20 @@
     "by": "Chris Fallin",
     "url": "https://www.cfallin.org/blog/2026/04/09/aegraph",
     "note": "A 2026 deep dive on how Cranelift folded GVN, LICM, constant folding and rematerialization into one e-graph pass to escape pass ordering; read the pass-ordering motivation first."
+   },
+   {
+    "kind": "blog",
+    "title": "A catalog of ways to generate SSA",
+    "by": "Max Bernstein",
+    "url": "https://bernsteinbear.com/blog/ssa/",
+    "note": "A history of SSA construction algorithms from Cytron to Braun et al., with how the author builds SSA in practice; read before your SSA conversion."
+   },
+   {
+    "kind": "blog",
+    "title": "What I talk about when I talk about IRs",
+    "by": "Max Bernstein",
+    "url": "https://bernsteinbear.com/blog/irs/",
+    "note": "Practical criteria for designing an IR; compare them with the UOp graph you will build in Module 18."
    }
   ],
   "stretch": "Implement SCCP, GVN-PRE (or GVN plus LICM) and Briggs-style out-of-SSA with parallel-copy sequentialization on Bril, then run a pass-ordering study: try all orderings of 4 passes over bril/benchmarks and report the best and worst dynamic instruction counts per benchmark. Explain at least two cases where order changes the result by more than 5%."
@@ -1005,6 +1040,27 @@
     "by": "UW PLSE",
     "url": "https://uwplse.org/2026/02/24/egglog-containers.html",
     "note": "A 2026 post on egglog container support (sets, maps, vectors) inside e-graphs; read it once you hit the limits of pure term rewriting."
+   },
+   {
+    "kind": "lecture",
+    "title": "Equality saturation (COMP 520 slides, 2025)",
+    "by": "McGill University",
+    "url": "https://www.cs.mcgill.ca/~cs520/2025/slides/eqsat.pdf",
+    "note": "Lecture slides covering e-nodes, e-classes and rebuilding, with DialEgg (egglog for MLIR) as a case study."
+   },
+   {
+    "kind": "blog",
+    "title": "Automatic verification of peephole optimizations (Alive)",
+    "by": "CS 6120 course blog",
+    "url": "https://www.cs.cornell.edu/courses/cs6120/2023fa/blog/automatic-verification/",
+    "note": "How Alive checks LLVM peephole rewrites with an SMT solver; the same idea as z3-checking your own rewrite rules."
+   },
+   {
+    "kind": "paper",
+    "title": "Hydra: Generalizing Peephole Optimizations with Program Synthesis",
+    "by": "Mukherjee and Regehr",
+    "url": "https://users.cs.utah.edu/~regehr/generalization-oopsla24.pdf",
+    "note": "Generalizes concrete rewrites into verified rules; read section 2 for how rules are generalized and checked."
    }
   ],
   "stretch": "Replace one tinygrad PatternMatcher simplification stage with an egglog-backed equality-saturation pass over index expressions and measure on 50 real kernels (captured with DEBUG output) how many ALU ops the generated code saves and how much compile time it adds. Report node counts, saturation time and any rule that causes blowup."

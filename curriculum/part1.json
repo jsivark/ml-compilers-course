@@ -1539,6 +1539,13 @@
     "by": "Yaoliang Yu (University of Waterloo)",
     "url": "https://cs.uwaterloo.ca/~y328yu/teaching/480/480-note-ad.pdf",
     "note": "Compact 2024 notes with a clean complexity comparison of forward and reverse mode; work through the time/space tradeoff section."
+   },
+   {
+    "kind": "course",
+    "title": "Learn autodiff (Parts 1 and 2: scalars, then vectors and reverse mode)",
+    "by": "Simone Scardapane",
+    "url": "https://sscardapane.github.io/learn-autodiff",
+    "note": "Build reverse-mode autodiff step by step, from scalar graphs to vector Jacobians; do Part 2 after the Parr and Howard notes."
    }
   ],
   "stretch": "Implement checkpointed reverse mode (Griewank's binomial or sqrt(n) checkpointing) for a 1000-step recurrent function in your tape AD and plot peak memory vs recomputation FLOPs against the plain tape. Show memory falling from O(n) to O(sqrt(n)) with less than 2x compute overhead, matching gradients to 1e-10 in float64."
@@ -1766,6 +1773,13 @@
     "by": "Modular",
     "url": "https://www.modular.com/blog/tiletensor-part-1-safer-more-efficient-gpu-kernels",
     "note": "Shows layout as a compile-time object so index math and bounds checks are generated; read for how strides become a type-level concept."
+   },
+   {
+    "kind": "blog",
+    "title": "Taking PyTorch for Granted",
+    "by": "nrehiew",
+    "url": "https://nrehiew.github.io/blog/pytorch",
+    "note": "Walks through what happens under a PyTorch call, from tensor metadata to dispatch; read the tensor and strides sections."
    }
   ],
   "stretch": "Extend your view system so that any chain of reshape, permute, expand, pad and shrink is represented as a list of views, and merge adjacent views whenever they compose into one strided view. On 10,000 random op chains, report the fraction that collapse to a single view and verify every emitted index expression against NumPy."
@@ -1965,6 +1979,13 @@
     "by": "George Hotz",
     "url": "https://github.com/geohot/ai-notebooks",
     "note": "Hotz's from-scratch notebooks, including MNIST from scratch in NumPy, written during the streams that led to tinygrad."
+   },
+   {
+    "kind": "repo",
+    "title": "miniMNIST-c",
+    "by": "procedural",
+    "url": "https://github.com/procedural/miniMNIST-c",
+    "note": "A small MNIST network in plain C with only the standard library; compare its training loop with your micrograd port."
    }
   ],
   "stretch": "Turn your graph IR into a tracing JIT: trace the MLP once, apply DCE and CSE, and emit a single C function for forward plus backward compiled with cc -O2 and loaded via ctypes. Report steps per second vs the interpreted engine and vs PyTorch on CPU for a 2x16x16x1 MLP, aiming for at least 100x over the interpreter."
@@ -2211,6 +2232,27 @@
     "by": "Kevin Frans",
     "url": "https://kvfrans.com/matrix-whitening",
     "note": "Controlled comparison of Shampoo, SOAP and Muon style optimizers; focus on the finding that variance adaptation matters beyond spectral normalization."
+   },
+   {
+    "kind": "lecture",
+    "title": "CSEP 590A Lecture 3: Optimization for deep learning (Winter 2026)",
+    "by": "University of Washington",
+    "url": "https://courses.cs.washington.edu/courses/csep590a/26wi/schedule/wi26_lecture3_live.pdf",
+    "note": "Initialization schemes, batch, layer and group normalization, and optimizers in one deck; use it as a checklist when your CNN stops training."
+   },
+   {
+    "kind": "course",
+    "title": "6.7960 Deep Learning (Fall 2024, lecture videos, notes, problem sets)",
+    "by": "MIT OpenCourseWare",
+    "url": "https://ocw.mit.edu/courses/6-7960-deep-learning-fall-2024/",
+    "note": "A full graduate deep learning course with videos and problem sets; use its problem sets to test yourself after CS231n Assignment 2."
+   },
+   {
+    "kind": "course",
+    "title": "6.S191 Introduction to Deep Learning (2025)",
+    "by": "MIT",
+    "url": "https://introtodeeplearning.com/2025/index.html",
+    "note": "Short recorded lectures with labs; a quick refresher on the overall landscape before the CNN project."
    }
   ],
   "stretch": "Speedrun CIFAR-10 on your own framework: reach 94% test accuracy with the fewest GPU-seconds (or CPU-minutes) you can, porting airbench tricks one at a time. Publish an ablation table with time-to-94% per trick and the gap to airbench94 running in PyTorch on the same hardware."
@@ -2510,6 +2552,13 @@
     "by": "Sebastian Raschka",
     "url": "https://github.com/rasbt/LLMs-from-scratch",
     "note": "Chapter notebooks building a GPT in PyTorch; the bonus folders on KV cache, GQA and MLA are the parts most relevant to inference kernels."
+   },
+   {
+    "kind": "blog",
+    "title": "Understanding and Coding the KV Cache in LLMs from Scratch",
+    "by": "Sebastian Raschka",
+    "url": "https://magazine.sebastianraschka.com/p/coding-the-kv-cache-in-llms",
+    "note": "Adds a KV cache to a small GPT with and without-cache scripts; use it to check your GPT-2 engine produces identical tokens with the cache on."
    }
   ],
   "stretch": "Add batched decoding and grouped-query or multi-query style KV sharing to your C engine, then write a roofline plot of decode tokens/s vs batch size from 1 to 64. Show where decode crosses from memory-bound to compute-bound, and stay within 70% of the bandwidth bound at batch 1."
