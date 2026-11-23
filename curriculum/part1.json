@@ -243,6 +243,48 @@
     "title": "gdb-dashboard",
     "url": "https://github.com/cyrus-and/gdb-dashboard",
     "note": "A single .gdbinit that shows registers, source, stack and memory at each stop; a reference for a productive gdb setup."
+   },
+   {
+    "kind": "course",
+    "title": "The Missing Semester of Your CS Education (2026 lectures)",
+    "by": "Anish Athalye, Jon Gjengset, Jose Javier Gonzalez Ortiz (MIT)",
+    "url": "https://missing.csail.mit.edu/2026/",
+    "note": "The January 2026 rewrite of the course; the debugging/profiling and packaging lectures are new, so read those even if you know the 2020 version."
+   },
+   {
+    "kind": "repo",
+    "title": "samply",
+    "by": "Markus Stange (Mozilla)",
+    "url": "https://github.com/mstange/samply",
+    "note": "A sampling CPU profiler for Linux, macOS and Windows that opens results in the Firefox Profiler UI; use it as a lower-friction alternative to perf + flamegraph scripts for the profiling exercises."
+   },
+   {
+    "kind": "repo",
+    "title": "torch-profiling-tutorial",
+    "by": "Quentin Anthony",
+    "url": "https://github.com/Quentin-Anthony/torch-profiling-tutorial",
+    "note": "Practical walkthrough of torch.profiler and Nsight traces on real training code; focus on how to read a trace timeline and spot CPU launch overhead versus GPU work."
+   },
+   {
+    "kind": "blog",
+    "title": "Profiling in PyTorch (Part 1): A Beginner's Guide to torch.profiler",
+    "by": "Hugging Face",
+    "url": "https://huggingface.co/blog/torch-profiler",
+    "note": "Shows the wait/warmup/active schedule and how to read the exported trace; a good first exposure to GPU profiling before the course reaches kernels."
+   },
+   {
+    "kind": "blog",
+    "title": "AI Flame Graphs",
+    "by": "Brendan Gregg",
+    "url": "https://www.brendangregg.com/blog/2024-10-29/ai-flame-graphs.html",
+    "note": "Extends CPU flame graphs to show GPU/accelerator instruction samples under the full software stack; read it to see where the flame graph idea goes once kernels are involved."
+   },
+   {
+    "kind": "blog",
+    "title": "New zine: The Secret Rules of the Terminal",
+    "by": "Julia Evans",
+    "url": "https://jvns.ca/blog/2025/06/24/new-zine--the-secret-rules-of-the-terminal/",
+    "note": "Links the free blog posts behind the zine (PATH, pipe buffering, escape codes); read the linked posts to fix the confusing terminal behaviour beginners hit."
    }
   ],
   "stretch": "Build a reproducible dev environment for the whole course: a Dockerfile or Nix flake that pins clang, gdb, perf, Python and uv, plus a CI matrix (Linux x86-64 and macOS arm64) that builds and tests every module directory. Measure cold-start setup time on a fresh machine and get it under 10 minutes, documented in the README."
@@ -477,6 +519,34 @@
     "by": "Casey Muratori",
     "url": "https://www.youtube.com/watch?v=ZQ5_u8Lgvyk",
     "note": "Muratori on API design for C libraries (granularity, retained vs immediate); apply it to tcore's public API."
+   },
+   {
+    "kind": "blog",
+    "title": "Examples of quick hash tables and dynamic arrays in C",
+    "by": "Chris Wellons (nullprogram)",
+    "url": "https://nullprogram.com/blog/2025/01/19/",
+    "note": "Short arena-backed hash trie and dynamic array implementations you can copy and adapt; compare them with your own hash table from this module."
+   },
+   {
+    "kind": "video",
+    "title": "Tips for C Programming",
+    "by": "Nic Barker",
+    "url": "https://www.youtube.com/watch?v=9UIIMBqq1D4",
+    "note": "A 35-minute tour of modern C99 habits (designated initializers, clear typedefs, simple build layout, avoiding include tangles) aimed at people coming from higher-level languages."
+   },
+   {
+    "kind": "blog",
+    "title": "Compiler Options Hardening Guide for C and C++",
+    "by": "OpenSSF Best Practices WG",
+    "url": "https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++",
+    "note": "Maintained table of GCC/Clang warning and hardening flags with rationale; use the warnings section to choose your project's default CFLAGS and note which flags conflict with sanitizers."
+   },
+   {
+    "kind": "blog",
+    "title": "Clang Hardening Cheat Sheet - Ten Years Later",
+    "by": "Quarkslab",
+    "url": "https://blog.quarkslab.com/clang-hardening-cheat-sheet-ten-years-later.html",
+    "note": "Concrete Clang flags and what each one catches at compile time or run time; read the warnings and sanitizer parts alongside the module's debugging exercises."
    }
   ],
   "stretch": "Extend tcore with a reference-counted or arena-scoped autograd tape and implement backward passes for add, mul and matmul, verified by finite differences on 1000 random shapes. Then fuzz the public API with libFuzzer plus ASan/UBSan for 1 hour and report every bug found and fixed."
@@ -708,6 +778,34 @@
     "by": "CMU",
     "url": "https://www.cs.cmu.edu/~213/",
     "note": "The live course page with current schedule and lab updates if F15 material feels dated."
+   },
+   {
+    "kind": "blog",
+    "title": "Advent of Compiler Optimisations 2025 (archive)",
+    "by": "Matt Godbolt",
+    "url": "https://xania.org/AoCO2025-archive",
+    "note": "25 short posts plus videos, each showing one optimisation in Compiler Explorer with the x86-64 (and some ARM) assembly; work through the loop, aliasing and vectorisation days to practise reading compiler output."
+   },
+   {
+    "kind": "blog",
+    "title": "A Programmer's Guide to x86-64 Assembly (series overview)",
+    "by": "Abhinav Upadhyay (Confessions of a Code Addict)",
+    "url": "https://blog.codingconfessions.com/p/a-programmers-guide-to-x86-64-assembly",
+    "note": "A 2025 from-first-principles series on registers, addressing, the stack and calling conventions; use it as a readable companion to the CS:APP machine-level chapters."
+   },
+   {
+    "kind": "blog",
+    "title": "How to execute an object file (Part 1)",
+    "by": "Cloudflare",
+    "url": "https://blog.cloudflare.com/how-to-execute-an-object-file-part-1/",
+    "note": "Loads and runs an ELF .o file by hand, applying relocations yourself; the clearest hands-on bridge between assembly output and what a linker/loader does."
+   },
+   {
+    "kind": "blog",
+    "title": "Weak vs. Strong Memory Models",
+    "by": "Jeff Preshing",
+    "url": "https://preshing.com/20120930/weak-vs-strong-memory-models/",
+    "note": "Explains which memory reorderings x86 and ARM allow and why; read it before the GPU memory-model material later in the course."
    }
   ],
   "stretch": "Write an x86-64 disassembler for the subset of instructions that appear in your Bomb Lab binary (mov, lea, add, sub, cmp, test, jcc, call, ret, push, pop), producing output identical to objdump -d for every function in the bomb. Report coverage as the percentage of bytes in .text you decode correctly."
@@ -945,6 +1043,34 @@
     "by": "Google DeepMind (Austin et al.)",
     "url": "https://jax-ml.github.io/scaling-book/",
     "note": "Applies arithmetic intensity and roofline to accelerators; do its worked problems after computing your CPU's peak."
+   },
+   {
+    "kind": "blog",
+    "title": "Optimizing matrix multiplication: discovering optimizations one at a time",
+    "by": "Michal Pitr",
+    "url": "https://michalpitr.substack.com/p/optimizing-matrix-multiplication",
+    "note": "A 2025 worklog taking a 4096x4096 DGEMM from 480 s down toward BLIS speed, step by step; focus on the loop-order and blocking steps and how each was measured."
+   },
+   {
+    "kind": "lecture",
+    "title": "6.172 Lecture 15: Cache-Oblivious Algorithms",
+    "by": "Julian Shun (MIT OCW)",
+    "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/mit6_172f18_lec15/",
+    "note": "Ideal-cache model, cache-miss analysis and recursive matmul/stencil examples; the analysis framework complements the hand-tuned blocking in the Goto papers."
+   },
+   {
+    "kind": "problems",
+    "title": "6.172 Homework 8: Cache-Oblivious Algorithms",
+    "by": "MIT OCW",
+    "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/homework-8-cache-oblivious-algorithms/",
+    "note": "Programming assignment that pairs with Lecture 15; do the cache-miss counting parts before writing code."
+   },
+   {
+    "kind": "course",
+    "title": "Performance Ninja",
+    "by": "Denis Bakhvalov",
+    "url": "https://github.com/dendibakh/perf-ninja",
+    "note": "Free lab-based course with videos where each lab is a slow kernel to fix; the memory-bound labs (data packing, loop interchange, false sharing) map directly to this module."
    }
   ],
   "stretch": "Push single-threaded SGEMM to at least 80% of your core's theoretical peak for N=2048 and then parallelize it across all cores, comparing against OpenBLAS and BLIS on the same machine. Publish a roofline plot and a perf-counter table (L1/L2/LLC misses, IPC) for each optimization step."
@@ -1158,6 +1284,34 @@
     "by": "Google DeepMind (Austin et al.)",
     "url": "https://jax-ml.github.io/scaling-book/",
     "note": "Block matrix multiplication split across devices; read it after the blocked-matmul project to see the same algebra at cluster scale."
+   },
+   {
+    "kind": "blog",
+    "title": "Understanding NumPy's einsum",
+    "by": "Eli Bendersky",
+    "url": "https://eli.thegreenplace.net/2025/understanding-numpys-einsum/",
+    "note": "Shows how an einsum string maps to explicit nested loops; that loop view is exactly how tensor contractions are lowered in later compiler modules."
+   },
+   {
+    "kind": "course",
+    "title": "MIT 18.065: Matrix Methods in Data Analysis, Signal Processing, and Machine Learning",
+    "by": "Gilbert Strang (MIT OCW)",
+    "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/",
+    "note": "Lecture videos and problem sets that go from SVD and low-rank approximation to backprop and convolution; watch the SVD and low-rank lectures first."
+   },
+   {
+    "kind": "course",
+    "title": "CS 6210: Matrix Computations (Fall 2025)",
+    "by": "David Bindel (Cornell)",
+    "url": "https://www.cs.cornell.edu/courses/cs6210/2025fa/",
+    "note": "Current notes and slides on floating point, blocking, LU/QR and conditioning; the early floating-point and performance lectures cover bf16 and why blocked algorithms matter."
+   },
+   {
+    "kind": "course",
+    "title": "Math 221: Matrix Computations / Numerical Linear Algebra (Fall 2024)",
+    "by": "James Demmel (UC Berkeley)",
+    "url": "https://people.eecs.berkeley.edu/~demmel/ma221_Fall24/",
+    "note": "Full lecture notes from the author of Applied Numerical Linear Algebra; Lecture 2 on roundoff and low precision for ML is the most relevant part."
    }
   ],
   "stretch": "Implement communication-avoiding (tournament pivoting) LU or recursive LU in NumPy and compare its backward error and runtime against partial-pivoting LU across condition numbers 1 to 1e12 and N up to 4096. Reproduce the growth-factor example where partial pivoting fails (Wilkinson's matrix) and report growth factors for each method."
@@ -1364,6 +1518,27 @@
     "by": "Rumelhart, Hinton, Williams",
     "url": "https://www.nature.com/articles/323533a0",
     "note": "The 1986 Nature paper that popularized backprop; four pages, read it to see the generalized delta rule in its original form."
+   },
+   {
+    "kind": "book",
+    "title": "Matrix Calculus (for Machine Learning and Beyond)",
+    "by": "Paige Bright, Alan Edelman, Steven G. Johnson",
+    "url": "https://arxiv.org/abs/2501.14787",
+    "note": "The MIT 18.S096 notes as a 2025 arXiv book; read the derivatives-as-linear-operators chapter and the forward vs reverse (adjoint) mode chapter."
+   },
+   {
+    "kind": "lecture",
+    "title": "Lecture 3: Automatic Differentiation & Backprop (CS4787)",
+    "by": "Cornell CS4787 (Chris De Sa)",
+    "url": "https://www.cs.cornell.edu/courses/cs4787/2025fa/lectures/lecture3.html",
+    "note": "Runnable lecture notes contrasting forward and reverse mode with cost analysis; focus on the memory cost of reverse mode."
+   },
+   {
+    "kind": "lecture",
+    "title": "CS480/680 notes: Automatic Differentiation",
+    "by": "Yaoliang Yu (University of Waterloo)",
+    "url": "https://cs.uwaterloo.ca/~y328yu/teaching/480/480-note-ad.pdf",
+    "note": "Compact 2024 notes with a clean complexity comparison of forward and reverse mode; work through the time/space tradeoff section."
    }
   ],
   "stretch": "Implement checkpointed reverse mode (Griewank's binomial or sqrt(n) checkpointing) for a 1000-step recurrent function in your tape AD and plot peak memory vs recomputation FLOPs against the plain tape. Show memory falling from O(n) to O(sqrt(n)) with less than 2x compute overhead, matching gradients to 1e-10 in float64."
@@ -1570,6 +1745,27 @@
     "by": "Tianqi Chen, Zico Kolter",
     "url": "https://dlsyscourse.org/",
     "note": "Homework 3 has you build an NDArray backend with strides, compact() and device kernels; the closest graded version of this module's build."
+   },
+   {
+    "kind": "lecture",
+    "title": "Tensor internals (Deep Learning course, slides 1.6)",
+    "by": "Francois Fleuret (University of Geneva)",
+    "url": "https://fleuret.org/dlc/materials/dlc-slides-1-6-tensor-internals.pdf",
+    "note": "Short slide deck showing storage, offset and strides, and how view, transpose and broadcasting (stride 0) avoid copies; good warm-up before writing your own strided tensor."
+   },
+   {
+    "kind": "talk",
+    "title": "Simplifying GPU Programming with Parametric Tile-Level Tensors in Mojo (LLVM Dev Meeting 2024)",
+    "by": "Taei (Modular)",
+    "url": "https://llvm.org/devmtg/2024-10/slides/techtalk/Taei-Simplifying-GPU-Programming-with-Parametric-Tile-Level-Tensors-In-Mojo.pdf",
+    "note": "Slides on compile-time layouts and tiled tensors in a compiler; compare their layout algebra with CuTe layouts."
+   },
+   {
+    "kind": "blog",
+    "title": "TileTensor Part 1: Safer, More Efficient GPU Kernels",
+    "by": "Modular",
+    "url": "https://www.modular.com/blog/tiletensor-part-1-safer-more-efficient-gpu-kernels",
+    "note": "Shows layout as a compile-time object so index math and bounds checks are generated; read for how strides become a type-level concept."
    }
   ],
   "stretch": "Extend your view system so that any chain of reshape, permute, expand, pad and shrink is represented as a list of views, and merge adjacent views whenever they compose into one strided view. On 10,000 random op chains, report the fraction that collapse to a single view and verify every emitted index expression against NumPy."
@@ -2001,6 +2197,20 @@
     "by": "Keller Jordan",
     "url": "https://kellerjordan.github.io/posts/muon/",
     "note": "A recent optimizer that orthogonalizes updates via Newton-Schulz; implement it as a third optimizer after SGD and Adam."
+   },
+   {
+    "kind": "blog",
+    "title": "Deriving Muon",
+    "by": "Jeremy Bernstein",
+    "url": "https://jeremybernste.in/writing/deriving-muon",
+    "note": "Derives Muon as steepest descent under an operator norm; read it after the Muon post to see why orthogonalizing the update is principled."
+   },
+   {
+    "kind": "blog",
+    "title": "What really matters in matrix-whitening optimizers?",
+    "by": "Kevin Frans",
+    "url": "https://kvfrans.com/matrix-whitening",
+    "note": "Controlled comparison of Shampoo, SOAP and Muon style optimizers; focus on the finding that variance adaptation matters beyond spectral normalization."
    }
   ],
   "stretch": "Speedrun CIFAR-10 on your own framework: reach 94% test accuracy with the fewest GPU-seconds (or CPU-minutes) you can, porting airbench tricks one at a time. Publish an ablation table with time-to-94% per trick and the gap to airbench94 running in PyTorch on the same hardware."
@@ -2279,6 +2489,27 @@
     "by": "Percy Liang, Tatsunori Hashimoto",
     "url": "https://stanford-cs336.github.io/spring2025/",
     "note": "Assignment 2 (systems) has you write a Triton FlashAttention and profile; lectures on GPUs and kernels follow this module."
+   },
+   {
+    "kind": "blog",
+    "title": "Inside vLLM: Anatomy of a High-Throughput LLM Inference System",
+    "by": "Aleksa Gordic",
+    "url": "https://vllm.ai/blog/2025-09-05-anatomy-of-vllm",
+    "note": "2025 code-level walk through vLLM's engine core, paged attention, continuous batching, prefix caching and speculative decoding; read parts 1-2 for the scheduler and KV cache manager."
+   },
+   {
+    "kind": "blog",
+    "title": "Defeating Nondeterminism in LLM Inference",
+    "by": "Horace He and Thinking Machines Lab",
+    "url": "https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/",
+    "note": "Explains why inference output changes with batch size (non batch-invariant matmul, RMSNorm and attention kernels) and how to write batch-invariant kernels."
+   },
+   {
+    "kind": "repo",
+    "title": "LLMs-from-scratch",
+    "by": "Sebastian Raschka",
+    "url": "https://github.com/rasbt/LLMs-from-scratch",
+    "note": "Chapter notebooks building a GPT in PyTorch; the bonus folders on KV cache, GQA and MLA are the parts most relevant to inference kernels."
    }
   ],
   "stretch": "Add batched decoding and grouped-query or multi-query style KV sharing to your C engine, then write a roofline plot of decode tokens/s vs batch size from 1 to 64. Show where decode crosses from memory-bound to compute-bound, and stay within 70% of the bandwidth bound at batch 1."

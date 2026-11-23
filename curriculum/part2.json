@@ -215,6 +215,34 @@
     "by": "Max Bernstein",
     "url": "https://bernsteinbear.com/blog/",
     "note": "Posts on interpreters, inline caching and JITs from a CPython/Cinder engineer; start with the interpreter and inline caching posts."
+   },
+   {
+    "kind": "blog",
+    "title": "Performance of the Python 3.14 tail-call interpreter",
+    "by": "Nelson Elhage",
+    "url": "https://blog.nelhage.com/post/cpython-tail-call/",
+    "note": "A 2025 benchmarking investigation showing the headline tail-call dispatch speedup was mostly a Clang 19 regression; read it for how to measure interpreter dispatch changes honestly."
+   },
+   {
+    "kind": "talk",
+    "title": "A deep dive into dispatching techniques (slides)",
+    "by": "Jonathan Mueller, think-cell",
+    "url": "https://www.think-cell.com/assets/think-cell_talk_a-deep-dive-into-dispatching-techniques.pdf",
+    "note": "Slides walking a bytecode VM from switch dispatch through computed goto to tail-call threading, with generated assembly for each; focus on the tail-call section."
+   },
+   {
+    "kind": "blog",
+    "title": "Which Parsing Approach?",
+    "by": "Laurence Tratt",
+    "url": "https://tratt.net/laurie/blog/2020/which_parsing_approach.html",
+    "note": "A long, opinionated comparison of recursive descent, LR, PEG and others; read it to understand what hand-written Pratt parsers trade away (silent ambiguity resolution)."
+   },
+   {
+    "kind": "book",
+    "title": "A Python Interpreter Written in Python (500 Lines or Less)",
+    "by": "Allison Kaptur",
+    "url": "https://aosabook.org/en/500L/a-python-interpreter-written-in-python.html",
+    "note": "Builds Byterun, a stack VM that runs real CPython bytecode in about 500 lines; focus on the frame and block-stack sections to compare with clox."
    }
   ],
   "stretch": "Turn clox into a register-based VM (Lua 5.0 style) with computed-goto dispatch and NaN boxing, keeping the full Crafting Interpreters test suite green. Report fib(35) and a loop-heavy benchmark against stock clox and CPython 3, and break down the speedup by each change."
@@ -460,6 +488,27 @@
     "by": "Agner Fog",
     "url": "https://www.agner.org/optimize/",
     "note": "Manual 2 (optimizing assembly) and the instruction tables tell you what your emitted instructions cost on real CPUs."
+   },
+   {
+    "kind": "blog",
+    "title": "Linear scan register allocation on SSA",
+    "by": "Max Bernstein",
+    "url": "https://bernsteinbear.com/blog/linear-scan/",
+    "note": "A 2025 worked tutorial of Wimmer-Franz linear scan over SSA live ranges; use it when your compiler moves past stack-only codegen to real register allocation."
+   },
+   {
+    "kind": "blog",
+    "title": "Cranelift, Part 1: Instruction Selection",
+    "by": "Chris Fallin",
+    "url": "https://cfallin.org/blog/2020/09/18/cranelift-isel-1/",
+    "note": "How a production backend lowers IR to machine instructions by tree matching; read it after you have a naive codegen to see what the next step looks like."
+   },
+   {
+    "kind": "course",
+    "title": "Code Generation for Data Processing (WS 2025/26)",
+    "by": "Alexis Engelke, TUM",
+    "url": "https://db.in.tum.de/teaching/ws2526/codegen",
+    "note": "Recent lecture slides plus a script covering LLVM-IR, instruction selection, register allocation, JIT and vectorization; the register allocation and JIT lectures fit this module best."
    }
   ],
   "stretch": "Add a register allocator (linear scan or graph coloring with coalescing) and a TACKY-style three-address IR to mycc, then pass the book suite through chapter 20. Measure runtime and instruction count against your stack-machine output and gcc -O0/-O1 on 5 compute-heavy C programs."
@@ -683,6 +732,20 @@
     "by": "Adrian Sampson",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2023fa/self-guided/",
     "note": "The later revision of the course with updated lessons and videos; use it for topics after lesson 11 such as alias analysis and GC."
+   },
+   {
+    "kind": "blog",
+    "title": "Land ahoy: leaving the Sea of Nodes",
+    "by": "V8 team",
+    "url": "https://v8.dev/blog/leaving-the-sea-of-nodes",
+    "note": "Why V8 replaced its Sea of Nodes IR with a CFG-based IR (Turboshaft); a rare production postmortem on IR design to read against the Simple/Sea of Nodes material."
+   },
+   {
+    "kind": "blog",
+    "title": "The acyclic e-graph: Cranelift's mid-end optimizer",
+    "by": "Chris Fallin",
+    "url": "https://www.cfallin.org/blog/2026/04/09/aegraph",
+    "note": "A 2026 deep dive on how Cranelift folded GVN, LICM, constant folding and rematerialization into one e-graph pass to escape pass ordering; read the pass-ordering motivation first."
    }
   ],
   "stretch": "Implement SCCP, GVN-PRE (or GVN plus LICM) and Briggs-style out-of-SSA with parallel-copy sequentialization on Bril, then run a pass-ordering study: try all orderings of 4 passes over bril/benchmarks and report the best and worst dynamic instruction counts per benchmark. Explain at least two cases where order changes the result by more than 5%."
@@ -893,6 +956,41 @@
     "by": "Pavel Panchekha, Zachary Tatlock and contributors",
     "url": "https://herbie.uwplse.org/",
     "note": "A floating-point accuracy optimizer built on e-graphs; try its web demo to see rewriting with an accuracy cost function."
+   },
+   {
+    "kind": "blog",
+    "title": "What's in an e-graph?",
+    "by": "Max Bernstein",
+    "url": "https://bernsteinbear.com/blog/whats-in-an-egraph/",
+    "note": "Builds a small e-graph with union-find and congruence step by step in code; a gentler on-ramp before the egg paper."
+   },
+   {
+    "kind": "course",
+    "title": "egglog tutorial",
+    "by": "egraphs-good",
+    "url": "https://egraphs-good.github.io/egglog-tutorial/01-basics.html",
+    "note": "Hands-on chapters that write an arithmetic optimizer and then a linear algebra one in egglog; do the first two chapters as exercises."
+   },
+   {
+    "kind": "talk",
+    "title": "aegraphs: Acyclic E-graphs for Efficient Optimization in a Production Compiler (EGRAPHS 2023 slides)",
+    "by": "Chris Fallin",
+    "url": "https://cfallin.org/pubs/egraphs2023_aegraphs_slides.pdf",
+    "note": "Invited-talk slides on the e-graph variant Cranelift ships; focus on why it avoids full saturation and how extraction is kept cheap."
+   },
+   {
+    "kind": "paper",
+    "title": "Slotted E-Graphs: First-Class Support for (Bound) Variables in E-Graphs",
+    "by": "Schneider, Rossel, Shaikhha, Goens, Koehler, Steuwer (PLDI 2025)",
+    "url": "https://pldi25.sigplan.org/details/pldi-2025-papers/77/Slotted-E-Graphs-First-Class-Support-for-Bound-Variables-in-E-Graphs",
+    "note": "Connects the lambda calculus and e-graph halves of this module: how to do equality saturation over terms with binders without de Bruijn indices."
+   },
+   {
+    "kind": "blog",
+    "title": "Custom Data Structures in E-Graphs",
+    "by": "UW PLSE",
+    "url": "https://uwplse.org/2026/02/24/egglog-containers.html",
+    "note": "A 2026 post on egglog container support (sets, maps, vectors) inside e-graphs; read it once you hit the limits of pure term rewriting."
    }
   ],
   "stretch": "Replace one tinygrad PatternMatcher simplification stage with an egglog-backed equality-saturation pass over index expressions and measure on 50 real kernels (captured with DEBUG output) how many ALU ops the generated code saves and how much compile time it adds. Report node counts, saturation time and any rule that causes blowup."
@@ -1136,6 +1234,55 @@
     "by": "PyTorch",
     "url": "https://docs.pytorch.org/docs/stable/notes/autograd.html",
     "note": "How a production tape handles saved tensors, in-place ops and version counters; compare with your tape design."
+   },
+   {
+    "kind": "blog",
+    "title": "Reverse mode automatic differentiation",
+    "by": "Eli Bendersky",
+    "url": "https://eli.thegreenplace.net/2025/reverse-mode-automatic-differentiation/",
+    "note": "A 2025 write-up that treats reverse mode as a generalization of backprop, working through a small Python implementation; focus on how the tape is built and replayed."
+   },
+   {
+    "kind": "blog",
+    "title": "Overview of PyTorch Autograd Engine",
+    "by": "PyTorch team",
+    "url": "https://pytorch.org/blog/overview-of-pytorch-autograd-engine/",
+    "note": "Part 1 of the official three-part autograd series; read the Jacobian-vector product section and how the backward graph is recorded during the forward pass."
+   },
+   {
+    "kind": "blog",
+    "title": "How Computational Graphs are Constructed in PyTorch",
+    "by": "PyTorch team",
+    "url": "https://pytorch.org/blog/computational-graphs-constructed-in-pytorch/",
+    "note": "Part 2 walks through grad_fn nodes, SavedVariable and the codegen behind derivatives.yaml; compare the design with your own micrograd-style engine."
+   },
+   {
+    "kind": "blog",
+    "title": "How Computational Graphs are Executed in PyTorch",
+    "by": "PyTorch team",
+    "url": "https://pytorch.org/blog/how-computational-graphs-are-executed-in-pytorch/",
+    "note": "Part 3 covers the C++ engine: dependency counting, the ready queue and per-device worker threads; focus on how topological order is computed at runtime."
+   },
+   {
+    "kind": "blog",
+    "title": "How to read the autograd codebase",
+    "by": "PyTorch dev-discuss forum",
+    "url": "https://dev-discuss.pytorch.org/t/how-to-read-the-autograd-codebase/383",
+    "note": "A map from Python API to the C++ files that implement autograd; use it as a guide before reading torch/csrc/autograd."
+   },
+   {
+    "kind": "lecture",
+    "title": "CSC421 Lecture 6 reading: Automatic Differentiation",
+    "by": "Roger Grosse (University of Toronto)",
+    "url": "https://www.cs.toronto.edu/~rgrosse/courses/csc421_2019/readings/L06%20Automatic%20Differentiation.pdf",
+    "note": "Concise notes that build a simplified version of HIPS Autograd step by step; good companion while doing the module's from-scratch engine."
+   },
+   {
+    "kind": "lecture",
+    "title": "L46 Principles of ML Systems: Automatic Differentiation slides",
+    "by": "University of Cambridge",
+    "url": "https://www.cl.cam.ac.uk/teaching/2324/L46/slides/3_23_24_AutoDiff.pdf",
+    "note": "Systems-flavoured slides from a 2023-24 ML systems course, linking AD modes to how frameworks implement them."
    }
   ],
   "stretch": "Implement optimal binomial checkpointing (Griewank's revolve) in your tensor engine and train a 50-layer MLP where peak activation memory is O(log n) layers. Report measured peak memory and recompute overhead against no checkpointing and sqrt(n) checkpointing, and verify gradients match to 1e-6 in float64."
@@ -1356,6 +1503,62 @@
     "by": "NumPy",
     "url": "https://numpy.org/doc/stable/reference/arrays.ndarray.html",
     "note": "The memory-layout section defines strides and contiguity precisely; use it to test your view ops."
+   },
+   {
+    "kind": "blog",
+    "title": "Let's talk about the PyTorch dispatcher",
+    "by": "Edward Z. Yang",
+    "url": "https://blog.ezyang.com/2020/09/lets-talk-about-the-pytorch-dispatcher/",
+    "note": "The companion to PyTorch internals: dispatch keys, operator registration and boxing; read it to see how a real framework routes one op to CPU, CUDA, autograd and other layers."
+   },
+   {
+    "kind": "blog",
+    "title": "How Does the Dispatcher Work?",
+    "by": "PyTorch devlogs",
+    "url": "https://docs.pytorch.org/devlogs/dispatcher/2026-04-16-how-does-the-dispatcher-work/",
+    "note": "A 2026 post that builds a dispatcher from first principles; useful as a modern follow-up to the ezyang post."
+   },
+   {
+    "kind": "course",
+    "title": "TinyTorch",
+    "by": "Vijay Janapa Reddi et al. (Harvard)",
+    "url": "https://mlsysbook.ai/tinytorch",
+    "note": "A free 20-module curriculum building a PyTorch-style framework from tensors to transformers in pure Python with memory and performance profiling built in; a good alternative track to minitorch/needle."
+   },
+   {
+    "kind": "paper",
+    "title": "TinyTorch: Building Machine Learning Systems from First Principles",
+    "by": "Vijay Janapa Reddi et al.",
+    "url": "https://arxiv.org/abs/2601.19107",
+    "note": "The 2026 paper describing TinyTorch's pedagogy (progressive disclosure, systems-first milestones); read it for how to sequence framework-building assignments."
+   },
+   {
+    "kind": "blog",
+    "title": "tinygrad-notes",
+    "by": "Di Zhu (mesozoic-egg)",
+    "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241231_intro.html",
+    "note": "Study notes on tinygrad internals that trace an elementwise add through UOps, scheduling and codegen; use DEBUG levels as shown to follow along in the course's pinned tinygrad."
+   },
+   {
+    "kind": "blog",
+    "title": "Adventures with TinyGrad",
+    "by": "xl0",
+    "url": "https://xl0.github.io/tinygrad-notes/intro.html",
+    "note": "Covers UOps, ShapeTracker and the pattern matcher; read the ShapeTracker chapter alongside the strides material in this module."
+   },
+   {
+    "kind": "book",
+    "title": "Build a Simple Deep Learning Library",
+    "by": "zekcrates",
+    "url": "https://zekcrates.quarto.pub/deep-learning-library/",
+    "note": "Free online book building a PyTorch-like library in NumPy (autograd, dataloaders, CNNs, ResNets); a gentler path for learners who stall on needle."
+   },
+   {
+    "kind": "course",
+    "title": "CMU 15-779: Advanced Topics in Machine Learning Systems (LLM Edition)",
+    "by": "Zhihao Jia (CMU)",
+    "url": "https://www.cs.cmu.edu/~zhihaoj2/15-779/",
+    "note": "Fall 2025 slides on how models are lowered to kernels, ML compilers, parallelization and serving; use it as the step after dlsys."
    }
   ],
   "stretch": "Add a CUDA or Metal codegen backend to your lazy framework and train a 6-layer, 384-dim char transformer on Tiny Shakespeare to validation loss under 1.6. Report tokens/sec within 3x of PyTorch eager on the same GPU, plus kernel count per step before and after fusion."
@@ -1623,6 +1826,20 @@
     "by": "Google",
     "url": "https://github.com/google/benchmark",
     "note": "A microbenchmark harness with warmup, repetition statistics and DoNotOptimize built in."
+   },
+   {
+    "kind": "blog",
+    "title": "SIMD City: Auto-vectorisation",
+    "by": "Matt Godbolt",
+    "url": "https://m.xania.org/202512/20-simd-city",
+    "note": "Day 20 of the series; shows when GCC and Clang vectorize a loop and why target flags change the output, a good bridge to hand-written SIMD."
+   },
+   {
+    "kind": "talk",
+    "title": "Algorithms for Modern Processor Architectures (SEA 2025)",
+    "by": "Daniel Lemire",
+    "url": "https://lemire.github.io/talks/2025/sea/sea2025.html",
+    "note": "2025 talk slides on instruction counts, branch prediction and SIMD in real parsers; focus on the measured examples for when branchless code wins."
    }
   ],
   "stretch": "Write a BLIS-style SGEMM with a hand-scheduled AVX-512 or NEON micro-kernel and an autotuner that searches block sizes (MC, KC, NC, MR, NR) per machine. Reach at least 85% of single-core theoretical peak and match OpenBLAS within 5% on square and skinny shapes (2048x2048, 4096x64), with a Top-Down perf breakdown explaining the remaining gap."
@@ -1887,6 +2104,41 @@
     "by": "NVIDIA",
     "url": "https://github.com/NVIDIA/cutlass",
     "note": "Production templated GEMMs; read the examples directory to see the warp-tiled, tensor-core version of your SGEMM."
+   },
+   {
+    "kind": "lecture",
+    "title": "Stanford CS149 Fall 2025 lectures",
+    "by": "Kayvon Fatahalian, Kunle Olukotun (Stanford)",
+    "url": "https://gfxcourses.stanford.edu/cs149/fall25/lecture/",
+    "note": "The newest offering of the course already used here; check it for updated GPU and DSL lectures not in the fall24 set."
+   },
+   {
+    "kind": "blog",
+    "title": "How To Write A Fast Matrix Multiplication From Scratch With Tensor Cores",
+    "by": "Alex Armbruster",
+    "url": "https://alexarmbr.github.io/2024/08/10/How-To-Write-A-Fast-Matrix-Multiplication-From-Scratch-With-Tensor-Cores.html",
+    "note": "A 2024 worklog continuing past the SGEMM tutorials into Tensor Core mma, swizzled shared memory and async copies on Turing; follow the kernel-by-kernel speedup table."
+   },
+   {
+    "kind": "blog",
+    "title": "Writing Speed-of-Light Flash Attention for 5090 in CUDA C++",
+    "by": "gau-nernst",
+    "url": "https://gau-nernst.github.io/fa-5090/",
+    "note": "A detailed worklog building flash attention from scratch with ldmatrix, mma and cp.async on a consumer Blackwell GPU, profiling each version."
+   },
+   {
+    "kind": "blog",
+    "title": "CUDA MODE lecture notes",
+    "by": "Christian Mills",
+    "url": "https://christianjmills.com/series/notes/cuda-mode-notes.html",
+    "note": "Written notes for the GPU MODE lectures; useful for skimming a lecture before watching or for review."
+   },
+   {
+    "kind": "book",
+    "title": "CUDA C++ Best Practices Guide",
+    "by": "NVIDIA",
+    "url": "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/",
+    "note": "NVIDIA's own APOD guide; read the memory optimization chapters (coalescing, shared memory bank conflicts, occupancy) next to the programming guide."
    }
   ],
   "stretch": "Extend your SGEMM to tensor cores (WMMA or mma.sync with FP16/BF16 inputs, FP32 accumulate) with async copies and double buffering, and reach at least 80% of cuBLAS HGEMM at 4096x4096. Submit your kernel to a GPU MODE leaderboard problem and report the ranking along with Nsight Compute evidence for the remaining gap."

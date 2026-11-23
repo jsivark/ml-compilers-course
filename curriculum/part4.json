@@ -238,6 +238,27 @@
     "by": "Modal",
     "url": "https://modal.com/gpu-glossary",
     "note": "Reference for the hardware terms (SM, warp, shared memory, tensor core) Triton hides; read the programming model entries."
+   },
+   {
+    "kind": "course",
+    "title": "Introduction to Gluon (Triton tutorials)",
+    "by": "Triton team",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/gluon/intro.html",
+    "note": "Official series on Gluon, Triton's lower-level dialect exposing layouts, shared memory and warp specialization; do the intro and layouts tutorials to see what Triton's compiler normally decides for you."
+   },
+   {
+    "kind": "blog",
+    "title": "Gluon: when Triton isn't low-level enough",
+    "by": "Matt Suiche",
+    "url": "https://www.msuiche.com/posts/gluon-when-triton-isnt-low-level-enough/",
+    "note": "Companion walk-through of the Gluon layouts and async-copy tutorials with performance comparisons against plain Triton."
+   },
+   {
+    "kind": "blog",
+    "title": "Blackwell 2-CTA Gluon GEMM",
+    "by": "Tanmay Patil",
+    "url": "https://tanmaypatil123.github.io/posts/2026/blackwell-2cta-gluon-gemm/",
+    "note": "A 2026 worklog writing a 2-CTA Blackwell GEMM in Gluon; read it to see how far tile-based Python can go toward CUTLASS-level control."
    }
   ],
   "stretch": "Add a Triton backend to your course compiler that lowers fused elementwise+reduction kernels, and show it within 10% of torch.compile (Inductor) on the nanoGPT forward pass at block size 1024. Report per-kernel time for both and explain any kernel where Inductor wins."
@@ -494,6 +515,34 @@
     "by": "Modal",
     "url": "https://modal.com/gpu-glossary",
     "note": "Entries on tensor cores, TMA-era memory hierarchy and warp schedulers for quick lookup while reading PTX."
+   },
+   {
+    "kind": "talk",
+    "title": "GPU MODE: Fundamentals of CuTe layout algebra and category-theoretic interpretation",
+    "by": "Jack Carlisle (Colfax Research)",
+    "url": "https://research.colfax-intl.com/gpu-mode-fundamentals-of-cute-layout-algebra-and-category-theoretic-interpretation/",
+    "note": "GPU MODE talk with slides that review composition, complement, divide and product, then give a mathematical framework; focus on the first half before touching CuTe tutorials."
+   },
+   {
+    "kind": "blog",
+    "title": "CuTe part 1: understanding layouts",
+    "by": "Eric Schreiber",
+    "url": "https://ericschreiber.github.io/blog/cute-part-1-understanding-layouts",
+    "note": "Clear walk from layout concepts to efficient memory copies in CuTe; a gentler entry than the official docs."
+   },
+   {
+    "kind": "blog",
+    "title": "Matrix Multiplication on NVIDIA's Blackwell, Part 2: Using hardware features to optimize matmul",
+    "by": "Modular",
+    "url": "https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul",
+    "note": "Part of a 2025 three-part series adding TMA, tcgen05 and later multicast and 2-SM MMA; follow on to part 3 for the optimizations reaching about 85 percent of SOTA."
+   },
+   {
+    "kind": "course",
+    "title": "The 5th Generation TensorCore (Gluon tutorial)",
+    "by": "Triton team",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/gluon/tcgen05.html",
+    "note": "Official tutorial on tcgen05 and tensor memory from Python; compare against the CuTe version to separate hardware concepts from library syntax."
    }
   ],
   "stretch": "Extend the grouped GEMM to FP8 with per-128-channel scaling and a persistent tile scheduler, and match or beat DeepGEMM grouped-contiguous TFLOPS on at least 3 of its published Mixtral-like shapes on H100. Publish Nsight Compute reports for both kernels side by side."
@@ -724,6 +773,20 @@
     "by": "Vasilache et al.",
     "url": "https://arxiv.org/abs/2202.03293",
     "note": "Describes structured codegen with linalg, vector and tiling-by-interfaces; the design behind the project's linalg reuse."
+   },
+   {
+    "kind": "blog",
+    "title": "TorchInductor: Deep Dive",
+    "by": "Calvin Woo",
+    "url": "https://calwoo.github.io/notes/concepts/pytorch-internals/torch-compile/inductor/",
+    "note": "Notes that walk through Inductor's lowering, scheduling and codegen stages; read the scheduler and fusion sections next to the source."
+   },
+   {
+    "kind": "blog",
+    "title": "Introduction to torch.compile and How It Works with vLLM",
+    "by": "vLLM team",
+    "url": "https://vllm.ai/blog/2025-08-20-torch-compile",
+    "note": "A 2025 case study of Dynamo plus Inductor inside a production inference engine; focus on graph splitting, caching and custom fusion passes."
    }
   ],
   "stretch": "Add a transform-dialect script that tiles, fuses and vectorizes your tg-dialect MLP for CPU and reach at least 70% of the runtime of torch.compile (Inductor C++ backend) on the 784-256-256-10 MLP at batch 64. Then lower the same IR through the GPU dialect to NVVM and report achieved bandwidth or FLOP/s against roofline."
@@ -918,6 +981,27 @@
     "by": "Louis-Noel Pouchet",
     "url": "https://www.cs.colostate.edu/~pouchet/software/polybench/",
     "note": "Standard kernels used by every polyhedral paper; run your legality checker and Pluto on several of them."
+   },
+   {
+    "kind": "lecture",
+    "title": "Polyhedral Compilation Foundations (888.11)",
+    "by": "Louis-Noel Pouchet",
+    "url": "https://www.cs.colostate.edu/~pouchet/lectures/888.11.lect1.html",
+    "note": "Full lecture slides and notes on iteration domains, dependences and scheduling; work through the dependence and tiling hyperplane lectures."
+   },
+   {
+    "kind": "course",
+    "title": "CR10 Advanced Compilation",
+    "by": "Christophe Alias (ENS Lyon)",
+    "url": "https://perso.ens-lyon.fr/christophe.alias/coursM2.html",
+    "note": "Graduate course page on polyhedral models and scheduling with slides; use it as a second explanation of affine scheduling."
+   },
+   {
+    "kind": "blog",
+    "title": "An Autoscheduler for Halide",
+    "by": "Cornell CS 6120 students",
+    "url": "https://www.cs.cornell.edu/courses/cs6120/2019fa/blog/halide-autoscheduler",
+    "note": "Student write-up summarizing the Halide autoscheduler design and its search and cost model; a short on-ramp before the Adams 2019 paper."
    }
   ],
   "stretch": "Train a single cost model on schedules from two GPUs and show that fine-tuning on 10% of the second GPU's data matches a model trained from scratch on all of it, measured by top-1 schedule runtime on 10 held-out kernels. Add polyhedral legality as a hard filter and report how many sampled schedules it removes."
@@ -1159,6 +1243,20 @@
     "by": "DeepSeek-AI",
     "url": "https://arxiv.org/abs/2412.19437",
     "note": "Section 3.3 describes fine-grained fp8 training with tile-wise scaling at production scale."
+   },
+   {
+    "kind": "paper",
+    "title": "Recipes for Pre-training LLMs with MXFP8",
+    "by": "Mishra et al. (NVIDIA)",
+    "url": "https://arxiv.org/abs/2506.08027",
+    "note": "2025 study of MXFP8 pre-training; focus on why E4M3 everywhere works and the scale-factor rounding change versus the OCP default."
+   },
+   {
+    "kind": "paper",
+    "title": "Characterization and Mitigation of Training Instabilities in Microscaling Formats",
+    "by": "Su, Kwun, Gil, Kakade, Anand",
+    "url": "https://arxiv.org/abs/2506.20752",
+    "note": "Nearly 1,000 small runs showing where MX training diverges; read the gradient-bias analysis around layer-norm parameters."
    }
   ],
   "stretch": "Implement a QuaRot-style rotation plus your MXFP4 emulator and get Llama-3.2-1B W4A4 within 1.0 WikiText-2 perplexity of bf16. Write a fused Triton kernel for the rotated W4A4 matmul and report tokens/s against your W4A16 kernel."
@@ -1354,6 +1452,27 @@
     "by": "Chips and Cheese",
     "url": "https://www.chipsandcheese.com/",
     "note": "Microbenchmark deep dives on real accelerators and GPUs; search their accelerator and GPU memory articles."
+   },
+   {
+    "kind": "blog",
+    "title": "TPU Deep Dive",
+    "by": "Henry Ko",
+    "url": "https://henryhmko.github.io/posts/tpu/tpu.html",
+    "note": "2025 bottom-up tour of TPUv4 chip, MXU systolic arrays and pod topology, discussed on Hacker News; focus on the systolic array and ICI sections."
+   },
+   {
+    "kind": "talk",
+    "title": "TPU talk slides (ModSim 2025)",
+    "by": "Norman Jouppi (Google)",
+    "url": "https://www.bnl.gov/modsim/events/2025/files/talks/norm-jouppi.pdf",
+    "note": "Slides from the TPU lead on design choices across generations; focus on the argument for systolic arrays and the interconnect."
+   },
+   {
+    "kind": "blog",
+    "title": "TPU architecture",
+    "by": "Google Cloud",
+    "url": "https://docs.cloud.google.com/tpu/docs/system-architecture",
+    "note": "Official current reference for TensorCore, MXU sizes (128x128 vs 256x256), SparseCore and slice topology across TPU versions."
    }
   ],
   "stretch": "Extend the simulator to model a TPU-like chip with an MXU, vector unit and HBM, and validate its predicted latency for a GPT-2 small layer against a real TPU (Colab or Cloud) within 20%. Use the validated model to propose and justify one design change that improves decode throughput by at least 1.5x at equal area proxy."
@@ -1598,6 +1717,20 @@
     "by": "Modal",
     "url": "https://modal.com/gpu-glossary",
     "note": "Short definitions of SMs, NVLink, HBM and more; look up terms while reading profiles."
+   },
+   {
+    "kind": "repo",
+    "title": "picotron_tutorial",
+    "by": "Hugging Face",
+    "url": "https://github.com/huggingface/picotron_tutorial",
+    "note": "Step-by-step build of a 4D-parallel trainer from scratch with a companion video playlist; implement DP, TP, PP and CP in order."
+   },
+   {
+    "kind": "blog",
+    "title": "Deploying DeepSeek with PD Disaggregation and Large-Scale Expert Parallelism on 96 H100 GPUs",
+    "by": "SGLang team (LMSYS)",
+    "url": "https://lmsys.org/blog/2025-05-05-large-scale-ep/",
+    "note": "Detailed 2025 worklog of prefill-decode disaggregation plus DeepEP-based expert parallelism; focus on the parallelism layout and the profiling breakdowns."
    }
   ],
   "stretch": "Implement a ZeRO++ or DualPipe-style overlap in your library and show a measured MFU gain over your 1F1B baseline on 8 GPUs, with traces showing the hidden communication. Add an automatic planner that predicts the best (dp, tp, pp) split from your cost model and matches the empirically best config on 3 model sizes."
@@ -1827,6 +1960,20 @@
     "by": "Matt Might",
     "url": "https://matt.might.net/articles/phd-school-in-pictures/",
     "note": "A short picture of what a research contribution means; read it before scoping the capstone's new result."
+   },
+   {
+    "kind": "blog",
+    "title": "GPU Programming from Scratch",
+    "by": "Answer.AI",
+    "url": "https://www.answer.ai/posts/2025-03-17-gpu-programming-scratch.html",
+    "note": "Example of learning in public by building and writing up kernels; use it as a model for your own worklog posts."
+   },
+   {
+    "kind": "talk",
+    "title": "The Shape of Compute, with Chris Lattner",
+    "by": "Latent Space",
+    "url": "https://www.latent.space/p/modular-2025",
+    "note": "2025 interview on compiler-first AI infrastructure, open source and how Modular hires; read the parts on hiring and community."
    }
   ],
   "stretch": "Pick an open problem on a GPU MODE leaderboard or KernelBench Level 3, reach a top-10 ranking or a 1.5x speedup over the torch.compile baseline, and publish the kernel, a profile-driven write-up and an upstream PR that ships it in a library such as torchao, vLLM or tinygrad."

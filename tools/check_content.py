@@ -12,7 +12,7 @@ import glob, json, re, sys, urllib.request, concurrent.futures as cf
 
 FILLER = [r"\bdelve", r"\bleverag", r"\bseamless", r"\brobust understanding", r"\bdeep understanding",
           r"\bunlock(?!ing gpu performance)", r"\bembark", r"\bjourney\b", r"\bgame[- ]changer", r"\btapestry", r"\bin today's",
-          r"\bcutting[- ]edge", r"\bharness the power", r"\bit's worth noting", r"\bdive into (?!systems|deep learning)", r"\bnavigate the",
+          r"\bcutting[- ]edge", r"\bharness the power", r"\bit's worth noting", r"(?<!deep )\bdive into (?!systems|deep learning|dispatching)", r"\bnavigate the",
           r"\bempower", r"\bsupercharge", r"\bmaster(?:y|ing)? the art"]
 REQ = ["id", "title", "why", "steps", "build", "check", "effort", "difficulty", "outcomes", "stuck", "project"]
 

@@ -284,6 +284,48 @@
     "by": "Google",
     "url": "https://github.com/google/souper",
     "note": "A superoptimizer that synthesizes missing peephole rules; a source of ideas for discovering rules instead of hand-writing them."
+   },
+   {
+    "kind": "blog",
+    "title": "Adventures with TinyGrad: the Pattern Matcher",
+    "by": "xl0",
+    "url": "https://xl0.github.io/tinygrad-notes/patternmatcher.html",
+    "note": "A second independent walkthrough of UPat and graph_rewrite with runnable examples; focus on how a rule's lambda returns a new UOp and how rules are dispatched."
+   },
+   {
+    "kind": "blog",
+    "title": "Value numbering",
+    "by": "Max Bernstein",
+    "url": "https://bernsteinbear.com/blog/value-numbering/",
+    "note": "Short 2026 post building local value numbering from hash-consing plus union-find; read it to see why UOp dedup is the same idea as LVN."
+   },
+   {
+    "kind": "blog",
+    "title": "Hash Consing Absolutism",
+    "by": "Justin Jaffray",
+    "url": "https://buttondown.com/jaffray/archive/hash-consing-absolutism/",
+    "note": "Argues about hash-consing every node versus best-effort dedup, using the Simple compiler as the example; useful for deciding what your UOp cache must guarantee."
+   },
+   {
+    "kind": "blog",
+    "title": "The mask that compiles to nothing: how HotSpot's JIT learned to reason about bits",
+    "by": "QuestDB",
+    "url": "https://questdb.com/blog/jvm-jit-known-bits/",
+    "note": "Explains why ranges and known bits refine each other (a reduced product), with the [5,41] to [8,40] example; apply the same trick to your bounds analysis."
+   },
+   {
+    "kind": "talk",
+    "title": "Lean-MLIR: a workbench for formally verifying peephole optimizations for MLIR (slides)",
+    "by": "Keizer, Bhat (LLVM Dev Meeting 2024)",
+    "url": "https://llvm.org/devmtg/2024-10/slides/techtalk/Keizer-Bhat-lean-mlir.pdf",
+    "note": "Shows Alive-style proofs of peephole rewrites in Lean; skim the section on verifying LLVM peepholes for how a rewrite rule is stated as a theorem."
+   },
+   {
+    "kind": "repo",
+    "title": "TVM rewrite_simplify.cc",
+    "by": "Apache TVM",
+    "url": "https://apache.googlesource.com/tvm/+/refs/tags/v0.11.0/src/arith/rewrite_simplify.cc",
+    "note": "A large production rule set for index-expression simplification; read the div/mod rules and compare them to tinygrad's symbolic.py."
    }
   ],
   "stretch": "Write a rule fuzzer: generate random UOp expressions over bounded variables, apply your rewrite set, and check every result against the original with z3 (or exhaustive evaluation for small ranges). Report soundness bugs and measure bounds precision as the mean interval width ratio versus the true range over 10,000 random expressions, and drive it below 1.2."
@@ -509,6 +551,27 @@
     "by": "Andrej Karpathy",
     "url": "https://github.com/karpathy/llm.c",
     "note": "train_gpt2.c is a full model as plain C loops over pointer buffers, a target for what your backend could eventually emit."
+   },
+   {
+    "kind": "lecture",
+    "title": "Instruction Scheduling (CSE 401, Spring 2025)",
+    "by": "University of Washington",
+    "url": "https://courses.cs.washington.edu/courses/cse401/25sp/lectures/R-Instruction-Scheduling.pdf",
+    "note": "Shows that any topological order of an SSA dependence DAG is legal and how list scheduling picks among ready nodes; this is the theory behind linearizing a UOp graph."
+   },
+   {
+    "kind": "repo",
+    "title": "Go compiler SSA schedule.go (early version)",
+    "by": "Go team",
+    "url": "https://go.googlesource.com/go/+/083a646f63055427c203d5600ef65f05f55783bf/src/cmd/internal/ssa/schedule.go",
+    "note": "A tiny real-world block scheduler that does a plain topological sort over SSA values; a good model for your first linearizer."
+   },
+   {
+    "kind": "talk",
+    "title": "Why Languages Should Preserve Load-Store Order",
+    "by": "Stephen Dolan (POPL 2024, FOWM)",
+    "url": "https://popl24.sigplan.org/details/fowm-2024-papers/4/Why-Languages-Should-Preserve-Load-Store-Order",
+    "note": "Argues that load-store reordering should never be programmer-visible; read the abstract to frame which load/store reorderings your renderer may do."
    }
   ],
   "stretch": "Add a restrict-aware emitter and an alias checker: prove from your AFTER graph which buffers never alias, emit __restrict__ only for those, and show with clang -O3 -Rpass=loop-vectorize on 5 kernels that vectorization appears where it did not before, with measured speedup."
@@ -729,6 +792,41 @@
     "by": "Modal",
     "url": "https://modal.com/gpu-glossary",
     "note": "Look up arithmetic intensity and roofline terms before Part IV moves these loops to the GPU."
+   },
+   {
+    "kind": "blog",
+    "title": "GEMM on CPU: multi-threaded FP32 matmul in pure C",
+    "by": "salykova",
+    "url": "https://salykova.github.io/gemm-cpu",
+    "note": "Step-by-step FMA3/AVX2 matmul in C that competes with OpenBLAS; focus on the micro-kernel and packing sections when writing your C renderer's matmul target."
+   },
+   {
+    "kind": "course",
+    "title": "LAFF-On Programming for High Performance, Week 2: vector registers and instructions",
+    "by": "Robert van de Geijn (UT Austin)",
+    "url": "https://www.cs.utexas.edu/~rvdg/laff/LAFF-On-PfHP/Week2-vector-registers-and-vector-instructions.html",
+    "note": "Free course unit that builds the register-blocked micro-kernel with exercises; do the micro-kernel exercises before tuning your generated loops."
+   },
+   {
+    "kind": "blog",
+    "title": "GEMM: From Pure C to SSE Optimized Micro Kernels",
+    "by": "Michael Lehn (Ulm)",
+    "url": "https://www.mathematik.uni-ulm.de/~lehn/sghpc/gemm/",
+    "note": "Walks from naive C to blocked C to SSE micro-kernels with benchmarks at each step; useful for seeing which transformation gives which speedup."
+   },
+   {
+    "kind": "lecture",
+    "title": "Convolution (DL System Design and Optimization, Week 4)",
+    "by": "Rice University",
+    "url": "https://rice-course-mlsys.github.io/DL-System-Design-and-Optimization/schedule/S26-Week-4-Lect1-Convolution.pdf",
+    "note": "Compact 2026 slides comparing direct conv, im2col+GEMM and Winograd with their memory and accuracy costs; use it to pick which conv form your compiler emits."
+   },
+   {
+    "kind": "paper",
+    "title": "Anatomy of High-Performance Deep Learning Convolutions on SIMD Architectures",
+    "by": "Georganas et al. (Intel, SC18)",
+    "url": "https://arxiv.org/abs/1808.05567",
+    "note": "Shows JIT-generated direct convolution near peak on x86 without im2col; read the loop-blocking section for the case against im2col copies."
    }
   ],
   "stretch": "Write a loop-order autotuner for gemm_256: enumerate all 6 permutations of the three ranges plus 2-level tiling with tile sizes in {8,16,32,64}, compile each, and report GFLOP/s against NumPy. Target at least 30 percent of NumPy single-thread float32 throughput with a schedule your compiler emits."
@@ -948,6 +1046,48 @@
     "by": "Philippe Tillet (OpenAI)",
     "url": "https://openai.com/index/triton/",
     "note": "The fused softmax example shows a reduce read twice without a staged buffer."
+   },
+   {
+    "kind": "blog",
+    "title": "A Range Is Not Its Shape: Reading Rangeify-Era tinygrad from OCANNL",
+    "by": "Lukasz Stafiniak",
+    "url": "https://lukstafi.github.io/notes/a-range-is-not-its-shape.html",
+    "note": "An outside compiler author's reading of tinygrad's rangeify design, contrasting declarative shapes with imperative ranges; read it after rangeify.py for a second view."
+   },
+   {
+    "kind": "talk",
+    "title": "Luminal - Search-Based Deep Learning Compilers",
+    "by": "Joe Fioti (AI Engineer)",
+    "url": "https://www.youtube.com/watch?v=0uj9lMI-sIo",
+    "note": "Describes a compiler that rewrites the graph without a cost model and searches over generated kernels to decide fusion; contrast with tinygrad's heuristic materialization rules."
+   },
+   {
+    "kind": "repo",
+    "title": "Luminal",
+    "by": "luminal-ai",
+    "url": "https://github.com/luminal-ai/luminal",
+    "note": "Small primitive-op graph compiler whose search derives fused kernels such as flash attention; read how it represents the primitive op set."
+   },
+   {
+    "kind": "blog",
+    "title": "What is the split strategy for large-dimensional reduction operations in Triton code generation?",
+    "by": "PyTorch dev-discuss",
+    "url": "https://dev-discuss.pytorch.org/t/what-is-the-split-strategy-for-large-dimensional-reduction-operations-in-triton-code-generation/1268",
+    "note": "Inductor maintainers explain why one reduction becomes two kernels (split reductions) to fill the GPU; a concrete case where materializing an intermediate is the right call."
+   },
+   {
+    "kind": "paper",
+    "title": "Blockbuster, Part 1: Block-level AI Operator Fusion",
+    "by": "Microsoft (arXiv 2025)",
+    "url": "https://arxiv.org/abs/2505.07829",
+    "note": "A 2025 fusion framework that reasons about which intermediates can stay in local memory; read the worked matmul plus ReLU example."
+   },
+   {
+    "kind": "lecture",
+    "title": "Deep Learning Compilers",
+    "by": "Raffi Khatchadourian (CUNY Hunter)",
+    "url": "https://www.cs.hunter.cuny.edu/~khatchad/media/dl_compilers/",
+    "note": "Lecture deck surveying fusion patterns (elementwise, reduction, vertical, horizontal) across TVM, XLA, Inductor and IREE; use it as a map of how other systems decide what to fuse."
    }
   ],
   "stretch": "Implement a cost-model-driven materializer: estimate bytes moved and recomputed flops for fuse vs stage per node, choose the minimum, and evaluate on softmax, layernorm and a 2-stage blur. Report bytes moved and wall time for all-fuse, all-stage and your model, and beat both baselines on at least two of three."
@@ -1173,6 +1313,55 @@
     "by": "Halide team",
     "url": "https://github.com/halide/Halide",
     "note": "Its bounds inference and BoundaryConditions show pad as a clamped or masked index, like your where on validity."
+   },
+   {
+    "kind": "blog",
+    "title": "Adventures with TinyGrad: ShapeTracker",
+    "by": "xl0",
+    "url": "https://xl0.github.io/tinygrad-notes/shapetracker.html",
+    "note": "Worked examples of views, masks from padding, and when permute plus reshape cannot merge into one view; good drill for the movement-op exercises."
+   },
+   {
+    "kind": "blog",
+    "title": "Linear Layout in Triton (1): Basic Idea",
+    "by": "ita9naiwa",
+    "url": "https://ita9naiwa.github.io/mlsys/2025/10/27/ll-in-triton-part-1.html",
+    "note": "Gentle 2025 explainer of layouts as maps from (register, lane, warp) bits to logical indices; read before the Linear Layouts paper."
+   },
+   {
+    "kind": "blog",
+    "title": "Linear layouts, Triton, and linear algebra over F2",
+    "by": "Damek Davis",
+    "url": "https://damek.github.io/random/linear-layouts-triton-and-linear-algebra-over-f-2",
+    "note": "A mathematician's walk through the F2 view of layouts; focus on how layout conversion becomes matrix inversion."
+   },
+   {
+    "kind": "paper",
+    "title": "A note on the algebra of CuTe Layouts",
+    "by": "Jay Shah (Colfax Research)",
+    "url": "https://research.colfax-intl.com/wp-content/uploads/2024/01/layout_algebra.pdf",
+    "note": "Precise definitions and proofs for coalesce, composition and complement; use it when the CUTLASS docs leave a step unexplained."
+   },
+   {
+    "kind": "paper",
+    "title": "Modeling Layout Abstractions Using Integer Set Relations",
+    "by": "arXiv 2511.10374",
+    "url": "https://arxiv.org/abs/2511.10374",
+    "note": "Puts CuTe layouts and Triton linear layouts in one integer-set framework; read the section on composition to connect strides, views and layouts."
+   },
+   {
+    "kind": "course",
+    "title": "Gluon tutorial: Tensor Layouts",
+    "by": "Triton",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/gluon/layouts.html",
+    "note": "Official tutorial where layouts are explicit in user code; shows blocked, sliced and linear layouts you will meet in GPU codegen."
+   },
+   {
+    "kind": "paper",
+    "title": "Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation",
+    "by": "Alex Rogozhnikov (ICLR 2022)",
+    "url": "https://openreview.net/forum?id=oapKSVM2bcj",
+    "note": "Design rationale for rearrange as a notation over reshape/permute; use its examples as test cases for your movement-op lowering."
    }
   ],
   "stretch": "Write a movement-op canonicalizer and prove it: for random chains of up to 6 movement ops on shapes with up to 4 dims, compare your generated index expressions to NumPy on every element, and count / and % ops in the emitted C. Make 100 percent of reshape-then-inverse-reshape chains compile to div/mod-free code, and report the fraction for general chains."
@@ -1427,6 +1616,34 @@
     "by": "Andrej Karpathy",
     "url": "https://www.youtube.com/watch?v=l8pRSuU81PU",
     "note": "Full training of a real model with performance work along the way; watch the speedup section for which optimizations matter when you move past MNIST."
+   },
+   {
+    "kind": "book",
+    "title": "The Elements of Differentiable Programming (book site and code)",
+    "by": "Mathieu Blondel, Vincent Roulet",
+    "url": "https://diffprog.github.io/",
+    "note": "Free book from Google DeepMind with accompanying Python code; read the automatic differentiation chapters on JVPs, VJPs and checkpointing."
+   },
+   {
+    "kind": "blog",
+    "title": "Autodidax2, part 1: JAX from scratch, again",
+    "by": "JAX team",
+    "url": "https://docs.jax.dev/en/latest/autodidax2_part1.html",
+    "note": "A shorter rewrite of Autodidax that frames JAX as primitives plus interpreters; build its JVP and linearize interpreters and compare with your own tape-based autograd."
+   },
+   {
+    "kind": "repo",
+    "title": "diff-zoo: Differentiation for Hackers",
+    "by": "Mike Innes",
+    "url": "https://github.com/MikeInnes/diff-zoo",
+    "note": "Notebooks that derive symbolic, forward and reverse differentiation from one tiny expression language; the reverse-mode and Wengert-list notebooks map directly onto this module."
+   },
+   {
+    "kind": "problems",
+    "title": "CMU 10-414/714 Deep Learning Systems assignments (Needle)",
+    "by": "Tianqi Chen, Zico Kolter",
+    "url": "https://dlsyscourse.org/assignments/",
+    "note": "Homework 1 has you implement reverse-mode autodiff over tensor ops in the Needle library with local tests; do it after the micrograd step."
    }
   ],
   "stretch": "Add forward-mode (jvp) and derive reverse mode from linearize plus a transpose pass, as in YOLO, then compute Hessian-vector products by composing them. Verify HVPs against finite differences on the MNIST MLP and train it with a few steps of Newton-CG; report gradient-graph size vs forward-graph size for every model in the project."
@@ -1688,6 +1905,13 @@
     "by": "Travis Downs",
     "url": "https://travisdowns.github.io/",
     "note": "Careful microbenchmark posts on store buffers, AVX frequency and memory; read the posts on AVX-512 frequency before choosing SIMD width."
+   },
+   {
+    "kind": "blog",
+    "title": "Tutorial: Performance Engineering for Machine Learning and Scientific Computing",
+    "by": "Davis Blalock",
+    "url": "https://dblalock.github.io/Performance-Engineering-Tutorial",
+    "note": "A compact tour of memory hierarchy, vectorization and threading aimed at ML people; good for the mental model before tuning your CPU backend."
    }
   ],
   "stretch": "Replace the autotuner's measurement loop with a learned cost model (gradient-boosted trees or a small MLP over loop features, as in TVM/Ansor) and show it reaches within 5% of the best measured schedule with 10x fewer real runs. Extend the micro-kernel to AVX-512 or NEON and report percentage of measured peak on 2048^3 GEMM next to OpenBLAS and BLIS."
@@ -1914,6 +2138,41 @@
     "by": "Chester Lam et al.",
     "url": "https://chipsandcheese.com/",
     "note": "Microbenchmark deep dives on GPU architectures; read the article for the GPU you run on to learn its cache and bandwidth numbers."
+   },
+   {
+    "kind": "blog",
+    "title": "A Gentle Introduction to CUDA PTX",
+    "by": "Philip Fabianek",
+    "url": "https://philipfabianek.com/posts/cuda-ptx-introduction",
+    "note": "Explains the CUDA C++ to PTX to SASS pipeline and walks through a complete hand-written PTX kernel; useful if your backend emits PTX instead of CUDA C."
+   },
+   {
+    "kind": "blog",
+    "title": "Understanding PTX, the Assembly Language of CUDA GPU Computing",
+    "by": "NVIDIA Technical Blog",
+    "url": "https://developer.nvidia.com/blog/understanding-ptx-the-assembly-language-of-cuda-gpu-computing",
+    "note": "Official explanation of PTX as a virtual ISA and how JIT compilation gives forward compatibility; read for the fatbinary and driver JIT section."
+   },
+   {
+    "kind": "paper",
+    "title": "Benchmarking and Dissecting the Nvidia Hopper GPU Architecture",
+    "by": "Weile Luo et al.",
+    "url": "https://arxiv.org/abs/2402.13499",
+    "note": "Instruction-level microbenchmarks of Hopper, Ada and Ampere memory and tensor cores; use the latency and bandwidth tables when building a cost model for your backend."
+   },
+   {
+    "kind": "blog",
+    "title": "GPU Compilation with MLIR",
+    "by": "Stephen Diehl",
+    "url": "https://www.stephendiehl.com/posts/mlir_gpu/",
+    "note": "Shows lowering a kernel through MLIR's gpu and nvvm dialects down to PTX; a good contrast to emitting CUDA source strings like tinygrad."
+   },
+   {
+    "kind": "course",
+    "title": "MIT 6.S894: Accelerated Computing (Fall 2024)",
+    "by": "Jonathan Ragan-Kelley",
+    "url": "https://accelerated-computing-class.github.io/fall24",
+    "note": "Public CUDA labs with write-ups, from SIMD Mandelbrot to matmul on an RTX A4000; do the early GPU labs as backend test kernels."
    }
   ],
   "stretch": "Add a Triton or PTX backend next to CUDA C and generate a single-pass reduction with decoupled look-back (as in CUB), then show elementwise, reduce and softmax each reaching 90% or more of measured DRAM bandwidth on two GPU generations. Publish ncu sections proving where the last 10% goes."
@@ -2191,6 +2450,55 @@
     "by": "Triton",
     "url": "https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html",
     "note": "Block-level GEMM with grouped ordering for L2 reuse; copy the grouped program-id swizzle into your scheduler."
+   },
+   {
+    "kind": "problems",
+    "title": "6.S894 Lab 6: Matrix Multiply with Tensor Cores",
+    "by": "MIT 6.S894 staff",
+    "url": "https://accelerated-computing-class.github.io/fall24/labs/lab6",
+    "note": "Guided lab using inline PTX mma instructions and their register fragment layouts on Ampere; the cleanest structured exercise for the tensor core step."
+   },
+   {
+    "kind": "blog",
+    "title": "Flash Attention From Scratch: 7 Kernels to 187 TFLOPS on A100",
+    "by": "Caleb Yenusah",
+    "url": "https://yencal.github.io/gpu-flash-attention/",
+    "note": "Worklog that adds one optimization per kernel in raw CUDA and PTX, reaching about 92% of FA2; follow it kernel by kernel next to your own implementation."
+   },
+   {
+    "kind": "blog",
+    "title": "Matrix Multiplication on NVIDIA's Blackwell, Part 1: Introduction",
+    "by": "Modular",
+    "url": "https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-1-introduction",
+    "note": "Start of a multi-part 2025 worklog that ends above cuBLAS on B200; read for tcgen05, tensor memory and 2-SM MMA."
+   },
+   {
+    "kind": "blog",
+    "title": "tcgen05 for dummies",
+    "by": "gau-nernst",
+    "url": "https://gau-nernst.github.io/tcgen05",
+    "note": "Plain CUDA plus PTX walkthrough of a Blackwell GEMM with TMA and mbarriers; the generation table comparing Ampere, Hopper and Blackwell paths is worth keeping."
+   },
+   {
+    "kind": "paper",
+    "title": "FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling",
+    "by": "Ted Zadouri, Markus Hoehnerbach, Jay Shah, Timmy Liu, Vijay Thakkar, Tri Dao",
+    "url": "https://arxiv.org/abs/2603.05451",
+    "note": "How attention changes on Blackwell when tensor cores outgrow exp units and shared memory; focus on the software exp emulation and pipeline schedule."
+   },
+   {
+    "kind": "blog",
+    "title": "We reverse-engineered Flash Attention 4",
+    "by": "Modal",
+    "url": "https://modal.com/blog/reverse-engineer-flash-attention-4",
+    "note": "Readable 2025 tour of the FA4 kernel's warp roles and online-softmax tricks; read before the paper."
+   },
+   {
+    "kind": "blog",
+    "title": "ThunderKittens 2.0: Even Faster Kernels for Your GPUs",
+    "by": "Hazy Research",
+    "url": "https://hazyresearch.stanford.edu/blog/2026-02-19-tk-2",
+    "note": "Lessons from Blackwell kernels, including the measured cost of tcgen05 fences; useful for seeing where the last 10-20% of throughput goes."
    }
   ],
   "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, wgmma or tcgen05, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at 8192^3 and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."
@@ -2431,6 +2739,48 @@
     "by": "DeepSeek",
     "url": "https://github.com/deepseek-ai/DualPipe",
     "note": "Bidirectional pipeline schedule that overlaps compute and communication from DeepSeek-V3; read the schedule diagram in the README."
+   },
+   {
+    "kind": "paper",
+    "title": "Demystifying NCCL: An In-depth Analysis of GPU Communication Protocols and Algorithms",
+    "by": "Zhiyi Hu et al.",
+    "url": "https://arxiv.org/abs/2507.04786",
+    "note": "Explains NCCL's Simple, LL and LL128 protocols and its ring and tree collectives at the primitive level; read the ring AllReduce section before writing your own allreduce."
+   },
+   {
+    "kind": "paper",
+    "title": "SimpleFSDP: Simpler Fully Sharded Data Parallel with torch.compile",
+    "by": "Ruisi Zhang et al.",
+    "url": "https://arxiv.org/abs/2411.00284",
+    "note": "FSDP expressed as DTensor redistributes so the compiler sees the full compute plus communication graph; focus on the bucketing and reordering passes in Inductor."
+   },
+   {
+    "kind": "paper",
+    "title": "AutoParallel: Composable, PyTorch-Native Automatic Parallelism for Production Training",
+    "by": "Sanket Purandare et al.",
+    "url": "https://arxiv.org/abs/2611.08660",
+    "note": "Recent compiler-side work that searches per-operator sharding placements, generalizing SimpleFSDP; read for how the search space and cost model are set up."
+   },
+   {
+    "kind": "talk",
+    "title": "Shardy: An MLIR-based Tensor Partitioning System (LLVM Dev Meeting 2024 slides)",
+    "by": "Bart Chrzaszcz, Zixuan Jiang",
+    "url": "https://llvm.org/devmtg/2024-10/slides/techtalk/Chrzaszcz-Jiang-Shardy.pdf",
+    "note": "How the GSPMD and PartIR teams merged into an axis-based sharding representation with priority-driven propagation; compare with GSPMD's attribute propagation."
+   },
+   {
+    "kind": "paper",
+    "title": "PartIR: Composing SPMD Partitioning Strategies for Machine Learning",
+    "by": "Sami Alabed et al.",
+    "url": "https://arxiv.org/abs/2401.11202",
+    "note": "PartIR's tactic-based partitioning and automatic search; read alongside Alpa as a different take on automating sharding."
+   },
+   {
+    "kind": "lecture",
+    "title": "Tensor Parallelism (UvA DL notebooks, Part 4.1)",
+    "by": "Phillip Lippe",
+    "url": "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/scaling/JAX/tensor_parallel_simple.html",
+    "note": "Implements tensor parallelism for linear layers from first principles in JAX shard_map with runnable code; do it as the manual counterpart to compiler sharding."
    }
   ],
   "stretch": "Extend the planner to choose among data, tensor, pipeline and FSDP sharding with an ILP or DP search (as in Alpa) and overlap collectives with compute. On 4+ GPUs, show the chosen plan for a 1B-parameter transformer lies within 10% of measured best across all enumerated plans and reach at least 40% MFU."
@@ -2714,6 +3064,20 @@
     "by": "NVIDIA Developer",
     "url": "https://www.youtube.com/watch?v=uiIdk61UxEs",
     "note": "NVIDIA's tile-based programming model aimed at kernels like these; useful context for where kernel compilers are heading."
+   },
+   {
+    "kind": "blog",
+    "title": "Inside vLLM: Anatomy of a High-Throughput LLM Inference System",
+    "by": "Aleksa Gordic",
+    "url": "https://www.aleksagordic.com/blog/vllm",
+    "note": "Long 2025 walkthrough of the vLLM V1 engine: scheduler, paged KV cache, chunked prefill, prefix caching and speculative decoding; read the engine core sections first."
+   },
+   {
+    "kind": "blog",
+    "title": "Look Ma, No Bubbles! Designing a Low-Latency Megakernel for Llama-1B",
+    "by": "Hazy Research",
+    "url": "https://hazyresearch.stanford.edu/blog/2025-05-27-no-bubbles",
+    "note": "Fusing a whole Llama forward pass into one persistent kernel to remove launch bubbles in batch-1 decode; a good extreme of the fusion ideas from this course."
    }
   ],
   "stretch": "Run a 1B-class Llama model on your compiler with a paged KV cache, continuous batching, 4-bit weights (GPTQ or AWQ) and EAGLE-style drafting. Match vLLM's throughput within 25% at equal p99 latency on the same GPU and report perplexity within 2% of fp16."
@@ -2940,6 +3304,20 @@
     "by": "Richard Hamming",
     "url": "https://www.cs.virginia.edu/~robins/YouAndYourResearch.html",
     "note": "Hamming on choosing important problems; read it before picking between ideas A-D."
+   },
+   {
+    "kind": "blog",
+    "title": "GEMM Performance Measurement Methodology Guidelines",
+    "by": "NVIDIA CUTLASS docs",
+    "url": "https://docs.nvidia.com/cutlass/latest/media/docs/cpp/gemm_performance_measurement_methodology_guidelines.html",
+    "note": "NVIDIA's own rules for timing GEMMs (clock monitoring, cold caches via rotated buffers, no gaps between launches); use it as the checklist for your project's baseline harness."
+   },
+   {
+    "kind": "blog",
+    "title": "How we (try to) benchmark GPU kernels accurately",
+    "by": "Jan.ai",
+    "url": "https://jan.ai/post/how-we-benchmark-kernels",
+    "note": "Practitioner write-up on L2 flushing, CUDA events and warmup; copy its L2-flush approach into your harness before recording any baseline."
    }
   ],
   "stretch": "Turn Idea A into a learned search: train a small cost model (gradient-boosted trees or an MLP over kernel features) on timings from your beam search, and show it reaches within 5% of full-beam kernel speed on 20+ KernelBench level-1 ops while timing at least 5x fewer candidates. Publish the dataset of (kernel, features, time) so others can reproduce."
@@ -3127,6 +3505,13 @@
     "by": "Stanford Scaling Intelligence Lab",
     "url": "https://github.com/ScalingIntelligence/KernelBench",
     "note": "Run your compiler across its level 1-3 problems as a broad regression and speedup suite beyond your chosen target."
+   },
+   {
+    "kind": "blog",
+    "title": "Outperforming cuBLAS on NVFP4",
+    "by": "cudaforfun (Substack)",
+    "url": "https://cudaforfun.substack.com/p/outperforming-cublas-on-nvfp4",
+    "note": "A 2025 step-by-step worklog building an NVFP4 GEMM in CUDA and inline PTX; study how each iteration is motivated by a measurement, the pattern your build log should follow."
    }
   ],
   "stretch": "Submit your optimized kernel to a GPU MODE leaderboard (https://www.gpumode.com) and place in the top 10 for its problem, or show a reproducible speedup over the current top entry. Document every submission in the lab notebook with its measured time."
@@ -3299,6 +3684,20 @@
     "by": "Gernot Heiser",
     "url": "https://gernot-heiser.org/benchmarking-crimes.html",
     "note": "Run your final tables and plots past this list before publishing."
+   },
+   {
+    "kind": "paper",
+    "title": "How (and How Not) to Write a Good Systems Paper",
+    "by": "Roy Levin and David D. Redell (1983)",
+    "url": "https://www.cs.cmu.edu/~18742/papers/levin83.pdf",
+    "note": "The classic SOSP reviewer checklist; run your write-up against its questions on the new idea, implementation and comparison to prior techniques."
+   },
+   {
+    "kind": "lecture",
+    "title": "How to write a good paper (slides)",
+    "by": "Gernot Heiser",
+    "url": "https://gernot-heiser.org/talk-howto-paper.pdf",
+    "note": "Systems-focused slides arguing evaluation is the core of the paper; focus on the evaluation and honesty-about-limitations sections."
    }
   ],
   "stretch": "Submit the report as a 4-page workshop paper (for example an MLSys or NeurIPS ML-for-systems workshop) with an artifact that an independent person reproduces within 10% of your headline number. Record the review feedback and the reproduction in the README."
