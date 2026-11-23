@@ -33,7 +33,7 @@ def page(title, body, depth=0, here=""):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap">
 <link rel="stylesheet" href="{up}style.css"></head>
 <body><header class="top"><div class="bar"><a class="brand" href="{up}index.html">ML Compilers From Zero</a>
-<nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a><a href="{up}about.html"{' class="on"' if here=='about' else ''}>About</a></nav></div></header>
+<nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a><a href="{up}about.html"{' class="on"' if here=='about' else ''}>About</a><a href="https://github.com/jsivark/ml-compilers-course">GitHub</a></nav></div></header>
 <main class="wrap">{body}</main>
 <footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU. <a href="{up}about.html">How this was made</a> · <a href="https://github.com/jsivark/ml-compilers-course/issues">Report a mistake</a></footer>
 </body></html>"""
@@ -107,6 +107,7 @@ def index(mods):
 <ul class="how">
 <li><b>Go in order.</b> Each module assumes the ones before it. If you already know a topic, do its <i>Build</i> step anyway. If it's easy, skip ahead.</li>
 <li><b>No deadlines.</b> Move on when the build works and you can answer every “ready to move on when” question without notes.</li>
+<li><b>Get the code.</b> The assignments, tests and this site's source are on GitHub: <a href="https://github.com/jsivark/ml-compilers-course">github.com/jsivark/ml-compilers-course</a>.</li>
 <li><b>Keep one repo.</b> From Module 18 onward, you grow a single <code>./compile</code>. The <a href="assignments.html">assignments</a> come with test suites.</li>
 <li><b>Build a portfolio as you go.</b> Every module ends with a portfolio project with a rubric. Push each one to your public repo and write it up. By the end you'll have a body of work that shows real depth to hiring managers and grad-school committees. See the <a href="portfolio.html">portfolio</a>.</li>
 <li><b>Effort estimates are honest, not deadlines.</b> Hard modules take longer. Being stuck is normal, and every module has an “if you get stuck” section.</li>
