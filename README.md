@@ -21,7 +21,7 @@ From Module 18 on, you build one compiler, and the tests in this repo check it. 
 | 24 | `tests/week07` | `python3 run_tests.py 7` |
 | 25–28 | none | graded by measured milestones (see each module page) |
 
-Module 18 has a full suite of 65 tests, checked against a reference implementation. Modules 19–24 have starter sets whose answers were worked out by hand. See the [About page](https://jsivark.github.io/ml-compilers-course/about.html) for what has and hasn't been checked.
+Module 18 has a full suite of 65 tests, checked against a reference implementation. Modules 19–24 have starter sets whose answers were worked out by hand.
 
 ```
 run_tests.py        run a week's tests against ./compile (or any command)
