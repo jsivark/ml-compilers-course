@@ -149,7 +149,7 @@ def md_to_html(md):
     s = E(s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
     s = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'<a href="\2">\1</a>', s)
-    s = re.sub(r'(?<!href=")(?<![">])(https?://[^\s<)]+)', r'<a href="\1">\1</a>', s)
+    s = re.sub(r'(?<!href=")(?<![">])(https?://[^\s<)*]+)', r'<a href="\1">\1</a>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", s)
     s = re.sub(r"\*([^*]+)\*", r"<i>\1</i>", s)
     return s
