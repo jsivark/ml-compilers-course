@@ -1,0 +1,2 @@
+%m = reduce [3 9 2 7] op=max pop=1
+%t = assert %m 9

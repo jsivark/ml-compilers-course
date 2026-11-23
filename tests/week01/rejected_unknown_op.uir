@@ -1,0 +1,2 @@
+%a = sub 3 1
+%t = assert %a 2

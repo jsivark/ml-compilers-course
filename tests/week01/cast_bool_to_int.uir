@@ -1,0 +1,3 @@
+%a = cast true dtype=i32
+%b = add %a %a
+%t = assert %b 2

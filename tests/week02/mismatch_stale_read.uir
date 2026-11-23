@@ -1,0 +1,7 @@
+%buf = extern [] slot=0 dtype=i32
+%w1 = store %buf 1
+%b1 = after %buf %w1
+%x = load %b1
+%w2 = store %b1 2
+%b2 = after %b1 %w2
+%t = assert %x 2

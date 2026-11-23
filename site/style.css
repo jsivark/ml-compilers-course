@@ -1,0 +1,64 @@
+:root{
+  --bg:#fbfbfa; --fg:#1b1d21; --muted:#62666e; --line:#e4e4e0; --soft:#f1f1ee; --accent:#2b59c3;
+  --head:"IBM Plex Sans",system-ui,sans-serif; --body:"Source Serif 4",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root{--bg:#131416;--fg:#e6e6e3;--muted:#9a9ea6;--line:#2a2c30;--soft:#1b1d20;--accent:#8fb0ff;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left))}
+.top{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:2}
+.top .bar{max-width:720px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-left));display:flex;flex-wrap:wrap;gap:6px 20px;align-items:baseline;font-family:var(--head);font-size:14.5px}
+.brand{font-weight:600;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:16px;flex-wrap:wrap}
+.top nav a{color:var(--muted);text-decoration:none}
+.top nav a:hover,.top nav a.on{color:var(--fg)}
+main{padding-block:40px 24px}
+h1,h2,h3{font-family:var(--head);line-height:1.25;text-wrap:balance}
+h1{font-size:32px;margin:0 0 12px;font-weight:600}
+h2{font-size:20px;margin:44px 0 8px;font-weight:600}
+h3{font-size:17px;margin:28px 0 6px;font-weight:600}
+p{margin:0 0 12px}
+a{color:var(--accent);text-underline-offset:2px;text-decoration-thickness:1px}
+code{font-family:var(--mono);font-size:.86em}
+pre{font-family:var(--mono);font-size:13.5px;line-height:1.5;background:var(--soft);padding:12px 14px;border-radius:4px;overflow-x:auto}
+.lede{font-size:18.5px;color:var(--fg)}
+.sub,.hint,.crumb{color:var(--muted)}
+.crumb{font-family:var(--head);font-size:14px;margin-bottom:6px}
+.crumb a{color:var(--muted)}
+.num{font-family:var(--mono);font-size:.62em;color:var(--muted);margin-right:10px;font-weight:400;vertical-align:.12em}
+.mods{list-style:none;padding:0;margin:8px 0 0;border-top:1px solid var(--line)}
+.mods li{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line);font-family:var(--head);font-size:16px}
+.mods li a{color:var(--fg);text-decoration:none}
+.mods li a:hover{color:var(--accent)}
+.mods .num{font-size:13px;vertical-align:0}
+.meta{color:var(--muted);font-size:13px;white-space:nowrap}
+.how li{margin:6px 0}
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:0}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:2.2em 1fr;column-gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps>li::before{content:counter(s);font-family:var(--mono);color:var(--muted);font-size:14px;padding-top:3px;grid-row:1/3}
+ol.steps .k{font-family:var(--head);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);grid-column:2}
+ol.steps>li>div{grid-column:2;min-width:0}
+ol.steps .st{font-family:var(--head);font-weight:500;margin:2px 0 4px}
+ol.steps p{margin:0 0 4px}
+.build{border-left:2px solid var(--accent);padding-left:14px}
+.check li,.extra li{margin:5px 0}
+.pn{display:flex;justify-content:space-between;gap:16px;margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--head);font-size:14.5px}
+.pn a{text-decoration:none}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;font-size:15px;margin:8px 0 16px}
+td,th{border-bottom:1px solid var(--line);padding:6px 12px 6px 0;text-align:left;vertical-align:top}
+th{font-family:var(--head);font-weight:500}
+.foot{color:var(--muted);font-size:13.5px;padding-block:40px 56px;border-top:1px solid var(--line);margin-top:40px}
+@media (max-width:520px){body{font-size:16px}h1{font-size:27px}.meta{display:none}}
+
+.mmeta{font-family:var(--head);font-size:14px;color:var(--muted)}
+.proj{margin-top:40px;padding:4px 20px 12px;border:1px solid var(--line);border-radius:6px;background:var(--soft)}
+.proj h2{margin-top:16px}
+.rub{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0 0 12px}
+.rub dt{font-family:var(--head);font-weight:500}
+.rub dd{margin:0}
+.pf{padding-left:0;list-style:none}
+.pf li{padding:10px 0;border-bottom:1px solid var(--line)}
+.pf li a{font-family:var(--head);font-weight:500;color:var(--fg);text-decoration:none}
+.pf li p{margin:4px 0 0;color:var(--muted);font-size:15.5px}
+@media (max-width:520px){.rub{grid-template-columns:1fr}.proj{padding:4px 14px 10px}}

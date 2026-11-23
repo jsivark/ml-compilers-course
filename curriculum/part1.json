@@ -1,0 +1,1380 @@
+[
+  {
+    "id": 0,
+    "title": "Orientation and toolkit",
+    "why": "Every later module assumes you can drive a terminal, version your work, debug C, manage Python environments, read papers and ask good questions. An afternoon of setup here saves weeks of friction, and your public repo becomes the portfolio that gets you hired.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "Missing Semester 2020, Lecture 1: Course overview + the shell",
+        "url": "https://missing.csail.mit.edu/2020/course-shell/",
+        "detail": "On Windows, install WSL2 Ubuntu first (next step) and do everything inside it. Do every exercise at the bottom of the page.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Install WSL2 (Windows only)",
+        "url": "https://learn.microsoft.com/en-us/windows/wsl/install",
+        "detail": "Run `wsl --install`, then keep your course files inside the Linux filesystem (~/), not /mnt/c, or builds will be slow. macOS users: install Xcode Command Line Tools and Homebrew instead.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Missing Semester 2020, Lecture 2: Shell Tools and Scripting",
+        "url": "https://missing.csail.mit.edu/2020/shell-tools/",
+        "detail": "Focus on pipes, find/grep/rg, and writing a small bash script with set -euo pipefail. You will script benchmark sweeps constantly.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Missing Semester 2020, Lecture 3: Editors (Vim)",
+        "url": "https://missing.csail.mit.edu/2020/editors/",
+        "detail": "You need not switch to Vim; learn enough to edit on a remote GPU box over ssh. Set up VS Code (or your editor) with clangd and a Python language server.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Missing Semester 2020, Lecture 6: Version Control (Git)",
+        "url": "https://missing.csail.mit.edu/2020/version-control/",
+        "detail": "Understand the data model (blobs, trees, commits, refs) rather than memorizing commands.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Learn Git Branching: Main levels 1-4 and Remote levels 1-2",
+        "url": "https://learngitbranching.js.org/",
+        "detail": "Interactive drills for branch, merge, rebase, and push/pull. Then adopt a workflow: one branch per module, small commits with descriptive messages, tag each finished module.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Pro Git, ch. 2 Git Basics and ch. 3 Git Branching",
+        "url": "https://git-scm.com/book/en/v2",
+        "detail": "Reference for when something goes wrong. Learn `git log --oneline --graph`, `git bisect` and `git stash`.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Missing Semester 2020, Lecture 7: Debugging and Profiling",
+        "url": "https://missing.csail.mit.edu/2020/debugging-profiling/",
+        "detail": "Covers printf debugging, gdb/pdb, perf and flame graphs, all of which recur in Modules 1-3 and the GPU modules.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "C toolchain + debugger: GDB docs or the LLDB tutorial",
+        "url": "https://lldb.llvm.org/use/tutorial.html",
+        "detail": "Install clang (or gcc) and make. Compile a buggy program with -g -O0 -fsanitize=address, then set a breakpoint, step, print a variable and get a backtrace. Linux users can use gdb instead (https://www.gnu.org/software/gdb/documentation/).",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Python environment with uv (or venv)",
+        "url": "https://docs.astral.sh/uv/",
+        "detail": "Make one project environment with numpy, matplotlib, pytest and torch (CPU build is fine). Commit a lockfile or requirements.txt so your results can be reproduced.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "S. Keshav, How to Read a Paper",
+        "url": "https://web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf",
+        "detail": "Two pages. Use the three-pass method on every paper in this course; keep a one-paragraph summary per paper in your repo.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Julia Evans, How to ask good questions",
+        "url": "https://jvns.ca/blog/good-questions/",
+        "detail": "Then join the GPU MODE Discord (next step). State what you tried, the exact error, and a minimal reproduction before asking.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Join the GPU MODE community",
+        "url": "https://discord.gg/gpumode",
+        "detail": "The main community for kernels and ML systems; the reading-group lectures are also on YouTube. Lurk first, read pinned messages, ask in the right channel.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Start a learning log",
+        "url": "https://jvns.ca/blog/2016/09/19/getting-things-done/",
+        "detail": "Keep LOG.md in your repo with one dated entry per session: what you did, what confused you, what you'll do next. Write a public blog post at the end of each module; explaining things is how you find gaps in your understanding.",
+        "bot_block": false
+      }
+    ],
+    "build": "A public GitHub repo `ml-compilers-journey` with a README (goals, schedule, hardware), LOG.md, a modules/ directory, a Makefile target that compiles and runs a sanitized C hello-world, a pytest that passes, and a GitHub Actions CI workflow that runs both on every push.",
+    "check": [
+      "Write a one-line shell pipeline that prints the 5 largest files under a directory.",
+      "Explain the difference between a commit, a branch and a tag in git's data model.",
+      "Use gdb or lldb to find the line of a segfault in a 20-line C program without adding printfs.",
+      "Recreate your Python environment from scratch on a clean machine (or container) from your lockfile alone.",
+      "Summarize a paper after Keshav's first pass in five sentences (the five Cs)."
+    ],
+    "extra": [],
+    "effort": "6–10 h",
+    "difficulty": 1,
+    "outcomes": [
+      "After this module you can work comfortably in a Unix shell, including on a remote machine over ssh.",
+      "After this module you can manage work with git branches, tags and CI, and recover from common mistakes.",
+      "After this module you can compile C with sanitizers and debug it in gdb/lldb, and reproduce a Python environment.",
+      "After this module you can read a research paper with a structured three-pass method and ask questions that get answered."
+    ],
+    "stuck": [
+      "WSL slow or files missing: keep the repo under ~/ in Linux, not /mnt/c; open it with `code .` from WSL.",
+      "macOS 'gdb' won't run: use lldb, which ships with the Xcode Command Line Tools; the commands map almost one to one (lldb's GDB-to-LLDB command map helps).",
+      "git 'detached HEAD' or a messy merge: run `git status` and `git log --oneline --graph --all` before anything else; `git reflog` can recover almost anything.",
+      "Do not over-polish the tooling (dotfiles, themes). Two evenings is enough; move on to Module 1.",
+      "Pip and conda in the same env cause mysterious import errors: pick one tool (uv recommended) and one env per project."
+    ],
+    "project": {
+      "title": "Public course repo + first blog post",
+      "brief": "Set up the repository that will hold every module's work and portfolio project for the whole course, with CI from day one. Publish a first blog post (GitHub Pages, a personal site, or similar) titled something like 'Why I'm building an ML compiler from scratch', stating your goals, your starting point, and a dated plan for the course.",
+      "deliverables": [
+        "repo with README, LOG.md, Makefile, a sanitized C test and a pytest, all green in GitHub Actions",
+        "a short CONTRIBUTING-style note to yourself: branch-per-module, commit message conventions, how to tag a finished module",
+        "a 600–1000 word blog post on your goals and plan, linked from the README"
+      ],
+      "rubric": {
+        "solid": "CI passes on push; README states the plan; LOG.md has at least 3 dated entries; blog post is published and linked.",
+        "exceptional": "Reproducible environment (lockfile or devcontainer), a `make bench` placeholder that writes results to CSV for later modules, and a blog post that someone else in GPU MODE or online found useful enough to comment on or share."
+      },
+      "references": [
+        {
+          "title": "Missing Semester 2020, Lecture 6: Version Control (Git)",
+          "url": "https://missing.csail.mit.edu/2020/version-control/"
+        }
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "title": "C, properly",
+    "why": "Your compiler will emit C, so you must read and write it fluently. Pointers, arrays, structs, the heap and the toolchain are the substrate every later kernel runs on.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "CS50x 2025 Lecture 1: C",
+        "url": "https://cs50.harvard.edu/x/weeks/1/",
+        "detail": "Watch at 1.5x if you already program; focus on compiling with clang, types and printf format specifiers.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS50x Problem Set 1: Mario (more) and Credit",
+        "url": "https://cs50.harvard.edu/x/psets/1/",
+        "detail": "Do the harder 'more comfortable' versions; they force loops and integer arithmetic in C.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CS50x 2025 Lecture 2: Arrays",
+        "url": "https://cs50.harvard.edu/x/weeks/2/",
+        "detail": "Focus on how strings are char arrays ending in \\0 and on argv/argc.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS50x Problem Set 2: Caesar (or Substitution)",
+        "url": "https://cs50.harvard.edu/x/psets/2/caesar/",
+        "detail": "Implement it, then rerun with -fsanitize=address to see what it catches.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CS50x 2025 Lecture 4: Memory",
+        "url": "https://cs50.harvard.edu/x/weeks/4/",
+        "detail": "The key lecture: pointers, malloc/free, the stack vs heap, valgrind. Do not skim this one.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Beej's Guide to C, ch. 5-7: Pointers (Cower In Fear!), Arrays, Strings",
+        "url": "https://beej.us/guide/bgc/",
+        "detail": "Read pointers.html, arrays.html, strings.html in order; type out every example and predict its output first.",
+        "bot_block": true
+      },
+      {
+        "kind": "read",
+        "title": "Beej's Guide to C, ch. 8, 11, 12: Structs; Pointers II: Arithmetic; Manual Memory Allocation",
+        "url": "https://beej.us/guide/bgc/",
+        "detail": "Also structs.html and manual-memory-allocation.html. Pointer arithmetic is the strides concept of Module 6 in disguise.",
+        "bot_block": true
+      },
+      {
+        "kind": "do",
+        "title": "CS50x Problem Set 4: Filter (less) and Recover",
+        "url": "https://cs50.harvard.edu/x/psets/4/recover/",
+        "detail": "Filter (psets/4/filter/less/) is 2-D array indexing over pixels; Recover is raw byte I/O with fread. Do both.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CS50x 2025 Lecture 5: Data Structures",
+        "url": "https://cs50.harvard.edu/x/weeks/5/",
+        "detail": "Linked lists, trees and hash tables built from structs and pointers.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS50x Problem Set 5: Speller",
+        "url": "https://cs50.harvard.edu/x/psets/5/speller/",
+        "detail": "Write the hash table; make valgrind report zero leaks and beat the staff timing.",
+        "bot_block": false
+      },
+      {
+        "kind": "build",
+        "title": "Build Your Own Lisp, ch. 6-10 (Parsing through Q-Expressions)",
+        "url": "https://buildyourownlisp.com/chapter6_parsing",
+        "detail": "Work through chapter6_parsing to chapter10_q_expressions, doing every bonus mark. This is your first tree-walking interpreter, in C.",
+        "bot_block": false
+      }
+    ],
+    "build": "(1) Build Your Own Lisp through ch. 10 Q-Expressions, with a REPL that evaluates (eval (head {(+ 1 2) 3})). (2) A generic open-addressing hash map in C (string keys, void* values, resize at 0.7 load) plus a test file inserting 1M keys, compiled with -Wall -Wextra -fsanitize=address,undefined and running clean.",
+    "check": [
+      "Draw stack and heap for a function that mallocs an int array, returns it and the caller frees it.",
+      "Explain why sizeof(arr) differs inside and outside a function that receives arr.",
+      "Explain p[i], *(p+i) and i[p], and what pointer arithmetic does on an int* vs a char*.",
+      "Speller passes check50 and valgrind reports 0 bytes lost.",
+      "ASan and UBSan are silent on your hash map test."
+    ],
+    "extra": [
+      {
+        "title": "Jens Gustedt, Modern C (free edition)",
+        "url": "https://gustedt.gitlabpages.inria.fr/modern-c/",
+        "note": "Read Level 1 for idiomatic C17/C23."
+      },
+      {
+        "title": "cstack, Let's Build a Simple Database, parts 1-8",
+        "url": "https://cstack.github.io/db_tutorial/",
+        "note": "Pager and B-tree in C."
+      },
+      {
+        "title": "rswier/c4: c4.c",
+        "url": "https://github.com/rswier/c4/blob/master/c4.c",
+        "note": "Keep for Module 11; skim now."
+      },
+      {
+        "title": "Beej ch. 17: Multifile Projects",
+        "url": "https://beej.us/guide/bgc/",
+        "note": "Headers, separate compilation, the linker."
+      }
+    ],
+    "effort": "40–60 h",
+    "difficulty": 2,
+    "outcomes": [
+      "After this module you can write and debug multi-file C programs that use pointers, structs and the heap without leaks, verified by ASan/UBSan and valgrind.",
+      "After this module you can implement core data structures (dynamic arrays, hash maps, trees) in C and reason about their memory layout.",
+      "After this module you can build a small interpreter with a parser and evaluator, the skeleton of every compiler front end.",
+      "After this module you can use make, compiler warnings and sanitizers as part of a routine workflow."
+    ],
+    "stuck": [
+      "Returning a pointer to a local array: it lives on the stack and dies with the frame. Re-watch CS50 Lecture 4 on stack vs heap.",
+      "sizeof on an array parameter gives the pointer size, because arrays decay to pointers when passed; pass the length explicitly (Beej, Arrays chapter).",
+      "Off-by-one on strings: allocate strlen(s)+1 for the terminating '\\0'.",
+      "Heisenbugs that vanish with printf are almost always undefined behaviour: always build with -Wall -Wextra -g -fsanitize=address,undefined while developing.",
+      "Build Your Own Lisp's mpc library hides errors; print the AST (mpc_ast_print) before debugging your evaluator."
+    ],
+    "project": {
+      "title": "An arena-allocated tensor runtime core in C",
+      "brief": "Write a small C library `tcore` that stores N-dimensional float tensors (shape, strides, offset, data) with an arena allocator, plus elementwise add/mul, a naive matmul, and a C test suite. This is the runtime your compiler's generated C will eventually link against. Benchmark arena allocation vs malloc/free for many small tensors and explain the difference.",
+      "deliverables": [
+        "repo with tcore.h/tcore.c, a Makefile, and tests that run clean under ASan, UBSan and valgrind",
+        "README with a table and plot of allocation throughput (arena vs malloc) across tensor counts and sizes",
+        "a 600–1200 word write-up explaining your memory layout, ownership rules, and why arenas suit compiler-generated code"
+      ],
+      "rubric": {
+        "solid": "All tests pass under sanitizers with zero leaks; arena benchmark reported with at least 3 sizes and repeated runs; API documented in the header.",
+        "exceptional": "Fuzzes the API with libFuzzer or randomized property tests against a Python reference, reports variance (median and spread) on benchmarks, and the code is clean enough that a reviewer would merge it: consistent error handling, no globals, CI running sanitizers."
+      },
+      "references": [
+        {
+          "title": "Beej's Guide to C Programming",
+          "url": "https://beej.us/guide/bgc/",
+          "bot_block": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "title": "How machines run code",
+    "why": "Bits, two's complement, IEEE floats, x86-64 and the stack: the first half of CMU 15-213. Your compiler's output only makes sense once you can read the machine code it becomes.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lectures 2-3: Bits, Bytes and Integers",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf",
+        "detail": "Videos are in the 15-213 F15 Panopto folder; follow along with these slides. Focus on two's complement, casting and overflow.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Dive into Systems ch. 4: Binary and Data Representation",
+        "url": "https://diveintosystems.org/book/C4-Binary/index.html",
+        "detail": "Do the inline exercises; skip nothing on signed/unsigned conversion.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS:APP Data Lab: all puzzles",
+        "url": "http://csapp.cs.cmu.edu/3e/datalab.pdf",
+        "detail": "Get datalab-handout from the labs page. Solve every bit and float puzzle within the op limits; run ./btest and ./dlc until both pass.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lecture 4: Floating Point",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/04-float.pdf",
+        "detail": "Understand sign/exponent/mantissa, denormals, rounding, why float addition is not associative (matters for reduction reordering later).",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lectures 5-6: Machine-Level Programming I-II (Basics, Control)",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/05-machine-basics.pdf",
+        "detail": "Then 06-machine-control.pdf. Registers, mov, lea, condition codes, jumps, loops.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Dive into Systems ch. 7: x86-64 Assembly",
+        "url": "https://diveintosystems.org/book/C7-x86_64/index.html",
+        "detail": "Read 7.1-7.6 (basics through functions); paste each example into Compiler Explorer.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lectures 7-9: Procedures, Data, Advanced",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/07-machine-procedures.pdf",
+        "detail": "Then 08-machine-data.pdf and 09-machine-advanced.pdf. Stack frames, calling convention, arrays/structs layout, buffer overflow.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Compiler Explorer: compile your Module 1 functions",
+        "url": "https://godbolt.org/",
+        "detail": "Compare -O0 vs -O2 for a sum loop, a struct access, and a recursive function; annotate the asm by hand.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS:APP Bomb Lab: phases 1-6",
+        "url": "http://csapp.cs.cmu.edu/3e/bomblab.pdf",
+        "detail": "Use gdb (break, stepi, x/s, info registers) and objdump -d. Write notes per phase on which C construct each one encodes.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "cpu.land ch. 1-5: The Basics through The Translator in Your Computer",
+        "url": "https://cpu.land/the-basics",
+        "detail": "Read through becoming-an-elf-lord and the-translator-in-your-computer: exec, ELF, syscalls, paging.",
+        "bot_block": false
+      }
+    ],
+    "build": "Defuse all six Bomb Lab phases (plus the secret phase if you find it). Then write half a page explaining the System V AMD64 calling convention: argument registers, return value, caller- vs callee-saved registers, stack alignment, red zone, illustrated with godbolt output of a 7-argument function.",
+    "check": [
+      "Data Lab: btest passes every puzzle and dlc reports no op-count violations.",
+      "Bomb Lab: all 6 phases defused.",
+      "Explain why (int)(unsigned)-1 and -1 > 0u behave as they do.",
+      "Explain why 0.1+0.2 != 0.3 and why summing floats in a different order changes the result.",
+      "Given a 10-line asm function, write the C that produced it."
+    ],
+    "extra": [
+      {
+        "title": "15-213 F15 lecture videos (Panopto folder)",
+        "url": "https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22b96d90ae-9871-4fae-91e2-b1627b43e25e%22",
+        "note": "The recorded lectures matching the slides above."
+      },
+      {
+        "title": "nand2tetris, projects 1-5",
+        "url": "https://www.nand2tetris.org/course",
+        "note": "Gates to CPU."
+      },
+      {
+        "title": "Pete Kivolowitz, Assembly Language Programming for ARM64",
+        "url": "https://github.com/pkivolowitz/asm_book",
+        "note": "If you are on Apple Silicon."
+      },
+      {
+        "title": "Ian Lance Taylor, Linkers part 1",
+        "url": "https://www.airs.com/blog/archives/38",
+        "note": "20-part series."
+      }
+    ],
+    "effort": "40–55 h",
+    "difficulty": 3,
+    "outcomes": [
+      "After this module you can read x86-64 assembly produced by a compiler and map it back to C.",
+      "After this module you can explain two's complement, integer overflow and IEEE-754 rounding, and predict surprising results.",
+      "After this module you can apply the System V AMD64 calling convention and use gdb to inspect registers and the stack.",
+      "After this module you can explain how a program goes from source to a running process (compile, link, load, exec)."
+    ],
+    "stuck": [
+      "Bomb Lab: do not guess. Disassemble with `objdump -d` and use gdb `break explode_bomb` first so a wrong answer never detonates.",
+      "AT&T vs Intel syntax confusion (operand order is reversed): pick one, and set Compiler Explorer and gdb (`set disassembly-flavor intel`) to match.",
+      "Data Lab op-count limits: think in masks; the 15-213 Lecture 2-3 slides on bit manipulation have most of the tricks.",
+      "Floating point: 0.1 cannot be represented exactly; work through the rounding examples in Lecture 4 by hand rather than trusting intuition.",
+      "At -O0 the asm is verbose and stack-heavy; compare -O0 vs -O2 in Compiler Explorer to see what the optimizer actually does."
+    ],
+    "project": {
+      "title": "Compiler Explorer study: what -O2 does to tensor loops",
+      "brief": "Pick five small kernels you will meet later (axpy, dot product, a strided gather, a reduction with a float accumulator, a 3x3 conv inner loop). For each, compile with clang and gcc at -O0/-O2/-O3 (and -ffast-math for the reductions), read the assembly, and document which optimizations happened: vectorization, unrolling, strength reduction, and why the float reduction does not vectorize without fast-math. Time each variant.",
+      "deliverables": [
+        "repo with the kernels, a script that regenerates annotated assembly and timings",
+        "README with a table of cycles/element per kernel, compiler and flag, plus annotated asm snippets",
+        "a 600–1200 word write-up explaining floating-point associativity, aliasing (restrict) and their effect on vectorization"
+      ],
+      "rubric": {
+        "solid": "All 5 kernels x 2 compilers x 3+ flag sets timed with repeated runs; each asm snippet annotated with what each block does.",
+        "exceptional": "Uses `perf stat` or llvm-mca to explain throughput from instruction counts and port pressure, demonstrates a measurable speedup from adding `restrict` or reassociation, and predicts the speedup before measuring it."
+      },
+      "references": [
+        {
+          "title": "Compiler Explorer",
+          "url": "https://godbolt.org/"
+        },
+        {
+          "title": "Algorithms for Modern Hardware (Sergey Slotin)",
+          "url": "https://en.algorithmica.org/hpc/"
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "title": "Memory and caches",
+    "why": "Cache lines, locality and TLBs decide why loop order matters. Every tiling, fusion and vectorization decision later in the course rests on this module.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lecture 11: The Memory Hierarchy",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/11-memory-hierarchy.pdf",
+        "detail": "Locality, the latency pyramid, why caches work.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lecture 12: Cache Memories",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/12-cache-memories.pdf",
+        "detail": "Sets/ways/lines, miss classification, and the matmul loop-order analysis at the end; this is the core of the module.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Dive into Systems ch. 11: Storage and the Memory Hierarchy",
+        "url": "https://diveintosystems.org/book/C11-MemHierarchy/index.html",
+        "detail": "Read 11.3-11.5 (locality, CPU caches); do the cache-mapping exercises.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Igor Ostrovsky, Gallery of Processor Cache Effects: all 7 examples",
+        "url": "https://igoro.com/archive/gallery-of-processor-cache-effects/",
+        "detail": "Reproduce each in C on your machine and plot; note where your L1/L2/L3 sizes show up.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Drepper, What Every Programmer Should Know About Memory, §3 CPU Caches and §6.2 Cache Access",
+        "url": "https://people.freebsd.org/~lstewart/articles/cpumemory.pdf",
+        "detail": "Skip §2 DRAM hardware details and §4-5. §6.2 has the tiled matmul with measured speedups.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS:APP Cache Lab Part A: cache simulator",
+        "url": "http://csapp.cs.cmu.edu/3e/cachelab.pdf",
+        "detail": "Write csim.c that replays valgrind traces with LRU; match csim-ref on all test traces.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS:APP Cache Lab Part B: optimized transpose",
+        "url": "http://csapp.cs.cmu.edu/3e/cachelab.pdf",
+        "detail": "Blocked transpose for 32x32, 64x64, 61x67 under the miss limits. This is your first hand-written schedule.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "CMU 15-213 F15 Lecture 17: Virtual Memory Concepts",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/17-vm-concepts.pdf",
+        "detail": "Pages, page tables, TLB; why huge strides cost TLB misses.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Algorithms for Modern Hardware: RAM & CPU Caches chapter",
+        "url": "https://en.algorithmica.org/hpc/cpu-cache/",
+        "detail": "Read the bandwidth, latency, cache lines and AoS vs SoA sections; run a couple of the benchmarks.",
+        "bot_block": false
+      }
+    ],
+    "build": "Reproduce Ostrovsky's seven effects with plots. Then time naive C matmul at N=1024 in all six loop orders (ijk, ikj, jik, jki, kij, kji) at -O2, plot GFLOP/s, and write a page explaining the ranking with per-iteration miss counts (as in Lecture 12). Add a tiled version and report its speedup.",
+    "check": [
+      "Explain why ikj beats ijk, with misses-per-inner-iteration arithmetic.",
+      "Cache Lab: test-csim gives full marks and transpose meets the 32x32 and 64x64 miss limits.",
+      "Given a 32 KB 8-way cache with 64 B lines, compute sets and the address bits for tag/index/offset.",
+      "Explain conflict misses and why padding a 4096-wide array can help.",
+      "Point to your L1/L2/L3 transitions on the Ostrovsky array-size plot."
+    ],
+    "extra": [
+      {
+        "title": "Berkeley CS61C",
+        "url": "https://cs61c.org/",
+        "note": "Caches and SIMD labs."
+      },
+      {
+        "title": "Fabian Giesen, Why do CPUs have multiple cache levels?",
+        "url": "https://fgiesen.wordpress.com/2016/08/07/why-do-cpus-have-multiple-cache-levels/",
+        "note": "Short essay."
+      },
+      {
+        "title": "Dan Luu, Branch prediction",
+        "url": "https://danluu.com/branch-prediction/",
+        "note": "Companion to the caches story."
+      },
+      {
+        "title": "15-213 F15 Lecture 10: Program Optimization",
+        "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/10-optimization.pdf",
+        "note": "Loop unrolling, multiple accumulators, ILP."
+      }
+    ],
+    "effort": "35–50 h",
+    "difficulty": 3,
+    "outcomes": [
+      "After this module you can predict cache misses for a loop nest from its access pattern and the cache geometry.",
+      "After this module you can speed up a memory-bound kernel through loop reordering and tiling, and measure the gain.",
+      "After this module you can explain the memory hierarchy (registers, L1/L2/L3, DRAM, TLB) with real latency and bandwidth numbers.",
+      "After this module you can use hardware counters (perf) to confirm or refute a performance hypothesis."
+    ],
+    "stuck": [
+      "Timings are noisy: warm up, repeat, report the median, pin to a core, and do not run with a browser open on a laptop on battery.",
+      "Cache Lab transpose 64x64: the 8x8 blocking that works for 32x32 suffers conflict misses; split into 4x4 sub-blocks (Lecture 12 and the lab writeup hint at this).",
+      "Apple Silicon and some laptops lack perf: use Instruments or measure on a Linux box/cloud VM; the concepts transfer.",
+      "The compiler may optimize your benchmark away; consume the result (print a checksum) and check the asm.",
+      "Confusing bandwidth-bound and latency-bound: a sequential scan is bandwidth-bound, a pointer chase latency-bound; Drepper §3 and Ostrovsky's examples separate the two."
+    ],
+    "project": {
+      "title": "Single-core CPU SGEMM: from naive to a large fraction of peak",
+      "brief": "Starting from your naive C matmul, optimize single-threaded float32 GEMM step by step: loop order, cache tiling, register blocking with a micro-kernel, SIMD (AVX2/NEON intrinsics or auto-vectorization) and packing. Compute the theoretical peak of your core and plot each version's GFLOP/s as a fraction of it, alongside OpenBLAS or Accelerate on the same machine.",
+      "deliverables": [
+        "repo with each optimization step as its own function or commit, a correctness test against a reference, and a benchmark script",
+        "README with a GFLOP/s vs N plot for all versions and the BLAS baseline, and your peak-FLOPs calculation",
+        "a 600–1200 word write-up explaining which step removed which bottleneck, backed by cache-miss counts or a roofline argument"
+      ],
+      "rubric": {
+        "solid": "At least 5 versions, each correct; best version reaches at least 30% of single-core peak; all numbers are medians with the CPU model stated.",
+        "exceptional": "Best version reaches at least 60–70% of peak or within 2x of OpenBLAS single-threaded, includes a roofline plot, and the write-up attributes each speedup quantitatively (miss counts from perf, or FLOPs per byte)."
+      },
+      "references": [
+        {
+          "title": "Simon Boehm, Fast Multidimensional Matrix Multiplication on CPU from Scratch",
+          "url": "https://siboehm.com/articles/22/Fast-MMM-on-CPU"
+        },
+        {
+          "title": "Algorithms for Modern Hardware: Matrix Multiplication",
+          "url": "https://en.algorithmica.org/hpc/algorithms/matmul/"
+        }
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "title": "Linear algebra",
+    "why": "Tensors are the data and matmul is the workload. You need matrices both as geometry (transformations) and as computation (elimination, factorization).",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown Essence of Linear Algebra ch. 1-4: Vectors, Span, Linear transformations, Matrix multiplication",
+        "url": "https://www.3blue1brown.com/lessons/linear-transformations",
+        "detail": "Also the span and matrix-multiplication lessons. Goal: see a matrix as where the basis vectors land.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 6-7: Determinant, Inverse matrices / column space / null space",
+        "url": "https://www.3blue1brown.com/lessons/determinant",
+        "detail": "Then inverse-matrices.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 9, 13-14: Dot products, Change of basis, Eigenvectors",
+        "url": "https://www.3blue1brown.com/lessons/dot-products",
+        "detail": "Then change-of-basis and eigenvalues. Skip cross products on first pass.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "MIT 18.06SC Lecture 1: The Geometry of Linear Equations",
+        "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/the-geometry-of-linear-equations/",
+        "detail": "Watch the lecture, then do the session's problem set and check against the solutions.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "MIT 18.06SC Lectures 2-3: Elimination with Matrices; Multiplication and Inverse Matrices",
+        "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/elimination-with-matrices/",
+        "detail": "Then multiplication-and-inverse-matrices/. Lecture 3's four ways to multiply matrices (row, column, outer product, blocks) is directly about kernels.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "MIT 18.06SC Lecture 4: Factorization into A = LU",
+        "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/factorization-into-a-lu/",
+        "detail": "Also count the operations: why elimination is O(n^3).",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "MIT 18.06SC Lecture 5: Transposes, Permutations, Vector Spaces",
+        "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/transposes-permutations-vector-spaces/",
+        "detail": "Transposes and permutations reappear as tensor permute in Module 6.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "MIT 18.06SC Lectures 6, 10: Column Space and Nullspace; The Four Fundamental Subspaces",
+        "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/column-space-and-nullspace/",
+        "detail": "Then the-four-fundamental-subspaces/. Do both problem sets.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "PyTorch blog, Inside the Matrix: Visualizing Matrix Multiplication",
+        "url": "https://pytorch.org/blog/inside-the-matrix/",
+        "detail": "Read the matmul sections; skip the attention part until Module 9.",
+        "bot_block": false
+      },
+      {
+        "kind": "build",
+        "title": "Pure-Python linear algebra library",
+        "url": "https://numpy.org/doc/stable/reference/routines.linalg.html",
+        "detail": "Implement it as specified in build; use numpy.linalg only as the oracle in tests.",
+        "bot_block": false
+      }
+    ],
+    "build": "Pure-Python (lists only) matmul, transpose, LU decomposition with partial pivoting, forward/back substitution and solve(A,b). Test against numpy on 100 random matrices to 1e-9, and include a 4-ways-of-matmul file (row, column, outer-product, block) that all agree.",
+    "check": [
+      "Explain matrix multiplication as composition of transformations, and as a sum of outer products.",
+      "Explain what the determinant means geometrically and why det=0 means no inverse.",
+      "Perform LU by hand on a 3x3 and verify L*U=A.",
+      "State the dimensions of the four fundamental subspaces of an m x n matrix of rank r.",
+      "Count the flops of an n x n matmul and of LU."
+    ],
+    "extra": [
+      {
+        "title": "Mathematics for Machine Learning, ch. 2-4",
+        "url": "https://mml-book.github.io/",
+        "note": "More formal treatment."
+      },
+      {
+        "title": "MIT 18.06SC Unit II: Least squares, determinants, eigenvalues",
+        "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/least-squares-determinants-and-eigenvalues/",
+        "note": "Continue if you enjoy it."
+      },
+      {
+        "title": "3Blue1Brown: Abstract vector spaces",
+        "url": "https://www.3blue1brown.com/lessons/abstract-vector-spaces",
+        "note": "Final chapter of the series."
+      }
+    ],
+    "effort": "30–45 h",
+    "difficulty": 2,
+    "outcomes": [
+      "After this module you can view matrix multiplication in four ways (row, column, outer product, block) and choose the one that suits a given algorithm.",
+      "After this module you can implement and test LU with partial pivoting and use it to solve linear systems.",
+      "After this module you can reason geometrically about rank, null space, determinant, change of basis and eigenvectors.",
+      "After this module you can measure numerical error and explain why pivoting matters."
+    ],
+    "stuck": [
+      "3Blue1Brown builds intuition but not fluency: work the 18.06 problem sets by hand, or the concepts will not stick.",
+      "LU without pivoting fails on a zero (or tiny) pivot; test on [[1e-20,1],[1,1]] to see catastrophic error, then add pivoting.",
+      "Comparing floats with == in tests: use a relative tolerance (numpy.allclose semantics).",
+      "Mixing up row-major indexing A[i][j] with the column picture of Ax: write out a 2x2 example both ways (18.06 Lecture 1)."
+    ],
+    "project": {
+      "title": "Blocked matrix algorithms and the cost of numerical stability",
+      "brief": "Implement blocked (tiled) matmul and right-looking blocked LU in NumPy, using only matmul on tiles, and compare against your unblocked versions and numpy/LAPACK for speed and accuracy. Measure backward error ||PA-LU||/||A|| as a function of condition number, including pivoting vs no pivoting on adversarial matrices, and relate blocking to the cache tiling from Module 3.",
+      "deliverables": [
+        "repo with blocked matmul and LU, tests against numpy.linalg on random and ill-conditioned matrices",
+        "README with plots: runtime vs N vs block size, and backward error vs condition number for each variant",
+        "a 600–1200 word write-up explaining why blocked algorithms map to matmul (and therefore to GPUs), with your measurements"
+      ],
+      "rubric": {
+        "solid": "Blocked LU matches scipy.linalg.lu to 1e-10 on well-conditioned inputs; plots for at least 3 block sizes; pivoting failure case demonstrated.",
+        "exceptional": "Adds a Cholesky or QR variant, shows growth-factor experiments (e.g. Wilkinson's matrix), and explains how LAPACK's getrf uses the same blocking, with a measured speedup from block size tuning."
+      },
+      "references": [
+        {
+          "title": "LAPACK",
+          "url": "https://www.netlib.org/lapack/"
+        }
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "title": "Calculus and gradients",
+    "why": "Autodiff is the chain rule applied mechanically. Learn it by hand on scalars first, then for vectors and matrices, because your compiler will generate backward passes.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown Essence of Calculus ch. 1-2: The essence of calculus; The paradox of the derivative",
+        "url": "https://www.3blue1brown.com/lessons/essence-of-calculus",
+        "detail": "Then the derivatives lesson.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 3-4: Derivative formulas through geometry; Visualizing the chain rule and product rule",
+        "url": "https://www.3blue1brown.com/lessons/chain-rule-and-product-rule",
+        "detail": "Also derivatives-power-rule. The chain rule lesson is the one that matters.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Karpathy, Hacker's guide to Neural Networks, Chapter 1: Real-valued Circuits",
+        "url": "https://karpathy.github.io/neuralnets/",
+        "detail": "Code every gate (add, multiply, sigmoid) with forward/backward in Python; verify with numerical gradients.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Parr & Howard, The Matrix Calculus You Need for Deep Learning: sections 1-4 (intro, review of scalar rules, vector calculus and partial derivatives, matrix calculus/Jacobians)",
+        "url": "https://explained.ai/matrix-calculus/",
+        "detail": "Work the Jacobian examples by hand on paper.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Parr & Howard: element-wise binary ops, scalar expansion, vector sum reduction, chain rules",
+        "url": "https://explained.ai/matrix-calculus/#sec4.2",
+        "detail": "The sum-reduction and broadcasting gradients are exactly what your autograd needs for expand/sum.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Parr & Howard: the gradient of neuron activation, and of the loss",
+        "url": "https://explained.ai/matrix-calculus/#sec6",
+        "detail": "Derive dL/dW for a single linear+ReLU layer and check it numerically.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Sasha Rush, Autodiff Puzzles: all puzzles",
+        "url": "https://github.com/srush/autodiff-puzzles",
+        "detail": "Open the Colab notebook; derive each tensor function's gradient; the notebook checks you.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Gradient check harness",
+        "url": "https://numpy.org/doc/stable/reference/generated/numpy.gradient.html",
+        "detail": "Write a finite-difference gradcheck(f, x) in NumPy and use it to verify your matmul, softmax and log-softmax derivations.",
+        "bot_block": false
+      }
+    ],
+    "build": "Finish all Autodiff Puzzles. Then a NumPy file deriving and implementing forward/backward for matmul, sum(axis), broadcast add, ReLU, softmax and cross-entropy, each verified by your gradcheck to 1e-6 relative error.",
+    "check": [
+      "Derive d/dx of sigmoid and express it in terms of sigmoid itself.",
+      "For C = A @ B, give dL/dA and dL/dB in terms of dL/dC, with shapes.",
+      "Explain why the gradient of a broadcast is a sum over the broadcast axes.",
+      "Explain why softmax+cross-entropy has the simple gradient p - y.",
+      "All autodiff puzzles pass."
+    ],
+    "extra": [
+      {
+        "title": "MIT 18.S096 Matrix Calculus for Machine Learning and Beyond",
+        "url": "https://ocw.mit.edu/courses/18-s096-matrix-calculus-for-machine-learning-and-beyond-january-iap-2023/",
+        "note": "Lectures 1-4 for forward vs reverse mode."
+      },
+      {
+        "title": "The Matrix Cookbook",
+        "url": "https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf",
+        "note": "Reference only."
+      },
+      {
+        "title": "Chris Olah, Calculus on Computational Graphs: Backpropagation",
+        "url": "https://colah.github.io/posts/2015-08-Backprop/",
+        "note": "Forward vs reverse mode intuition."
+      }
+    ],
+    "effort": "25–40 h",
+    "difficulty": 3,
+    "outcomes": [
+      "After this module you can derive gradients of vector and matrix expressions with correct shapes, including matmul, softmax and cross-entropy.",
+      "After this module you can explain forward vs reverse mode autodiff and when each is cheaper.",
+      "After this module you can verify any gradient with finite differences and diagnose a wrong one.",
+      "After this module you can explain why the gradient of a broadcast is a sum and of a sum is a broadcast."
+    ],
+    "stuck": [
+      "Shape errors in matrix calculus: always write shapes next to every term; dL/dA must have A's shape, which fixes where the transposes go.",
+      "Gradcheck failing at 1e-3: use float64, central differences, eps around 1e-6, and relative error; float32 will not reach 1e-6.",
+      "Softmax overflow: subtract the max before exp; the gradient is unchanged (Parr & Howard do not cover this, but every implementation does it).",
+      "ReLU gradcheck fails near 0 because the function is not differentiable there; avoid inputs within eps of the kink."
+    ],
+    "project": {
+      "title": "Forward-mode vs reverse-mode autodiff: implement both and measure",
+      "brief": "Implement forward-mode AD with dual numbers and reverse-mode AD on a tape, over the same small expression language (scalar ops and NumPy arrays). Construct functions with n inputs and m outputs and measure time and memory as n and m vary, demonstrating the n-vs-m crossover; then compute a Hessian-vector product by composing the two (forward-over-reverse).",
+      "deliverables": [
+        "repo with both AD modes, a shared gradcheck, and tests against PyTorch or JAX",
+        "README with plots of runtime and memory vs n and m for both modes, and the HVP verified against finite differences",
+        "a 600–1200 word write-up explaining JVPs, VJPs, why deep learning uses reverse mode, and what the tape costs in memory"
+      ],
+      "rubric": {
+        "solid": "Both modes agree with PyTorch to 1e-8 in float64 on at least 10 test functions; crossover demonstrated in a plot.",
+        "exceptional": "Implements HVP and uses it in a few steps of Newton-CG on a small problem, adds gradient checkpointing to the tape and plots the memory/compute trade-off, and relates the design to JAX's jvp/vjp."
+      },
+      "references": [
+        {
+          "title": "Baydin et al., Automatic Differentiation in Machine Learning: a Survey",
+          "url": "https://arxiv.org/abs/1502.05767"
+        }
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "title": "Tensors, broadcasting, strides",
+    "why": "A tensor is a pointer, a shape and strides. Reshape, permute and expand are pure index arithmetic, which is exactly what you will compile in Module 22.",
+    "steps": [
+      {
+        "kind": "read",
+        "title": "Rougier, From Python to NumPy ch. 2: Anatomy of an array",
+        "url": "https://www.labri.fr/perso/nrougier/from-python-to-numpy/#anatomy-of-an-array",
+        "detail": "Memory layout, views vs copies, and the stride-based view examples. Run every snippet.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Alex Riley, A Guide to NumPy Strides, parts 1-3",
+        "url": "https://ajcr.net/stride-guide-part-1/",
+        "detail": "Then stride-guide-part-2/ and part-3/. Compute the strides yourself before printing them.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Rougier ch. 3: Code vectorization",
+        "url": "https://www.labri.fr/perso/nrougier/from-python-to-numpy/#code-vectorization",
+        "detail": "Focus on uniform vectorization (Game of Life); skip the temporal/spatial sections on first pass.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "numpy-100 #1-40",
+        "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises.md",
+        "detail": "Without looking at hints. Note every one that involves strides, broadcasting or views.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Edward Yang, PyTorch internals (the Concepts section: tensors, strides, views, dispatch)",
+        "url": "https://blog.ezyang.com/2019/05/pytorch-internals/",
+        "detail": "Stop before the 'Mechanics' code tour if it gets heavy; the stride diagrams are the point.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Sasha Rush, Tensor Puzzles: puzzles 1-10",
+        "url": "https://github.com/srush/Tensor-Puzzles",
+        "detail": "ones, sum, outer, diag, eye, triu, cumsum, diff, vstack, roll, using only arange, where and broadcasting.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Sasha Rush, Tensor Puzzles: puzzles 11-21",
+        "url": "https://github.com/srush/Tensor-Puzzles",
+        "detail": "flip, compress, pad_to, sequence_mask, bincount, scatter_add, flatten, linspace, heaviside, repeat, bucketize. Try for shortest solutions.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "numpy-100 #41-70",
+        "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises.md",
+        "detail": "Especially the as_strided / sliding-window and broadcasting exercises.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Maharshi Pandya, Tensors from Scratch part 1",
+        "url": "https://maharshi.bearblog.dev/tensors-from-scratch-part-1/",
+        "detail": "Same ideas in C; preview of what your compiler generates.",
+        "bot_block": false
+      }
+    ],
+    "build": "An NDArray class in pure Python over a flat list: shape, strides, offset; __getitem__ for ints and slices (views, no copy); reshape (view when contiguous, else copy), permute/transpose, expand (stride 0), broadcasting elementwise add/mul, sum(axis), and contiguous(). Tested against NumPy on random shapes.",
+    "check": [
+      "Given shape (2,3,4) contiguous, state strides and the flat index of [1,2,3].",
+      "Explain why transpose is free but a subsequent reshape may need a copy.",
+      "Explain how expand/broadcast is implemented with stride 0.",
+      "All 21 Tensor Puzzles pass.",
+      "Implement a sliding-window view with as_strided and explain the strides."
+    ],
+    "extra": [
+      {
+        "title": "fast.ai Part 2, Lesson 11-13",
+        "url": "https://course.fast.ai/Lessons/part2.html",
+        "note": "Matmul and broadcasting from foundations."
+      },
+      {
+        "title": "numpy-100 #71-100",
+        "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises.md",
+        "note": "Harder ones."
+      },
+      {
+        "title": "NumPy docs: Broadcasting",
+        "url": "https://numpy.org/doc/stable/user/basics.broadcasting.html",
+        "note": "The precise rules."
+      }
+    ],
+    "effort": "30–45 h",
+    "difficulty": 3,
+    "outcomes": [
+      "After this module you can compute strides and offsets for any view (slice, transpose, expand) and predict when an operation copies.",
+      "After this module you can implement broadcasting from first principles and explain its rules.",
+      "After this module you can vectorize Python loops into array operations fluently.",
+      "After this module you can explain how PyTorch separates a tensor's storage from its view metadata."
+    ],
+    "stuck": [
+      "Negative-step slices: the offset moves to the last element and the stride becomes negative; test x[::-1] early.",
+      "reshape after transpose: the result is not expressible with strides, so it must copy; check contiguity by comparing strides with the strides a contiguous array would have.",
+      "Broadcasting aligns shapes from the right, not the left; (3,) + (3,1) gives (3,3), not an error.",
+      "Tensor Puzzles forbid loops and most functions; use arange, comparisons and broadcasting (where to index, sum to reduce)."
+    ],
+    "project": {
+      "title": "A view-tracking shape tracker (a mini ShapeTracker)",
+      "brief": "Build a symbolic view system that composes reshape, permute, expand, pad, shrink and stride operations without touching data, and emits a single index expression (as a string of C) mapping output index to input address, or reports that a copy is needed. This is the core idea behind tinygrad's ShapeTracker, which you will meet again in the compiler modules. Property-test it against NumPy on thousands of random op chains.",
+      "deliverables": [
+        "repo with the view system, a C-expression emitter, and a randomized property test against NumPy",
+        "README showing example op chains, their emitted index expressions, and how many chains merge into one view vs need a copy",
+        "a 600–1200 word write-up explaining when two views can be merged and why this lets a compiler fuse movement ops for free"
+      ],
+      "rubric": {
+        "solid": "Passes at least 10,000 random chains of up to 6 ops against NumPy; emitted C compiles and gives identical results.",
+        "exceptional": "Simplifies emitted index expressions (constant folding, removing mod/div when provably unneeded), supports masks for pad, and compares its design to tinygrad's ShapeTracker with specific code references."
+      },
+      "references": [
+        {
+          "title": "tinygrad (see tinygrad/shape)",
+          "url": "https://github.com/tinygrad/tinygrad"
+        }
+      ]
+    }
+  },
+  {
+    "id": 7,
+    "title": "Neural networks from scratch",
+    "why": "Loss, gradient descent and backpropagation, ending in a tiny autograd engine you wrote yourself. This engine is the seed of the tinygrad-style framework you will compile.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown Neural Networks ch. 1: But what is a neural network?",
+        "url": "https://www.3blue1brown.com/lessons/neural-networks",
+        "detail": "Neurons as numbers, layers as matrix-vector products.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 2: Gradient descent, how neural networks learn",
+        "url": "https://www.3blue1brown.com/lessons/gradient-descent",
+        "detail": "",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 3-4: Backpropagation; Backpropagation calculus",
+        "url": "https://www.3blue1brown.com/lessons/backpropagation",
+        "detail": "Then backpropagation-calculus.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy, The spelled-out intro to neural networks: building micrograd (0:00-1:15:00, Value and manual backprop)",
+        "url": "https://www.youtube.com/watch?v=VMj-3S1tku0",
+        "detail": "Code along; do not copy-paste.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy micrograd video, 1:15:00-end (topological sort, neurons, MLP, training loop, PyTorch comparison)",
+        "url": "https://www.youtube.com/watch?v=VMj-3S1tku0&t=4500s",
+        "detail": "Note the zero_grad bug Karpathy hits; understand why gradients accumulate with +=.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "CS231n notes: Backpropagation, Intuitions",
+        "url": "https://cs231n.github.io/optimization-2/",
+        "detail": "Focus on patterns in backward flow (add distributes, max routes, mul swaps) and gradients for vectorized ops.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Michael Nielsen, NNDL ch. 2: How the backpropagation algorithm works",
+        "url": "http://neuralnetworksanddeeplearning.com/chap2.html",
+        "detail": "The four fundamental equations in matrix form.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "Rebuild micrograd from memory",
+        "url": "https://github.com/karpathy/micrograd",
+        "detail": "Close the video; write engine.py and nn.py from scratch; diff against the repo only afterwards.",
+        "bot_block": false
+      },
+      {
+        "kind": "build",
+        "title": "Train on moons (micrograd demo.ipynb)",
+        "url": "https://github.com/karpathy/micrograd/blob/master/demo.ipynb",
+        "detail": "Reproduce the demo's decision boundary with your own engine.",
+        "bot_block": false
+      }
+    ],
+    "build": "Your own micrograd written without looking: Value with +,*,**,relu,tanh,exp, topological backward; Neuron/Layer/MLP; SVM or BCE loss; trained to >95% accuracy on sklearn make_moons with a decision-boundary plot. Add a test that compares every gradient to PyTorch.",
+    "check": [
+      "Explain why backward must visit nodes in reverse topological order.",
+      "Explain why gradients use += and what breaks if a node is used twice with =.",
+      "Backprop by hand through f = (a*b + c).tanh() and match your engine.",
+      "Your engine's gradients match PyTorch to 1e-6 on a random expression.",
+      "Moons accuracy >95%."
+    ],
+    "extra": [
+      {
+        "title": "Chris Olah, Calculus on Computational Graphs",
+        "url": "https://colah.github.io/posts/2015-08-Backprop/",
+        "note": "Forward vs reverse mode."
+      },
+      {
+        "title": "Nielsen NNDL ch. 1",
+        "url": "http://neuralnetworksanddeeplearning.com/chap1.html",
+        "note": "MNIST with a plain MLP."
+      },
+      {
+        "title": "Tsoding, nn.h",
+        "url": "https://github.com/tsoding/nn.h",
+        "note": "Port your micrograd to C."
+      }
+    ],
+    "effort": "20–30 h",
+    "difficulty": 2,
+    "outcomes": [
+      "After this module you can implement scalar reverse-mode autodiff with a computation graph and topological sort from memory.",
+      "After this module you can build and train an MLP from scratch and debug it when the loss does not decrease.",
+      "After this module you can derive the four backpropagation equations and connect them to the code.",
+      "After this module you can verify gradients of your engine against PyTorch."
+    ],
+    "stuck": [
+      "Gradients wrong when a node is used twice: you used = instead of +=; Karpathy shows this bug in the micrograd video.",
+      "Forgetting to zero gradients between steps makes training diverge.",
+      "Loss stuck: learning rate too high or too low; plot loss vs step and try a sweep over 3 orders of magnitude.",
+      "Recursion limit hit on big graphs: make the topological sort iterative."
+    ],
+    "project": {
+      "title": "A tiny graph IR for your autograd: visualize, optimize, codegen",
+      "brief": "Make your micrograd record an explicit graph IR, then write three passes over it: dead-code elimination, common-subexpression elimination, and a codegen pass that emits a straight-line Python (or C) function computing the forward and backward pass with no Value objects. Benchmark the generated code against the interpreted engine on an MLP. This is your first compiler.",
+      "deliverables": [
+        "repo with the IR, the three passes, and tests that the generated code matches the interpreted gradients exactly",
+        "README with Graphviz renders before and after optimization and a speedup table vs the interpreted engine",
+        "a 600–1200 word write-up explaining tracing vs interpretation and what each pass removed, with node counts"
+      ],
+      "rubric": {
+        "solid": "Generated code matches interpreted gradients bit-for-bit on random MLPs; reports node counts before/after each pass and a measured speedup.",
+        "exceptional": "Generated C version gives a speedup of 100x or more over the interpreter, adds constant folding, and the write-up connects the design to torch.fx or jax.make_jaxpr."
+      },
+      "references": [
+        {
+          "title": "karpathy/micrograd",
+          "url": "https://github.com/karpathy/micrograd"
+        }
+      ]
+    }
+  },
+  {
+    "id": 8,
+    "title": "Deep learning core",
+    "why": "MLPs, CNNs, initialization, normalization and optimizers. These are the models your compiler must train correctly and fast.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "Karpathy, makemore Part 1: bigram language model",
+        "url": "https://www.youtube.com/watch?v=PaCmpygFfXo",
+        "detail": "Counting vs neural bigram; broadcasting pitfalls (watch the keepdim bug).",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy, makemore Part 2: MLP",
+        "url": "https://www.youtube.com/watch?v=TCH_1BHY58I",
+        "detail": "Embeddings, minibatches, learning-rate finding, train/dev/test splits. Code along.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "CS231n notes: Neural Networks Part 1 (Setting up the Architecture)",
+        "url": "https://cs231n.github.io/neural-networks-1/",
+        "detail": "Activation functions and representational power.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy, makemore Part 3: Activations, Gradients, BatchNorm",
+        "url": "https://www.youtube.com/watch?v=P6sfmUTpUmc",
+        "detail": "Kaiming init, saturated tanh, BatchNorm; reproduce the activation/gradient histograms.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "CS231n notes: Neural Networks Part 2 and 3 (data, init, BN, regularization; learning and evaluation)",
+        "url": "https://cs231n.github.io/neural-networks-2/",
+        "detail": "Then neural-networks-3/ for gradient checks, SGD+momentum, Adam.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy, makemore Part 4: Becoming a Backprop Ninja",
+        "url": "https://www.youtube.com/watch?v=q8SA3rM6ckI",
+        "detail": "Do the exercise notebook: manual tensor-level backward for cross-entropy, BatchNorm, linear layers. Most important for compiler work.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy, makemore Part 5: Building a WaveNet",
+        "url": "https://www.youtube.com/watch?v=t3YJ5hKiMQ0",
+        "detail": "torch.nn-like module structure; shape debugging.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "CS231n notes: Convolutional Neural Networks",
+        "url": "https://cs231n.github.io/convolutional-networks/",
+        "detail": "Conv layer arithmetic and im2col implementation section.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS231n Assignment 1 (2025): kNN, SVM, Softmax, Two-layer net, Features",
+        "url": "https://cs231n.github.io/assignments2025/assignment1/",
+        "detail": "Vectorize every loss and gradient; the 'no loops' versions are the point.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "CS231n Assignment 2 (2025): FC nets, BatchNorm, Dropout, CNNs",
+        "url": "https://cs231n.github.io/assignments2025/assignment2/",
+        "detail": "Optional if short on time, but the conv forward/backward naive implementations are great compiler fodder.",
+        "bot_block": false
+      }
+    ],
+    "build": "Extend your Module 7 engine (or your Module 6 NDArray) into a tensor-level autograd with matmul, broadcast ops, sum, log-softmax and cross-entropy, plus SGD-momentum and Adam. Train a 2-layer MLP on MNIST to >97% test accuracy, and compare loss curves with an identical PyTorch model.",
+    "check": [
+      "makemore Part 4 notebook: every manual gradient matches PyTorch (cmp prints exact/approx True).",
+      "Explain why Kaiming init uses gain/sqrt(fan_in) and what happens to tanh activations without it.",
+      "Explain BatchNorm train vs eval behaviour and its backward pass in one paragraph.",
+      "Compute output shape and parameter count of a conv layer given input, kernel, stride, padding.",
+      "CS231n A1 two-layer net reaches the target validation accuracy."
+    ],
+    "extra": [
+      {
+        "title": "Simon Prince, Understanding Deep Learning",
+        "url": "https://udlbook.github.io/udlbook/",
+        "note": "Use the notebooks as exercises."
+      },
+      {
+        "title": "Fleuret, The Little Book of Deep Learning",
+        "url": "https://fleuret.org/francois/lbdl.html",
+        "note": "Compact reference."
+      },
+      {
+        "title": "Dive into Deep Learning, ch. 7: Convolutional Neural Networks",
+        "url": "https://d2l.ai/chapter_convolutional-neural-networks/index.html",
+        "note": "Implementations from scratch."
+      },
+      {
+        "title": "Stanford CS229 lectures 1-4",
+        "url": "https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU",
+        "note": "Classical ML theory."
+      }
+    ],
+    "effort": "50–70 h",
+    "difficulty": 4,
+    "outcomes": [
+      "After this module you can implement a tensor-level autograd with broadcasting-aware gradients and train real models on it.",
+      "After this module you can diagnose training from activation and gradient statistics and fix it with initialization, normalization or optimizer choice.",
+      "After this module you can write backward passes for batchnorm, cross-entropy and convolution by hand.",
+      "After this module you can implement SGD-momentum and Adam and explain their update rules."
+    ],
+    "stuck": [
+      "Broadcast-add gradient has the wrong shape: sum the upstream gradient over the broadcast dimensions (keepdims, then reshape) to match the input.",
+      "makemore Part 4 batchnorm backward: derive it on paper with shapes first; the bessel correction (n-1) in the variance trips people up.",
+      "MNIST stuck at around 10% accuracy: check data normalization, label alignment, and that the softmax is over the right axis.",
+      "Adam not matching PyTorch: check bias correction and that eps is added after the sqrt.",
+      "CS231n assignments take far longer than estimated; budget the time and do not skip the conv backward."
+    ],
+    "project": {
+      "title": "MiniTorch-scale framework: train a CNN and profile where time goes",
+      "brief": "Grow your Module 8 autograd into a small framework with Conv2d (via im2col), MaxPool, BatchNorm, Dropout, a DataLoader and a module system, and train a small CNN on CIFAR-10 to at least 60% test accuracy. Profile one training step and produce a breakdown by op, then speed up the top op (for example a vectorized im2col or a C extension) and report the gain.",
+      "deliverables": [
+        "repo with the framework, gradient tests against PyTorch for every op, and the training script",
+        "README with loss and accuracy curves vs an identical PyTorch model, plus a per-op time breakdown before and after optimization",
+        "a 600–1200 word write-up on what dominated training time and why, linking it to the arithmetic intensity of each op"
+      ],
+      "rubric": {
+        "solid": "Every op gradient-checked against PyTorch; CIFAR-10 at least 60% test accuracy; profile breakdown and one optimization with measured speedup.",
+        "exceptional": "At least 70% on CIFAR-10, the training curve tracks PyTorch's within noise given the same seed and init, and the write-up uses FLOP and byte counts to predict which ops are compute-bound vs memory-bound."
+      },
+      "references": [
+        {
+          "title": "Horace He, Making Deep Learning Go Brrrr From First Principles",
+          "url": "https://horace.io/brrr_intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9,
+    "title": "Transformers",
+    "why": "The transformer is the workload that ML compilers are tuned for today: matmuls, softmax, layernorm and attention. Building one end to end shows you exactly which ops a compiler must fuse and schedule.",
+    "steps": [
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown Deep Learning ch. 5: Transformers, the tech behind LLMs",
+        "url": "https://www.3blue1brown.com/lessons/gpt",
+        "detail": "Embeddings, unembedding, softmax with temperature.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 6: Attention in transformers, step-by-step",
+        "url": "https://www.3blue1brown.com/lessons/attention",
+        "detail": "Q, K, V as matmuls; masking; multi-head.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "3Blue1Brown ch. 7: How might LLMs store facts (MLP blocks)",
+        "url": "https://www.3blue1brown.com/lessons/mlp",
+        "detail": "",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Jay Alammar, The Illustrated Transformer",
+        "url": "https://jalammar.github.io/illustrated-transformer/",
+        "detail": "Focus on self-attention in matrix form; skip the encoder-decoder details.",
+        "bot_block": false
+      },
+      {
+        "kind": "watch",
+        "title": "Karpathy, Let's build GPT: from scratch, in code, spelled out",
+        "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+        "detail": "Code along in a notebook through the full Shakespeare model; pause at 'the mathematical trick in self-attention' and derive it.",
+        "bot_block": false
+      },
+      {
+        "kind": "do",
+        "title": "nanoGPT: train shakespeare_char",
+        "url": "https://github.com/karpathy/nanoGPT",
+        "detail": "Follow the README quick start; read model.py fully and map each line to the video.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Jay Mody, GPT in 60 Lines of NumPy",
+        "url": "https://jaykmody.com/blog/gpt-from-scratch/",
+        "detail": "Implement every function yourself first, then compare; load the real GPT-2 124M weights.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "Harvard NLP, The Annotated Transformer",
+        "url": "https://nlp.seas.harvard.edu/annotated-transformer/",
+        "detail": "Read Part 1 (model architecture) only; skip training details.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "karpathy/llama2.c: run.c",
+        "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
+        "detail": "The whole forward pass in C. Read matmul, rmsnorm, softmax and forward(); this is the shape of code your compiler will emit.",
+        "bot_block": false
+      },
+      {
+        "kind": "read",
+        "title": "kipply, Transformer Inference Arithmetic",
+        "url": "https://kipp.ly/transformer-inference-arithmetic/",
+        "detail": "FLOPs and memory per token; KV cache; compute- vs memory-bound.",
+        "bot_block": false
+      }
+    ],
+    "build": "GPT-2 124M forward pass in about 60 lines of NumPy that loads the OpenAI weights and generates the same greedy text as the reference picoGPT. Then train nanoGPT shakespeare_char to val loss <1.5, and annotate llama2.c's run.c forward() line by line in your own notes.",
+    "check": [
+      "Write out attention shapes for batch B, seq T, heads H, head dim d at every step.",
+      "Explain why the causal mask is applied before softmax and why scores are divided by sqrt(d).",
+      "Count FLOPs per token for GPT-2 124M and estimate whether batch-1 decoding is memory-bound.",
+      "Your NumPy GPT-2 output matches picoGPT token for token.",
+      "Explain what the KV cache saves and its memory cost."
+    ],
+    "extra": [
+      {
+        "title": "Vaswani et al., Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762",
+        "note": "The original paper."
+      },
+      {
+        "title": "Karpathy, llm.c: train_gpt2.c",
+        "url": "https://github.com/karpathy/llm.c/blob/master/train_gpt2.c",
+        "note": "Forward and backward in plain C."
+      },
+      {
+        "title": "Stanford CS336 Assignment 1",
+        "url": "https://github.com/stanford-cs336/assignment1-basics",
+        "note": "BPE tokenizer + transformer LM from scratch."
+      },
+      {
+        "title": "Karpathy, Let's build the GPT Tokenizer",
+        "url": "https://www.youtube.com/watch?v=zduSFxRajkE",
+        "note": "BPE in depth."
+      }
+    ],
+    "effort": "45–65 h",
+    "difficulty": 4,
+    "outcomes": [
+      "After this module you can implement a GPT-style transformer forward pass from scratch and load real pretrained weights into it.",
+      "After this module you can write attention shapes, FLOPs and memory per token for any transformer configuration.",
+      "After this module you can train a small language model and interpret its loss curves.",
+      "After this module you can explain the inference loop (prefill vs decode, KV cache) and why decode is memory-bound."
+    ],
+    "stuck": [
+      "Outputs differ from the reference: check GELU variant (tanh approximation), layernorm eps, and whether the weights are stored transposed (GPT-2 uses Conv1D, so the matrices are transposed).",
+      "Causal mask applied after softmax, or with 0 instead of -inf: apply it to the scores before softmax.",
+      "Head reshape bugs: (B,T,C) to (B,H,T,d) needs a reshape then a transpose; print shapes at every step.",
+      "nanoGPT on CPU or a Mac: use the small shakespeare_char config with device=cpu or mps and expect higher loss; a free Colab GPU is enough for the target.",
+      "FLOP counting: a matmul of (m,k)x(k,n) is 2mkn FLOPs; kipply's post shows the per-token totals."
+    ],
+    "project": {
+      "title": "A C inference engine for GPT-2 with KV cache, benchmarked",
+      "brief": "Write a single-file C (or C with OpenMP) inference engine for GPT-2 124M that loads the weights you exported from NumPy, implements a KV cache, and generates text matching your NumPy reference token for token. Measure prefill and decode throughput, compare decode tokens/s against the memory-bandwidth bound you compute from model size, and add int8 weight-only quantization with a perplexity comparison.",
+      "deliverables": [
+        "repo with the C engine, a weight-export script, and a test that greedy output matches the NumPy reference exactly",
+        "README with tokens/s for prefill and decode, with and without KV cache, fp32 vs int8, against the computed bandwidth roofline",
+        "a 600–1200 word write-up explaining why decode is memory-bound, what the KV cache saves, and the accuracy cost of quantization"
+      ],
+      "rubric": {
+        "solid": "Greedy output matches the reference for 100+ tokens; KV cache gives a measured speedup that grows with sequence length; numbers reported with the hardware stated.",
+        "exceptional": "Decode reaches at least 50% of the memory-bandwidth bound, int8 perplexity on a held-out text stays within 1–2% of fp32, and the code is clean enough to compare favourably with llama2.c's run.c."
+      },
+      "references": [
+        {
+          "title": "karpathy/llama2.c",
+          "url": "https://github.com/karpathy/llama2.c"
+        },
+        {
+          "title": "kipply, Transformer Inference Arithmetic",
+          "url": "https://kipp.ly/transformer-inference-arithmetic/"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,2 @@
+%a = shl 1 33
+%t = assert %a 2

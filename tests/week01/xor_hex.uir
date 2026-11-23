@@ -1,0 +1,2 @@
+%a = xor 0xff 0x0f
+%t = assert %a 240

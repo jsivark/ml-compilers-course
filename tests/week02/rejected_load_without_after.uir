@@ -1,0 +1,5 @@
+# loads must be ordered after stores to the same buffer
+%buf = extern [] slot=0 dtype=i32
+%w = store %buf 3
+%v = load %buf
+%t = assert (add %v (cast (cmplt 0 1) dtype=i32)) 4

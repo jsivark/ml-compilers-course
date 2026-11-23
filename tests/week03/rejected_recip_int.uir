@@ -1,0 +1,2 @@
+%a = recip 4
+%t = assert %a 0

@@ -1,0 +1,2 @@
+%a = mul true false
+%t = assert %a false

@@ -1,0 +1,3 @@
+%x = param [] [5 1] slot=0 dtype=i32 addrspace=ALU
+%v = call %x 3
+%t = assert %v 3

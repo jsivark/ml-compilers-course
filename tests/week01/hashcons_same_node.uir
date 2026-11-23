@@ -1,0 +1,4 @@
+%a = add 2 4
+%b = add 2 4
+%m = mul %a %b
+%t = assert %m 36

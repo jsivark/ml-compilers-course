@@ -1,0 +1,6 @@
+%a = stack 4 5
+%b = [4 5]
+%e = index %a 1
+%f = index %b 0
+%g = add %e %f
+%t = assert %g 9

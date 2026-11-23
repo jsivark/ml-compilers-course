@@ -1,0 +1,5 @@
+%x = param [] slot=0 dtype=i32 addrspace=ALU
+%y = param [] slot=1 dtype=i32 addrspace=ALU
+%d = div %x %y
+%v = call %d 17 5
+%t = assert %v 3

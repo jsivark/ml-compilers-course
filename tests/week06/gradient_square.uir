@@ -1,0 +1,5 @@
+%grad = { %buf = extern [2 2] slot=0 dtype=f32 url=data/x.bin
+          %x = load %buf
+          %loss = reduce (mul %x %x) op=add pop=2
+          %dx = gradient %loss %x }
+%test = assert (index %grad 1 0) 6.0

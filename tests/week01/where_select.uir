@@ -1,0 +1,3 @@
+%c = cmplt 5 3
+%w = where %c 10 20
+%t = assert %w 20

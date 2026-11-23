@@ -1,0 +1,2 @@
+%sum = add 2 3
+%test = assert %sum 5

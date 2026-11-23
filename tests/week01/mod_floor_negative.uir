@@ -1,0 +1,2 @@
+%r = mod -7 2
+%t = assert %r 1

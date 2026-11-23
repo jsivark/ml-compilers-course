@@ -1,0 +1,2 @@
+%a = add true true
+%t = assert %a true

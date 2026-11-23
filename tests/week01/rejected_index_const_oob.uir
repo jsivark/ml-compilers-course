@@ -1,0 +1,2 @@
+%e = index [10 20 30] 3
+%t = assert %e 0

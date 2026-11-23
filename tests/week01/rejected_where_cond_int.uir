@@ -1,0 +1,2 @@
+%w = where 1 2 3
+%t = assert %w 2

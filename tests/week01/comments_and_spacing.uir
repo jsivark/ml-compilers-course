@@ -1,0 +1,3 @@
+# comments run to end of line
+%a=add 1 2   # no spaces around = is fine
+%t =   assert %a    3

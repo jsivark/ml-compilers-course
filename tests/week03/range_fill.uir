@@ -1,0 +1,5 @@
+%buf = extern 3 slot=0 dtype=f32
+%i = range 3 slot=0
+%write = store (index %buf %i) (cast %i dtype=f32)
+%done = end %write %i
+%test = assert (after %buf %done) [0.0 1.0 2.0]

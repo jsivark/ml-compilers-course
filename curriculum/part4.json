@@ -1,0 +1,1033 @@
+[
+ {
+  "id": 32,
+  "title": "Triton and tile-based GPU programming",
+  "why": "Triton is how most new production kernels get written at OpenAI, Meta and in TorchInductor. Programming whole tiles instead of threads is the mental model the frontier works in; you already wrote a codegen backend, now learn the one industry uses.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "Tillet, Kung, Cox: Triton (MAPL 2019)",
+    "url": "https://www.eecs.harvard.edu/~htk/publication/2019-mapl-tillet-kung-cox.pdf",
+    "detail": "Sections 3-5: Triton-C, Triton-IR, the tile-level optimization passes. Compare with your own IR.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Triton tutorial 01: Vector Addition",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html",
+    "detail": "Learn program_id, masks, BLOCK_SIZE as constexpr; run the benchmark and plot GB/s vs. size.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Triton tutorial 02: Fused Softmax",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html",
+    "detail": "Row-per-program reduction; note why fusion makes this memory-bound kernel ~2x faster than eager torch.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Triton tutorial 03: Matrix Multiplication",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html",
+    "detail": "Block tiling, L2 'grouped ordering' of program ids, autotune configs. Reach >=80% of cuBLAS on fp16.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Triton tutorial 04: Low-Memory Dropout",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/04-low-memory-dropout.html",
+    "detail": "Counter-based Philox RNG in-kernel: recompute masks instead of storing them.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Triton tutorial 05: Layer Normalization",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html",
+    "detail": "Forward and backward; the backward's two-stage parallel reduction of dW/db with locks is the hard part.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Triton tutorial 06: Fused Attention",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/06-fused-attention.html",
+    "detail": "FlashAttention-2 in Triton: online softmax, causal masking stages. Read alongside the papers below.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "Triton-Puzzles (Sasha Rush)",
+    "url": "https://github.com/srush/Triton-Puzzles",
+    "detail": "Do all puzzles through Flash Attention and the quantized matmul; they force you to reason about shapes and masks without a GPU.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "FlashAttention (Dao et al. 2022)",
+    "url": "https://arxiv.org/abs/2205.14135",
+    "detail": "Sections 2-3: IO-aware tiling, recomputation. Derive the HBM-access bound yourself.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "FlashAttention-2",
+    "url": "https://arxiv.org/abs/2307.08691",
+    "detail": "Sections 3.1-3.3: work partitioning across warps and sequence-length parallelism.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Horace He, Making Deep Learning Go Brrrr",
+    "url": "https://horace.io/brrr_intro.html",
+    "detail": "Compute vs. memory vs. overhead bound: use this lens on every kernel you benchmark.",
+    "bot_block": false
+   },
+   {
+    "kind": "test",
+    "title": "Port one of your compiler's kernels to a Triton backend",
+    "url": "",
+    "detail": "Add a Triton codegen target to your compiler for elementwise+reduce fusions; diff results vs. your CUDA backend.",
+    "bot_block": false
+   }
+  ],
+  "build": "A Triton backend for your compiler (elementwise, reduction and matmul codegen) plus all six tutorials reproduced with benchmark plots.",
+  "check": [
+   "Tutorial 03 matmul reaches >=80% of cuBLAS fp16 TFLOPS at 4096^2",
+   "Fused attention matches torch SDPA to 1e-2 (fp16) for causal and non-causal",
+   "Your compiler emits Triton for a fused LayerNorm and it passes your test suite",
+   "You can explain grouped program ordering and why it raises L2 hit rate"
+  ],
+  "extra": [
+   "https://github.com/triton-lang/triton",
+   "https://github.com/gpu-mode/lectures"
+  ],
+  "effort": "45\u201365 h",
+  "difficulty": 4,
+  "outcomes": [
+   "After this module you can write, autotune and profile Triton kernels for matmul, reductions and attention",
+   "After this module you can reason about tile shapes, num_warps and num_stages from roofline numbers instead of guessing",
+   "After this module you can generate Triton from your own compiler IR",
+   "After this module you can read and modify FlashAttention-style kernels"
+  ],
+  "stuck": [
+   "Wrong results only at odd sizes: you forgot a mask on load or store; test sizes like 1000 and 4097, not just powers of two",
+   "Autotune 'wins' that vanish: you benchmarked with a cold cache or included compilation; use triton.testing.do_bench",
+   "Layernorm backward races: re-read the lock/atomic section of tutorial 05 before inventing your own reduction",
+   "Attention numerically off: check you rescale the running accumulator when the running max changes (FA2 paper, Alg. 1)",
+   "Puzzles confusing: print shapes with the interpreter mode (TRITON_INTERPRET=1) on CPU"
+  ],
+  "project": {
+   "title": "Fused kernel library: beat torch.compile on three real ops",
+   "brief": "Pick three ops that appear in a real model (e.g. RMSNorm+residual, rotary embedding fused into QKV projection, SwiGLU, fused cross-entropy over a large vocab). Write Triton kernels with forward and backward, autotune them, and drop them into a nanoGPT-sized model. Show end-to-end training step speedup against eager and torch.compile.",
+   "deliverables": [
+    "repo with kernels, gradcheck tests and a pip-installable package",
+    "README with roofline plots (achieved GB/s or TFLOPS vs. peak) across sizes",
+    "a 600\u20131200 word write-up explaining each fusion, the bound it hits and what limited further gains"
+   ],
+   "rubric": {
+    "solid": "All three kernels pass gradcheck; each is >=1.3x eager and within 10% of torch.compile; roofline plot per kernel",
+    "exceptional": "At least one kernel beats torch.compile by >=1.2x end to end, e.g. a chunked fused cross-entropy that cuts peak memory by >2x, with Nsight Compute evidence for why"
+   },
+   "references": [
+    {
+     "title": "Liger Kernel (fused Triton kernels for LLM training)",
+     "url": "https://github.com/linkedin/Liger-Kernel"
+    },
+    {
+     "title": "Triton tutorial 05: Layer Normalization",
+     "url": "https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html"
+    }
+   ]
+  }
+ },
+ {
+  "id": 33,
+  "title": "CUTLASS, CuTe and Hopper/Blackwell features",
+  "why": "The fastest kernels on H100/B200 (FlashAttention-3, cuBLAS-class GEMMs) use TMA, wgmma and warp specialization, which Triton only partly exposes. Teams writing inference kernels expect you to read and write CuTe layouts.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "Simon Boehm, How to Optimize a CUDA Matmul Kernel",
+    "url": "https://siboehm.com/articles/22/CUDA-MMM",
+    "detail": "Re-derive kernels 1-10 quickly as a warm-up; this is the baseline vocabulary for the rest.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "CuTe quickstart (CUTLASS docs)",
+    "url": "https://github.com/NVIDIA/cutlass/blob/main/media/docs/cpp/cute/00_quickstart.md",
+    "detail": "Then read 01_layout, 02_layout_algebra, 03_tensor, 0x_gemm_tutorial in the same folder.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "CuTe docs folder: layout algebra exercises",
+    "url": "https://github.com/NVIDIA/cutlass/tree/main/media/docs/cpp/cute",
+    "detail": "Hand-compute composition, complement and logical_divide on 2-3 layouts; check with cute::print.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Colfax: CUTLASS tutorial, design of a GEMM kernel",
+    "url": "https://research.colfax-intl.com/cutlass-tutorial-design-of-a-gemm-kernel/",
+    "detail": "Mainloop/epilogue split, pipelining stages, how CUTLASS composes collectives.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Colfax: Mastering the NVIDIA Tensor Memory Accelerator (TMA)",
+    "url": "https://research.colfax-intl.com/tutorial-hopper-tma/",
+    "detail": "TMA descriptors, multicast, mbarrier synchronization.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Colfax: Fast matrix multiplication using wgmma",
+    "url": "https://research.colfax-intl.com/cutlass-tutorial-wgmma-hopper/",
+    "detail": "Warpgroup MMA, smem layout requirements, async fences.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "PTX ISA: wgmma and cp.async.bulk sections",
+    "url": "https://docs.nvidia.com/cuda/parallel-thread-execution/index.html",
+    "detail": "Look up wgmma.mma_async and cp.async.bulk.tensor; see exactly what CuTe emits.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "FlashAttention-3",
+    "url": "https://arxiv.org/abs/2407.08608",
+    "detail": "Sections 3.1-3.3: producer/consumer warp specialization, ping-pong scheduling, FP8 incoherent processing.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "ThunderKittens paper",
+    "url": "https://arxiv.org/abs/2410.20399",
+    "detail": "Tile primitives as a middle ground between Triton and CUTLASS; compare abstractions.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "ThunderKittens: build and run an example kernel",
+    "url": "https://github.com/HazyResearch/ThunderKittens",
+    "detail": "Run the H100 GEMM/attention example; profile with Nsight Compute and identify the pipeline.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Write a Hopper GEMM in CuTe",
+    "url": "",
+    "detail": "TMA load -> smem -> wgmma, 2-4 stage pipeline, then add warp specialization. No GPU with sm90? Rent one by the hour.",
+    "bot_block": false
+   }
+  ],
+  "build": "A from-scratch CuTe GEMM for H100 progressing from SIMT to wgmma+TMA+warp-specialized, each step benchmarked.",
+  "check": [
+   "Final GEMM reaches >=70% of cuBLAS bf16 at 8192^2 on H100",
+   "You can draw the CuTe layout (shape:stride) of an smem tile with swizzle",
+   "You can explain why warp specialization helps when TMA is async",
+   "Nsight Compute report shows tensor-core utilization per version"
+  ],
+  "extra": [
+   "https://github.com/NVIDIA/cutlass",
+   "https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html"
+  ],
+  "effort": "60\u201390 h",
+  "difficulty": 5,
+  "outcomes": [
+   "After this module you can read and write CuTe layouts and layout algebra",
+   "After this module you can build a TMA+wgmma pipelined GEMM on Hopper",
+   "After this module you can explain FlashAttention-3's scheduling and reproduce part of it",
+   "After this module you can choose between Triton, ThunderKittens and CUTLASS for a given kernel"
+  ],
+  "stuck": [
+   "Template error walls: compile tiny examples first and use cute::print/print_latex to inspect layouts",
+   "wgmma hangs or garbage: missing fence/commit/wait or wrong smem swizzle; compare with the Colfax wgmma post line by line",
+   "No Hopper GPU: do the layout and SIMT parts locally, then rent an H100 for a few hours with a script ready",
+   "TMA descriptor errors: global tensor must be 16-byte aligned and strides multiples of 16 bytes",
+   "Lost in CUTLASS 3 collectives: read the Colfax GEMM design post before the source"
+  ],
+  "project": {
+   "title": "FP8 or bf16 attention/GEMM on Hopper with a public benchmark",
+   "brief": "Implement a warp-specialized Hopper kernel for a real workload: either a grouped GEMM for MoE layers or a decode-time attention kernel (paged KV). Benchmark against cuBLAS/FlashAttention-3/FlashInfer across shapes taken from Llama or DeepSeek configs, and document every optimization with profiler evidence.",
+   "deliverables": [
+    "repo with the kernel, a PyTorch extension binding and correctness tests",
+    "README with TFLOPS tables vs. baselines across >=6 real shapes",
+    "a 600\u20131200 word write-up walking through the pipeline, layouts and the remaining gap"
+   ],
+   "rubric": {
+    "solid": ">=60% of the best public baseline on all shapes, correct to fp tolerance, profiler screenshots",
+    "exceptional": "Matches or beats the baseline on some shapes (e.g. small-batch decode) and explains why with occupancy/pipeline analysis; upstreamable quality"
+   },
+   "references": [
+    {
+     "title": "FlashAttention-3",
+     "url": "https://arxiv.org/abs/2407.08608"
+    },
+    {
+     "title": "ThunderKittens",
+     "url": "https://github.com/HazyResearch/ThunderKittens"
+    }
+   ]
+  }
+ },
+ {
+  "id": 34,
+  "title": "Industrial ML compilers: MLIR, XLA/StableHLO, TorchInductor, TVM",
+  "why": "Every big lab's stack is one of these. You built a toy compiler; now read real designs, see which choices they made differently, and get fluent in MLIR, the lingua franca of accelerator compilers.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "MLIR: Scaling Compiler Infrastructure (Lattner et al.)",
+    "url": "https://arxiv.org/abs/2002.11054",
+    "detail": "Sections 2-4: dialects, regions, progressive lowering.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun mlir-tutorial: Getting started",
+    "url": "https://www.jeremykun.com/2023/08/10/mlir-getting-started/",
+    "detail": "Build with Bazel or CMake; get mlir-opt running.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun: Running and testing a lowering",
+    "url": "https://www.jeremykun.com/2023/08/10/mlir-running-and-testing-a-lowering/",
+    "detail": "lit/FileCheck tests; you'll use them for everything.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun: Writing our first pass",
+    "url": "https://www.jeremykun.com/2023/08/10/mlir-writing-our-first-pass/",
+    "detail": "An affine loop-unroll pass and a rewrite pattern.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun: Defining a new dialect",
+    "url": "https://www.jeremykun.com/2023/08/21/mlir-defining-a-new-dialect/",
+    "detail": "TableGen ops/types: the basis for your toy tensor dialect.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun: Canonicalizers and declarative rewrite patterns",
+    "url": "https://www.jeremykun.com/2023/09/20/mlir-canonicalizers-and-declarative-rewrite-patterns/",
+    "detail": "DRR patterns for algebraic simplification.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun: Dialect conversion",
+    "url": "https://www.jeremykun.com/2023/10/23/mlir-dialect-conversion/",
+    "detail": "Type converters and conversion targets: lower your dialect to arith/linalg.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "j2kun: Lowering through LLVM",
+    "url": "https://www.jeremykun.com/2023/11/01/mlir-lowering-through-llvm/",
+    "detail": "Finish the pipeline to an executable.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "OpenXLA architecture and StableHLO",
+    "url": "https://openxla.org/xla/architecture",
+    "detail": "HLO, fusion and layout assignment; then skim the StableHLO spec at openxla.org/stablehlo.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "TorchInductor design post (Jason Ansel)",
+    "url": "https://dev-discuss.pytorch.org/t/torchinductor-a-pytorch-native-compiler-with-define-by-run-ir-and-symbolic-shapes/747",
+    "detail": "Define-by-run loop IR, scheduling, Triton codegen. Then the PyTorch 2 paper sections on Dynamo and Inductor.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "PyTorch 2 paper (ASPLOS 2024)",
+    "url": "https://pytorch.org/assets/pytorch2-2.pdf",
+    "detail": "Sections 3-5: graph capture via bytecode, guards, Inductor.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "TVM (OSDI 2018)",
+    "url": "https://arxiv.org/abs/1802.04799",
+    "detail": "Sections 3-5: tensor expressions, schedules, learned cost model.",
+    "bot_block": false
+   }
+  ],
+  "build": "A toy 'tg' MLIR dialect (add, mul, matmul, reduce) with canonicalization and a lowering to linalg -> loops -> LLVM, tested with FileCheck.",
+  "check": [
+   "mlir-opt runs your pass pipeline and the resulting binary computes a correct matmul",
+   "At least 10 FileCheck tests cover canonicalization and lowering",
+   "One-page comparison table: your compiler vs. XLA vs. Inductor vs. TVM on IR levels, fusion, scheduling, autotuning",
+   "You can dump and read Inductor's generated Triton for a small model (TORCH_LOGS=output_code)"
+  ],
+  "extra": [
+   "https://mlir.llvm.org/docs/Tutorials/Toy/",
+   "https://openxla.org/stablehlo"
+  ],
+  "effort": "45\u201370 h",
+  "difficulty": 4,
+  "outcomes": [
+   "After this module you can define an MLIR dialect, write passes and lower to LLVM",
+   "After this module you can read XLA HLO and Inductor output and explain their fusion decisions",
+   "After this module you can compare compiler designs in an interview with specifics",
+   "After this module you can navigate a large compiler codebase to find where a decision is made"
+  ],
+  "stuck": [
+   "Build takes forever: use the tutorial's pinned LLVM commit and ccache; build once, release mode",
+   "TableGen errors are opaque: start from the tutorial's dialect and change one thing at a time",
+   "Dialect conversion 'failed to legalize': mark the right ops legal/illegal and check your type converter covers block args",
+   "Inductor output overwhelming: start with a two-op function and TORCH_LOGS=output_code,schedule"
+  ],
+  "project": {
+   "title": "Port your compiler's frontend onto MLIR (or upstream-style Inductor study)",
+   "brief": "Make your course compiler emit your MLIR dialect, then reuse upstream linalg tiling/fusion and the GPU dialect to reach a GPU, and compare against your hand-written backend. Alternative: a deep empirical study of TorchInductor fusion decisions on 5 HuggingFace models with a minimal patch that improves one case.",
+   "deliverables": [
+    "repo with the dialect, passes, FileCheck tests and an end-to-end example",
+    "README with performance comparison vs. your original backend and vs. torch.compile",
+    "a 600\u20131200 word write-up on what MLIR made easier or harder than your own IR"
+   ],
+   "rubric": {
+    "solid": "An MLP runs end to end through MLIR with correct results; 20+ lit tests",
+    "exceptional": "A small transformer block runs on GPU via MLIR within 2x of torch.compile, or the Inductor patch is opened upstream with benchmarks"
+   },
+   "references": [
+    {
+     "title": "j2kun mlir-tutorial",
+     "url": "https://github.com/j2kun/mlir-tutorial"
+    },
+    {
+     "title": "MLIR Toy tutorial",
+     "url": "https://mlir.llvm.org/docs/Tutorials/Toy/"
+    }
+   ]
+  }
+ },
+ {
+  "id": 35,
+  "title": "Scheduling theory: polyhedral model and auto-schedulers",
+  "why": "Your BEAM search picked schedules by trial. Research compilers reason about the space formally (polyhedra, dependences) or learn cost models. Grad labs and XLA/TPU teams expect you to know both camps.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "Halide (PLDI 2013)",
+    "url": "https://people.csail.mit.edu/jrk/halide-pldi13.pdf",
+    "detail": "Sections 3-5: algorithm/schedule separation, the tradeoff space of locality, parallelism and recompute.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Learning to Optimize Halide with Tree Search and Random Programs (2019)",
+    "url": "https://halide-lang.org/papers/autoscheduler2019.html",
+    "detail": "Beam search + learned cost model; compare with your BEAM.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Ansor (OSDI 2020)",
+    "url": "https://arxiv.org/abs/2006.06762",
+    "detail": "Sections 4-6: sketch generation, random annotation, evolutionary fine-tuning.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "isl tutorial (Verdoolaege)",
+    "url": "https://libisl.sourceforge.io/tutorial.pdf",
+    "detail": "Sets, maps, dependences, schedule trees. Work the examples with islpy.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "Pluto: polyhedral source-to-source",
+    "url": "https://pluto-compiler.sourceforge.net/",
+    "detail": "Read the Pluto paper linked there; run it on a stencil and matmul and inspect tiling hyperplanes.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Tiramisu (CGO 2019)",
+    "url": "https://arxiv.org/abs/1804.10694",
+    "detail": "A polyhedral compiler with a scheduling language: the bridge between Halide and isl.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Dependence analysis in your compiler",
+    "url": "",
+    "detail": "Using islpy, compute dependences for your loop IR and prove which tile/permute transforms are legal.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Learned cost model for your BEAM search",
+    "url": "",
+    "detail": "Collect (schedule features, runtime) pairs, train a small GBDT/MLP, and use it to prune search.",
+    "bot_block": false
+   }
+  ],
+  "build": "islpy-based legality checking for your loop transforms, plus a learned cost model that cuts BEAM search time.",
+  "check": [
+   "Your compiler rejects an illegal interchange on a loop-carried dependence and accepts the legal one",
+   "Cost-model-guided search finds schedules within 10% of exhaustive BEAM using <=25% of the measurements",
+   "You can write the iteration domain and schedule of a tiled matmul as isl sets/maps",
+   "One-page comparison of Halide autoscheduler vs. Ansor vs. polyhedral"
+  ],
+  "extra": [
+   "https://arxiv.org/abs/2011.01383",
+   "https://libisl.sourceforge.io/tutorial.pdf"
+  ],
+  "effort": "40\u201360 h",
+  "difficulty": 5,
+  "outcomes": [
+   "After this module you can model loop nests as polyhedra and check transform legality",
+   "After this module you can build and evaluate a learned cost model for schedule search",
+   "After this module you can explain the design space of auto-schedulers and their failure modes",
+   "After this module you can read a scheduling paper and reproduce its key experiment"
+  ],
+  "stuck": [
+   "isl notation feels alien: write every example by hand first, then check with islpy",
+   "Cost model overfits: split by program, not by schedule, or you measure leakage",
+   "Measurements noisy: lock clocks, warm up, take medians of repeated runs",
+   "Pluto build issues: use a container; the concepts matter more than the tool"
+  ],
+  "project": {
+   "title": "Reproduce a cost-model result on your own compiler",
+   "brief": "Reproduce the core claim of a learned-scheduling paper (Halide 2019, Ansor, or TenSet) inside your compiler: same feature ideas, your search space. Report sample efficiency curves and transfer across GPUs or across ops.",
+   "deliverables": [
+    "repo with the dataset of measured schedules (released), training code and integration",
+    "README with search-time vs. achieved-performance curves against random and plain BEAM",
+    "a 600\u20131200 word write-up on what transferred, what didn't and why"
+   ],
+   "rubric": {
+    "solid": "Dataset of >=20k measured schedules, cost model with reported rank correlation, clear sample-efficiency plot",
+    "exceptional": "Shows cross-hardware transfer or a novel feature that measurably helps; written like a workshop paper"
+   },
+   "references": [
+    {
+     "title": "TenSet (NeurIPS 2021 datasets)",
+     "url": "https://arxiv.org/abs/2011.01383"
+    },
+    {
+     "title": "Ansor",
+     "url": "https://arxiv.org/abs/2006.06762"
+    }
+   ]
+  }
+ },
+ {
+  "id": 36,
+  "title": "Numerics and low precision",
+  "why": "Inference cost is dominated by bytes moved, so every frontier serving stack runs fp8, int4 or MX formats. Knowing exactly where precision is lost, and how to recover it, is a top skill in inference and kernel teams.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "Fabien Sanglard, Floating point visually explained",
+    "url": "https://fabiensanglard.net/floating_point_visually_explained/",
+    "detail": "Warm-up; then derive bf16, fp16, fp8 E4M3/E5M2 ranges by hand.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "FP8 Formats for Deep Learning (Micikevicius et al.)",
+    "url": "https://arxiv.org/abs/2209.05433",
+    "detail": "E4M3 vs E5M2, scaling, which tensors get which format.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "OCP Microscaling (MX) Formats v1.0 spec",
+    "url": "https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf",
+    "detail": "Sections 5-6: shared E8M0 block scale, MXFP8/6/4 and MXINT8 element encodings.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Microscaling Data Formats for Deep Learning",
+    "url": "https://arxiv.org/abs/2310.10537",
+    "detail": "Empirical results for MX training and inference.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "LLM.int8()",
+    "url": "https://arxiv.org/abs/2208.07339",
+    "detail": "Outlier features and mixed-precision decomposition.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "SmoothQuant",
+    "url": "https://arxiv.org/abs/2211.10438",
+    "detail": "Migrating activation outliers into weights; derive the scaling factor alpha.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "GPTQ",
+    "url": "https://arxiv.org/abs/2210.17323",
+    "detail": "OBQ-style second-order rounding; sections 3-4 incl. the lazy batch updates and Cholesky trick.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "AWQ",
+    "url": "https://arxiv.org/abs/2306.00978",
+    "detail": "Activation-aware per-channel scaling; compare with GPTQ.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "FP8 training recipe in Transformer Engine",
+    "url": "https://github.com/NVIDIA/TransformerEngine",
+    "detail": "Read the FP8 docs and delayed-scaling recipe; run the example on a small model.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Bit-exact format emulators",
+    "url": "",
+    "detail": "Write numpy emulators for bf16, fp8 E4M3/E5M2 and MXFP4 (round-to-nearest-even, saturation), tested against torch.float8 dtypes.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Quantized matmul kernel",
+    "url": "",
+    "detail": "W4A16 Triton kernel with in-kernel dequantization; add it to your compiler as a dtype.",
+    "bot_block": false
+   }
+  ],
+  "build": "Format emulators, GPTQ and AWQ implemented from scratch on a ~1B model, and a W4A16 kernel used by your compiler.",
+  "check": [
+   "Emulators bit-match torch.float8_e4m3fn/e5m2 casts on 1e6 random values",
+   "Your GPTQ 4-bit model is within 0.5 perplexity of the reference implementation on WikiText-2",
+   "W4A16 kernel is faster than fp16 at batch 1 decode shapes",
+   "You can explain why E4M3 has no infinity and what that means for scaling"
+  ],
+  "extra": [
+   "https://arxiv.org/abs/2304.01433",
+   "https://pytorch.org/blog/accelerating-generative-ai-2/"
+  ],
+  "effort": "40\u201360 h",
+  "difficulty": 4,
+  "outcomes": [
+   "After this module you can derive and emulate any fp/MX format bit-exactly",
+   "After this module you can implement GPTQ, AWQ and SmoothQuant and diagnose accuracy loss",
+   "After this module you can write fused dequant-matmul kernels",
+   "After this module you can design a precision recipe for a model and defend it with numbers"
+  ],
+  "stuck": [
+   "Emulator off by one ulp: you truncated instead of round-to-nearest-even, or mishandled subnormals",
+   "GPTQ blows up: add damping to the Hessian diagonal (the paper uses 1% of the mean)",
+   "Perplexity numbers don't match papers: same eval context length, dataset split and tokenizer",
+   "Quantized kernel slow: dequantize in registers after loading packed ints, not into smem"
+  ],
+  "project": {
+   "title": "Precision study: how low can a real LLM go?",
+   "brief": "Take an open 1-8B model and build a systematic study across bf16, fp8 (per-tensor vs. per-channel), MXFP8/MXFP4 and int4 (GPTQ vs. AWQ), measuring perplexity, a downstream task and real throughput with your kernels. Find which layers are sensitive and propose a mixed-precision recipe.",
+   "deliverables": [
+    "repo with emulators, quantizers, kernels and an eval harness",
+    "README with accuracy-vs-bytes Pareto plot and per-layer sensitivity heatmap",
+    "a 600\u20131200 word write-up of findings and the recommended recipe"
+   ],
+   "rubric": {
+    "solid": "At least 6 configurations evaluated on 2 metrics with measured speed; reproducible scripts",
+    "exceptional": "A mixed-precision recipe that Pareto-dominates uniform int4 or MXFP4, with kernel speedups measured, written up as a blog post others cite"
+   },
+   "references": [
+    {
+     "title": "OCP MX spec v1.0",
+     "url": "https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf"
+    },
+    {
+     "title": "GPTQ",
+     "url": "https://arxiv.org/abs/2210.17323"
+    }
+   ]
+  }
+ },
+ {
+  "id": 37,
+  "title": "Accelerator architecture: systolic arrays, TPUs, dataflows",
+  "why": "A compiler is only as good as its model of the hardware. TPU, Trainium and startup accelerator teams hire people who can reason about dataflow, buffer sizing and utilization, not only GPUs.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "In-Datacenter Performance Analysis of a TPU (TPUv1, ISCA 2017)",
+    "url": "https://arxiv.org/abs/1704.04760",
+    "detail": "Systolic matrix unit, the roofline section, why latency mattered more than throughput.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "TPU v4 (ISCA 2023)",
+    "url": "https://arxiv.org/abs/2304.01433",
+    "detail": "Optical circuit switches, SparseCores, the scale-up story; contrast with v1.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Efficient Processing of DNNs: A Tutorial and Survey (Sze et al.)",
+    "url": "https://arxiv.org/abs/1703.09039",
+    "detail": "Sections on dataflows: weight-, output-, row-stationary.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Eyeriss (JSSC 2017)",
+    "url": "https://eems.mit.edu/wp-content/uploads/2016/11/eyeriss_jssc_2017.pdf",
+    "detail": "Row-stationary dataflow and energy accounting per memory level.",
+    "bot_block": false
+   },
+   {
+    "kind": "watch",
+    "title": "MIT 6.5930 Hardware Architecture for Deep Learning",
+    "url": "https://csg.csail.mit.edu/6.5930/",
+    "detail": "Follow the lectures on dataflow and mapping; do the Timeloop labs if available.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "Timeloop/Accelergy",
+    "url": "https://timeloop.csail.mit.edu/",
+    "detail": "Map a conv and a matmul onto a modeled accelerator; compare mappings by energy and cycles.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Gemmini (Berkeley)",
+    "url": "https://github.com/ucb-bar/gemmini",
+    "detail": "Read the README architecture section: a real open systolic generator with a software stack.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Cycle-level systolic array simulator",
+    "url": "",
+    "detail": "Python or C++: NxN PEs, weight- and output-stationary modes, SRAM buffers, DMA; count cycles and accesses.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Compiler backend for your simulator",
+    "url": "",
+    "detail": "Lower your compiler's matmul/conv to tiled instructions for the simulator; pick tile sizes by buffer capacity.",
+    "bot_block": false
+   }
+  ],
+  "build": "A cycle-level systolic array simulator with two dataflows, plus a backend in your compiler that targets it.",
+  "check": [
+   "Simulator matches numpy results and an analytic cycle count for matmul within 5%",
+   "You can show utilization vs. matrix shape and explain the drop for small or skinny matrices",
+   "Your compiler's tiling for the simulator beats naive tiling on a ResNet layer",
+   "You can explain why TPUs use bf16 and large systolic arrays"
+  ],
+  "extra": [
+   "https://arxiv.org/abs/1703.09039",
+   "https://github.com/ucb-bar/gemmini"
+  ],
+  "effort": "40\u201360 h",
+  "difficulty": 4,
+  "outcomes": [
+   "After this module you can model accelerator performance and energy from first principles",
+   "After this module you can compare dataflows and choose mappings",
+   "After this module you can write a compiler backend for a non-GPU target",
+   "After this module you can discuss TPU generations in depth"
+  ],
+  "stuck": [
+   "Simulator too slow: simulate per tile analytically after validating cycle-exact on small cases",
+   "Off-by-skew cycle counts: remember the (N-1) fill and drain of a systolic wavefront",
+   "Mapping space huge: use Timeloop's mapper ideas, constrain by buffer capacity first",
+   "Energy numbers meaningless: use relative per-level costs from Eyeriss/Sze tables"
+  ],
+  "project": {
+   "title": "Design-space exploration of a transformer accelerator",
+   "brief": "Extend your simulator with a vector unit and on-chip memory hierarchy, then explore array size, buffer size and dataflow for a transformer layer (prefill vs. decode). Use your compiler to generate the mapping and produce Pareto curves of perf/area-proxy/energy.",
+   "deliverables": [
+    "repo with simulator, compiler backend and sweep scripts",
+    "README with Pareto plots and a validation section against analytic models",
+    "a 600\u20131200 word write-up recommending a design for decode-heavy serving"
+   ],
+   "rubric": {
+    "solid": "Validated simulator, >=50 design points, clear prefill-vs-decode insight",
+    "exceptional": "Results cross-checked against Timeloop or published TPU numbers, plus a non-obvious finding (e.g. a dataflow switch per phase) with quantified benefit"
+   },
+   "references": [
+    {
+     "title": "Timeloop",
+     "url": "https://timeloop.csail.mit.edu/"
+    },
+    {
+     "title": "TPU v4",
+     "url": "https://arxiv.org/abs/2304.01433"
+    }
+   ]
+  }
+ },
+ {
+  "id": 38,
+  "title": "Distributed training and inference at scale",
+  "why": "Frontier models never fit on one GPU. Labs need people who can reason about sharding, communication overlap and serving systems; it is the single most in-demand systems skill right now.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "How to Scale Your Model (JAX scaling book)",
+    "url": "https://jax-ml.github.io/scaling-book/",
+    "detail": "Read the rooflines, sharding and transformer-math chapters; do every exercise.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "The Ultra-Scale Playbook (Hugging Face)",
+    "url": "https://huggingface.co/spaces/nanotron/ultrascale-playbook",
+    "detail": "Data, tensor, pipeline, context and expert parallelism with measurements.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "ZeRO (Rajbhandari et al.)",
+    "url": "https://arxiv.org/abs/1910.02054",
+    "detail": "Stages 1-3 memory math; then the PyTorch FSDP tutorial below.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "PyTorch FSDP tutorial",
+    "url": "https://pytorch.org/tutorials/intermediate/FSDP_tutorial.html",
+    "detail": "Run it, then profile the all-gather/reduce-scatter overlap.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Megatron-LM tensor parallelism",
+    "url": "https://arxiv.org/abs/1909.08053",
+    "detail": "Column/row-parallel MLP and attention; count the all-reduces.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "GPipe and Megatron 1F1B / interleaved schedules",
+    "url": "https://arxiv.org/abs/2104.04473",
+    "detail": "Section 2: pipeline bubbles, 1F1B, interleaving; GPipe is arXiv 1811.06965.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Ring Attention",
+    "url": "https://arxiv.org/abs/2310.01889",
+    "detail": "Blockwise attention across devices with overlapped KV passing.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "GShard and Switch Transformer",
+    "url": "https://arxiv.org/abs/2006.16668",
+    "detail": "Expert parallelism and all-to-all; Switch is arXiv 2101.03961.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "vLLM / PagedAttention",
+    "url": "https://arxiv.org/abs/2309.06180",
+    "detail": "KV-cache paging and continuous batching for serving.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "NCCL source and docs",
+    "url": "https://github.com/NVIDIA/nccl",
+    "detail": "Ring vs. tree all-reduce algorithms, channels, protocols (LL, LL128, Simple).",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Mini-parallelism library",
+    "url": "",
+    "detail": "From scratch on torch.distributed: ZeRO-3-style sharding, 1F1B pipeline, tensor-parallel MLP; test on 2-8 GPUs.",
+    "bot_block": false
+   }
+  ],
+  "build": "A from-scratch distributed library (FSDP-style sharding, TP, 1F1B pipeline) training a GPT-2-size model on multiple GPUs, with communication profiled.",
+  "check": [
+   "Loss curves match single-GPU training to tolerance for each parallelism",
+   "Measured memory per GPU matches your ZeRO math within 10%",
+   "Profiler trace shows communication overlapped with compute",
+   "You can compute MFU and the pipeline bubble fraction for your runs"
+  ],
+  "extra": [
+   "https://arxiv.org/abs/1811.06965",
+   "https://arxiv.org/abs/2101.03961",
+   "https://github.com/vllm-project/vllm"
+  ],
+  "effort": "50\u201375 h",
+  "difficulty": 5,
+  "outcomes": [
+   "After this module you can derive memory and communication cost for any parallelism combination",
+   "After this module you can implement FSDP, TP and pipeline schedules from scratch",
+   "After this module you can profile and fix communication bottlenecks",
+   "After this module you can explain serving systems: paged KV, continuous batching, expert parallelism"
+  ],
+  "stuck": [
+   "Hangs: mismatched collective order across ranks; log every collective with rank and shape",
+   "Losses diverge from single-GPU: check gradient scaling by world size and RNG seeding per rank",
+   "No multi-GPU box: use torch.distributed with gloo on CPU for correctness, rent 8 GPUs for an afternoon for perf",
+   "Pipeline bubbles worse than expected: count microbatches vs. stages (bubble ~ (p-1)/m)"
+  ],
+  "project": {
+   "title": "Scale a model and publish an MFU report",
+   "brief": "Train a 1B-class model on 8 GPUs using your library combined in 2D/3D parallelism, then optimize to the best MFU you can, with ablations of each choice. Optionally add ring attention for long context or expert parallelism for an MoE variant.",
+   "deliverables": [
+    "repo with the library, configs and launch scripts",
+    "README with MFU, tokens/s and memory tables across parallelism configs plus profiler traces",
+    "a 600\u20131200 word write-up on what limited scaling and how you fixed it"
+   ],
+   "rubric": {
+    "solid": ">=35% MFU on 8 GPUs with correct convergence and an ablation table",
+    "exceptional": ">=45% MFU, or a working long-context/MoE extension, with a scaling analysis that predicts your measured numbers"
+   },
+   "references": [
+    {
+     "title": "How to Scale Your Model",
+     "url": "https://jax-ml.github.io/scaling-book/"
+    },
+    {
+     "title": "The Ultra-Scale Playbook",
+     "url": "https://huggingface.co/spaces/nanotron/ultrascale-playbook"
+    }
+   ]
+  }
+ },
+ {
+  "id": 39,
+  "title": "Research, open source and career",
+  "why": "Hiring managers and grad committees judge evidence: merged PRs in real compilers, a reproduced paper, leaderboard results and clear writing. This module turns your skills into that evidence.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "Karpathy, A Recipe for Training Neural Networks",
+    "url": "http://karpathy.github.io/2019/04/25/recipe/",
+    "detail": "The mindset for reproductions: become one with the data, overfit first, verify every step.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Simon Peyton Jones, How to Write a Great Research Paper",
+    "url": "https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/",
+    "detail": "Apply to your reproduction write-up.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "Pick and reproduce a recent paper",
+    "url": "https://arxiv.org/abs/2502.10517",
+    "detail": "E.g. KernelBench (linked), a FlashAttention variant or a quantization paper. Match a headline number, then ablate.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "KernelBench",
+    "url": "https://github.com/ScalingIntelligence/KernelBench",
+    "detail": "Solve level-1/2 problems by hand and track speedup; know how LLM kernel agents are evaluated.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "GPU MODE community and leaderboards",
+    "url": "https://www.gpumode.com/",
+    "detail": "Submit to an active kernel competition; join the Discord reading groups.",
+    "bot_block": false
+   },
+   {
+    "kind": "practice",
+    "title": "GPU MODE reference kernels",
+    "url": "https://github.com/gpu-mode/reference-kernels",
+    "detail": "Problem definitions used by the leaderboards.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Land a PR in tinygrad",
+    "url": "https://github.com/tinygrad/tinygrad/blob/master/README.md",
+    "detail": "Read the contributing rules (line count, tests, bounties); start with a bounty or a bug with a failing test.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Or land a PR in PyTorch",
+    "url": "https://github.com/pytorch/pytorch/blob/main/CONTRIBUTING.md",
+    "detail": "Inductor/Dynamo 'good first issue' labels; follow the CLA and test instructions.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Or Triton / vLLM",
+    "url": "https://github.com/triton-lang/triton",
+    "detail": "Small backend fixes or perf issues; vLLM kernels at github.com/vllm-project/vllm.",
+    "bot_block": false
+   },
+   {
+    "kind": "implement",
+    "title": "Portfolio and interview prep",
+    "url": "",
+    "detail": "Pin 4-6 project repos; prepare to whiteboard a tiled matmul, a reduction, roofline math, a fusion pass and a sharding cost estimate in 45 minutes each.",
+    "bot_block": false
+   }
+  ],
+  "build": "One reproduced paper with a public report, at least one merged PR in a major ML compiler/runtime, a leaderboard submission and a polished portfolio.",
+  "check": [
+   "A merged (not just opened) PR in tinygrad, PyTorch, Triton, vLLM, JAX/XLA or MLIR",
+   "Reproduction repo matches a headline number within the paper's reported variance",
+   "A ranked leaderboard submission (GPU MODE or KernelBench-style) with writeup",
+   "Mock interview: you can derive roofline numbers and write a correct tiled kernel live"
+  ],
+  "extra": [
+   "https://github.com/vllm-project/vllm",
+   "https://github.com/gpu-mode/lectures"
+  ],
+  "effort": "60\u2013120 h (spread over weeks)",
+  "difficulty": 5,
+  "outcomes": [
+   "After this module you can reproduce and extend a systems paper end to end",
+   "After this module you can work effectively in a large open-source compiler codebase and get changes merged",
+   "After this module you can present your work in writing and interviews at a top-lab bar",
+   "After this module you can pick a research direction and justify it with evidence"
+  ],
+  "stuck": [
+   "PR stalls: pick issues maintainers asked for, keep diffs small, include benchmarks, respond fast",
+   "Reproduction doesn't match: email the authors early with a precise question; check hardware and versions",
+   "Overwhelmed by scope: one paper, one PR, one leaderboard; depth beats breadth",
+   "Interview anxiety: practice out loud with a timer; explain tradeoffs, not just code"
+  ],
+  "project": {
+   "title": "Capstone: a research-grade contribution",
+   "brief": "Combine a reproduction with a new idea: e.g. extend a kernel paper to a new hardware or precision, or a scheduling result to a new compiler, and upstream the useful part. Present it as a short paper plus a talk.",
+   "deliverables": [
+    "repo with code, scripts and data to reproduce every figure",
+    "README with headline results and links to merged PRs",
+    "a 4-6 page workshop-style paper and a 15-minute recorded talk"
+   ],
+   "rubric": {
+    "solid": "Reproduction matches, one merged PR, paper with clear claims and ablations",
+    "exceptional": "A novel result accepted at a workshop (e.g. MLSys, NeurIPS workshop) or a feature merged upstream that maintainers use, plus a talk at GPU MODE or a reading group"
+   },
+   "references": [
+    {
+     "title": "KernelBench",
+     "url": "https://github.com/ScalingIntelligence/KernelBench"
+    },
+    {
+     "title": "GPU MODE",
+     "url": "https://www.gpumode.com/"
+    }
+   ]
+  }
+ }
+]

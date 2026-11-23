@@ -1,0 +1,2 @@
+%r = mod 5 0
+%t = assert %r 5

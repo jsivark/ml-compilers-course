@@ -1,0 +1,2 @@
+%q = div -7 2
+%t = assert %q -4

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assignments · ML Compilers From Zero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap">
+<link rel="stylesheet" href="style.css"></head>
+<body><header class="top"><div class="bar"><a class="brand" href="index.html">ML Compilers From Zero</a>
+<nav><a href="index.html#modules">Modules</a><a href="assignments.html" class="on">Assignments</a><a href="portfolio.html">Portfolio</a><a href="projects.html">Capstone</a><a href="library.html">Library</a></nav></div></header>
+<main class="wrap"><h1>Assignments</h1><p class="lede">The compiler you build across Part III. Get the starter repo, which has the specs, test suites and a test runner:</p><pre>git clone https://github.com/jsivark/ml-compilers-course.git
+cd ml-compilers-course
+python3 run_tests.py 1   # runs ./compile on tests/week01</pre><p>The companion repo for the course site. It has the compiler assignments for Part III, the test suites, and a test runner.</p>
+<pre>
+run_tests.py        run a week&#x27;s tests against ./compile (or any command)
+
+tests/weekNN/       .uir test programs; the filename prefix gives the expected outcome
+
+</pre>
+<h2>The contract</h2>
+<p>Build one program, <code>./compile</code>, in any language. It takes <code>.uir</code> files and prints one line for each file:</p>
+<pre>
+$ ./compile tests/week01/add_fold.uir tests/week01/rejected_assert_dtype_mismatch.uir
+
+MATCH tests/week01/add_fold.uir
+
+REJECTED tests/week01/rejected_assert_dtype_mismatch.uir
+
+</pre>
+<p>The expected outcome comes from the filename prefix:</p>
+<div class="tw"><table><tr><th>Prefix</th><th>Expected outcome</th></tr><tr><td>(none)</td><td><code>MATCH</code></td></tr><tr><td><code>mismatch_</code></td><td><code>MISMATCH</code></td></tr><tr><td><code>rejected_</code></td><td><code>REJECTED</code> (invalid before it runs)</td></tr><tr><td><code>overbudget_</code></td><td><code>OVERBUDGET</code></td></tr></table></div>
+<p>To check your compiler, run <code>python3 run_tests.py 1</code> (or 2, 3, …). Every week must also keep passing all earlier weeks&#x27; tests.</p>
+<p><b>Rules, the same as the real course.</b> No BLAS/cuBLAS, PyTorch, Triton, MLIR or tinygrad inside your compiler. You can use clang, LLVM, the CUDA driver/runtime APIs and cuda-python. Don&#x27;t let an AI write the compiler for you. Use it to explain things, to debug, and to write tests.</p>
+<p><b>Write tests too.</b> Each week, add at least 10 tests of your own. Good tests are cases where an obvious-but-wrong compiler would fail. Make sure each one has a single, clearly correct answer by working it out by hand.</p>
+<p><b>Where the conventions come from.</b> The format follows the public 10-411 Week 1 spec and the example programs on 10-411.com. Where the public material says nothing, this edition picks a convention. The places where it does that are marked <i>(convention)</i> below. The real course may differ.</p>
+<hr>
+<h2>Week 1 (course wk 18): UOps, rewrites, bounds</h2>
+<p><b>Format.</b> Each line is a binding, <code>%name = op src... key=val...</code>. A literal like <code>3</code> or <code>true</code> is a constant. <code>[a b c]</code> is <code>stack a b c</code>. <code>#</code> starts a comment.</p>
+<p><b>Types and shapes.</b></p>
+<ul><li>Dtypes are <code>i32</code> and <code>bool</code>.</li><li>Shapes are rank 0, or rank 1 for stacks. ALU ops take scalars only.</li><li><code>i32</code> arithmetic wraps on overflow.</li></ul>
+<p><b>Hash-consing.</b> Every <code>(op, src, arg)</code> triple is exactly one node. <code>%a = add 2 4</code> and <code>%b = add 2 4</code> are the same node.</p>
+<p><b>Ops.</b></p>
+<ul><li>Constants and stacks: <code>const</code> (written as a literal), <code>stack</code> / <code>[...]</code>, <code>index v i</code>.</li><li>Lambda calculus: <code>param [] [lo hi]? slot=k dtype=t addrspace=ALU</code> and <code>call body arg0 arg1 ...</code>.</li><li>ALU ops: <code>cast dtype=t</code>, <code>add</code>, <code>mul</code>, <code>max</code>, <code>div</code> (floor; −1 when dividing by 0), <code>mod</code> (floor; x when dividing by 0), <code>xor</code>, <code>shl</code> (shift amount taken mod 32), <code>cmplt</code>, <code>where</code>.</li><li><code>assert x expected</code> ends every file. Its expected value must be a literal or a stack of literals.</li></ul>
+<p><b>Bounds.</b> Compute an interval <code>[lo, hi]</code> for every node: constants are exact, params use their declared limits, and ALU ops use interval arithmetic. If an overflow is possible, the interval widens to the full i32 range. An <code>index</code> is REJECTED unless its bounds <i>prove</i> it is in range, across all calls. A call is REJECTED if an argument&#x27;s bounds fall outside the param&#x27;s limits.</p>
+<p><b>Cost.</b> Each node is charged once (hash-consing makes repeats free). Elementwise ops cost the number of result elements. <code>[]</code> and <code>index</code> cost 1. <code>const</code>, <code>param</code> and <code>assert</code> cost 0. A call costs 1 + C(body), so calling the same body twice charges it twice.</p>
+<p><b>Budgets.</b></p>
+<ul><li>File larger than 4096 bytes: OVERBUDGET.</li><li>After parsing, 100 or more distinct nodes, or 300 or more source edges: OVERBUDGET.</li><li>Static cost of 1,000,000 or more: OVERBUDGET.</li></ul>
+<p><b>Build it in this order.</b></p>
+<ol><li>Tokenizer and parser.</li><li><code>UOp(op, src, arg)</code> with interning, so equality is identity.</li><li>Lazily cached <code>dtype</code>, <code>shape</code>, <code>bounds</code> and <code>cost</code>.</li><li>A validator.</li><li>An evaluator that runs the graph.</li><li>A pattern-rewrite engine (<code>UPat</code> + <code>PatternMatcher</code> + <code>graph_rewrite</code> to a fixed point) with constant folding and the identities x+0, x\<i>1, x\</i>0, x^x, max(x,x), where(true,a,b). Prove it works by folding every MATCH test down to <code>assert c c</code>.</li></ol>
+<p><b>Reading.</b> tinygrad&#x27;s <code>tinygrad/uop/ops.py</code> (the UOp, UPat, PatternMatcher and graph_rewrite classes) and its tests in <code>test/null/test_pattern_matcher.py</code> and <code>test/null/test_uop_vmin_vmax.py</code>. Read them after your own attempt.</p>
+<p><b>Done when:</b> <code>python3 run_tests.py 1</code> passes 65/65, and you&#x27;ve written 10 or more tests of your own.</p>
+<h2>Week 2 (course wk 19): loads, stores, memory; render C</h2>
+<p><b>New ops.</b></p>
+<ul><li><code>extern shape slot=k dtype=t</code>: a global buffer.</li><li><code>store dst value</code>.</li><li><code>load buf</code>.</li><li><code>after buf effect...</code>: buf, but only once the listed effects have happened.</li><li><code>index buf i</code> on a buffer gives an addressable element.</li><li>Nested <code>(op ...)</code> expressions are now allowed anywhere an operand can go.</li></ul>
+<p><b>Ordering rules.</b></p>
+<ul><li>A <code>load</code> must be ordered by <code>after</code> relative to every store to that buffer <i>(convention: an unordered load is REJECTED)</i>.</li><li>Stores must be provably in range, just as indexing is in Week 1.</li></ul>
+<p><b>Renderer.</b> Starting this week, <i>execute by generating C</i>:</p>
+<ol><li>Topologically sort the graph.</li><li>Emit one C function with no loops.</li><li>Compile it with <code>clang -O2 -shared</code>.</li><li>Call it through <code>ctypes</code> (or dlopen), with the buffers you allocated.</li></ol>
+<p>Keep your Week 1 interpreter as a second backend and cross-check the two.</p>
+<p><b>Reading.</b> Russ Cox, <i>Hardware Memory Models</i>; tinygrad&#x27;s <code>renderer/cstyle.py</code>.</p>
+<p><b>Done when:</b> tests/week02 and all earlier weeks pass, through the C backend.</p>
+<h2>Week 3 (course wk 20): loops, floats, runtime; matmul and conv</h2>
+<p><b>New ops.</b></p>
+<ul><li><code>range n slot=k</code>: a loop variable over 0..n-1, with bounds [0, n−1].</li><li><code>end effect range...</code>: closes loops, innermost first.</li><li><code>recip x</code>, for f32 only.</li><li>Dtype <code>f32</code>. Float literals contain a <code>.</code>.</li></ul>
+<p><b>What to build.</b></p>
+<ul><li>Render ranges as C <code>for</code> loops, and place each computation in the innermost loop it depends on.</li><li>Write matmul (M=N=K=256) and a 3×3 conv2d as UIR files by hand. Check them against NumPy to within 1e-4.</li></ul>
+<p><b>Reading.</b> Goldberg on floating point. CS231n conv notes (im2col).</p>
+<p><b>Done when:</b> the week03 tests pass, plus your hand-written <code>gemm_256.uir</code> and <code>conv3x3.uir</code>.</p>
+<h2>Week 4 (course wk 21): rangeify, reduce, materialization</h2>
+<p><b>New ops.</b></p>
+<ul><li><code>expand x n</code>: broadcast a scalar to shape (n,).</li><li><code>reduce x op=add|max pop=n</code>: reduce the last n axes <i>(convention)</i>.</li><li>ALU ops now accept rank-1 inputs.</li></ul>
+<p>*<i>The core pass, </i>rangeify<i>.<b> Rewrite every shaped op into scalar code over explicit ranges, then decide what gets </b>materialized</i>*:</p>
+<ul><li>Fuse elementwise chains into a single loop.</li><li>Stage a temporary buffer only where needed, for example the input of a reduce that is read twice.</li></ul>
+<p><b>Reading.</b> The Halide paper (separating the algorithm from the schedule); the tinygrad-notes posts on scheduling and fusion.</p>
+<p><b>Done when:</b></p>
+<ul><li>The week04 tests pass.</li><li><code>reduce(mul(a,b))</code> compiles to one fused loop with no temporary buffer. Check the generated C.</li></ul>
+<h2>Week 5 (course wk 22): movement ops</h2>
+<p><b>New ops.</b></p>
+<ul><li><code>reshape x [shape]</code>.</li><li><code>permute x [order]</code>.</li><li><code>pad x [[before after] ...]</code>, padding with zeros <i>(convention)</i>.</li><li><code>shrink x [[start end] ...]</code>.</li><li><code>expand x [shape]</code>.</li><li>Shapes of any rank.</li></ul>
+<p><b>What to build.</b></p>
+<ul><li>Movement ops never copy. Each one becomes index arithmetic, plus a validity mask for pad.</li><li>Simplify the resulting <code>div</code>/<code>mod</code> index expressions using your Week 1 bounds.</li><li>Matmul is now just <code>reshape → expand → mul → reduce</code>.</li></ul>
+<p><b>Reading.</b> ezyang, <i>PyTorch internals</i>; tinygrad-notes, ShapeTracker; Tensor-Puzzles (do all of them).</p>
+<p><b>Done when:</b> the week05 tests pass, and conv2d written only with movement ops plus mul/reduce matches NumPy.</p>
+<h2>Week 6 (course wk 23): autodiff, real models</h2>
+<p><b>New syntax and ops.</b></p>
+<ul><li><code>{ ... }</code> lexical scopes, whose value is the last binding.</li><li><code>extern ... url=path</code>, which loads a file-backed buffer.</li><li><code>gradient loss wrt</code>.</li><li>Transcendental ops: <code>exp2</code>, <code>log2</code>, <code>sqrt</code>, <code>sin</code>, implemented yourself, for example with range reduction plus a polynomial.</li></ul>
+<p><b>Milestones.</b> These are the real 10-411 Week 6 goals:</p>
+<ol><li><code>gradient</code> as a graph rewrite, with a rule per op. Test it against finite differences on 20 random graphs.</li><li>Train an MNIST MLP to <b>at least 97%</b> test accuracy in under 5 minutes on CPU.</li><li>Run a small LLM (the TinyStories model behind Karpathy&#x27;s llama2.c, <code>stories15M</code>) and produce the same tokens as <code>run.c</code>.</li><li>Run ResNet-18 inference on one image, with the top-1 class matching PyTorch&#x27;s output (computed outside your compiler).</li></ol>
+<p><b>Reading.</b> Autodidax; the Baydin AD survey, §3.</p>
+<h2>Week 7 (course wk 24): CPU memory hierarchy, threads</h2>
+<p><b>New syntax.</b> <code>range ... axis=GLOBAL|LOOP|UPCAST</code>. A <code>call</code> of a kernel launches it.</p>
+<p><b>What to build.</b></p>
+<ul><li>Tiling, loop reordering, unrolling (UPCAST), SIMD-friendly code (vector types or <code>#pragma clang loop vectorize</code>), and multithreading over GLOBAL axes with pthreads.</li></ul>
+<p><b>Targets.</b></p>
+<ul><li>1024³ f32 matmul at <b>50% or more of single-socket peak</b>. Report GFLOPS.</li><li>Conv and reduce within 3× of NumPy.</li></ul>
+<p><b>Reading.</b> siboehm, <i>Fast Multidimensional Matrix Multiplication on CPU</i>; salykova, matmul-cpu; how-to-optimize-gemm; Algorithmica.</p>
+<h2>Week 8 (course wk 25): GPU backend</h2>
+<p><b>What to build.</b></p>
+<ul><li>A CUDA renderer: GLOBAL/LOCAL axes map to the grid and blocks, plus shared memory (<code>addrspace=LOCAL</code>) and <code>barrier</code>.</li><li>Compile with NVRTC through cuda-python.</li><li>Every earlier test must pass on the GPU.</li></ul>
+<p><b>Target.</b> Elementwise and reduce ops at <b>70% or more of memory bandwidth</b>, measured with Nsight Compute.</p>
+<p><b>Reading.</b> CUDA Programming Guide ch. 1–5; GPU-Puzzles; Stanford CS149 GPU lectures.</p>
+<h2>Week 9 (course wk 26): tensor cores, fast GEMM, flash attention</h2>
+<p><b>What to build.</b></p>
+<ul><li>Register tiling, vectorized loads, double buffering, and <code>mma.sync</code> tensor-core instructions emitted by your compiler (not hand-written CUDA).</li><li>A fused attention kernel.</li></ul>
+<p><b>Targets.</b></p>
+<ul><li>fp16 4096³ GEMM at <b>70% or more of cuBLAS</b> (benchmark cuBLAS separately, with PyTorch, outside your compiler).</li><li>Flash-attention forward pass at 60% or more of PyTorch SDPA.</li></ul>
+<p><b>Reading.</b> siboehm, CUDA matmul worklog; spatters, <i>mma matmul</i>; FlashAttention 1 and 2; flash-attention-minimal; ThunderKittens.</p>
+<h2>Week 10 (course wk 27): multiple GPUs, sharding</h2>
+<p><b>What to build.</b></p>
+<ul><li>A <code>shard</code> annotation on buffers.</li><li>A pass that inserts all-reduce and all-gather.</li><li>Data-parallel MNIST training on 2 or more GPUs (NCCL through ctypes is allowed).</li><li>Tensor-parallel matmul.</li></ul>
+<p><b>Reading.</b> <i>How to Scale Your Model</i>; <i>Ultra-Scale Playbook</i>; LLM-Training-Puzzles.</p>
+<h2>Week 11 (course wk 28): SOTA inference and training</h2>
+<p><b>What to build.</b></p>
+<ul><li>KV cache, batching, int8 weights and speculative decoding for the Week 6 LLM.</li><li>Report tokens/sec against llama2.c and gpt-fast.</li></ul>
+<p><b>Also due:</b> a one-page final project proposal covering the goal, baseline, metric and plan.</p>
+<h2>Weeks 12–14 (course wk 29–31): final project</h2>
+<p>See the ideas list on the course site. Deliver code, a benchmark harness, and a 4-page report.</p></main>
+<footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU.</footer>
+</body></html>

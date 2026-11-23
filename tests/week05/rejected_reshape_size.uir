@@ -1,0 +1,2 @@
+%m = reshape [1 2 3] [2 2]
+%t = assert (index %m 0 0) 1

@@ -1,0 +1,2 @@
+%q = div 5 0
+%t = assert %q -1

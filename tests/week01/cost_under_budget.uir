@@ -1,0 +1,19 @@
+%x = param [] slot=0 dtype=i32 addrspace=ALU
+%f0 = add %x 1
+%a1 = call %f0 %x
+%b1 = call %f0 0
+%f1 = add %a1 %b1
+%a2 = call %f1 %x
+%b2 = call %f1 0
+%f2 = add %a2 %b2
+%a3 = call %f2 %x
+%b3 = call %f2 0
+%f3 = add %a3 %b3
+%a4 = call %f3 %x
+%b4 = call %f3 0
+%f4 = add %a4 %b4
+%a5 = call %f4 %x
+%b5 = call %f4 0
+%f5 = add %a5 %b5
+%v = call %f5 5
+%t = assert %v 37

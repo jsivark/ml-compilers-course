@@ -1,0 +1,2 @@
+%dead = add 1 1
+%t = assert 2 2

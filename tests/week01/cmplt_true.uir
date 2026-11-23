@@ -1,0 +1,2 @@
+%a = cmplt 1 2
+%t = assert %a true

@@ -1,0 +1,2 @@
+%a = recip 4.0
+%t = assert %a 0.25

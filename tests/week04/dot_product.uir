@@ -1,0 +1,2 @@
+%d = reduce (mul [1 2 3] [4 5 6]) op=add pop=1
+%t = assert %d 32

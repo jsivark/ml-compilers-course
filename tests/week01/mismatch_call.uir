@@ -1,0 +1,4 @@
+%x = param [] slot=0 dtype=i32 addrspace=ALU
+%s = mul %x 3
+%v = call %s 4
+%t = assert %v 13

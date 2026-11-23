@@ -1,0 +1,2 @@
+%a = add 007 0x0A
+%t = assert %a 17

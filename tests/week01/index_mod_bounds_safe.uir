@@ -1,0 +1,6 @@
+# mod by a constant proves the index is in range
+%x = param [] slot=0 dtype=i32 addrspace=ALU
+%i = mod %x 3
+%e = index [10 20 30] %i
+%v = call %e -1
+%t = assert %v 30

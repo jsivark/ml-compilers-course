@@ -1,0 +1,5 @@
+%buf = extern [] slot=0 dtype=i32
+%write = store %buf 7
+%ready = after %buf %write
+%value = load %ready
+%test = assert %value 7

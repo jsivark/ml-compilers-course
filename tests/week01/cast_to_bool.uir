@@ -1,0 +1,2 @@
+%a = cast -5 dtype=bool
+%t = assert %a true
