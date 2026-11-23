@@ -147,26 +147,7 @@
     }
    ]
   },
-  "solutions": [
-   {
-    "title": "GitHub starter workflow: C/C++ with Make",
-    "url": "https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml",
-    "note": "The official minimal workflow that runs make on every push; compare it with your own CI file.",
-    "for": "Build: CI workflow running the C hello-world"
-   },
-   {
-    "title": "GitHub starter workflow: Python application",
-    "url": "https://github.com/actions/starter-workflows/blob/main/ci/python-app.yml",
-    "note": "Official workflow that installs dependencies and runs pytest; shows the job and step layout your CI needs.",
-    "for": "Build: CI workflow running pytest"
-   },
-   {
-    "title": "gdb-dashboard",
-    "url": "https://github.com/cyrus-and/gdb-dashboard",
-    "note": "A single .gdbinit that shows registers, source, stack and memory at each stop; a reference for a productive gdb setup.",
-    "for": "Step: C toolchain + debugger"
-   }
-  ],
+  "solutions": [],
   "deeper": [
    {
     "kind": "repo",
@@ -244,6 +225,24 @@
     "by": "CodeCrafters community",
     "url": "https://github.com/codecrafters-io/build-your-own-x",
     "note": "An index of from-scratch tutorials; bookmark the Programming Language, Database and Neural Network sections for side projects."
+   },
+   {
+    "kind": "repo",
+    "title": "GitHub starter workflow: C/C++ with Make",
+    "url": "https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml",
+    "note": "The official minimal workflow that runs make on every push; compare it with your own CI file."
+   },
+   {
+    "kind": "repo",
+    "title": "GitHub starter workflow: Python application",
+    "url": "https://github.com/actions/starter-workflows/blob/main/ci/python-app.yml",
+    "note": "Official workflow that installs dependencies and runs pytest; shows the job and step layout your CI needs."
+   },
+   {
+    "kind": "repo",
+    "title": "gdb-dashboard",
+    "url": "https://github.com/cyrus-and/gdb-dashboard",
+    "note": "A single .gdbinit that shows registers, source, stack and memory at each stop; a reference for a productive gdb setup."
    }
   ],
   "stretch": "Build a reproducible dev environment for the whole course: a Dockerfile or Nix flake that pins clang, gdb, perf, Python and uv, plus a CI matrix (Linux x86-64 and macOS arm64) that builds and tests every module directory. Measure cold-start setup time on a fresh machine and get it under 10 minutes, documented in the README."
