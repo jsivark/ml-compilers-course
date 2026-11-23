@@ -243,6 +243,20 @@
     "by": "Allison Kaptur",
     "url": "https://aosabook.org/en/500L/a-python-interpreter-written-in-python.html",
     "note": "Builds Byterun, a stack VM that runs real CPython bytecode in about 500 lines; focus on the frame and block-stack sections to compare with clox."
+   },
+   {
+    "kind": "paper",
+    "title": "PEP 659: Specializing Adaptive Interpreter",
+    "by": "Mark Shannon",
+    "url": "https://peps.python.org/pep-0659/",
+    "note": "Explains how CPython 3.11 rewrites bytecode in place with quickened, type-specialized instructions; focus on the specialization and deoptimization sections."
+   },
+   {
+    "kind": "blog",
+    "title": "Flattening ASTs (and Other Compiler Data Structures)",
+    "by": "Adrian Sampson",
+    "url": "https://www.cs.cornell.edu/~asampson/blog/flattening.html",
+    "note": "Shows with benchmarks how storing an AST in a flat array with integer indices speeds up a tree-walking interpreter; read the measurements and the arena discussion."
    }
   ],
   "stretch": "Turn clox into a register-based VM (Lua 5.0 style) with computed-goto dispatch and NaN boxing, keeping the full Crafting Interpreters test suite green. Report fib(35) and a loop-heavy benchmark against stock clox and CPython 3, and break down the speedup by each change."

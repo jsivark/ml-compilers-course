@@ -259,6 +259,34 @@
     "by": "Tanmay Patil",
     "url": "https://tanmaypatil123.github.io/posts/2026/blackwell-2cta-gluon-gemm/",
     "note": "A 2026 worklog writing a 2-CTA Blackwell GEMM in Gluon; read it to see how far tile-based Python can go toward CUTLASS-level control."
+   },
+   {
+    "kind": "course",
+    "title": "Triton tutorial: Persistent Matmul",
+    "by": "Triton project",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html",
+    "note": "Walks from a naive matmul to persistent and TMA-based versions with benchmarks; focus on the TMA descriptor version and the persistent tile loop."
+   },
+   {
+    "kind": "course",
+    "title": "Gluon tutorial: Persistent Kernels",
+    "by": "Triton project",
+    "url": "https://triton-lang.org/main/getting-started/tutorials/gluon/persistence.html",
+    "note": "Shows pipelining across the persistent outer loop with one abstraction over Hopper and Blackwell tensor cores; read it after the plain Triton persistent tutorial."
+   },
+   {
+    "kind": "blog",
+    "title": "Accelerating MoEs with a Triton Persistent Cache-Aware Grouped GEMM Kernel",
+    "by": "PyTorch blog (2025)",
+    "url": "https://pytorch.org/blog/accelerating-moes-with-a-triton-persistent-cache-aware-grouped-gemm-kernel/",
+    "note": "A production Triton kernel worklog; focus on per-expert TMA descriptors and the tile ordering used for cache reuse."
+   },
+   {
+    "kind": "blog",
+    "title": "FlexAttention + FlashAttention-4: Fast and Flexible",
+    "by": "PyTorch blog",
+    "url": "https://pytorch.org/blog/flexattention-flashattention-4-fast-and-flexible/",
+    "note": "How FlexAttention's score and mask modifications are lowered onto a CuTe DSL FA4 backend; read it to see where Triton-generated kernels stop being the fastest option."
    }
   ],
   "stretch": "Add a Triton backend to your course compiler that lowers fused elementwise+reduction kernels, and show it within 10% of torch.compile (Inductor) on the nanoGPT forward pass at block size 1024. Report per-kernel time for both and explain any kernel where Inductor wins."
@@ -543,6 +571,27 @@
     "by": "Triton team",
     "url": "https://triton-lang.org/main/getting-started/tutorials/gluon/tcgen05.html",
     "note": "Official tutorial on tcgen05 and tensor memory from Python; compare against the CuTe version to separate hardware concepts from library syntax."
+   },
+   {
+    "kind": "blog",
+    "title": "CUTLASS Tutorial: Efficient GEMM kernel designs with Pipelining",
+    "by": "Colfax Research",
+    "url": "https://research.colfax-intl.com/cutlass-tutorial/",
+    "note": "Part 2 of the Colfax Hopper GEMM series: warp specialization and CUTLASS Pipeline classes overlapping TMA with WGMMA; trace the producer/consumer barrier code."
+   },
+   {
+    "kind": "talk",
+    "title": "The Present and Future of CUTLASS Tensor Core Programming (slides)",
+    "by": "Vijay Thakkar (NVIDIA), SemiAnalysis Blackwell Hackathon 2025",
+    "url": "https://semianalysis.com/wp-content/uploads/2025/03/The-Present-and-Future-of-CUTLASS-Tensor-Core-Programming-Vijay-Thakkar.pdf",
+    "note": "The CUTLASS lead's view of why CuTe DSL exists and how it maps 1:1 to CuTe C++; skim for the Blackwell programming model slides."
+   },
+   {
+    "kind": "blog",
+    "title": "FlashAttention-4 (Tri Dao blog)",
+    "by": "Tri Dao",
+    "url": "https://tridao.me/blog/2026/flash4/",
+    "note": "A full CuTe DSL kernel on Blackwell: TMEM accumulators, ping-pong over two query tiles, and why backward is SMEM-bandwidth bound; read the TMEM and pipelining sections."
    }
   ],
   "stretch": "Extend the grouped GEMM to FP8 with per-128-channel scaling and a persistent tile scheduler, and match or beat DeepGEMM grouped-contiguous TFLOPS on at least 3 of its published Mixtral-like shapes on H100. Publish Nsight Compute reports for both kernels side by side."
@@ -1473,6 +1522,20 @@
     "by": "Google Cloud",
     "url": "https://docs.cloud.google.com/tpu/docs/system-architecture",
     "note": "Official current reference for TensorCore, MXU sizes (128x128 vs 256x256), SparseCore and slice topology across TPU versions."
+   },
+   {
+    "kind": "talk",
+    "title": "Ironwood: Delivering Best in Class perf, perf/TCO and perf/Watt for Reasoning Model Training and Serving (Hot Chips 2025 slides)",
+    "by": "Norman P. Jouppi, Sridhar Lakshmanamurthy (Google)",
+    "url": "https://hc2025.hotchips.org/assets/program/conference/day2/61_Google_Ironwood-Final.pdf",
+    "note": "Slides for Google's 7th-gen TPU: look at the two-die chip layout, the SparseCore and the 9216-chip OCS pod with shared HBM to see how a systolic-array design scales up."
+   },
+   {
+    "kind": "talk",
+    "title": "Google TPU rack design tutorial (Hot Chips 2025)",
+    "by": "Pankaj Makhija (Google)",
+    "url": "https://www.hc2025.hotchips.org/assets/program/tutorials/HC2025.T1DCRacks.S7.Pankaj.pdf",
+    "note": "Tutorial deck on how TPU chips are packaged into trays and racks; use it to connect chip-level dataflow to power, cooling and interconnect limits."
    }
   ],
   "stretch": "Extend the simulator to model a TPU-like chip with an MXU, vector unit and HBM, and validate its predicted latency for a GPT-2 small layer against a real TPU (Colab or Cloud) within 20%. Use the validated model to propose and justify one design change that improves decode throughput by at least 1.5x at equal area proxy."
@@ -1731,6 +1794,13 @@
     "by": "SGLang team (LMSYS)",
     "url": "https://lmsys.org/blog/2025-05-05-large-scale-ep/",
     "note": "Detailed 2025 worklog of prefill-decode disaggregation plus DeepEP-based expert parallelism; focus on the parallelism layout and the profiling breakdowns."
+   },
+   {
+    "kind": "repo",
+    "title": "nanotron",
+    "by": "Hugging Face",
+    "url": "https://github.com/huggingface/nanotron",
+    "note": "Small, readable 3D-parallel (data, tensor, pipeline) pretraining library; read the parallel/ directory alongside the Ultra-Scale Playbook to see each sharding scheme in code."
    }
   ],
   "stretch": "Implement a ZeRO++ or DualPipe-style overlap in your library and show a measured MFU gain over your 1F1B baseline on 8 GPUs, with traces showing the hidden communication. Add an automatic planner that predicts the best (dp, tp, pp) split from your cost model and matches the empirically best config on 3 model sizes."

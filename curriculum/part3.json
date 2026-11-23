@@ -3078,6 +3078,20 @@
     "by": "Hazy Research",
     "url": "https://hazyresearch.stanford.edu/blog/2025-05-27-no-bubbles",
     "note": "Fusing a whole Llama forward pass into one persistent kernel to remove launch bubbles in batch-1 decode; a good extreme of the fusion ideas from this course."
+   },
+   {
+    "kind": "paper",
+    "title": "Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving",
+    "by": "Moonshot AI",
+    "url": "https://arxiv.org/abs/2407.00079",
+    "note": "Production report on separating prefill and decode clusters around a shared KV cache pool; focus on the scheduler and the overload rejection policy."
+   },
+   {
+    "kind": "lecture",
+    "title": "CMSC 828G Lecture 15: Inference",
+    "by": "University of Maryland",
+    "url": "https://www.cs.umd.edu/class/spring2025/cmsc828g/slides/15-cmsc828g-inference.pdf",
+    "note": "Compact slide deck tying together KV caching, batching and parallelism for LLM inference; use it as a map before reading the vLLM and SGLang papers."
    }
   ],
   "stretch": "Run a 1B-class Llama model on your compiler with a paged KV cache, continuous batching, 4-bit weights (GPTQ or AWQ) and EAGLE-style drafting. Match vLLM's throughput within 25% at equal p99 latency on the same GPU and report perplexity within 2% of fp16."
@@ -3318,6 +3332,27 @@
     "by": "Jan.ai",
     "url": "https://jan.ai/post/how-we-benchmark-kernels",
     "note": "Practitioner write-up on L2 flushing, CUDA events and warmup; copy its L2-flush approach into your harness before recording any baseline."
+   },
+   {
+    "kind": "paper",
+    "title": "Statistically Rigorous Java Performance Evaluation",
+    "by": "Andy Georges, Dries Buytaert, Lieven Eeckhout (OOPSLA 2007)",
+    "url": "https://dri.es/files/oopsla07-georges.pdf",
+    "note": "Shows how best-of-N and mean-only reporting mislead; read the confidence-interval and ANOVA sections and apply them to your baseline timing runs."
+   },
+   {
+    "kind": "paper",
+    "title": "Producing Wrong Data Without Doing Anything Obviously Wrong! (ASPLOS 2009)",
+    "by": "Todd Mytkowicz, Amer Diwan, Matthias Hauswirth, Peter F. Sweeney",
+    "url": "https://sape.inf.usi.ch/publications/asplos09",
+    "note": "Measurement bias from link order and environment size can flip conclusions; read it before trusting a single setup and plan to randomize your harness setup."
+   },
+   {
+    "kind": "blog",
+    "title": "CUDA Performance Hot VS Cold Measurement",
+    "by": "Lei Mao",
+    "url": "https://leimao.github.io/blog/CUDA-Performance-Hot-Cold-Measurement",
+    "note": "A small C++ harness that flushes L2 with cudaMemsetAsync before each timed launch; copy its structure for the cold-cache mode of your benchmark."
    }
   ],
   "stretch": "Turn Idea A into a learned search: train a small cost model (gradient-boosted trees or an MLP over kernel features) on timings from your beam search, and show it reaches within 5% of full-beam kernel speed on 20+ KernelBench level-1 ops while timing at least 5x fewer candidates. Publish the dataset of (kernel, features, time) so others can reproduce."
@@ -3512,6 +3547,27 @@
     "by": "cudaforfun (Substack)",
     "url": "https://cudaforfun.substack.com/p/outperforming-cublas-on-nvfp4",
     "note": "A 2025 step-by-step worklog building an NVFP4 GEMM in CUDA and inline PTX; study how each iteration is motivated by a measurement, the pattern your build log should follow."
+   },
+   {
+    "kind": "blog",
+    "title": "Measuring Computer Systems is Almost Certainly Harder Than You Think",
+    "by": "Cornell CS 6120 course blog",
+    "url": "https://cs.cornell.edu/courses/cs6120/2019fa/blog/measurement",
+    "note": "A student discussion of the measurement-bias paper; use its checklist while iterating so each speedup you log is a real effect and not noise."
+   },
+   {
+    "kind": "blog",
+    "title": "Statistically rigorous Java performance evaluation (The Morning Paper)",
+    "by": "Adrian Colyer",
+    "url": "https://blog.acolyer.org/2017/11/06/statistically-rigorous-java-performance-evaluation/",
+    "note": "A short summary of the Georges et al. method; focus on how many repetitions to run and when two configurations are actually different."
+   },
+   {
+    "kind": "blog",
+    "title": "ThunderMLA: FlashMLA, but faster and simpler",
+    "by": "Hazy Research (Stanford)",
+    "url": "https://hazyresearch.stanford.edu/blog/2025-03-04-thundermla",
+    "note": "A compact iterate-and-measure worklog on a decode megakernel; study how they find the bottleneck (tail effects, launch overhead) and fix it step by step."
    }
   ],
   "stretch": "Submit your optimized kernel to a GPU MODE leaderboard (https://www.gpumode.com) and place in the top 10 for its problem, or show a reproducible speedup over the current top entry. Document every submission in the lab notebook with its measured time."
@@ -3698,6 +3754,27 @@
     "by": "Gernot Heiser",
     "url": "https://gernot-heiser.org/talk-howto-paper.pdf",
     "note": "Systems-focused slides arguing evaluation is the core of the paper; focus on the evaluation and honesty-about-limitations sections."
+   },
+   {
+    "kind": "blog",
+    "title": "FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling",
+    "by": "Tri Dao",
+    "url": "https://tridao.me/blog/2026/flash4/",
+    "note": "An exemplary public write-up of a kernel project; copy how it states the hardware bottleneck first, then the schedule, then the measured results."
+   },
+   {
+    "kind": "blog",
+    "title": "ThunderKittens Now on Blackwells!",
+    "by": "Benjamin Spector, Aaryan Singhal, Dan Fu, Chris Re (Hazy Research)",
+    "url": "https://hazyresearch.stanford.edu/blog/2025-03-15-tk-blackwell",
+    "note": "A short, readable results post with cuBLAS comparisons; use it as a model for presenting your final numbers to a general systems audience."
+   },
+   {
+    "kind": "blog",
+    "title": "One Kernel for All Your GPUs",
+    "by": "Hazy Research (Stanford)",
+    "url": "https://hazyresearch.stanford.edu/blog/2025-09-22-pgl",
+    "note": "Another worked results post from a research lab; note how plots and baselines are chosen to support one main claim."
    }
   ],
   "stretch": "Submit the report as a 4-page workshop paper (for example an MLSys or NeurIPS ML-for-systems workshop) with an artifact that an independent person reproduces within 10% of your headline number. Record the review feedback and the reproduction in the README."
