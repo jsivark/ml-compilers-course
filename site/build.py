@@ -7,7 +7,8 @@ import html, json, os, re, shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "curriculum")
-OUT = os.path.join(ROOT, "docs")
+OUT = os.environ.get("SITE_OUT") or os.path.join(ROOT, "docs")
+STYLE = "style.css"
 E = lambda s: html.escape(str(s or ""), quote=True)
 
 PARTS = [
@@ -25,18 +26,28 @@ PARTS = [
 KIND = {"watch": "Watch", "read": "Read", "do": "Do", "build": "Build", "implement": "Implement",
         "test": "Test", "measure": "Measure"}
 
-def page(title, body, depth=0, here=""):
+EXTRA_JS = ""
+TOGGLE = ""
+THEME_JS = ""
+PREVIEW = True
+MAP = {}  # depth -> course map html (preview)
+if True:
+  THEME_JS = "<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>"
+  TOGGLE = '<button class="theme" type="button" aria-label="Switch light or dark" onclick="var d=document.documentElement,n=d.dataset.theme==\'dark\'?\'light\':\'dark\';d.dataset.theme=n;try{localStorage.setItem(\'theme\',n)}catch(e){}">◐</button>'
+
+
+def page(title, body, depth=0, here="", part=""):
   up = "../" * depth
   return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)}</title>
+<title>{E(title)}</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2324489c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' text-anchor='middle' fill='%23f6f3ec'%3Ek%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap">
-<link rel="stylesheet" href="{up}style.css"></head>
-<body><header class="top"><div class="bar"><a class="brand" href="{up}index.html">ML Compilers From Zero</a>
-<nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a><a href="{up}about.html"{' class="on"' if here=='about' else ''}>About</a><a href="https://github.com/jsivark/ml-compilers-course">GitHub</a></nav></div></header>
-<main class="wrap">{linkify(body)}</main>
-<footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU. <a href="{up}about.html">How this was made</a> · <a href="https://github.com/jsivark/ml-compilers-course/issues">Report a mistake</a></footer>
-</body></html>"""
+<link rel="stylesheet" href="{up}style.css">{THEME_JS}{f'<meta name="base" content="{up}"><script src="{up}app.js" defer></script>' if PREVIEW else ''}</head>
+<body data-part="{part}"{' class="has-map"' if (PREVIEW and part) else ''}>{'<div class="art-bg" aria-hidden="true"></div>' if PREVIEW else ''}<header class="top"><div class="bar">{'<button class="map-btn" type="button" aria-label="Course map">☰</button>' if (PREVIEW and part) else ''}<a class="brand" href="{up}index.html">ML Compilers From Zero</a>{'<button class="menu-btn" type="button" aria-label="Menu">Menu</button>' if PREVIEW else ''}
+<nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a><a href="{up}about.html"{' class="on"' if here=='about' else ''}>About</a><a href="https://github.com/jsivark/ml-compilers-course">GitHub</a>{'<button class="search-open" type="button" aria-label="Search">Search <kbd>⌘K</kbd></button>' if PREVIEW else ''}{TOGGLE}</nav></div></header>
+{MAP.get(depth, "") if (PREVIEW and part) else ""}<main class="wrap">{linkify(body)}</main>
+<footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU. <a href="{up}about.html">How this was made</a> · <a href="https://github.com/jsivark/ml-compilers-course/issues">Report a mistake</a>{'<br><span class="art-credit"></span>' if PREVIEW else ''}</footer>
+{EXTRA_JS}</body></html>"""
 
 URL = re.compile(r"https?://[^\s<>\"']+")
 def _label(u):
@@ -130,6 +141,10 @@ def module_page(m, mods):
   KN = {"lecture": "Lectures", "course": "Courses", "talk": "Talks", "video": "Videos", "paper": "Papers", "book": "Books", "blog": "Blogs and articles", "repo": "Code to read", "problems": "Problem sets"}
   groups = {}
   for x in m.get("deeper", []): groups.setdefault(x.get("kind", "blog"), []).append(x)
+  def shelf(xs):
+    return '<div class="shelf">' + "".join(
+      f'<a class="bk" href="{E(x.get("url") or "#")}" target="_blank" rel="noopener" title="{E(x.get("note", ""))}">'
+      f'<span class="bt">{E(x["title"])}</span><span class="ba">{E(x.get("by", ""))}</span></a>' for x in xs) + "</div>"
   deeper = "".join(
     f'<h3>{KN.get(k, k.title())}</h3><ul class="extra">' + "".join(
       f'<li>{link(x["title"], x.get("url"))}{" <span class=n>· " + E(x["by"]) + "</span>" if x.get("by") else ""}{"<br><span class=n>" + E(x["note"]) + "</span>" if x.get("note") else ""}</li>' for x in groups[k]) + "</ul>"
@@ -167,7 +182,7 @@ def module_page(m, mods):
   body = f"""<nav class="pn top">{prev}{nxt}</nav><p class="crumb"><a href="../index.html#{p[0]}">{p[1]} · {p[2]}</a>{cw}</p>
 <h1><span class="num">{i:02d}</span>{E(m["title"])}</h1>
 <p class="lede">{E(m.get("why"))}</p>
-{f'<p class="mmeta">{meta}</p>' if meta else ''}
+<div class="mhead">{f'<p class="mmeta">{meta}</p>' if meta else ''}{f'<button class="mark" type="button" data-mod="{i}">Mark module done</button>' if PREVIEW else ''}</div>
 <nav class="toc"><a href="#steps">Steps</a><a href="#build">Build</a>{'<a href="#project">Project</a>' if proj else ''}<a href="#help">Help</a>{'<a href="#deeper">Go deeper</a>' if (deeper or extra or m.get("stretch")) else ''}</nav>
 {f'<h2>After this module you can</h2><ul class="check">{outcomes}</ul>' if outcomes else ''}
 <h2 id="steps">Steps</h2><p class="hint">Work through these in order. Each step points at one specific unit.</p>
@@ -175,23 +190,25 @@ def module_page(m, mods):
 <h2 id="build">Build</h2><div class="build">{numbered(m.get("build"))}</div>
 {proj}
 <h2 id="help">Help</h2>
-{f'<h3>If you get stuck</h3><ul class="check">{stuck}</ul>' if stuck else ''}
-{f'<h3>Ready to move on when</h3><ul class="check">{check}</ul>' if check else ''}
+{f'<div class="callout stuck"><h3>If you get stuck</h3><ul class="check">{stuck}</ul></div>' if stuck else ''}
+{f'<div class="callout ready"><h3>Ready to move on when</h3><ul class="check">{check}</ul></div>' if check else ''}
 {f'<details><summary>Reference implementations ({len(m.get("solutions", []))})</summary><p class="hint">Make a real attempt first. When you are stuck, or after you finish, compare your work with these.</p><ul class="extra">{sol}</ul></details>' if sol else ''}
 {'<h2 id="deeper">Go deeper <span class="n">(optional)</span></h2>' if (deeper or extra or m.get("stretch")) else ''}
 {f'<details><summary>Talks, papers, code and writing ({len(m.get("deeper", [])) + len(m.get("extra", []))})</summary>{deeper}' + (f'<h3>More reading</h3><ul class="extra">{extra}</ul>' if extra else '') + '</details>' if (deeper or extra) else ''}
 {f'<details><summary>Stretch project</summary><div class="build">{numbered(m.get("stretch"))}</div></details>' if m.get("stretch") else ''}
 <nav class="pn">{prev}{nxt}</nav>"""
-  return page(f'{i:02d} {m["title"]} · ML Compilers From Zero', body, 1)
+  html_ = page(f'{i:02d} {m["title"]} · ML Compilers From Zero', body, 1, "", p[0])
+  return html_.replace(f'<a data-mod="{i}" ', f'<a data-mod="{i}" class="cur" aria-current="page" ', 1)
 
 def index(mods):
   parts = ""
   for pid, pn, name, rng, blurb in PARTS:
     rows = "".join(
-      f'<li><a href="modules/{i:02d}.html"><span class="num">{i:02d}</span>{E(mods[i]["title"])}</a>'
+      f'<li><a href="modules/{i:02d}.html" data-mod="{i}"><span class="num">{i:02d}</span>{E(mods[i]["title"])}</a>'
       f'<span class="meta">{E((mods[i].get("effort") or "").split(" (")[0] or str(len(mods[i]["steps"])) + " steps")}{" · " + "●"*int(mods[i]["difficulty"]) if mods[i].get("difficulty") else ""}</span></li>'
       for i in rng if i in mods)
-    parts += f'<section id="{pid}"><h2>{pn} · {name}</h2><p class="sub">{E(blurb)}</p><ol class="mods">{rows}</ol></section>'
+    pp = f' <span class="pp" data-part-progress="{",".join(str(i) for i in rng)}"></span>' if PREVIEW else ""
+    parts += f'<section id="{pid}"><h2>{pn} · {name}{pp}</h2><p class="sub">{E(blurb)}</p><ol class="mods">{rows}</ol></section>'
   body = f"""<h1>ML Compilers From Zero</h1>
 <p class="lede">A free, self-paced path from intermediate Python and basic C to writing your own machine-learning compiler, modelled on CMU 10-411 <i>Compilers for Machine Learning</i>. Every module is a short, ordered list of specific lectures, chapters, problems and projects. Each one ends with something you build.</p>
 <h2>How to use this</h2>
@@ -205,6 +222,11 @@ def index(mods):
 <li><b>Write the code yourself.</b> Use AI to explain things and to debug, not to write your compiler. The real course has the same rule.</li>
 </ul>
 <div id="modules">{parts}</div>"""
+  if PREVIEW:  # table of contents first, how-to folded below
+    head, rest = body.split("<h2>How to use this</h2>")
+    how, mods_ = rest.split('<div id="modules">')
+    body = (head + '<p class="progress" data-progress></p><div id="modules">' + mods_
+            + '<details class="how-box"><summary>How to use this course</summary>' + how + "</details>")
   return page("ML Compilers From Zero", body, 0, "modules")
 
 def portfolio(mods):
@@ -283,11 +305,32 @@ def static(name):
 
 def main():
   mods = load()
+  if PREVIEW:
+    for d in (0, 1):
+      up = "../" * d
+      groups = "".join(
+        f'<li><p>{E(pn)} · {E(name)}</p><ol>' + "".join(
+          f'<li><a data-mod="{i}" href="{up}modules/{i:02d}.html"><span class="num">{i:02d}</span>{E(mods[i]["title"])}</a></li>' for i in rng if i in mods) + "</ol></li>"
+        for pid, pn, name, rng, _ in PARTS)
+      MAP[d] = f'<aside class="map" aria-label="Course map"><ol>{groups}</ol></aside>'
   KILN.update({i: m["project"]["version"] for i, m in mods.items() if m.get("project", {}).get("track") == "main"})
   if os.path.exists(OUT): shutil.rmtree(OUT)
   os.makedirs(os.path.join(OUT, "modules"))
   w = lambda p, s: open(os.path.join(OUT, p), "w").write(s)
-  w("style.css", static("style.css"))
+  w("style.css", static(STYLE))
+  if PREVIEW:
+    w("app.js", static("app.js"))
+    idx = []
+    for i, m in mods.items():
+      u = f"modules/{i:02d}.html"; mt = f"Module {i:02d} · {m['title']}"
+      body_txt = " ".join([m.get("why", ""), m.get("build", ""), m.get("stretch", "")] + m.get("outcomes", []) + m.get("check", []) + m.get("stuck", [])).replace("`", "")
+      idx.append({"k": "module", "t": f"{i:02d} {m['title']}", "m": m.get("why", "")[:120].replace("`", ""), "u": u, "x": body_txt})
+      for st in m.get("steps", []): idx.append({"k": st.get("kind", "step"), "t": st["title"], "m": mt, "u": u + "#steps", "x": st.get("detail", "").replace("`", "")})
+      pr = m.get("project") or {}
+      if pr.get("title"): idx.append({"k": "project", "t": pr["title"], "m": mt, "u": u + "#project"})
+      for x in m.get("deeper", []) + m.get("solutions", []):
+        if x.get("url"): idx.append({"k": x.get("kind", "code"), "t": x["title"] + (" · " + x["by"] if x.get("by") else ""), "m": mt, "u": x["url"]})
+    w("search.json", json.dumps(idx, ensure_ascii=False))
   w(".nojekyll", "")
   w("index.html", index(mods))
   w("assignments.html", assignments())
