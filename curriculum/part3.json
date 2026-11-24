@@ -2524,6 +2524,13 @@
     "by": "Hazy Research",
     "url": "https://hazyresearch.stanford.edu/blog/2026-02-19-tk-2",
     "note": "Lessons from Blackwell kernels, including the measured cost of `tcgen05` fences; useful for seeing where the last 10-20% of throughput goes."
+   },
+   {
+    "kind": "assignment",
+    "title": "CS336 Assignment 2: Systems (FlashAttention-2 in Triton, profiling, DDP, sharded optimizer)",
+    "by": "Stanford CS336 (Hashimoto, Liang)",
+    "url": "https://github.com/stanford-cs336/assignment2-systems",
+    "note": "Optional. Its Triton FlashAttention-2 forward and backward with tests is a good check on your own kernel."
    }
   ],
   "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, `wgmma` or `tcgen05`, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at `8192^3` and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."

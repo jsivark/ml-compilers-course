@@ -2276,6 +2276,27 @@
     "by": "MIT",
     "url": "https://introtodeeplearning.com/2025/index.html",
     "note": "Short recorded lectures with labs; a quick refresher on the overall landscape before the CNN project."
+   },
+   {
+    "kind": "course",
+    "title": "CS312 Deep Learning Alchemy: lectures 2-6 (basics, scaling, optimization, µP, Muon, loss landscapes)",
+    "by": "Stanford CS312 (Hashimoto, Kotha)",
+    "url": "https://deep-learning-alchemy.github.io/",
+    "note": "Optional. Predict-then-check view of why training works; take the Basics quiz (quiz-basics.html) cold first, then check the answer slides."
+   },
+   {
+    "kind": "assignment",
+    "title": "CS312 A1 Basics: hyperparameter tuning and scaling",
+    "by": "Stanford CS312 (Hashimoto, Kotha)",
+    "url": "https://github.com/deep-learning-alchemy/assignments/tree/a1_release",
+    "note": "Optional, needs a GPU. Handout: https://deep-learning-alchemy.github.io/assets/assignments/a1_basics.pdf. Do it if you want hands-on LR and batch-size sweeps on a small LM."
+   },
+   {
+    "kind": "assignment",
+    "title": "CS312 A2-A3: hyperparameter invariants and loss landscapes",
+    "by": "Stanford CS312 (Hashimoto, Kotha)",
+    "url": "https://github.com/deep-learning-alchemy/assignments/tree/a2_release",
+    "note": "Optional. A3 is on branch a3_release. Pairs with the Muon readings above."
    }
   ],
   "stretch": "Speedrun CIFAR-10 on your own framework: reach 94% test accuracy with the fewest GPU-seconds (or CPU-minutes) you can, porting airbench tricks one at a time. Publish an ablation table with time-to-94% per trick and the gap to airbench94 running in PyTorch on the same hardware."
@@ -2585,6 +2606,20 @@
     "by": "Sebastian Raschka",
     "url": "https://magazine.sebastianraschka.com/p/coding-the-kv-cache-in-llms",
     "note": "Adds a KV cache to a small GPT with and without-cache scripts; use it to check your GPT-2 engine produces identical tokens with the cache on."
+   },
+   {
+    "kind": "assignment",
+    "title": "CS312 A4-A5: stability across depth/time, extending model capacity",
+    "by": "Stanford CS312 (Hashimoto, Kotha)",
+    "url": "https://github.com/deep-learning-alchemy/assignments/tree/a4_release",
+    "note": "Optional. A5 is on branch a5_release. Lectures 7-9 cover residual signal propagation, attention vs SSMs, depth vs width."
+   },
+   {
+    "kind": "assignment",
+    "title": "CS336 Assignment 1: Basics (BPE tokenizer, transformer LM, AdamW, training loop)",
+    "by": "Stanford CS336 (Hashimoto, Liang)",
+    "url": "https://github.com/stanford-cs336/assignment1-basics",
+    "note": "Optional alternative to the GPT-2 reproduction: graded tests for every component."
    }
   ],
   "stretch": "Add batched decoding and grouped-query or multi-query style KV sharing to your C engine, then write a roofline plot of decode tokens/s vs batch size from 1 to 64. Show where decode crosses from memory-bound to compute-bound, and stay within 70% of the bandwidth bound at batch 1."

@@ -1383,6 +1383,13 @@
     "by": "NVIDIA",
     "url": "https://arxiv.org/abs/2509.25149",
     "note": "How 4-bit training is made to match FP8: 16-element blocks, E4M3 scales, stochastic rounding and Hadamard transforms."
+   },
+   {
+    "kind": "course",
+    "title": "MIT 6.5940 TinyML and Efficient Deep Learning (EfficientML.ai)",
+    "by": "Song Han",
+    "url": "https://efficientml.ai/",
+    "note": "Optional. Lectures and labs on quantization, pruning and efficient LLM inference."
    }
   ],
   "stretch": "Implement a QuaRot-style rotation plus your MXFP4 emulator and get Llama-3.2-1B W4A4 within 1.0 WikiText-2 perplexity of bf16. Write a fused Triton kernel for the rotated W4A4 matmul and report tokens/s against your W4A16 kernel."
@@ -1882,6 +1889,13 @@
     "by": "Hugging Face",
     "url": "https://github.com/huggingface/nanotron",
     "note": "Small, readable 3D-parallel (data, tensor, pipeline) pretraining library; read the parallel/ directory alongside the Ultra-Scale Playbook to see each sharding scheme in code."
+   },
+   {
+    "kind": "assignment",
+    "title": "CS336 Assignment 2: Systems, part 2 (DDP, bucketing, optimizer state sharding)",
+    "by": "Stanford CS336 (Hashimoto, Liang)",
+    "url": "https://github.com/stanford-cs336/assignment2-systems",
+    "note": "Optional. Small hands-on version of the data-parallel ideas in this module."
    }
   ],
   "stretch": "Implement a ZeRO++ or DualPipe-style overlap in your library and show a measured MFU gain over your 1F1B baseline on 8 GPUs, with traces showing the hidden communication. Add an automatic planner that predicts the best (dp, tp, pp) split from your cost model and matches the empirically best config on 3 model sizes."
