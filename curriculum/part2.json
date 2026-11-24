@@ -15,14 +15,14 @@
     "kind": "do",
     "title": "Crafting Interpreters ch. 4 Scanning",
     "url": "https://craftinginterpreters.com/scanning.html",
-    "detail": "Port jlox's scanner to Python and print the token stream for a few sample files. Do challenge 4 (C-style /* ... */ block comments, optionally nested).",
+    "detail": "Port jlox's scanner to Python and print the token stream for a few sample files. Do challenge 4 (C-style `/* ... */` block comments, optionally nested).",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "Crafting Interpreters ch. 5 Representing Code",
     "url": "https://craftinginterpreters.com/representing-code.html",
-    "detail": "Focus on the grammar notation and the Visitor pattern; in Python, dataclasses plus match statements replace the generated AST classes.",
+    "detail": "Focus on the grammar notation and the Visitor pattern; in Python, dataclasses plus `match` statements replace the generated AST classes.",
     "bot_block": false
    },
    {
@@ -50,7 +50,7 @@
     "kind": "do",
     "title": "Crafting Interpreters ch. 9 Control Flow and ch. 10 Functions",
     "url": "https://craftinginterpreters.com/control-flow.html",
-    "detail": "Add if/while/for (for desugars to while), then functions and closures (ch. 10). Ch. 10 adds the native clock() and a recursive fib example; keep it as your benchmark.",
+    "detail": "Add `if/while/for` (for desugars to while), then functions and closures (ch. 10). Ch. 10 adds the native `clock()` and a recursive `fib` example; keep it as your benchmark.",
     "bot_block": false
    },
    {
@@ -78,15 +78,15 @@
     "kind": "build",
     "title": "Measure tree-walk vs bytecode",
     "url": "https://craftinginterpreters.com/contents.html",
-    "detail": "If you stopped at ch. 17, time both implementations on the same large generated arithmetic expression evaluated many times. If you reached ch. 24, time fib(30) in both. Record the numbers for the write-up.",
+    "detail": "If you stopped at ch. 17, time both implementations on the same large generated arithmetic expression evaluated many times. If you reached ch. 24, time `fib(30)` in both. Record the numbers for the write-up.",
     "bot_block": false
    }
   ],
-  "build": "A Python tree-walking interpreter for a Lox subset (expressions, variables, blocks, if/while/for, functions with closures) with a resolver pass, plus a C bytecode VM that evaluates arithmetic expressions through a Pratt compiler; include a test directory of .lox programs with expected outputs and a runner script.",
+  "build": "A Python tree-walking interpreter for a Lox subset (expressions, variables, blocks, `if/while/for`, functions with closures) with a resolver pass, plus a C bytecode VM that evaluates arithmetic expressions through a Pratt compiler; include a test directory of `.lox` programs with expected outputs and a runner script.",
   "check": [
-   "Your parser reports an error on 'print (1 + ;' and continues parsing the next statement",
-   "Closures work: a makeCounter() function returns counters that increment independently",
-   "The resolver reports \"Can't read local variable in its own initializer.\" for 'var a = a;' in a local scope",
+   "Your parser reports an error on '`print (1 + ;`' and continues parsing the next statement",
+   "Closures work: a `makeCounter()` function returns counters that increment independently",
+   "The resolver reports \"Can't read local variable in its own initializer.\" for '`var a = a;`' in a local scope",
    "You have a timing table comparing your Python tree-walker and C clox on the same input"
   ],
   "extra": [
@@ -119,11 +119,11 @@
    "brief": "Extend your tree-walking interpreter with a compiler to a stack-based bytecode and a dispatch-loop VM (in Python first, optionally C). Use the tree-walker as an oracle: a fuzzer generates random programs and asserts both produce identical output. Measure where the speedup comes from (dispatch, environment lookups vs local slots, constant folding at compile time).",
    "deliverables": [
     "repo with scanner, parser, tree-walker, bytecode compiler, VM, and a differential fuzzer",
-    "README with a benchmark table (fib(25), loops, string concat) for tree-walk vs VM, plus a disassembler output example",
+    "README with a benchmark table (`fib(25)`, loops, string concat) for tree-walk vs VM, plus a disassembler output example",
     "a 600–1200 word write-up explaining the bytecode design, local-slot resolution, and what profiling showed about dispatch overhead"
    ],
    "rubric": {
-    "solid": "VM passes every tree-walker test plus 1,000 fuzzed programs with zero divergences; at least 3x faster than the tree-walker on fib(25) in the same language.",
+    "solid": "VM passes every tree-walker test plus 1,000 fuzzed programs with zero divergences; at least 3x faster than the tree-walker on `fib(25)` in the same language.",
     "exceptional": "C VM with computed-goto dispatch, superinstructions justified by an opcode-pair frequency profile, 20x+ speedup, and a fuzzer bug found and documented."
    },
    "references": [
@@ -138,13 +138,13 @@
    {
     "title": "jlox reference source (Java)",
     "url": "https://github.com/munificent/craftinginterpreters/tree/master/java/com/craftinginterpreters/lox",
-    "note": "Robert Nystrom's finished tree-walking interpreter: Scanner, Parser, Interpreter, Resolver and Environment classes to diff against your Python port.",
+    "note": "Robert Nystrom's finished tree-walking interpreter: `Scanner`, `Parser`, `Interpreter`, `Resolver` and `Environment` classes to diff against your Python port.",
     "for": "ch. 4-11 tree-walker and resolver"
    },
    {
     "title": "clox reference source (C)",
     "url": "https://github.com/munificent/craftinginterpreters/tree/master/c",
-    "note": "The complete clox VM, compiler and scanner; compare chunk.c, vm.c and compiler.c with yours chapter by chapter.",
+    "note": "The complete clox VM, compiler and scanner; compare `chunk.c`, `vm.c` and `compiler.c` with yours chapter by chapter.",
     "for": "ch. 14-17 bytecode VM and Pratt compiler"
    },
    {
@@ -156,7 +156,7 @@
    {
     "title": "Crafting Interpreters test suite",
     "url": "https://github.com/munificent/craftinginterpreters/tree/master/test",
-    "note": "Hundreds of .lox programs with expected output and error annotations, ready to drive your own test runner.",
+    "note": "Hundreds of `.lox` programs with expected output and error annotations, ready to drive your own test runner.",
     "for": "build: test directory and runner"
    }
   ],
@@ -173,7 +173,7 @@
     "title": "Pratt Parsers: Expression Parsing Made Easy",
     "by": "Robert Nystrom",
     "url": "https://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/",
-    "note": "The original explanation of the parselet design clox uses; focus on how precedence is passed into parseExpression."
+    "note": "The original explanation of the parselet design clox uses; focus on how precedence is passed into `parseExpression`."
    },
    {
     "kind": "paper",
@@ -208,7 +208,7 @@
     "title": "wren",
     "by": "Robert Nystrom and contributors",
     "url": "https://github.com/wren-lang/wren",
-    "note": "A production-quality descendant of clox's design; read src/vm/wren_vm.c to see NaN boxing and fibers in a real VM."
+    "note": "A production-quality descendant of clox's design; read `src/vm/wren_vm.c` to see NaN boxing and fibers in a real VM."
    },
    {
     "kind": "blog",
@@ -260,7 +260,7 @@
     "note": "Shows with benchmarks how storing an AST in a flat array with integer indices speeds up a tree-walking interpreter; read the measurements and the arena discussion."
    }
   ],
-  "stretch": "Turn clox into a register-based VM (Lua 5.0 style) with computed-goto dispatch and NaN boxing, keeping the full Crafting Interpreters test suite green. Report fib(35) and a loop-heavy benchmark against stock clox and CPython 3, and break down the speedup by each change."
+  "stretch": "Turn clox into a register-based VM (Lua 5.0 style) with computed-goto dispatch and NaN boxing, keeping the full Crafting Interpreters test suite green. Report `fib(35)` and a loop-heavy benchmark against stock clox and CPython 3, and break down the speedup by each change."
  },
  {
   "id": 11,
@@ -271,21 +271,21 @@
     "kind": "read",
     "title": "x86 Assembly Guide (UVA CS216)",
     "url": "https://www.cs.virginia.edu/~evans/cs216/guides/x86.html",
-    "detail": "The guide covers 32-bit x86 registers and mov/push/pop/call/ret; the test suite needs x86-64, so also compile tiny C programs on Compiler Explorer with x86-64 gcc -O0 and read the output.",
+    "detail": "The guide covers 32-bit x86 registers and `mov/push/pop/call/ret`; the test suite needs x86-64, so also compile tiny C programs on Compiler Explorer with x86-64 `gcc -O0` and read the output.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Install the test suite and run --check-setup",
     "url": "https://github.com/nlsandler/writing-a-c-compiler-tests",
-    "detail": "Clone nlsandler/writing-a-c-compiler-tests and run './test_compiler --check-setup'. The suite follows the book's chapters, not the blog: it needs an x86-64 toolchain (native on Intel/AMD Linux and in WSL; Rosetta on Apple Silicon Macs; an x86-64 VM or container on ARM Linux), 'int main(void)', and the gcc-like driver plus --lex/--parse/--validate/--tacky/--codegen stage flags described in the README.",
+    "detail": "Clone `nlsandler/writing-a-c-compiler-tests` and run '`./test_compiler --check-setup`'. The suite follows the book's chapters, not the blog: it needs an x86-64 toolchain (native on Intel/AMD Linux and in WSL; Rosetta on Apple Silicon Macs; an x86-64 VM or container on ARM Linux), '`int main(void)`', and the gcc-like driver plus `--lex/--parse/--validate/--tacky/--codegen` stage flags described in the README.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Sandler Part 1: Integers -> run './test_compiler ./mycc --chapter 1'",
     "url": "https://norasandler.com/2017/11/29/Write-a-Compiler.html",
-    "detail": "Lexer, parser and code emission for 'int main(void){return 2;}'. The blog emits 32-bit x86; Part 1 itself recommends adapting to 64-bit, and the suite requires it. Use --latest-only while iterating, then rerun without it to catch regressions.",
+    "detail": "Lexer, parser and code emission for '`int main(void){return 2;}`'. The blog emits 32-bit x86; Part 1 itself recommends adapting to 64-bit, and the suite requires it. Use `--latest-only` while iterating, then rerun without it to catch regressions.",
     "bot_block": false
    },
    {
@@ -299,14 +299,14 @@
     "kind": "do",
     "title": "Sandler Part 3: Binary Operators -> run './test_compiler ./mycc --chapter 3'",
     "url": "https://norasandler.com/2017/12/15/Write-a-Compiler-3.html",
-    "detail": "Add + - * /. The blog rewrites the grammar into exp/term/factor levels; the chapter 3 tests also include % (mod.c). Intermediate values live on the stack (push/pop).",
+    "detail": "Add `+ - * /`. The blog rewrites the grammar into `exp/term/factor` levels; the chapter 3 tests also include `%` (`mod.c`). Intermediate values live on the stack (`push/pop`).",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Sandler Part 4: Even More Binary Operators -> run './test_compiler ./mycc --chapter 4'",
     "url": "https://norasandler.com/2017/12/28/Write-a-Compiler-4.html",
-    "detail": "Add relational and short-circuiting && and ||, using labels and conditional jumps.",
+    "detail": "Add relational and short-circuiting `&&` and `||`, using labels and conditional jumps.",
     "bot_block": false
    },
    {
@@ -320,7 +320,7 @@
     "kind": "do",
     "title": "Sandler Part 6: Conditionals -> run './test_compiler ./mycc --chapter 6'",
     "url": "https://norasandler.com/2018/02/25/Write-a-Compiler-6.html",
-    "detail": "if statements and the ternary operator.",
+    "detail": "`if` statements and the ternary operator.",
     "bot_block": false
    },
    {
@@ -334,29 +334,29 @@
     "kind": "do",
     "title": "Sandler Part 8: Loops -> run './test_compiler ./mycc --chapter 8'",
     "url": "https://norasandler.com/2018/04/10/Write-a-Compiler-8.html",
-    "detail": "for, while and do loops plus break and continue; track the current loop's labels.",
+    "detail": "`for`, `while` and `do` loops plus `break` and `continue`; track the current loop's labels.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Sandler Part 9: Functions -> run './test_compiler ./mycc --chapter 9'",
     "url": "https://norasandler.com/2018/06/27/Write-a-Compiler-9.html",
-    "detail": "The blog uses the 32-bit cdecl convention; implement the x86-64 System V convention instead (first six integer arguments in registers, 16-byte stack alignment at call). The chapter 9 tests include 'libraries' cases that link your code with gcc-compiled C.",
+    "detail": "The blog uses the 32-bit `cdecl` convention; implement the x86-64 System V convention instead (first six integer arguments in registers, 16-byte stack alignment at call). The chapter 9 tests include 'libraries' cases that link your code with gcc-compiled C.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Sandler Part 10: Global Variables (optional; chapter 10 tests need static/extern)",
     "url": "https://norasandler.com/2019/02/18/Write-a-Compiler-10.html",
-    "detail": "File-scope variables in .data/.bss. The suite's chapter 10 tests also require static and extern, which the blog does not cover; treat chapter 10 as optional.",
+    "detail": "File-scope variables in `.data/.bss`. The suite's chapter 10 tests also require `static` and `extern`, which the blog does not cover; treat chapter 10 as optional.",
     "bot_block": false
    }
   ],
-  "build": "mycc: a Python C-subset compiler (int returns, unary/binary/relational/logical ops including %, locals, if/ternary, blocks, loops with break/continue, functions) emitting x86-64 assembly and passing './test_compiler ./mycc --chapter 9', plus a README mapping each blog part to commit hashes.",
+  "build": "`mycc`: a Python C-subset compiler (int returns, unary/binary/relational/logical ops including `%`, locals, `if/ternary`, blocks, loops with `break/continue`, functions) emitting x86-64 assembly and passing '`./test_compiler ./mycc --chapter 9`', plus a README mapping each blog part to commit hashes.",
   "check": [
-   "'./test_compiler ./mycc --chapter 9' passes with zero failures",
-   "The chapter 9 'libraries' tests pass, so mycc functions link with gcc-compiled C in both directions",
-   "You can draw the stack frame of a call with 8 int arguments and say which arguments are in registers and which are on the stack",
+   "'`./test_compiler ./mycc --chapter 9`' passes with zero failures",
+   "The chapter 9 'libraries' tests pass, so `mycc` functions link with gcc-compiled C in both directions",
+   "You can draw the stack frame of a call with 8 `int` arguments and say which arguments are in registers and which are on the stack",
    "Invalid programs (undeclared variable, break outside a loop) exit nonzero and write no assembly file"
   ],
   "extra": [
@@ -368,7 +368,7 @@
    {
     "title": "Compiler Explorer",
     "url": "https://godbolt.org/",
-    "note": "Compare your output to gcc -O0 and -O2 for each feature."
+    "note": "Compare your output to `gcc -O0` and `-O2` for each feature."
    }
   ],
   "effort": "40–60 h (10 blog parts at 3-5 h each, plus porting from 32-bit to x86-64)",
@@ -379,22 +379,22 @@
    "Use the book test suite's stage flags to localize a failure to the lexer, parser, validator or code generator."
   ],
   "stuck": [
-   "Segfault on call: rsp must be 16-byte aligned at the call instruction (System V ABI).",
-   "Values clobbered after a call: caller-saved registers (rax, rcx, rdx, rsi, rdi, r8-r11) are not preserved.",
-   "Blog examples use int main() and 32-bit registers; the suite expects int main(void) and x86-64.",
-   "The suite refuses native arm64. On Apple Silicon Macs run it and gcc under Rosetta ('arch -x86_64 zsh'), and remember Mach-O symbols need a leading underscore. On ARM Linux use an x86-64 VM or container. Intel/AMD Linux and WSL work as is."
+   "Segfault on `call`: `rsp` must be 16-byte aligned at the `call` instruction (System V ABI).",
+   "Values clobbered after a call: caller-saved registers (`rax`, `rcx`, `rdx`, `rsi`, `rdi`, `r8-r11`) are not preserved.",
+   "Blog examples use `int main()` and 32-bit registers; the suite expects `int main(void)` and x86-64.",
+   "The suite refuses native arm64. On Apple Silicon Macs run it and gcc under Rosetta ('`arch -x86_64 zsh`'), and remember Mach-O symbols need a leading underscore. On ARM Linux use an x86-64 VM or container. Intel/AMD Linux and WSL work as is."
   ],
   "project": {
    "title": "mycc, stage 1: Three-address IR and peephole pass for mycc, measured against naive codegen",
-   "brief": "Insert a TACKY-style three-address IR between the AST and assembly, give each temporary a stack slot, and add a peephole pass (drop push/pop pairs, redundant movs, jumps to the next label). Measure static instruction counts of the emitted assembly on the suite's chapter 1-9 valid programs before and after.",
+   "brief": "Insert a TACKY-style three-address IR between the AST and assembly, give each temporary a stack slot, and add a peephole pass (drop `push/pop` pairs, redundant movs, jumps to the next label). Measure static instruction counts of the emitted assembly on the suite's chapter 1-9 valid programs before and after.",
    "deliverables": [
-    "repo with mycc, the IR stage, the peephole pass, and a script that counts emitted instructions per test program",
-    "README table: instructions per program for naive codegen, IR codegen, IR plus peephole, and gcc -O0",
+    "repo with `mycc`, the IR stage, the peephole pass, and a script that counts emitted instructions per test program",
+    "README table: instructions per program for naive codegen, IR codegen, IR plus peephole, and `gcc -O0`",
     "a 600–1200 word write-up on the IR design and which peephole rules paid off"
    ],
    "rubric": {
     "solid": "All chapter 1-9 tests still pass and total emitted instructions drop by at least 25% versus the naive stack codegen.",
-    "exceptional": "Also passes with --bitwise --compound, and comes within 1.2x of gcc -O0 instruction count on the chapter 9 valid programs."
+    "exceptional": "Also passes with `--bitwise --compound`, and comes within 1.2x of `gcc -O0` instruction count on the chapter 9 valid programs."
    },
    "references": [
     {
@@ -430,7 +430,7 @@
    {
     "title": "8cc",
     "url": "https://github.com/rui314/8cc",
-    "note": "Rui Ueyama's earlier self-hosting C compiler; gen.c shows a complete x86-64 System V argument-passing implementation.",
+    "note": "Rui Ueyama's earlier self-hosting C compiler; `gen.c` shows a complete x86-64 System V argument-passing implementation.",
     "for": "Part 9 calling convention"
    }
   ],
@@ -447,7 +447,7 @@
     "title": "CppCon 2017: Matt Godbolt \"What Has My Compiler Done for Me Lately? Unbolting the Compiler's Lid\"",
     "by": "CppCon",
     "url": "https://www.youtube.com/watch?v=bSkpMdDe4g4",
-    "note": "Shows what gcc and clang actually emit for common C patterns at -O0 vs -O2; watch it before comparing mycc output to gcc."
+    "note": "Shows what gcc and clang actually emit for common C patterns at `-O0` vs `-O2`; watch it before comparing `mycc` output to gcc."
    },
    {
     "kind": "book",
@@ -482,7 +482,7 @@
     "title": "x86 and amd64 instruction reference",
     "by": "Felix Cloutier",
     "url": "https://www.felixcloutier.com/x86/",
-    "note": "Searchable HTML of the Intel manual; look up idiv, cqo, setcc and movzx as you emit them."
+    "note": "Searchable HTML of the Intel manual; look up `idiv`, `cqo`, `setcc` and `movzx` as you emit them."
    },
    {
     "kind": "repo",
@@ -548,7 +548,7 @@
     "note": "Instruction selection, scheduling and graph-coloring register allocation in one deck."
    }
   ],
-  "stretch": "Add a register allocator (linear scan or graph coloring with coalescing) and a TACKY-style three-address IR to mycc, then pass the book suite through chapter 20. Measure runtime and instruction count against your stack-machine output and gcc -O0/-O1 on 5 compute-heavy C programs."
+  "stretch": "Add a register allocator (linear scan or graph coloring with coalescing) and a TACKY-style three-address IR to `mycc`, then pass the book suite through chapter 20. Measure runtime and instruction count against your stack-machine output and `gcc -O0/-O1` on 5 compute-heavy C programs."
  },
  {
   "id": 12,
@@ -559,21 +559,21 @@
     "kind": "watch",
     "title": "CS6120 Lesson 1: Welcome & Overview",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/1/",
-    "detail": "Read the lesson and the self-guided page (cs6120/2020fa/self-guided/), which explains how to do the course without enrollment.",
+    "detail": "Read the lesson and the self-guided page (`cs6120/2020fa/self-guided/`), which explains how to do the course without enrollment.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "CS6120 Lesson 2: Representing Programs -- video + task",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/2/",
-    "detail": "Install bril2json and brili. Do the task: write a Bril benchmark, and write a small tool that loads Bril JSON (for example, counts add instructions). Then form basic blocks and a CFG as the lesson derives.",
+    "detail": "Install `bril2json` and `brili`. Do the task: write a Bril benchmark, and write a small tool that loads Bril JSON (for example, counts `add` instructions). Then form basic blocks and a CFG as the lesson derives.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "CS6120 Lesson 3: Local Analysis & Optimization -- video + task",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/3/",
-    "detail": "Implement trivial dead code elimination (iterate to convergence) and local value numbering. Compare dynamic instruction counts with 'brili -p' on the benchmarks.",
+    "detail": "Implement trivial dead code elimination (iterate to convergence) and local value numbering. Compare dynamic instruction counts with '`brili -p`' on the benchmarks.",
     "bot_block": false
    },
    {
@@ -594,7 +594,7 @@
     "kind": "do",
     "title": "CS6120 Lesson 5 task part 2: into and out of SSA",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/5/",
-    "detail": "Implement into-SSA and out-of-SSA. Check SSA form with the lesson's is_ssa.py and run the midpoint under brili, which supports phi. Watch for variables undefined on some paths.",
+    "detail": "Implement into-SSA and out-of-SSA. Check SSA form with the lesson's `is_ssa.py` and run the midpoint under `brili`, which supports `phi`. Watch for variables undefined on some paths.",
     "bot_block": false
    },
    {
@@ -615,22 +615,22 @@
     "kind": "watch",
     "title": "CS6120 Lesson 11: Dynamic Compilers",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/11/",
-    "detail": "Watch the lecture. The task is a trace-based speculative optimizer for Bril: modify brili to record a trace and reinject it with the speculation extension. Lessons 8-10 are optional.",
+    "detail": "Watch the lecture. The task is a trace-based speculative optimizer for Bril: modify `brili` to record a trace and reinject it with the speculation extension. Lessons 8-10 are optional.",
     "bot_block": false
    },
    {
     "kind": "build",
     "title": "Lower your Module 11 compiler through a Bril-like IR",
     "url": "https://capra.cs.cornell.edu/bril/",
-    "detail": "Read the Bril language reference, then add a three-address IR stage to mycc from Module 11 and run your TDCE/LVN passes before codegen.",
+    "detail": "Read the Bril language reference, then add a three-address IR stage to `mycc` from Module 11 and run your TDCE/LVN passes before codegen.",
     "bot_block": false
    }
   ],
-  "build": "A Python optimizer for Bril with CFG construction, a worklist dataflow solver, dominators, into/out of SSA, TDCE+LVN and LICM; a script runs bril/benchmarks/core before and after and reports dynamic instruction counts from 'brili -p' with output checks.",
+  "build": "A Python optimizer for Bril with CFG construction, a worklist dataflow solver, dominators, into/out of SSA, TDCE+LVN and LICM; a script runs `bril/benchmarks/core` before and after and reports dynamic instruction counts from '`brili -p`' with output checks.",
   "check": [
-   "Every program in bril/benchmarks/core prints the same output before and after your passes",
-   "LVN on 'a = add x y; b = add y x' reuses a (requires the commutativity extension)",
-   "is_ssa.py accepts your into-SSA output, and SSA round-trips give identical brili output",
+   "Every program in `bril/benchmarks/core` prints the same output before and after your passes",
+   "LVN on '`a = add x y; b = add y x`' reuses `a` (requires the commutativity extension)",
+   "`is_ssa.py` accepts your into-SSA output, and SSA round-trips give identical `brili` output",
    "Your dominator tree for a hand-drawn nested-loop CFG matches a by-hand answer"
   ],
   "extra": [
@@ -661,11 +661,11 @@
    "Phi placement errors usually come from a wrong dominator tree: test dominators alone on hand-drawn CFGs first.",
    "Out-of-SSA with naive sequential copies hits the lost-copy and swap problems; the lesson links Boissinot et al. on correct translation.",
    "A non-terminating dataflow solver means a transfer function that is not monotone (lesson 4 theory section).",
-   "Run each pass alone and check brili output against the unoptimized program before combining passes."
+   "Run each pass alone and check `brili` output against the unoptimized program before combining passes."
   ],
   "project": {
    "title": "mycc, stage 2: An optimizing middle-end with a measured pass pipeline",
-   "brief": "Build an SSA middle-end on Bril with SCCP, GVN (the lesson 5 bonus), LICM and aggressive DCE, then study pass ordering. Report dynamic instruction counts from 'brili -p' on bril/benchmarks/core and check brili output equivalence after every pass.",
+   "brief": "Build an SSA middle-end on Bril with SCCP, GVN (the lesson 5 bonus), LICM and aggressive DCE, then study pass ordering. Report dynamic instruction counts from '`brili -p`' on `bril/benchmarks/core` and check `brili` output equivalence after every pass.",
    "deliverables": [
     "repo with IR, SSA construction/destruction, 4+ optimization passes and a pass manager",
     "README with a table of dynamic instruction counts per benchmark per pass and a pass-ordering heatmap",
@@ -691,7 +691,7 @@
    {
     "title": "Bril examples (official course reference code)",
     "url": "https://github.com/sampsyo/bril/tree/main/examples",
-    "note": "Adrian Sampson's own Python implementations used in lessons: tdce.py, lvn.py, df.py, dom.py, to_ssa.py, from_ssa.py and cfg utilities.",
+    "note": "Adrian Sampson's own Python implementations used in lessons: `tdce.py`, `lvn.py`, `df.py`, `dom.py`, `to_ssa.py`, `from_ssa.py` and cfg utilities.",
     "for": "Lessons 2-5 tasks"
    },
    {
@@ -713,7 +713,7 @@
     "title": "A Simple, Fast Dominance Algorithm",
     "by": "Keith Cooper, Timothy Harvey, Ken Kennedy",
     "url": "https://www.cs.tufts.edu/~nr/cs257/archive/keith-cooper/dom14.pdf",
-    "note": "The iterative dominator algorithm most compilers use; implement its intersect routine and compare to your set-based version."
+    "note": "The iterative dominator algorithm most compilers use; implement its `intersect` routine and compare to your set-based version."
    },
    {
     "kind": "paper",
@@ -800,7 +800,7 @@
     "note": "Practical criteria for designing an IR; compare them with the UOp graph you will build in Module 18."
    }
   ],
-  "stretch": "Implement SCCP, GVN-PRE (or GVN plus LICM) and Briggs-style out-of-SSA with parallel-copy sequentialization on Bril, then run a pass-ordering study: try all orderings of 4 passes over bril/benchmarks and report the best and worst dynamic instruction counts per benchmark. Explain at least two cases where order changes the result by more than 5%."
+  "stretch": "Implement SCCP, GVN-PRE (or GVN plus LICM) and Briggs-style out-of-SSA with parallel-copy sequentialization on Bril, then run a pass-ordering study: try all orderings of 4 passes over `bril/benchmarks` and report the best and worst dynamic instruction counts per benchmark. Explain at least two cases where order changes the result by more than 5%."
  },
  {
   "id": 13,
@@ -818,7 +818,7 @@
     "kind": "do",
     "title": "Write a lambda calculus interpreter with capture-avoiding substitution",
     "url": "https://en.wikipedia.org/wiki/Lambda_calculus",
-    "detail": "In Python, implement terms, capture-avoiding substitution and normal-order reduction; encode Church numerals and check that 2+3 reduces to 5.",
+    "detail": "In Python, implement terms, capture-avoiding substitution and normal-order reduction; encode Church numerals and check that `2+3` reduces to 5.",
     "bot_block": false
    },
    {
@@ -832,7 +832,7 @@
     "kind": "read",
     "title": "egg paper: Fast and Extensible Equality Saturation",
     "url": "https://arxiv.org/abs/2004.03082",
-    "detail": "Read the introduction, background and rebuilding sections; skim the case studies. The intro's (a*2)/2 example shows why destructive rewriting depends on rule order.",
+    "detail": "Read the introduction, background and rebuilding sections; skim the case studies. The intro's `(a*2)/2` example shows why destructive rewriting depends on rule order.",
     "bot_block": false
    },
    {
@@ -846,14 +846,14 @@
     "kind": "read",
     "title": "tinygrad docs: UOp",
     "url": "https://docs.tinygrad.org/developer/uop/",
-    "detail": "Read how tinygrad represents computation as UOp(op, src, arg) graphs. The pattern matcher is not documented there; read it in ops.py in the next step.",
+    "detail": "Read how tinygrad represents computation as `UOp(op, src, arg)` graphs. The pattern matcher is not documented there; read it in `ops.py` in the next step.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Write a pattern-rewrite engine for an expression DAG",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py",
-    "detail": "Read the UPat and PatternMatcher classes and graph_rewrite in this pinned ops.py, then write your own: patterns with wildcards, a fixed-point rewrite, and constant-folding and algebraic rules.",
+    "detail": "Read the `UPat` and `PatternMatcher` classes and `graph_rewrite` in this pinned `ops.py`, then write your own: patterns with wildcards, a fixed-point rewrite, and constant-folding and algebraic rules.",
     "bot_block": false
    },
    {
@@ -864,12 +864,12 @@
     "bot_block": false
    }
   ],
-  "build": "A Python rewrite toolkit with (1) a PatternMatcher-style greedy rewriter over a hash-consed expression DAG and (2) a mini e-graph with equality saturation and cost-based extraction, both applied to arithmetic/tensor-index expressions, with a report showing cases where saturation finds better results than greedy rewriting.",
+  "build": "A Python rewrite toolkit with (1) a `PatternMatcher`-style greedy rewriter over a hash-consed expression DAG and (2) a mini e-graph with equality saturation and cost-based extraction, both applied to arithmetic/tensor-index expressions, with a report showing cases where saturation finds better results than greedy rewriting.",
   "check": [
-   "Substituting y into (\\x.\\y.x) renames the bound y, giving \\y'.y",
-   "Church numeral 2+3 and 2*3 reduce to the normal forms of 5 and 6",
-   "Your e-graph proves (a*2)/2 == a with rules a*2->a<<1, (a*b)/c->a*(b/c), x/x->1, x*1->x, even though the shift rule also fires",
-   "Your greedy rewriter terminates on a rule set that contains a+b->b+a"
+   "Substituting `y` into `(\\x.\\y.x)` renames the bound `y`, giving `\\y'.y`",
+   "Church numeral `2+3` and `2*3` reduce to the normal forms of 5 and 6",
+   "Your e-graph proves `(a*2)/2 == a` with rules `a*2->a<<1`, `(a*b)/c->a*(b/c)`, `x/x->1`, `x*1->x`, even though the shift rule also fires",
+   "Your greedy rewriter terminates on a rule set that contains `a+b->b+a`"
   ],
   "extra": [
    {
@@ -888,17 +888,17 @@
   "outcomes": [
    "Implement capture-avoiding substitution and normal-order reduction.",
    "Build an e-graph with hashconsing, union-find, rebuilding and equality saturation, and extract terms with a cost function.",
-   "Explain where tinygrad's PatternMatcher and graph_rewrite get stuck that equality saturation does not."
+   "Explain where tinygrad's `PatternMatcher` and `graph_rewrite` get stuck that equality saturation does not."
   ],
   "stuck": [
-   "Rewrites looping on a+b->b+a need a termination ordering or an e-graph instead of destructive rewriting.",
+   "Rewrites looping on `a+b->b+a` need a termination ordering or an e-graph instead of destructive rewriting.",
    "E-graph blowup: set node and iteration limits; associativity plus commutativity together is the usual cause.",
    "Wrong results after unions mean congruence was not restored; follow the egg paper's rebuilding section.",
    "Substitution bugs are almost always variable capture: use de Bruijn indices or fresh names."
   ],
   "project": {
    "title": "kiln v0.6: an equality-saturation optimizer over the kiln graph",
-   "brief": "Build an e-graph optimizer that runs on the kiln graph IR, starting with its tensor algebra (matmul, add, transpose, elementwise ops) with 15+ rules such as transpose-of-transpose, (AB)^T = B^T A^T, matmul associativity and distributivity. Extract with a FLOP cost model and check it finds the optimal parenthesization for 10 matrix chains of length 4-6 (compare to the textbook O(n^3) dynamic program).",
+   "brief": "Build an e-graph optimizer that runs on the kiln graph IR, starting with its tensor algebra (matmul, add, transpose, elementwise ops) with 15+ rules such as transpose-of-transpose, `(AB)^T = B^T A^T`, matmul associativity and distributivity. Extract with a FLOP cost model and check it finds the optimal parenthesization for 10 matrix chains of length 4-6 (compare to the textbook `O(n^3)` dynamic program).",
    "deliverables": [
     "repo with e-graph core (union-find, hashcons, rebuild), 15+ rules, and cost-based extraction",
     "README with plots of e-graph size vs iterations and FLOP reductions on 10 test expressions, with numerical-equivalence checks in NumPy",
@@ -932,7 +932,7 @@
    {
     "title": "tinygrad symbolic rules (pinned)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/symbolic.py",
-    "note": "The real PatternMatcher rule sets for constant folding and algebraic simplification at the commit the module pins; check your greedy rules against these.",
+    "note": "The real `PatternMatcher` rule sets for constant folding and algebraic simplification at the commit the module pins; check your greedy rules against these.",
     "for": "pattern-rewrite engine step"
    },
    {
@@ -1069,25 +1069,25 @@
     "note": "Generalizes concrete rewrites into verified rules; read section 2 for how rules are generalized and checked."
    }
   ],
-  "stretch": "Replace one tinygrad PatternMatcher simplification stage with an egglog-backed equality-saturation pass over index expressions and measure on 50 real kernels (captured with DEBUG output) how many ALU ops the generated code saves and how much compile time it adds. Report node counts, saturation time and any rule that causes blowup."
+  "stretch": "Replace one tinygrad `PatternMatcher` simplification stage with an egglog-backed equality-saturation pass over index expressions and measure on 50 real kernels (captured with `DEBUG` output) how many ALU ops the generated code saves and how much compile time it adds. Report node counts, saturation time and any rule that causes blowup."
  },
  {
   "id": 14,
   "title": "Automatic differentiation",
-  "why": "ML compilers differentiate programs as a graph transformation. You build forward and reverse mode yourself, then read how JAX implements grad as linearize plus transpose on a traced IR (Autodidax).",
+  "why": "ML compilers differentiate programs as a graph transformation. You build forward and reverse mode yourself, then read how JAX implements `grad` as linearize plus transpose on a traced IR (Autodidax).",
   "steps": [
    {
     "kind": "watch",
     "title": "Karpathy: The spelled-out intro to neural networks and backpropagation: building micrograd",
     "url": "https://www.youtube.com/watch?v=VMj-3S1tku0",
-    "detail": "Code along to build micrograd's scalar Value class with backward().",
+    "detail": "Code along to build micrograd's scalar `Value` class with `backward()`.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "micrograd repo: reproduce engine.py and pass the tests",
     "url": "https://github.com/karpathy/micrograd",
-    "detail": "Re-implement engine.py from memory and check gradients against PyTorch as in test/test_engine.py.",
+    "detail": "Re-implement `engine.py` from memory and check gradients against PyTorch as in `test/test_engine.py`.",
     "bot_block": false
    },
    {
@@ -1108,44 +1108,44 @@
     "kind": "do",
     "title": "Implement forward mode with dual numbers",
     "url": "https://en.wikipedia.org/wiki/Dual_number",
-    "detail": "Add a Dual class supporting + * sin exp, compute JVPs, and compare costs with your reverse-mode for R^n->R vs R->R^n functions.",
+    "detail": "Add a `Dual` class supporting `+ * sin exp`, compute JVPs, and compare costs with your reverse-mode for `R^n->R` vs `R->R^n` functions.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "Autodidax Part 1: Transformations as interpreters (standard evaluation, jvp, vmap)",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
-    "detail": "Code along: primitives, the interpreter stack, and the JVP and vmap tracers.",
+    "detail": "Code along: primitives, the interpreter stack, and the JVP and `vmap` tracers.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Autodidax Parts 2-3: Jaxprs and jit (simplified)",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
-    "detail": "Continue through make_jaxpr and the simplified jit that lowers jaxprs to XLA. This is tracing a Python function into an IR.",
+    "detail": "Continue through `make_jaxpr` and the simplified `jit` that lowers jaxprs to XLA. This is tracing a Python function into an IR.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Autodidax Part 4: linearize and vjp (and grad)",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
-    "detail": "Reverse mode as partial evaluation (linearize) followed by transposition. Implement grad in your mini system.",
+    "detail": "Reverse mode as partial evaluation (`linearize`) followed by transposition. Implement `grad` in your mini system.",
     "bot_block": false
    },
    {
     "kind": "build",
     "title": "Reverse-mode AD over your Module 13 DAG (read tinygrad mixin/gradient.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/gradient.py",
-    "detail": "Read tinygrad's gradient.py (a rewrite-rule-based gradient), then emit gradient graphs for your own IR.",
+    "detail": "Read tinygrad's `gradient.py` (a rewrite-rule-based gradient), then emit gradient graphs for your own IR.",
     "bot_block": true
    }
   ],
-  "build": "A Python tensor-free autodiff library with forward mode (dual numbers), reverse mode (tape/graph), and a tracing jit that records a jaxpr-like IR and computes grad as a transformation on that IR; validated against finite differences and PyTorch on 15 functions.",
+  "build": "A Python tensor-free autodiff library with forward mode (dual numbers), reverse mode (tape/graph), and a tracing `jit` that records a jaxpr-like IR and computes `grad` as a transformation on that IR; validated against finite differences and PyTorch on 15 functions.",
   "check": [
    "Gradients agree with central finite differences to 1e-5 on all test functions",
-   "You can explain why reverse mode costs O(1) passes for scalar loss and forward mode O(n)",
+   "You can explain why reverse mode costs `O(1)` passes for scalar loss and forward mode `O(n)`",
    "Your traced IR for a 2-layer MLP prints readable and its grad IR runs correctly",
-   "Higher-order: grad(grad(f)) works for f=x**3"
+   "Higher-order: `grad(grad(f))` works for `f=x**3`"
   ],
   "extra": [
    {
@@ -1164,13 +1164,13 @@
   "outcomes": [
    "Implement reverse-mode AD on a graph with gradient accumulation for nodes used more than once.",
    "Derive VJPs and JVPs for core ops and check them against central finite differences in float64.",
-   "State the cost of forward vs reverse mode for f: R^n -> R and f: R -> R^n.",
-   "Explain how Autodidax implements jvp, vmap, jit and vjp as interpreters over a traced jaxpr."
+   "State the cost of forward vs reverse mode for `f: R^n -> R` and `f: R -> R^n`.",
+   "Explain how Autodidax implements `jvp`, `vmap`, `jit` and `vjp` as interpreters over a traced jaxpr."
   ],
   "stuck": [
    "Broadcast inputs need their gradient summed back to the input shape; most backward shape errors come from this.",
    "Run backward in reverse topological order, or a node's gradient is read before all contributions arrive.",
-   "A node used twice must accumulate its gradient (+=), not overwrite it.",
+   "A node used twice must accumulate its gradient (`+=`), not overwrite it.",
    "Use float64 for gradient checks; float32 finite differences produce false failures.",
    "If Autodidax Part 4 is hard to follow, finish the dual-number step first."
   ],
@@ -1184,7 +1184,7 @@
    ],
    "rubric": {
     "solid": "All op gradients pass finite-difference checks (rtol 1e-5 in float64); MNIST MLP reaches 97%+ test accuracy.",
-    "exceptional": "Checkpointing cuts peak memory by a measured factor with sqrt(n) segment analysis, HVP via forward-over-reverse verified, and results matched against PyTorch to 1e-6."
+    "exceptional": "Checkpointing cuts peak memory by a measured factor with `sqrt(n)` segment analysis, HVP via forward-over-reverse verified, and results matched against PyTorch to 1e-6."
    },
    "references": [
     {
@@ -1204,13 +1204,13 @@
    {
     "title": "Autodidax source (autodidax.py in the JAX repo)",
     "url": "https://github.com/jax-ml/jax/blob/main/docs/autodidax.py",
-    "note": "The complete runnable source behind the Autodidax tutorial, including the jvp, vmap, jit, linearize and vjp interpreters.",
+    "note": "The complete runnable source behind the Autodidax tutorial, including the `jvp`, `vmap`, `jit`, `linearize` and `vjp` interpreters.",
     "for": "Autodidax Parts 1-4 and the tracing-jit part of the build"
    },
    {
     "title": "nn-zero-to-hero: micrograd lecture notebooks (Karpathy)",
     "url": "https://github.com/karpathy/nn-zero-to-hero",
-    "note": "The notebooks Karpathy wrote live in the micrograd video, so you can diff your Value class and backward() against his at each stage.",
+    "note": "The notebooks Karpathy wrote live in the micrograd video, so you can diff your `Value` class and `backward()` against his at each stage.",
     "for": "micrograd video and engine.py reimplementation"
    },
    {
@@ -1222,7 +1222,7 @@
    {
     "title": "tinygrad engine/realize.py and codegen/memory.py at the pinned commit",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/engine/realize.py",
-    "note": "Shows how tinygrad runs the scheduled forward and gradient graphs; read it after mixin/gradient.py to see where your gradient graph gets executed.",
+    "note": "Shows how tinygrad runs the scheduled forward and gradient graphs; read it after `mixin/gradient.py` to see where your gradient graph gets executed.",
     "for": "Reverse-mode AD over your Module 13 DAG",
     "bot_block": true
    }
@@ -1233,7 +1233,7 @@
     "title": "Training Deep Nets with Sublinear Memory Cost",
     "by": "Tianqi Chen, Bing Xu, Chiyuan Zhang, Carlos Guestrin",
     "url": "https://arxiv.org/abs/1604.06174",
-    "note": "The sqrt(n) activation-checkpointing analysis your project asks for; focus on Section 3 and the memory-planning algorithm."
+    "note": "The `sqrt(n)` activation-checkpointing analysis your project asks for; focus on Section 3 and the memory-planning algorithm."
    },
    {
     "kind": "paper",
@@ -1275,14 +1275,14 @@
     "title": "Compiling machine learning programs via high-level tracing (JAX, SysML 2018)",
     "by": "Roy Frostig, Matthew Johnson, Chris Leary",
     "url": "https://mlsys.org/Conferences/doc/2018/146.pdf",
-    "note": "The original 4-page JAX paper: tracing to an IR, then composing grad and jit as transformations."
+    "note": "The original 4-page JAX paper: tracing to an IR, then composing `grad` and `jit` as transformations."
    },
    {
     "kind": "course",
     "title": "JAX: The Autodiff Cookbook",
     "by": "JAX authors",
     "url": "https://docs.jax.dev/en/latest/notebooks/autodiff_cookbook.html",
-    "note": "Hessian-vector products via forward-over-reverse, jacfwd vs jacrev costs; use it to check your HVP."
+    "note": "Hessian-vector products via forward-over-reverse, `jacfwd` vs `jacrev` costs; use it to check your HVP."
    },
    {
     "kind": "blog",
@@ -1333,7 +1333,7 @@
     "title": "How Computational Graphs are Constructed in PyTorch",
     "by": "PyTorch team",
     "url": "https://pytorch.org/blog/computational-graphs-constructed-in-pytorch/",
-    "note": "Part 2 walks through grad_fn nodes, SavedVariable and the codegen behind derivatives.yaml; compare the design with your own micrograd-style engine."
+    "note": "Part 2 walks through `grad_fn` nodes, `SavedVariable` and the codegen behind `derivatives.yaml`; compare the design with your own micrograd-style engine."
    },
    {
     "kind": "blog",
@@ -1347,7 +1347,7 @@
     "title": "How to read the autograd codebase",
     "by": "PyTorch dev-discuss forum",
     "url": "https://dev-discuss.pytorch.org/t/how-to-read-the-autograd-codebase/383",
-    "note": "A map from Python API to the C++ files that implement autograd; use it as a guide before reading torch/csrc/autograd."
+    "note": "A map from Python API to the C++ files that implement autograd; use it as a guide before reading `torch/csrc/autograd`."
    },
    {
     "kind": "lecture",
@@ -1364,7 +1364,7 @@
     "note": "Systems-flavoured slides from a 2023-24 ML systems course, linking AD modes to how frameworks implement them."
    }
   ],
-  "stretch": "Implement optimal binomial checkpointing (Griewank's revolve) in your tensor engine and train a 50-layer MLP where peak activation memory is O(log n) layers. Report measured peak memory and recompute overhead against no checkpointing and sqrt(n) checkpointing, and verify gradients match to 1e-6 in float64."
+  "stretch": "Implement optimal binomial checkpointing (Griewank's revolve) in your tensor engine and train a 50-layer MLP where peak activation memory is `O(log n)` layers. Report measured peak memory and recompute overhead against no checkpointing and `sqrt(n)` checkpointing, and verify gradients match to 1e-6 in float64."
  },
  {
   "id": 15,
@@ -1417,29 +1417,29 @@
     "kind": "do",
     "title": "DLSys Homework 1: needle autodiff",
     "url": "https://github.com/dlsyscourse/hw1",
-    "detail": "Implement forward and backward for needle ops and reverse-mode AD with a topological sort (hw1.ipynb).",
+    "detail": "Implement forward and backward for needle ops and reverse-mode AD with a topological sort (`hw1.ipynb`).",
     "bot_block": false
    },
    {
     "kind": "watch",
     "title": "DLSys Lectures 10, 12, 13: Hardware Acceleration for Linear Algebra, Hardware Acceleration + GPUs, Hardware Acceleration Implementation",
     "url": "https://dlsyscourse.org/lectures/",
-    "detail": "Focus on the strided NDArray backend design and tiling.",
+    "detail": "Focus on the strided `NDArray` backend design and tiling.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "DLSys Homework 3: NDArray backend (CPU + CUDA)",
     "url": "https://github.com/dlsyscourse/hw3",
-    "detail": "Implement compact/setitem, elementwise ops, reductions and tiled matmul in C++ and CUDA (hw3.ipynb).",
+    "detail": "Implement `compact/setitem`, elementwise ops, reductions and tiled matmul in C++ and CUDA (`hw3.ipynb`).",
     "bot_block": false
    }
   ],
-  "build": "A tinygrad-like tensor library in Python: strided Tensor with views (reshape/permute/expand without copy), broadcasting, reverse-mode autograd, a CPU backend in C via ctypes with tiled matmul, and an MNIST MLP training to >97% accuracy.",
+  "build": "A tinygrad-like tensor library in Python: strided `Tensor` with views (`reshape/permute/expand` without copy), broadcasting, reverse-mode autograd, a CPU backend in C via `ctypes` with tiled matmul, and an MNIST MLP training to >97% accuracy.",
   "check": [
-   "permute/expand/reshape produce views (no data copy) verified by shared storage",
+   "`permute/expand/reshape` produce views (no data copy) verified by shared storage",
    "All MiniTorch Module 2 tests pass",
-   "Your tiled matmul is at least 5x faster than the naive triple loop at 1024x1024",
+   "Your tiled matmul is at least 5x faster than the naive triple loop at `1024x1024`",
    "MNIST trains to >97% test accuracy with your library"
   ],
   "extra": [
@@ -1458,14 +1458,14 @@
   "effort": "55–80 h",
   "difficulty": 4,
   "outcomes": [
-   "Implement strided views (reshape, permute, expand) that share storage with the original tensor.",
+   "Implement strided views (`reshape`, `permute`, `expand`) that share storage with the original tensor.",
    "Implement tensor broadcasting and tensor-level autograd that pass the MiniTorch Module 2 tests.",
-   "Write a tiled CPU matmul and a CUDA matmul for an NDArray backend.",
+   "Write a tiled CPU matmul and a CUDA matmul for an `NDArray` backend.",
    "Train LeNet on MNIST with your own framework."
   ],
   "stuck": [
    "Stride bugs: compare your view ops to NumPy on random shapes before building on them.",
-   "Non-contiguous tensors break naive kernels; decide where you call compact()/contiguous() and test both paths.",
+   "Non-contiguous tensors break naive kernels; decide where you call `compact()/contiguous()` and test both paths.",
    "Softmax and log-softmax overflow unless you subtract the row max.",
    "If training does not learn, overfit a single batch first; failure there means a gradient bug."
   ],
@@ -1499,7 +1499,7 @@
    {
     "title": "teenygrad",
     "url": "https://github.com/tinygrad/teenygrad",
-    "note": "A roughly 1000-line lazy tensor framework from the tinygrad authors with views, a lazy graph and an autograd Function layer; the closest small reference for the lazy-fusion project.",
+    "note": "A roughly 1000-line lazy tensor framework from the tinygrad authors with views, a lazy graph and an autograd `Function` layer; the closest small reference for the lazy-fusion project.",
     "for": "Build and the lazy mini-framework project"
    },
    {
@@ -1535,7 +1535,7 @@
     "title": "Tensor Puzzles",
     "by": "Sasha Rush",
     "url": "https://github.com/srush/Tensor-Puzzles",
-    "note": "21 puzzles that force you to implement NumPy functions with only broadcasting and arange; good drill for the broadcasting step."
+    "note": "21 puzzles that force you to implement NumPy functions with only broadcasting and `arange`; good drill for the broadcasting step."
    },
    {
     "kind": "video",
@@ -1577,7 +1577,7 @@
     "title": "ggml",
     "by": "ggml-org (Georgi Gerganov)",
     "url": "https://github.com/ggml-org/ggml",
-    "note": "A C tensor library with a static compute graph and preplanned memory, the engine behind llama.cpp; read ggml.c's graph build and allocator."
+    "note": "A C tensor library with a static compute graph and preplanned memory, the engine behind llama.cpp; read `ggml.c`'s graph build and allocator."
    },
    {
     "kind": "blog",
@@ -1724,15 +1724,15 @@
     "kind": "build",
     "title": "Hand-optimize a CPU matmul to >50% of peak",
     "url": "https://en.algorithmica.org/hpc/algorithms/matmul/",
-    "detail": "In C with intrinsics: naive -> transposed -> blocked -> micro-kernel -> OpenMP; plot GFLOP/s per step.",
+    "detail": "In C with intrinsics: `naive -> transposed -> blocked -> micro-kernel -> OpenMP`; plot GFLOP/s per step.",
     "bot_block": false
    }
   ],
-  "build": "A benchmarked CPU SGEMM in C (callable from your Module 15 library via ctypes) with a writeup plotting GFLOP/s across 6 optimization stages against theoretical peak, plus perf counter evidence (cache misses, IPC) for each stage.",
+  "build": "A benchmarked CPU SGEMM in C (callable from your Module 15 library via `ctypes`) with a writeup plotting GFLOP/s across 6 optimization stages against theoretical peak, plus perf counter evidence (cache misses, IPC) for each stage.",
   "check": [
    "You can compute your CPU's theoretical peak FLOP/s from cores, frequency, SIMD width and FMA units",
-   "Your final matmul is within 2x of OpenBLAS/numpy at 2048x2048",
-   "You can explain from perf counters why loop order i-k-j beats i-j-k",
+   "Your final matmul is within 2x of OpenBLAS/numpy at `2048x2048`",
+   "You can explain from perf counters why loop order `i-k-j` beats `i-j-k`",
    "Aalto CP3a passes the grader at the benchmark time limit"
   ],
   "extra": [
@@ -1757,8 +1757,8 @@
   ],
   "stuck": [
    "Noisy timings: warm up, repeat, report median and spread; pin threads to cores where possible.",
-   "If the compiler removed your benchmark loop, consume the result or use a DoNotOptimize-style barrier.",
-   "Check vectorization with -Rpass=loop-vectorize (clang) or -fopt-info-vec (gcc) instead of guessing.",
+   "If the compiler removed your benchmark loop, consume the result or use a `DoNotOptimize`-style barrier.",
+   "Check vectorization with `-Rpass=loop-vectorize` (clang) or `-fopt-info-vec` (gcc) instead of guessing.",
    "Choose block sizes from your own L1/L2 sizes and measurements."
   ],
   "project": {
@@ -1801,7 +1801,7 @@
    {
     "title": "how-to-optimize-gemm (FLAME group)",
     "url": "https://github.com/flame/how-to-optimize-gemm",
-    "note": "Robert van de Geijn's group's step-by-step GEMM optimization with each version as its own file, from naive to packed 4x4 SIMD micro-kernel.",
+    "note": "Robert van de Geijn's group's step-by-step GEMM optimization with each version as its own file, from naive to packed `4x4` SIMD micro-kernel.",
     "for": "Micro-kernel and packing steps"
    },
    {
@@ -1831,7 +1831,7 @@
     "title": "CppCon 2015: Chandler Carruth \"Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My!\"",
     "by": "Chandler Carruth",
     "url": "https://www.youtube.com/watch?v=nXaxk27zwlk",
-    "note": "Live perf and benchmark work, including the DoNotOptimize/clobber trick from the stuck list."
+    "note": "Live perf and benchmark work, including the `DoNotOptimize/clobber` trick from the stuck list."
    },
    {
     "kind": "talk",
@@ -1908,7 +1908,7 @@
     "title": "google/benchmark",
     "by": "Google",
     "url": "https://github.com/google/benchmark",
-    "note": "A microbenchmark harness with warmup, repetition statistics and DoNotOptimize built in."
+    "note": "A microbenchmark harness with warmup, repetition statistics and `DoNotOptimize` built in."
    },
    {
     "kind": "blog",
@@ -1925,7 +1925,7 @@
     "note": "2025 talk slides on instruction counts, branch prediction and SIMD in real parsers; focus on the measured examples for when branchless code wins."
    }
   ],
-  "stretch": "Write a BLIS-style SGEMM with a hand-scheduled AVX-512 or NEON micro-kernel and an autotuner that searches block sizes (MC, KC, NC, MR, NR) per machine. Reach at least 85% of single-core theoretical peak and match OpenBLAS within 5% on square and skinny shapes (2048x2048, 4096x64), with a Top-Down perf breakdown explaining the remaining gap."
+  "stretch": "Write a BLIS-style SGEMM with a hand-scheduled AVX-512 or NEON micro-kernel and an autotuner that searches block sizes (`MC`, `KC`, `NC`, `MR`, `NR`) per machine. Reach at least 85% of single-core theoretical peak and match OpenBLAS within 5% on square and skinny shapes (`2048x2048`, `4096x64`), with a Top-Down perf breakdown explaining the remaining gap."
  },
  {
   "id": 17,
@@ -1964,7 +1964,7 @@
     "kind": "do",
     "title": "CS149 Assignment 3: A Simple CUDA Renderer",
     "url": "https://github.com/stanford-cs149/asst3",
-    "detail": "Part 1 SAXPY, Part 2 exclusive prefix sum and find_repeats, Part 3 circle renderer (85 of 100 points).",
+    "detail": "Part 1 SAXPY, Part 2 exclusive prefix sum and `find_repeats`, Part 3 circle renderer (85 of 100 points).",
     "bot_block": false
    },
    {
@@ -2001,7 +2001,7 @@
    "All 14 GPU Puzzles pass",
    "CS149 asst1 Program 1 analysis explains why speedup is not linear in thread count (uneven work across image regions)",
    "Your matmul reports achieved memory bandwidth and FLOP/s and you can say which bound applies",
-   "A fused kernel for relu(x*w+b).sum() is faster than three separate kernels"
+   "A fused kernel for `relu(x*w+b).sum()` is faster than three separate kernels"
   ],
   "extra": [
    {
@@ -2030,8 +2030,8 @@
   ],
   "stuck": [
    "Uncoalesced global loads are the most common slowdown; check the per-warp access pattern, then confirm in Nsight Compute's memory section.",
-   "A missing __syncthreads() gives intermittently wrong results; run compute-sanitizer --tool racecheck.",
-   "Shared-memory bank conflicts: pad the tile (for example 32x33) and measure.",
+   "A missing `__syncthreads()` gives intermittently wrong results; run `compute-sanitizer --tool racecheck`.",
+   "Shared-memory bank conflicts: pad the tile (for example `32x33`) and measure.",
    "Higher occupancy is not always faster; register tiling often wins at lower occupancy.",
    "No NVIDIA GPU: GPU Puzzles run in Colab; for asst3 and SGEMM use a cloud or Colab GPU."
   ],
@@ -2044,7 +2044,7 @@
     "a 600–1200 word write-up explaining tiling, coalescing, occupancy trade-offs and the online-softmax algorithm"
    ],
    "rubric": {
-    "solid": "SGEMM reaches 50%+ of cuBLAS on 4096x4096; softmax kernel within 2x of memory bandwidth bound; all tests pass.",
+    "solid": "SGEMM reaches 50%+ of cuBLAS on `4096x4096`; softmax kernel within 2x of memory bandwidth bound; all tests pass.",
     "exceptional": "SGEMM 80%+ of cuBLAS with warp-tiling/double buffering, softmax near bandwidth peak, profiler-backed analysis, and kernels training a model in your framework."
    },
    "references": [
@@ -2201,14 +2201,14 @@
     "title": "How To Write A Fast Matrix Multiplication From Scratch With Tensor Cores",
     "by": "Alex Armbruster",
     "url": "https://alexarmbr.github.io/2024/08/10/How-To-Write-A-Fast-Matrix-Multiplication-From-Scratch-With-Tensor-Cores.html",
-    "note": "A 2024 worklog continuing past the SGEMM tutorials into Tensor Core mma, swizzled shared memory and async copies on Turing; follow the kernel-by-kernel speedup table."
+    "note": "A 2024 worklog continuing past the SGEMM tutorials into Tensor Core `mma`, swizzled shared memory and async copies on Turing; follow the kernel-by-kernel speedup table."
    },
    {
     "kind": "blog",
     "title": "Writing Speed-of-Light Flash Attention for 5090 in CUDA C++",
     "by": "gau-nernst",
     "url": "https://gau-nernst.github.io/fa-5090/",
-    "note": "A detailed worklog building flash attention from scratch with ldmatrix, mma and cp.async on a consumer Blackwell GPU, profiling each version."
+    "note": "A detailed worklog building flash attention from scratch with `ldmatrix`, `mma` and `cp.async` on a consumer Blackwell GPU, profiling each version."
    },
    {
     "kind": "blog",
@@ -2225,6 +2225,6 @@
     "note": "NVIDIA's own APOD guide; read the memory optimization chapters (coalescing, shared memory bank conflicts, occupancy) next to the programming guide."
    }
   ],
-  "stretch": "Extend your SGEMM to tensor cores (WMMA or mma.sync with FP16/BF16 inputs, FP32 accumulate) with async copies and double buffering, and reach at least 80% of cuBLAS HGEMM at 4096x4096. Submit your kernel to a GPU MODE leaderboard problem and report the ranking along with Nsight Compute evidence for the remaining gap."
+  "stretch": "Extend your SGEMM to tensor cores (WMMA or `mma.sync` with FP16/BF16 inputs, FP32 accumulate) with async copies and double buffering, and reach at least 80% of cuBLAS HGEMM at `4096x4096`. Submit your kernel to a GPU MODE leaderboard problem and report the ranking along with Nsight Compute evidence for the remaining gap."
  }
 ]

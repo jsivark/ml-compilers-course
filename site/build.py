@@ -252,8 +252,11 @@ def md_to_html(md):
   items = []
   for line in md.splitlines():
     if line.startswith("```"):
-      flush(); out.append("</pre>" if code else "<pre>"); code = not code; continue
-    if code: out.append(E(line) + "\n"); continue
+      flush()
+      if code: out[-1] = out[-1].rstrip("\n") + "</pre>"
+      else: out.append("<pre>")
+      code = not code; continue
+    if code: out[-1] += E(line) + "\n"; continue
     if line.startswith("|"): tbl.append(line); continue
     m = re.match(r"^(#{1,3}) (.*)", line)
     if m: flush(); lvl = len(m[1]) + (0 if len(m[1]) > 1 else 0); out.append(f"<h{lvl}>{inline(m[2])}</h{lvl}>"); continue
@@ -270,9 +273,8 @@ def md_to_html(md):
 
 def assignments():
   md = open(os.path.join(ROOT, "README.md")).read()
-  md = md.split("\n", 1)[1]  # drop H1
+  md = md[md.index("\n## "):]  # skip H1, website link and repo blurb
   intro = ('<h1>Assignments</h1><p class="lede">The compiler you build across Part III. Get the starter repo, which has the specs, test suites and a test runner:</p>'
-           '<p><b>The tests start at Module 18.</b> Modules 0–17 rely on the labs and test suites linked from each module. Test folders are numbered by the real course\'s weeks: Module 18 is <code>tests/week01</code> (<code>python3 run_tests.py 1</code>), Module 19 is <code>week02</code>, and so on through Module 24 (<code>week07</code>). Modules 25–28 are graded by measured milestones.</p>'
            '<pre>git clone https://github.com/jsivark/ml-compilers-course.git\ncd ml-compilers-course\npython3 run_tests.py 1   # runs ./compile on tests/week01</pre>')
   return page("Assignments · ML Compilers From Zero", intro + md_to_html(md), 0, "assign")
 
@@ -290,7 +292,7 @@ def main():
   w("index.html", index(mods))
   w("assignments.html", assignments())
   w("portfolio.html", portfolio(mods))
-  for name, here, title in (("projects.html", "projects", "Final projects"), ("library.html", "library", "Library"), ("about.html", "about", "About")):
+  for name, here, title in (("projects.html", "projects", "Capstone"), ("library.html", "library", "Library"), ("about.html", "about", "About")):
     w(name, page(f"{title} · ML Compilers From Zero", static(name), 0, here))
   for i, m in mods.items(): w(f"modules/{i:02d}.html", module_page(m, mods))
   print(f"built {len(mods)} modules into {OUT}")

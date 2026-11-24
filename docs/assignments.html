@@ -5,37 +5,23 @@
 <link rel="stylesheet" href="style.css"></head>
 <body><header class="top"><div class="bar"><a class="brand" href="index.html">ML Compilers From Zero</a>
 <nav><a href="index.html#modules">Modules</a><a href="assignments.html" class="on">Assignments</a><a href="portfolio.html">Portfolio</a><a href="projects.html">Capstone</a><a href="library.html">Library</a><a href="about.html">About</a><a href="https://github.com/jsivark/ml-compilers-course">GitHub</a></nav></div></header>
-<main class="wrap"><h1>Assignments</h1><p class="lede">The compiler you build across Part III. Get the starter repo, which has the specs, test suites and a test runner:</p><p><b>The tests start at Module 18.</b> Modules 0–17 rely on the labs and test suites linked from each module. Test folders are numbered by the real course's weeks: Module 18 is <code>tests/week01</code> (<code>python3 run_tests.py 1</code>), Module 19 is <code>week02</code>, and so on through Module 24 (<code>week07</code>). Modules 25–28 are graded by measured milestones.</p><pre>git clone https://github.com/jsivark/ml-compilers-course.git
+<main class="wrap"><h1>Assignments</h1><p class="lede">The compiler you build across Part III. Get the starter repo, which has the specs, test suites and a test runner:</p><pre>git clone https://github.com/jsivark/ml-compilers-course.git
 cd ml-compilers-course
-python3 run_tests.py 1   # runs ./compile on tests/week01</pre><p><b>Course website: <a href="https://jsivark.github.io/ml-compilers-course/">https://jsivark.github.io/ml-compilers-course/</a></b></p>
-<p>A free, self-paced path from intermediate Python and basic C to building your own machine-learning compiler, modelled on CMU 10-411 <i>Compilers for Machine Learning</i>. The website has all 40 modules with step-by-step instructions and portfolio projects. This repo holds the website&#x27;s source and the compiler assignments with their tests.</p>
-<h2>When the tests apply</h2>
+python3 run_tests.py 1   # runs ./compile on tests/week01</pre><h2>When the tests apply</h2>
 <p><b>The automated tests start at Module 18.</b> Modules 0–17 (orientation, foundations and bridge) have no tests here. They use the labs, puzzle sets and test suites linked from each module page, such as the CS:APP labs, Tensor Puzzles and Nora Sandler&#x27;s C compiler tests.</p>
 <p>From Module 18 on, you build one compiler, and the tests in this repo check it. The test folders are numbered by the real course&#x27;s weeks:</p>
 <div class="tw"><table><tr><th>Course module</th><th>Test folder</th><th>Tests</th><th>Run with</th></tr><tr><td>18</td><td><code>tests/week01</code></td><td>66</td><td><code>python3 run_tests.py 1</code></td></tr><tr><td>19</td><td><code>tests/week02</code></td><td>57</td><td><code>python3 run_tests.py 2</code></td></tr><tr><td>20</td><td><code>tests/week03</code></td><td>60</td><td><code>python3 run_tests.py 3</code></td></tr><tr><td>21</td><td><code>tests/week04</code></td><td>54</td><td><code>python3 run_tests.py 4</code></td></tr><tr><td>22</td><td><code>tests/week05</code></td><td>60</td><td><code>python3 run_tests.py 5</code></td></tr><tr><td>23</td><td><code>tests/week06</code></td><td>63</td><td><code>python3 run_tests.py 6</code></td></tr><tr><td>24</td><td><code>tests/week07</code></td><td>41</td><td><code>python3 run_tests.py 7</code></td></tr><tr><td>25–28</td><td>none</td><td></td><td>graded by measured milestones (see each module page)</td></tr></table></div>
 <p>Every test in Modules 18–24 has been checked against a reference implementation that follows the rules below, including the places marked <i>(convention)</i>. The tests cover normal programs, edge cases an obvious-but-wrong compiler gets wrong, and <code>rejected_</code>, <code>mismatch_</code> and <code>overbudget_</code> variants.</p>
-<pre>
-run_tests.py        run a week&#x27;s tests against ./compile (or any command)
-
+<pre>run_tests.py        run a week&#x27;s tests against ./compile (or any command)
 tests/weekNN/       .uir test programs; the filename prefix gives the expected outcome
-
 curriculum/         the course content (one JSON file per part)
-
 site/               the website generator; python3 site/build.py writes docs/
-
-tools/              content and link checker
-
-</pre>
+tools/              content and link checker</pre>
 <h2>The contract</h2>
 <p>Build one program, <code>./compile</code>, in any language. Everything here runs on macOS and Linux; on Windows, use WSL2. It takes <code>.uir</code> files and prints one line for each file:</p>
-<pre>
-$ ./compile tests/week01/add_fold.uir tests/week01/rejected_assert_dtype_mismatch.uir
-
+<pre>$ ./compile tests/week01/add_fold.uir tests/week01/rejected_assert_dtype_mismatch.uir
 MATCH tests/week01/add_fold.uir
-
-REJECTED tests/week01/rejected_assert_dtype_mismatch.uir
-
-</pre>
+REJECTED tests/week01/rejected_assert_dtype_mismatch.uir</pre>
 <p>The expected outcome comes from the filename prefix:</p>
 <div class="tw"><table><tr><th>Prefix</th><th>Expected outcome</th></tr><tr><td>(none)</td><td><code>MATCH</code></td></tr><tr><td><code>mismatch_</code></td><td><code>MISMATCH</code></td></tr><tr><td><code>rejected_</code></td><td><code>REJECTED</code> (invalid before it runs)</td></tr><tr><td><code>overbudget_</code></td><td><code>OVERBUDGET</code></td></tr></table></div>
 <p>To check your compiler, run <code>python3 run_tests.py 1</code> (or 2, 3, …). The number is the test folder (the course week), not the module number: Module 18 is <code>1</code>. Every week must also keep passing all earlier weeks&#x27; tests.</p>

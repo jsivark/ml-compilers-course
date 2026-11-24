@@ -85,3 +85,6 @@ details[open] summary{margin-bottom:8px}
 code{white-space:nowrap;background:var(--soft);padding:0 3px;border-radius:3px}
 pre code{background:none;padding:0;white-space:pre}
 .proj code{background:var(--bg)}
+.wrap{overflow-wrap:break-word}
+ol.steps>li>div,.proj,.build,li{min-width:0}
+@media (max-width:640px){code{white-space:normal;overflow-wrap:anywhere}.toc{top:0;position:static}.pn.top a{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}

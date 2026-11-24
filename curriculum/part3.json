@@ -3,83 +3,83 @@
   "id": 18,
   "title": "UOps, rewrites, bounds",
   "course_week": 1,
-  "why": "Every later week is a rewrite on one hash-consed graph of (op, src, arg) nodes. This module builds that graph, its cached dtype/shape/bounds/cost properties, and the rewrite engine you will reuse through Module 31.",
+  "why": "Every later week is a rewrite on one hash-consed graph of `(op, src, arg)` nodes. This module builds that graph, its cached dtype/shape/bounds/cost properties, and the rewrite engine you will reuse through Module 31.",
   "steps": [
    {
     "kind": "read",
     "title": "Handout page 1: the format and grammar",
     "url": "https://10-411.com/assignments/week1.pdf",
-    "detail": "Page 1 only: the token table (DEF, REF, INT, BOOL, OP, ATTR, brackets, EOF), the 4-line grammar, the filename-prefix table and the immediate limits (bytes > 4096; nodes >= 100 or edges >= 300; cost >= 1,000,000). Write the grammar down before coding.",
+    "detail": "Page 1 only: the token table (`DEF`, `REF`, `INT`, `BOOL`, `OP`, `ATTR`, brackets, `EOF`), the 4-line grammar, the filename-prefix table and the immediate limits (bytes > 4096; nodes >= 100 or edges >= 300; cost >= 1,000,000). Write the grammar down before coding.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Tokenizer and parser",
     "url": "",
-    "detail": "Turn a .uir file into a list of bindings (name, op, atoms, attrs); handle comments, hex, leading zeros, %x= vs %x =, and [ ] sugar. Make comments_and_spacing, xor_hex, leading_zeros, stack_sugar_same parse; REJECT rejected_undefined_ref, rejected_redefined, rejected_unknown_op, rejected_int_literal_range.",
+    "detail": "Turn a `.uir` file into a list of bindings (name, op, atoms, attrs); handle comments, hex, leading zeros, `%x=` vs `%x =`, and [ ] sugar. Make `comments_and_spacing`, `xor_hex`, `leading_zeros`, `stack_sugar_same` parse; REJECT `rejected_undefined_ref`, `rejected_redefined`, `rejected_unknown_op`, `rejected_int_literal_range`.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad-notes: UOp is a singleton",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20250119_uop_singleton.html",
-    "detail": "UOpMetaClass keeps a cache keyed by (op, dtype, src, arg), so building the same triple twice returns the same object. Then read UOpMetaClass at the pinned commit: https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L181. The note is from Jan 2025 and the code has moved since, so trust the source.",
+    "detail": "`UOpMetaClass` keeps a cache keyed by `(op, dtype, src, arg)`, so building the same triple twice returns the same object. Then read `UOpMetaClass` at the pinned commit: https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L181. The note is from Jan 2025 and the code has moved since, so trust the source.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Interned UOp(op, src, arg)",
     "url": "",
-    "detail": "Build nodes through one constructor keyed by (op, src, arg) so equal triples return the same object. hashcons_node_budget.uir (120 copies of add 2 4) only passes if equal triples are shared. Count distinct nodes and source edges here; overbudget_many_nodes needs the count.",
+    "detail": "Build nodes through one constructor keyed by `(op, src, arg)` so equal triples return the same object. `hashcons_node_budget.uir` (120 copies of `add 2 4`) only passes if equal triples are shared. Count distinct nodes and source edges here; `overbudget_many_nodes` needs the count.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Lazy dtype and shape + validator",
     "url": "",
-    "detail": "Cache dtype/shape per node and reject: rejected_add_dtype_mismatch, alu_on_vector, stack_mixed, where_cond_int, div_bool, free_param, no_assert, assert_used, assert_dtype_mismatch, unreachable, vector_return, two_params_one_slot, missing_arg, arg_dtype (all with the rejected_ prefix).",
+    "detail": "Cache dtype/shape per node and reject: `rejected_add_dtype_mismatch`, `alu_on_vector`, `stack_mixed`, `where_cond_int`, `div_bool`, `free_param`, `no_assert`, `assert_used`, `assert_dtype_mismatch`, unreachable, `vector_return`, `two_params_one_slot`, `missing_arg`, `arg_dtype` (all with the `rejected_` prefix).",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "Handout page 2: the operation reference table",
     "url": "https://10-411.com/assignments/week1.pdf",
-    "detail": "Read the Bounds and Cost columns row by row: overflowing i32 bounds widen to I; div uses endpoint quotients only for a fixed y; mod has three cases (variable y, zero, fixed nonzero y); xor is exact only for two singletons; shl is a hull over possible k; then the two worked boxes (index safety, shared vs distinct cost).",
+    "detail": "Read the Bounds and Cost columns row by row: overflowing `i32` bounds widen to I; div uses endpoint quotients only for a fixed y; mod has three cases (variable y, zero, fixed nonzero y); xor is exact only for two singletons; shl is a hull over possible k; then the two worked boxes (index safety, shared vs distinct cost).",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad UOp._min_max (vmin/vmax)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1058",
-    "detail": "Read _min_max after drafting your own and note how each op derives bounds from source bounds. Then skim the tests in https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uop_vmin_vmax.py.",
+    "detail": "Read `_min_max` after drafting your own and note how each op derives bounds from source bounds. Then skim the tests in https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uop_vmin_vmax.py.",
     "bot_block": true
    },
    {
     "kind": "implement",
     "title": "Bounds and index/limit safety",
     "url": "",
-    "detail": "Interval bounds per the page 2 table, used to prove index and call-argument safety across all calls. Pass index_param_safe, index_mod_bounds_safe, index_stack, and REJECT rejected_index_oob, rejected_index_const_oob, rejected_index_unbounded, rejected_arg_outside_limits, rejected_limits_reversed.",
+    "detail": "Interval bounds per the page 2 table, used to prove index and call-argument safety across all calls. Pass `index_param_safe`, `index_mod_bounds_safe`, `index_stack`, and REJECT `rejected_index_oob`, `rejected_index_const_oob`, `rejected_index_unbounded`, `rejected_arg_outside_limits`, `rejected_limits_reversed`.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Cost and budgets",
     "url": "",
-    "detail": "Charge each node once (a call costs 1 + C(body) each time it appears). Check budgets in the handout's order: bytes before parsing, nodes/edges right after parsing, cost after validation. Pass overbudget_file_size, overbudget_many_nodes, overbudget_static_cost, cost_under_budget.",
+    "detail": "Charge each node once (a call costs 1 + `C(body)` each time it appears). Check budgets in the handout's order: bytes before parsing, nodes/edges right after parsing, cost after validation. Pass `overbudget_file_size`, `overbudget_many_nodes`, `overbudget_static_cost`, `cost_under_budget`.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Evaluator",
     "url": "",
-    "detail": "Interpret the graph with i32 wrap, floor div/mod (div by 0 gives -1, mod by 0 gives x), shl by y mod 32, bool add as OR and mul as AND, and call/param substitution. Pass every MATCH and mismatch_ file in python3 run_tests.py 1.",
+    "detail": "Interpret the graph with `i32` wrap, floor div/mod (div by 0 gives -1, mod by 0 gives x), shl by y mod 32, bool add as OR and mul as AND, and call/param substitution. Pass every `MATCH` and `mismatch_` file in `python3 run_tests.py 1`.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad-notes: Pattern matcher, then UPat/PatternMatcher source",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241112_pm.html",
-    "detail": "Read the note (written against an older tinygrad), then the pinned source: UPat (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1429), PatternMatcher (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1572) and graph_rewrite (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1877).",
+    "detail": "Read the note (written against an older tinygrad), then the pinned source: `UPat` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1429), `PatternMatcher` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1572) and `graph_rewrite` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1877).",
     "bot_block": false
    },
    {
@@ -93,22 +93,22 @@
     "kind": "implement",
     "title": "Constant folding and identities",
     "url": "",
-    "detail": "Rules: fold all-constant ALU through your evaluator, x+0, x*1, x*0, x^x, max(x,x), where(true,a,b). Every MATCH test must fold to assert c c. Compare with symbolic_simple: https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/symbolic.py#L123.",
+    "detail": "Rules: fold all-constant ALU through your evaluator, `x+0`, `x*1`, `x*0`, `x^x`, `max(x,x)`, `where(true,a,b)`. Every `MATCH` test must fold to `assert c c`. Compare with `symbolic_simple`: https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/symbolic.py#L123.",
     "bot_block": false
    },
    {
     "kind": "test",
     "title": "Write 10 tests of your own",
     "url": "",
-    "detail": "Cases an obvious-but-wrong compiler gets wrong: add at INT_MIN/INT_MAX, div/mod by a negative divisor, an index that is only out of range on the second call, shared vs distinct cost. Work out each expected result by hand from the page 2 table.",
+    "detail": "Cases an obvious-but-wrong compiler gets wrong: add at `INT_MIN/INT_MAX`, div/mod by a negative divisor, an index that is only out of range on the second call, shared vs distinct cost. Work out each expected result by hand from the page 2 table.",
     "bot_block": false
    }
   ],
-  "build": "./compile parses, validates, bounds-checks, costs, evaluates and constant-folds Week 1 UIR files.",
+  "build": "`./compile` parses, validates, bounds-checks, costs, evaluates and constant-folds Week 1 UIR files.",
   "check": [
-   "python3 run_tests.py 1 prints 66/66 passed",
-   "hashcons_node_budget.uir and hashcons_cost_shared_call.uir pass, which only happens if identical nodes are shared",
-   "Every MATCH test rewrites to assert c c through your PatternMatcher",
+   "`python3 run_tests.py 1` prints 66/66 passed",
+   "`hashcons_node_budget.uir` and `hashcons_cost_shared_call.uir` pass, which only happens if identical nodes are shared",
+   "Every `MATCH` test rewrites to `assert c c` through your `PatternMatcher`",
    "10+ own tests in tests/week01 with hand-derived expected outcomes"
   ],
   "extra": [
@@ -136,13 +136,13 @@
   "effort": "25-35 h",
   "difficulty": 3,
   "outcomes": [
-   "Parse UIR into an interned UOp DAG where equal (op, src, arg) triples are one object.",
+   "Parse UIR into an interned `UOp` DAG where equal `(op, src, arg)` triples are one object.",
    "Compute dtype, shape, interval bounds and cost per node, and use bounds to accept or reject every index and call.",
-   "Write UPat rules and run graph_rewrite to a fixed point to fold every Week 1 MATCH test to assert c c."
+   "Write `UPat` rules and run `graph_rewrite` to a fixed point to fold every Week 1 `MATCH` test to `assert c c`."
   ],
   "stuck": [
-   "Rewrites never terminate: two rules undo each other (a+b -> b+a). Canonicalize operand order once instead of swapping.",
-   "div/mod with negatives disagree: the spec is floor division (Python //), not C truncation. Test div_floor_negative and mod_negative_divisor first.",
+   "Rewrites never terminate: two rules undo each other (`a+b -> b+a`). Canonicalize operand order once instead of swapping.",
+   "div/mod with negatives disagree: the spec is floor division (Python `//`), not C truncation. Test `div_floor_negative` and `mod_negative_divisor` first.",
    "Folding changes results: you folded with Python ints. Wrap to 32 bits after every folded add, mul and shl.",
    "Validator passes but evaluator crashes: check src count and dtype per op in the validator, not only the op name.",
    "A rewritten child does not show up in the parent: rebuild the parent through the interning constructor when any source changes."
@@ -151,14 +151,14 @@
    "title": "kiln v1.0: the 10-411 compiler as kiln's backend, with a z3-checked simplifier",
    "brief": "From here on, your 10-411 compiler lives inside kiln as its backend (for example kiln/compiler), and the course test suites run against it. Turn your v0.6 rewrite engine into a checked simplifier. Encode each integer rule as a z3 query over 32-bit bitvectors (wraparound included) and refuse to load any rule that z3 cannot prove under its stated preconditions. Add a tracer that records each rule firing and renders before/after graphs.",
    "deliverables": [
-    "repo with a rule file, a check_rules CLI that runs z3 on every rule, and CI that fails on an unproven rule",
+    "repo with a rule file, a `check_rules` CLI that runs z3 on every rule, and CI that fails on an unproven rule",
     "a Graphviz or HTML trace of each rewrite step on 3 index expressions taken from your Week 5 (Module 22) output",
-    "README table: rule count, proven/rejected, and node-count reduction on 200+ expressions (the week01-05 tests plus cases ported from tinygrad's test_uop_symbolic.py)",
+    "README table: rule count, proven/rejected, and node-count reduction on 200+ expressions (the week01-05 tests plus cases ported from tinygrad's `test_uop_symbolic.py`)",
     "a 600-1200 word write-up on one rule z3 rejected, its counterexample, and the corrected precondition"
    ],
    "rubric": {
     "solid": "30+ rules, all z3-proven at 32-bit width; measured node-count reduction on the 200+ expression set; trace works on any UIR file.",
-    "exceptional": "Uses interval bounds as z3 assumptions so conditional rules (e.g. x%n -> x when 0<=x<n) are proven too; documents at least one unsound rule you wrote first, with its counterexample."
+    "exceptional": "Uses interval bounds as z3 assumptions so conditional rules (e.g. `x%n -> x when 0<=x<n`) are proven too; documents at least one unsound rule you wrote first, with its counterexample."
    },
    "references": [
     {
@@ -182,31 +182,31 @@
    {
     "title": "tinygrad uop/uir.py: parse_uir",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/uir.py#L158",
-    "note": "tinygrad's own reader for the UIR text format, which its docstring says also parses studentgrad's hand-written %names, nested (op ...) and [stacks]; compare tokenizing, literal handling and how each line becomes a hash-consed UOp.",
+    "note": "tinygrad's own reader for the UIR text format, which its docstring says also parses studentgrad's hand-written `%names`, nested `(op ...)` and [stacks]; compare tokenizing, literal handling and how each line becomes a hash-consed `UOp`.",
     "for": "Tokenizer and parser"
    },
    {
     "title": "tinygrad test/null/test_uir_render.py",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uir_render.py",
-    "note": "Round-trip tests asserting parse_uir(render_uir(x)) is x, a ready-made test pattern for your parser and interning.",
+    "note": "Round-trip tests asserting `parse_uir(render_uir(x))` is x, a ready-made test pattern for your parser and interning.",
     "for": "Interned UOp(op, src, arg)"
    },
    {
     "title": "tinygrad uop/spec.py: type_verify and spec_shared",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/spec.py#L33",
-    "note": "How tinygrad expresses dtype and structure rules as a PatternMatcher and rejects graphs that match none; compare with your validator's reject list.",
+    "note": "How tinygrad expresses dtype and structure rules as a `PatternMatcher` and rejects graphs that match none; compare with your validator's reject list.",
     "for": "Lazy dtype and shape + validator"
    },
    {
     "title": "tinygrad uop/validate.py: validate_index_with_z3",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/validate.py#L96",
-    "note": "Translates UOps to z3 with bounded variables to prove an index in range, the exact check your bounds give you cheaply; useful for differential-testing your vmin/vmax.",
+    "note": "Translates UOps to z3 with bounded variables to prove an index in range, the exact check your bounds give you cheaply; useful for differential-testing your `vmin/vmax`.",
     "for": "Bounds and index safety"
    },
    {
     "title": "tinygrad uop/upat.py: upat_compile",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/upat.py#L173",
-    "note": "Compiles UPat patterns into straight Python source for speed; read after your interpreted rewrite engine works.",
+    "note": "Compiles `UPat` patterns into straight Python source for speed; read after your interpreted rewrite engine works.",
     "for": "Rewrite engine"
    }
   ],
@@ -230,7 +230,7 @@
     "title": "Testing Dataflow Analyses for Precision and Soundness",
     "by": "John Regehr",
     "url": "https://blog.regehr.org/archives/1709",
-    "note": "Shows how to fuzz an abstract domain (known bits, ranges) for soundness and precision; apply it directly to your vmin/vmax."
+    "note": "Shows how to fuzz an abstract domain (known bits, ranges) for soundness and precision; apply it directly to your `vmin/vmax`."
    },
    {
     "kind": "repo",
@@ -265,7 +265,7 @@
     "title": "Type-Safe Modular Hash-Consing",
     "by": "Jean-Christophe Filliatre, Sylvain Conchon",
     "url": "https://www.lri.fr/~filliatr/ftp/publis/hash-consing2.pdf",
-    "note": "Short paper on hash-consing with weak tables; the section on memory explains why tinygrad needs weakrefs in its UOp cache."
+    "note": "Short paper on hash-consing with weak tables; the section on memory explains why tinygrad needs weakrefs in its `UOp` cache."
    },
    {
     "kind": "paper",
@@ -279,7 +279,7 @@
     "title": "Sea of Nodes: Simple",
     "by": "Cliff Click et al.",
     "url": "https://github.com/SeaOfNodes/Simple",
-    "note": "A chapter-by-chapter hash-consed graph IR with peephole rewrites and type lattices, the closest relative of a UOp graph in a classic compiler."
+    "note": "A chapter-by-chapter hash-consed graph IR with peephole rewrites and type lattices, the closest relative of a `UOp` graph in a classic compiler."
    },
    {
     "kind": "repo",
@@ -293,21 +293,21 @@
     "title": "Adventures with TinyGrad: the Pattern Matcher",
     "by": "xl0",
     "url": "https://xl0.github.io/tinygrad-notes/patternmatcher.html",
-    "note": "A second independent walkthrough of UPat and graph_rewrite with runnable examples; focus on how a rule's lambda returns a new UOp and how rules are dispatched."
+    "note": "A second independent walkthrough of `UPat` and `graph_rewrite` with runnable examples; focus on how a rule's lambda returns a new `UOp` and how rules are dispatched."
    },
    {
     "kind": "blog",
     "title": "Value numbering",
     "by": "Max Bernstein",
     "url": "https://bernsteinbear.com/blog/value-numbering/",
-    "note": "Short 2026 post building local value numbering from hash-consing plus union-find; read it to see why UOp dedup is the same idea as LVN."
+    "note": "Short 2026 post building local value numbering from hash-consing plus union-find; read it to see why `UOp` dedup is the same idea as LVN."
    },
    {
     "kind": "blog",
     "title": "Hash Consing Absolutism",
     "by": "Justin Jaffray",
     "url": "https://buttondown.com/jaffray/archive/hash-consing-absolutism/",
-    "note": "Argues about hash-consing every node versus best-effort dedup, using the Simple compiler as the example; useful for deciding what your UOp cache must guarantee."
+    "note": "Argues about hash-consing every node versus best-effort dedup, using the Simple compiler as the example; useful for deciding what your `UOp` cache must guarantee."
    },
    {
     "kind": "blog",
@@ -328,16 +328,16 @@
     "title": "TVM rewrite_simplify.cc",
     "by": "Apache TVM",
     "url": "https://apache.googlesource.com/tvm/+/refs/tags/v0.11.0/src/arith/rewrite_simplify.cc",
-    "note": "A large production rule set for index-expression simplification; read the div/mod rules and compare them to tinygrad's symbolic.py."
+    "note": "A large production rule set for index-expression simplification; read the div/mod rules and compare them to tinygrad's `symbolic.py`."
    }
   ],
-  "stretch": "Write a rule fuzzer: generate random UOp expressions over bounded variables, apply your rewrite set, and check every result against the original with z3 (or exhaustive evaluation for small ranges). Report soundness bugs and measure bounds precision as the mean interval width ratio versus the true range over 10,000 random expressions, and drive it below 1.2."
+  "stretch": "Write a rule fuzzer: generate random `UOp` expressions over bounded variables, apply your rewrite set, and check every result against the original with z3 (or exhaustive evaluation for small ranges). Report soundness bugs and measure bounds precision as the mean interval width ratio versus the true range over 10,000 random expressions, and drive it below 1.2."
  },
  {
   "id": 19,
   "title": "Loads, stores, memory; render C",
   "course_week": 2,
-  "why": "Memory adds effects, so graph order stops being free: a load must come after the stores it observes. This is also your first backend: toposort, emit C, compile with clang, call through ctypes.",
+  "why": "Memory adds effects, so graph order stops being free: a load must come after the stores it observes. This is also your first backend: toposort, emit C, compile with clang, call through `ctypes`.",
   "steps": [
    {
     "kind": "read",
@@ -357,77 +357,77 @@
     "kind": "read",
     "title": "Russ Cox, Hardware Memory Models: 'Sequential Consistency' and 'x86 Total Store Order (x86-TSO)'",
     "url": "https://research.swtch.com/hwmm",
-    "detail": "Only these two sections. They show why unordered memory operations can be observed out of order, which is what AFTER rules out.",
+    "detail": "Only these two sections. They show why unordered memory operations can be observed out of order, which is what `AFTER` rules out.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "Preshing, Memory Ordering at Compile Time",
     "url": "https://preshing.com/20120625/memory-ordering-at-compile-time/",
-    "detail": "Short post: the compiler reorders loads and stores at -O2, and a compiler barrier stops it.",
+    "detail": "Short post: the compiler reorders loads and stores at `-O2`, and a compiler barrier stops it.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Ordering validator",
     "url": "",
-    "detail": "Track, per buffer, the stores reachable through after. REJECT unordered loads and out-of-range or wrong-dtype stores, reusing Week 1 bounds. Pass rejected_load_without_after, rejected_store_oob, rejected_store_dtype.",
+    "detail": "Track, per buffer, the stores reachable through after. REJECT unordered loads and out-of-range or wrong-dtype stores, reusing Week 1 bounds. Pass `rejected_load_without_after`, `rejected_store_oob`, `rejected_store_dtype`.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Interpreter support for memory",
     "url": "",
-    "detail": "Extend the Week 1 evaluator with buffers so it executes store/load/after in dependency order. Pass store_load, index_store, two_stores_ordered, read_modify_write, mismatch_stale_read.",
+    "detail": "Extend the Week 1 evaluator with buffers so it executes store/load/after in dependency order. Pass `store_load`, `index_store`, `two_stores_ordered`, `read_modify_write`, `mismatch_stale_read`.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad linearize (toposort to a list)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/late/linearizer.py#L8",
-    "detail": "Read linearize() and UOp.toposort (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L281) to see a graph turned into a straight-line list.",
+    "detail": "Read `linearize()` and `UOp.toposort` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L281) to see a graph turned into a straight-line list.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Toposort + C emitter",
     "url": "",
-    "detail": "Emit one loopless C function: one local per node in topo order, buffers as pointer arguments, i32 add/mul/shl done in uint32_t and cast back so signed overflow is not undefined behaviour.",
+    "detail": "Emit one loopless C function: one local per node in topo order, buffers as pointer arguments, `i32` add/mul/shl done in `uint32_t` and cast back so signed overflow is not undefined behaviour.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad renderer/cstyle.py: base_rewrite and ClangRenderer",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/cstyle.py#L9",
-    "detail": "Read base_rewrite (lines 9-80) and ClangRenderer (line 283). Rendering is another PatternMatcher, from UOp to string.",
+    "detail": "Read `base_rewrite` (lines 9-80) and `ClangRenderer` (line 283). Rendering is another `PatternMatcher`, from `UOp` to string.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "Python ctypes: loading shared libraries and arrays",
     "url": "https://docs.python.org/3/library/ctypes.html#loading-dynamic-link-libraries",
-    "detail": "Tutorial sections 'Loading dynamic link libraries', 'Specifying the required argument types (function prototypes)' and 'Arrays'. Use dlopen if your compiler is not in Python.",
+    "detail": "Tutorial sections 'Loading dynamic link libraries', 'Specifying the required argument types (function prototypes)' and 'Arrays'. Use `dlopen` if your compiler is not in Python.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "clang -O2 -shared + ctypes runtime",
     "url": "",
-    "detail": "Write the .c file to a temp dir, compile with clang -O2 -shared, load it, allocate buffers, call, compare with the assert. Run week01 and week02 through the C backend.",
+    "detail": "Write the `.c` file to a temp dir, compile with `clang -O2 -shared`, load it, allocate buffers, call, compare with the assert. Run week01 and week02 through the C backend.",
     "bot_block": false
    },
    {
     "kind": "test",
     "title": "Cross-check the two backends",
     "url": "",
-    "detail": "Run the interpreter and the C backend on every test and diff the results. Add 10 tests, e.g. two stores to the same index, a store whose index is only safe via mod bounds, an add that overflows INT_MAX.",
+    "detail": "Run the interpreter and the C backend on every test and diff the results. Add 10 tests, e.g. two stores to the same index, a store whose index is only safe via mod bounds, an add that overflows `INT_MAX`.",
     "bot_block": false
    }
   ],
-  "build": "A C backend: toposort, render one loopless function, compile with clang, run via ctypes, with the interpreter as a cross-check.",
+  "build": "A C backend: toposort, render one loopless function, compile with clang, run via `ctypes`, with the interpreter as a cross-check.",
   "check": [
-   "python3 run_tests.py 1 and python3 run_tests.py 2 both pass with the C backend",
-   "rejected_load_without_after, rejected_store_oob and rejected_store_dtype print REJECTED",
+   "`python3 run_tests.py 1` and `python3 run_tests.py 2` both pass with the C backend",
+   "`rejected_load_without_after`, `rejected_store_oob` and `rejected_store_dtype` print `REJECTED`",
    "Interpreter and C backend give the same value on every test file",
    "10+ new tests in tests/week02"
   ],
@@ -440,34 +440,34 @@
    {
     "title": "John Regehr, A Guide to Undefined Behavior in C and C++, Part 1",
     "url": "https://blog.regehr.org/archives/213",
-    "note": "Why generated signed i32 arithmetic needs the uint32_t round-trip."
+    "note": "Why generated signed `i32` arithmetic needs the `uint32_t` round-trip."
    }
   ],
   "effort": "20-30 h",
   "difficulty": 3,
   "outcomes": [
    "Reject a UIR program whose loads are not ordered after the stores to the same buffer.",
-   "Toposort a UOp graph, emit one loopless C function, build it with clang -O2 -shared and call it through ctypes.",
+   "Toposort a `UOp` graph, emit one loopless C function, build it with `clang -O2 -shared` and call it through `ctypes`.",
    "Use the Week 1 interpreter as a reference to diff against the C backend on every test."
   ],
   "stuck": [
-   "ctypes segfault: argtypes not set, or a buffer object freed before the call. Set argtypes and keep a Python reference to every buffer.",
+   "`ctypes` segfault: argtypes not set, or a buffer object freed before the call. Set argtypes and keep a Python reference to every buffer.",
    "Node rendered twice or used before defined: the toposort visits shared children more than once. Memoize by node identity.",
-   "Old code runs after you change the compiler: dlopen returned the library already loaded from that path. Name each .so by a hash of its source.",
-   "C and interpreter disagree only on overflow tests: clang assumed signed add cannot overflow. Do i32 arithmetic in uint32_t."
+   "Old code runs after you change the compiler: `dlopen` returned the library already loaded from that path. Name each `.so` by a hash of its source.",
+   "C and interpreter disagree only on overflow tests: clang assumed signed add cannot overflow. Do `i32` arithmetic in `uint32_t`."
   ],
   "project": {
    "title": "kiln v1.1: Differential fuzzer: C backend vs interpreter",
-   "brief": "Write a random UIR program generator for the Week 1-2 op set (i32/bool, scalars and stacks, stores and loads with after, edge-case constants like INT_MIN and 0) and differential-test your C backend against your interpreter. Shrink every mismatch to a minimal reproducer and commit it as a regression test.",
+   "brief": "Write a random UIR program generator for the Week 1-2 op set (`i32/bool`, scalars and stacks, stores and loads with after, edge-case constants like `INT_MIN` and 0) and differential-test your C backend against your interpreter. Shrink every mismatch to a minimal reproducer and commit it as a regression test.",
    "deliverables": [
     "repo with a generator, a runner that compares both backends, and a delta-debugging reducer",
     "README with programs per second, per-op coverage counts, and a table of bugs found (root cause, fix commit)",
-    "a regression corpus of minimized failing programs wired into run_tests.py-style tests",
+    "a regression corpus of minimized failing programs wired into `run_tests.py`-style tests",
     "a 600-1200 word write-up on the most surprising bug and the C rule behind it"
    ],
    "rubric": {
-    "solid": "100,000+ generated programs (batch many functions per .c file to keep clang time down) with no unexplained mismatch; every mismatch found is minimized below 15 nodes and fixed.",
-    "exceptional": "Generator is driven by Hypothesis strategies so shrinking is automatic; you compare its shrunk cases against your own reducer; generated programs hit every op and every REJECTED rule at least 100 times."
+    "solid": "100,000+ generated programs (batch many functions per `.c` file to keep clang time down) with no unexplained mismatch; every mismatch found is minimized below 15 nodes and fixed.",
+    "exceptional": "Generator is driven by Hypothesis strategies so shrinking is automatic; you compare its shrunk cases against your own reducer; generated programs hit every op and every `REJECTED` rule at least 100 times."
    },
    "references": [
     {
@@ -493,13 +493,13 @@
    {
     "title": "tinygrad runtime/ops_cpu.py",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/ops_cpu.py",
-    "note": "How tinygrad loads the compiled code and calls it with buffer pointers; compare with your ctypes runtime.",
+    "note": "How tinygrad loads the compiled code and calls it with buffer pointers; compare with your `ctypes` runtime.",
     "for": "Load and call through ctypes"
    },
    {
     "title": "tinygrad uop/spec.py: validate_index",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/spec.py#L9",
-    "note": "The out-of-bounds load/store check built on vmin/vmax, matching rejected_store_oob.",
+    "note": "The out-of-bounds load/store check built on `vmin/vmax`, matching `rejected_store_oob`.",
     "for": "Ordering validator"
    },
    {
@@ -535,14 +535,14 @@
     "title": "MLIR: A Compiler Infrastructure for the End of Moore's Law",
     "by": "Chris Lattner et al.",
     "url": "https://arxiv.org/abs/2002.11054",
-    "note": "Section on side effects and regions shows how a production IR models memory effects that AFTER makes explicit."
+    "note": "Section on side effects and regions shows how a production IR models memory effects that `AFTER` makes explicit."
    },
    {
     "kind": "repo",
     "title": "Sea of Nodes: Simple",
     "by": "Cliff Click et al.",
     "url": "https://github.com/SeaOfNodes/Simple",
-    "note": "The memory chapters thread a memory edge through loads and stores, an alternative design to AFTER worth comparing."
+    "note": "The memory chapters thread a memory edge through loads and stores, an alternative design to `AFTER` worth comparing."
    },
    {
     "kind": "book",
@@ -556,14 +556,14 @@
     "title": "llm.c",
     "by": "Andrej Karpathy",
     "url": "https://github.com/karpathy/llm.c",
-    "note": "train_gpt2.c is a full model as plain C loops over pointer buffers, a target for what your backend could eventually emit."
+    "note": "`train_gpt2.c` is a full model as plain C loops over pointer buffers, a target for what your backend could eventually emit."
    },
    {
     "kind": "lecture",
     "title": "Instruction Scheduling (CSE 401, Spring 2025)",
     "by": "University of Washington",
     "url": "https://courses.cs.washington.edu/courses/cse401/25sp/lectures/R-Instruction-Scheduling.pdf",
-    "note": "Shows that any topological order of an SSA dependence DAG is legal and how list scheduling picks among ready nodes; this is the theory behind linearizing a UOp graph."
+    "note": "Shows that any topological order of an SSA dependence DAG is legal and how list scheduling picks among ready nodes; this is the theory behind linearizing a `UOp` graph."
    },
    {
     "kind": "repo",
@@ -580,26 +580,26 @@
     "note": "Argues that load-store reordering should never be programmer-visible; read the abstract to frame which load/store reorderings your renderer may do."
    }
   ],
-  "stretch": "Add a restrict-aware emitter and an alias checker: prove from your AFTER graph which buffers never alias, emit __restrict__ only for those, and show with clang -O3 -Rpass=loop-vectorize on 5 kernels that vectorization appears where it did not before, with measured speedup."
+  "stretch": "Add a restrict-aware emitter and an alias checker: prove from your `AFTER` graph which buffers never alias, emit `__restrict__` only for those, and show with clang `-O3 -Rpass=loop-vectorize` on 5 kernels that vectorization appears where it did not before, with measured speedup."
  },
  {
   "id": 20,
   "title": "Loops, floats, runtime; matmul and conv",
   "course_week": 3,
-  "why": "range and end turn straight-line code into loop nests, and placing each computation in the innermost loop it depends on is the first scheduling decision. f32 arrives, so correctness becomes a tolerance.",
+  "why": "range and end turn straight-line code into loop nests, and placing each computation in the innermost loop it depends on is the first scheduling decision. `f32` arrives, so correctness becomes a tolerance.",
   "steps": [
    {
     "kind": "read",
     "title": "10-411 syllabus: Week 3",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
-    "detail": "RANGE/END/RECIP, the ranges and ended_ranges properties, and the note that this is likely the first week you need a rewrite engine to order the ranges.",
+    "detail": "`RANGE/END/RECIP`, the ranges and `ended_ranges` properties, and the note that this is likely the first week you need a rewrite engine to order the ranges.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "range/end/recip/f32 in parser, types and bounds",
     "url": "",
-    "detail": "range n has bounds [0, n-1]; recip takes f32 only; float literals contain '.'. REJECT rejected_recip_int and rejected_range_index_oob.",
+    "detail": "range n has bounds [0, n-1]; recip takes `f32` only; float literals contain '.'. REJECT `rejected_recip_int` and `rejected_range_index_oob`.",
     "bot_block": false
    },
    {
@@ -613,7 +613,7 @@
     "kind": "implement",
     "title": "Render ranges as nested for loops",
     "url": "",
-    "detail": "Emit each node inside the innermost loop among its ranges; close loops at end, innermost first. Pass range_fill, range_square, nested_ranges_2x3, float_recip.",
+    "detail": "Emit each node inside the innermost loop among its ranges; close loops at end, innermost first. Pass `range_fill`, `range_square`, `nested_ranges_2x3`, `float_recip`.",
     "bot_block": false
    },
    {
@@ -627,14 +627,14 @@
     "kind": "implement",
     "title": "Float comparison in assert and runtime",
     "url": "",
-    "detail": "Compare f32 results with a tolerance; emit float, not double, and render recip x as 1.0f/x.",
+    "detail": "Compare `f32` results with a tolerance; emit float, not double, and render recip x as `1.0f/x`.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Hand-write gemm_256.uir",
     "url": "",
-    "detail": "M=N=K=256 with three ranges and an accumulator buffer. Check against NumPy (A @ B in float32) within 1e-4 with a small harness script.",
+    "detail": "`M=N=K=256` with three ranges and an accumulator buffer. Check against NumPy (`A @ B` in `float32`) within 1e-4 with a small harness script.",
     "bot_block": false
    },
    {
@@ -648,21 +648,21 @@
     "kind": "read",
     "title": "tinygrad-notes: The trick in convolution and arange",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241208_conv.html",
-    "detail": "tinygrad builds conv from _pool, which is expand, permute and shrink. Preview for Module 22; the note uses an older tinygrad API.",
+    "detail": "tinygrad builds conv from `_pool`, which is expand, permute and shrink. Preview for Module 22; the note uses an older tinygrad API.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Hand-write conv3x3.uir",
     "url": "",
-    "detail": "Direct 3x3 conv2d, 1 channel, 32x32 input, no padding (30x30 output), as nested ranges. Check against a NumPy loop or scipy.signal.correlate2d(mode='valid') within 1e-4.",
+    "detail": "Direct `3x3` conv2d, 1 channel, `32x32` input, no padding (`30x30` output), as nested ranges. Check against a NumPy loop or `scipy.signal.correlate2d(mode='valid')` within 1e-4.",
     "bot_block": false
    },
    {
     "kind": "measure",
     "title": "Time gemm_256 in C",
     "url": "",
-    "detail": "Report GFLOP/s (2*256^3 flops / median time over 10+ runs after a warmup) for your naive loop nest. Module 24 tries to beat this number.",
+    "detail": "Report GFLOP/s (`2*256^3` flops / median time over 10+ runs after a warmup) for your naive loop nest. Module 24 tries to beat this number.",
     "bot_block": false
    },
    {
@@ -673,36 +673,36 @@
     "bot_block": false
    }
   ],
-  "build": "Loop nests from range/end, f32 and recip, plus hand-written GEMM and conv UIR checked against NumPy.",
+  "build": "Loop nests from range/end, `f32` and recip, plus hand-written GEMM and conv UIR checked against NumPy.",
   "check": [
-   "python3 run_tests.py 1, 2 and 3 all pass",
-   "gemm_256.uir matches NumPy float32 matmul within 1e-4",
-   "conv3x3.uir matches a NumPy 3x3 valid correlation within 1e-4",
+   "`python3 run_tests.py 1`, 2 and 3 all pass",
+   "`gemm_256.uir` matches NumPy `float32` matmul within 1e-4",
+   "`conv3x3.uir` matches a NumPy `3x3` valid correlation within 1e-4",
    "In the generated C, a node that depends only on the outer range is emitted outside the inner loop"
   ],
   "extra": [
    {
     "title": "tinygrad renderer/cstyle.py: RANGE rendering in base_rewrite",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/cstyle.py#L9",
-    "note": "Lines 15-18: RANGE becomes a for loop."
+    "note": "Lines 15-18: `RANGE` becomes a for loop."
    }
   ],
   "effort": "25-35 h",
   "difficulty": 4,
   "outcomes": [
    "Lower range/end into C for loops with each node in the innermost loop it depends on.",
-   "Compare f32 results within a stated tolerance and explain why accumulation order changes them.",
-   "Hand-write GEMM (256^3) and a 3x3 conv in UIR, verify them against NumPy, and report a GFLOP/s baseline."
+   "Compare `f32` results within a stated tolerance and explain why accumulation order changes them.",
+   "Hand-write GEMM (`256^3`) and a `3x3` conv in UIR, verify them against NumPy, and report a GFLOP/s baseline."
   ],
   "stuck": [
-   "Wrong loop nesting or off-by-one bounds: print the generated C for nested_ranges_2x3 and trace it by hand.",
-   "conv3x3 wrong only at the edges: output size for a valid 3x3 on 32x32 is 30x30. Check your index ranges against that.",
-   "gemm_256 fails the tolerance: the oracle used float64. Compute the NumPy reference in float32, or compare with a relative tolerance.",
+   "Wrong loop nesting or off-by-one bounds: print the generated C for `nested_ranges_2x3` and trace it by hand.",
+   "conv3x3 wrong only at the edges: output size for a valid `3x3` on `32x32` is `30x30`. Check your index ranges against that.",
+   "`gemm_256` fails the tolerance: the oracle used `float64`. Compute the NumPy reference in `float32`, or compare with a relative tolerance.",
    "Timings vary run to run: warm up once, time 10+ runs and report the median."
   ],
   "project": {
    "title": "kiln v1.2: Roofline benchmark harness for your compiler",
-   "brief": "Build a harness that runs the kernels your compiler can emit now (elementwise add over 2^20 f32, gemm at 64/128/256/512, conv3x3 at 32/64/128) over a size sweep, computes arithmetic intensity (flops / bytes of buffers) from the IR, and plots each on a roofline of your machine using a measured peak FLOP/s and a STREAM-style copy bandwidth. Later modules add their kernels to it.",
+   "brief": "Build a harness that runs the kernels your compiler can emit now (elementwise add over `2^20` `f32`, gemm at 64/128/256/512, conv3x3 at 32/64/128) over a size sweep, computes arithmetic intensity (flops / bytes of buffers) from the IR, and plots each on a roofline of your machine using a measured peak FLOP/s and a STREAM-style copy bandwidth. Later modules add their kernels to it.",
    "deliverables": [
     "repo with a bench CLI that writes JSON results keyed by git commit",
     "a generated HTML or notebook page: roofline plot, GFLOP/s vs size, history across commits",
@@ -710,7 +710,7 @@
     "a 600-1200 word write-up on which kernels are compute- or memory-bound and why"
    ],
    "rubric": {
-    "solid": "All listed kernels on one roofline with intensity computed from the IR, not hand-entered; repeated runs agree within 5%; NumPy float32 matmul shown as a reference point.",
+    "solid": "All listed kernels on one roofline with intensity computed from the IR, not hand-entered; repeated runs agree within 5%; NumPy `float32` matmul shown as a reference point.",
     "exceptional": "CI flags any kernel that slows down by more than 5% between commits; adds an L1/L2 bandwidth ceiling and explains which gemm sizes fall out of cache."
    },
    "references": [
@@ -743,7 +743,7 @@
    {
     "title": "llama2.c run.c: matmul",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
-    "note": "A minimal float32 matmul loop with an accumulator, the reference shape for gemm_256.",
+    "note": "A minimal `float32` matmul loop with an accumulator, the reference shape for `gemm_256`.",
     "for": "Hand-write gemm_256.uir"
    },
    {
@@ -838,7 +838,7 @@
     "note": "Shows JIT-generated direct convolution near peak on x86 without im2col; read the loop-blocking section for the case against im2col copies."
    }
   ],
-  "stretch": "Write a loop-order autotuner for gemm_256: enumerate all 6 permutations of the three ranges plus 2-level tiling with tile sizes in {8,16,32,64}, compile each, and report GFLOP/s against NumPy. Target at least 30 percent of NumPy single-thread float32 throughput with a schedule your compiler emits."
+  "stretch": "Write a loop-order autotuner for `gemm_256`: enumerate all 6 permutations of the three ranges plus 2-level tiling with tile sizes in {8,16,32,64}, compile each, and report GFLOP/s against NumPy. Target at least 30 percent of NumPy single-thread `float32` throughput with a schedule your compiler emits."
  },
  {
   "id": 21,
@@ -850,14 +850,14 @@
     "kind": "read",
     "title": "10-411 syllabus: Week 4",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
-    "detail": "REDUCE (axis count / op), STAGE (temp buffer), EXPAND, and 'Rangeify removes shapes from all ops'.",
+    "detail": "`REDUCE` (axis count / op), `STAGE` (temp buffer), `EXPAND`, and 'Rangeify removes shapes from all ops'.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "expand, reduce, rank-1 ALU: types and shapes",
     "url": "",
-    "detail": "Shape rules for expand (scalar to (n,)) and reduce of the last pop axes. REJECT rejected_shape_mismatch; pass elementwise_rank1 in the interpreter first.",
+    "detail": "Shape rules for expand (scalar to (n,)) and reduce of the last pop axes. REJECT `rejected_shape_mismatch`; pass `elementwise_rank1` in the interpreter first.",
     "bot_block": false
    },
    {
@@ -871,21 +871,21 @@
     "kind": "read",
     "title": "tinygrad-notes: Short note on operator fusion",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20250117_fusion.html",
-    "detail": "a+4+3 becomes one kernel; calling realize() on the intermediate forces two. Written against an older tinygrad.",
+    "detail": "`a+4+3` becomes one kernel; calling `realize()` on the intermediate forces two. Written against an older tinygrad.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Rangeify pass",
     "url": "",
-    "detail": "Rewrite each shaped node into a scalar node indexed by ranges: elementwise ops share their consumer's ranges; reduce opens new ranges and an accumulator. Pass dot_product, reduce_max, reduce_expand, mismatch_reduce.",
+    "detail": "Rewrite each shaped node into a scalar node indexed by ranges: elementwise ops share their consumer's ranges; reduce opens new ranges and an accumulator. Pass `dot_product`, `reduce_max`, `reduce_expand`, `mismatch_reduce`.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad run_rangeify and pm_apply_rangeify",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/indexing.py#L181",
-    "detail": "After your first version: run_rangeify, the pm_apply_rangeify matcher (line 128) and convert_reduce_to_reduce_with_ranges (line 104).",
+    "detail": "After your first version: `run_rangeify`, the `pm_apply_rangeify` matcher (line 128) and `convert_reduce_to_reduce_with_ranges` (line 104).",
     "bot_block": false
    },
    {
@@ -899,7 +899,7 @@
     "kind": "read",
     "title": "tinygrad rangeify.py: stage, _limit_bufs, remove_bufferize",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/rangeify.py#L164",
-    "detail": "stage() wraps a value in a bufferize over fresh ranges and indexes it back; _limit_bufs (line 169) calls it when a kernel would exceed the device's buffer limit. remove_bufferize (line 46) goes the other way.",
+    "detail": "`stage()` wraps a value in a bufferize over fresh ranges and indexes it back; `_limit_bufs` (line 169) calls it when a kernel would exceed the device's buffer limit. `remove_bufferize` (line 46) goes the other way.",
     "bot_block": false
    },
    {
@@ -920,14 +920,14 @@
     "kind": "test",
     "title": "10 own tests",
     "url": "",
-    "detail": "E.g. x minus max(x) (the reduce input is used twice, so it must stage), expand of a reduce, max-reduce of all-negative values (init to INT_MIN, not 0).",
+    "detail": "E.g. x minus `max(x)` (the reduce input is used twice, so it must stage), expand of a reduce, max-reduce of all-negative values (init to `INT_MIN`, not 0).",
     "bot_block": false
    }
   ],
   "build": "A rangeify pass that lowers expand/reduce/rank-1 ALU to scalar loops and decides fusion vs staging.",
   "check": [
-   "python3 run_tests.py 1 through 4 all pass",
-   "reduce(mul(a,b)) generates one loop with no temp buffer in the C",
+   "`python3 run_tests.py 1` through 4 all pass",
+   "`reduce(mul(a,b))` generates one loop with no temp buffer in the C",
    "A reduce input read twice gets exactly one staged buffer",
    "10+ new tests in tests/week04"
   ],
@@ -940,7 +940,7 @@
    {
     "title": "TorchInductor design post",
     "url": "https://dev-discuss.pytorch.org/t/torchinductor-a-pytorch-native-compiler-with-define-by-run-ir-and-symbolic-shapes/747",
-    "note": "See the answer on op fusion: can_fuse decides legality and score_fusion orders fusions."
+    "note": "See the answer on op fusion: `can_fuse` decides legality and `score_fusion` orders fusions."
    }
   ],
   "effort": "25-40 h",
@@ -954,14 +954,14 @@
    "A fused reduce is recomputed for every output element: stage a reduce result that is consumed inside another loop.",
    "Wrong results after fusion: two reduces share range variables. Give each reduce its own ranges.",
    "Accumulator carries over between outputs: initialize it inside the outer loops, not above them.",
-   "reduce_max wrong on negative inputs: the identity for max is INT_MIN (or -inf for f32), not 0."
+   "`reduce_max` wrong on negative inputs: the identity for max is `INT_MIN` (or `-inf` for `f32`), not 0."
   ],
   "project": {
    "title": "kiln v1.3: Fusion plan search with a cost model",
    "brief": "Expose each fuse-or-stage decision as a knob. Enumerate the plans for three rank-1 graphs you can write in Week 4 UIR, estimate bytes moved and flops for each with a cost model, measure real runtime, and report how well the model ranks the plans. This replaces the fixed fusion rules from v0.8.",
    "deliverables": [
     "repo with a plan enumerator, a cost model and a runner",
-    "README with predicted vs measured time and Spearman rank correlation on 3 graphs at n = 2^20 f32: x*recip(sum(x)), x - max(x), and a mean-centered sum of squares",
+    "README with predicted vs measured time and Spearman rank correlation on 3 graphs at n = `2^20` `f32`: `x*recip(sum(x))`, `x - max(x)`, and a mean-centered sum of squares",
     "the generated C for the chosen plan next to the no-fusion plan, with temp-buffer sizes noted",
     "a 600-1200 word write-up on a case where fusing made things slower and why"
    ],
@@ -1005,7 +1005,7 @@
    {
     "title": "PyTorch Inductor scheduler.py",
     "url": "https://github.com/pytorch/pytorch/blob/main/torch/_inductor/scheduler.py",
-    "note": "Production fuse-or-not logic (can_fuse, score_fusion) for comparison with your rule.",
+    "note": "Production fuse-or-not logic (`can_fuse`, `score_fusion`) for comparison with your rule.",
     "for": "Materialization decision"
    }
   ],
@@ -1029,14 +1029,14 @@
     "title": "Halide",
     "by": "Halide team",
     "url": "https://github.com/halide/Halide",
-    "note": "Tutorial lesson 8 (scheduling multi-stage pipelines) is compute_at/store_at, the exact fuse-or-stage decision."
+    "note": "Tutorial lesson 8 (scheduling multi-stage pipelines) is `compute_at/store_at`, the exact fuse-or-stage decision."
    },
    {
     "kind": "repo",
     "title": "Apache TVM",
     "by": "Apache",
     "url": "https://github.com/apache/tvm",
-    "note": "Its operator fusion pass (FuseOps) classifies ops as injective, reduction or opaque, a rule set to compare with yours."
+    "note": "Its operator fusion pass (`FuseOps`) classifies ops as injective, reduction or opaque, a rule set to compare with yours."
    },
    {
     "kind": "blog",
@@ -1064,7 +1064,7 @@
     "title": "A Range Is Not Its Shape: Reading Rangeify-Era tinygrad from OCANNL",
     "by": "Lukasz Stafiniak",
     "url": "https://lukstafi.github.io/notes/a-range-is-not-its-shape.html",
-    "note": "An outside compiler author's reading of tinygrad's rangeify design, contrasting declarative shapes with imperative ranges; read it after rangeify.py for a second view."
+    "note": "An outside compiler author's reading of tinygrad's rangeify design, contrasting declarative shapes with imperative ranges; read it after `rangeify.py` for a second view."
    },
    {
     "kind": "talk",
@@ -1128,35 +1128,35 @@
     "kind": "read",
     "title": "tinygrad-notes: Shapetracker",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241217_st.html",
-    "detail": "Shape, strides and mask per view, and the transpose-then-reshape example whose index needs %3 and //3. ShapeTracker has since been removed from tinygrad; the index ideas still apply.",
+    "detail": "Shape, strides and mask per view, and the transpose-then-reshape example whose index needs `%3` and `//3`. `ShapeTracker` has since been removed from tinygrad; the index ideas still apply.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Shapes of any rank + shape rules for 5 movement ops",
     "url": "",
-    "detail": "Validate each op's argument: reshape keeps the element count, permute is a permutation, pad/shrink pairs fit the axis. REJECT rejected_reshape_size.",
+    "detail": "Validate each op's argument: reshape keeps the element count, permute is a permutation, pad/shrink pairs fit the axis. REJECT `rejected_reshape_size`.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Movement ops as index rewrites",
     "url": "",
-    "detail": "During rangeify, map output ranges to input indices: permute reorders them, shrink adds the start offset, expand drops the broadcast axis, reshape flattens and splits with div/mod, pad subtracts 'before' and adds a where on validity. Pass transpose_index, pad_zeros.",
+    "detail": "During rangeify, map output ranges to input indices: permute reorders them, shrink adds the start offset, expand drops the broadcast axis, reshape flattens and splits with div/mod, pad subtracts 'before' and adds a where on validity. Pass `transpose_index`, `pad_zeros`.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad apply_movement_op and _apply_reshape",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/indexing.py#L163",
-    "detail": "Compare with your version; _apply_reshape is at line 147.",
+    "detail": "Compare with your version; `_apply_reshape` is at line 147.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad divandmod.py: fold_divmod_general",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/divandmod.py#L8",
-    "detail": "Rules that use bounds: mod folds when x//y is constant; (x%(k*c))//c becomes (x//c)%k; exact division (q*c+k)//c becomes q+k//c.",
+    "detail": "Rules that use bounds: mod folds when `x//y` is constant; `(x%(k*c))//c` becomes `(x//c)%k`; exact division `(q*c+k)//c` becomes `q+k//c`.",
     "bot_block": true
    },
    {
@@ -1177,7 +1177,7 @@
     "kind": "implement",
     "title": "Matmul and conv from movement ops",
     "url": "",
-    "detail": "Pass matmul_2x2. Then write conv2d (1 channel, 8x8 input, 3x3 kernel, pad 1) using only pad, shrink, reshape, expand, permute, mul and reduce, and match NumPy.",
+    "detail": "Pass `matmul_2x2`. Then write conv2d (1 channel, `8x8` input, `3x3` kernel, pad 1) using only pad, shrink, reshape, expand, permute, mul and reduce, and match NumPy.",
     "bot_block": false
    },
    {
@@ -1190,7 +1190,7 @@
   ],
   "build": "Rank-N shapes and the five movement ops lowered to masked index arithmetic, with bounds-driven div/mod simplification.",
   "check": [
-   "python3 run_tests.py 1 through 5 all pass",
+   "`python3 run_tests.py 1` through 5 all pass",
    "conv2d built only from movement ops plus mul/reduce matches NumPy",
    "A contiguous reshape and its inverse produce no / or % in the generated C",
    "All 21 Tensor Puzzles pass their notebook tests"
@@ -1217,15 +1217,15 @@
   "stuck": [
    "permute then reshape gives wrong values: the reshape must split the flat index of the permuted shape, not the original one.",
    "Pad then permute then shrink gives wrong edges: the validity mask is attached to the wrong axis. Test that exact chain.",
-   "Index expressions keep growing: add the rule (x//a)*a + x%a -> x and apply it with bounds.",
-   "rejected_reshape_size passes validation: compare the product of all dims, not the rank."
+   "Index expressions keep growing: add the rule `(x//a)*a + x%a -> x` and apply it with bounds.",
+   "`rejected_reshape_size` passes validation: compare the product of all dims, not the rank."
   ],
   "project": {
    "title": "kiln v1.4: Property-tested view algebra with a z3-checked index simplifier",
    "brief": "Use Hypothesis to generate random chains of movement ops on random shapes, check your lowered index arithmetic against the same chain in NumPy, and prove each div/mod rule with z3 under the bounds you computed. Measure how much the simplifier shrinks index expressions on conv2d and matmul. This upgrades the v0.3 view system.",
    "deliverables": [
     "repo with a Hypothesis suite (random chains up to depth 8, shapes up to rank 4) and a z3 proof for each index rule",
-    "README with index-expression op counts and generated-C line counts before and after simplification for conv2d (3x3, 32x32, pad 1), matmul 64x64 and 20 random chains",
+    "README with index-expression op counts and generated-C line counts before and after simplification for conv2d (`3x3`, `32x32`, pad 1), matmul `64x64` and 20 random chains",
     "a diagram or notebook showing how a padded, permuted view maps to memory",
     "a 600-1200 word write-up on when two consecutive reshapes can be merged, with a proof sketch"
    ],
@@ -1275,7 +1275,7 @@
    {
     "title": "teenygrad shape/",
     "url": "https://github.com/tinygrad/teenygrad/tree/main/teenygrad/shape",
-    "note": "A minimal ShapeTracker implementation small enough to read in one sitting.",
+    "note": "A minimal `ShapeTracker` implementation small enough to read in one sitting.",
     "for": "Movement ops as index rewrites"
    }
   ],
@@ -1306,7 +1306,7 @@
     "title": "Stride Visualizer",
     "by": "Edward Z. Yang",
     "url": "https://ezyang.github.io/stride-visualizer/",
-    "note": "Interactive view of how sizes and strides map indices to storage; test your transpose_index by hand here."
+    "note": "Interactive view of how sizes and strides map indices to storage; test your `transpose_index` by hand here."
    },
    {
     "kind": "blog",
@@ -1327,7 +1327,7 @@
     "title": "Halide",
     "by": "Halide team",
     "url": "https://github.com/halide/Halide",
-    "note": "Its bounds inference and BoundaryConditions show pad as a clamped or masked index, like your where on validity."
+    "note": "Its bounds inference and `BoundaryConditions` show pad as a clamped or masked index, like your where on validity."
    },
    {
     "kind": "blog",
@@ -1405,28 +1405,28 @@
     "kind": "implement",
     "title": "Scopes {...}, url= externs, gradient op parsing",
     "url": "",
-    "detail": "Value of a scope is its last binding; load .bin weights. Use tests/week06/data/x.bin.",
+    "detail": "Value of a scope is its last binding; load `.bin` weights. Use `tests/week06/data/x.bin`.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad pm_gradient and compute_gradient",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/gradient.py#L68",
-    "detail": "One rule per op (lines 68-108), then compute_gradient (line 121) for the reverse toposort accumulation.",
+    "detail": "One rule per op (lines 68-108), then `compute_gradient` (line 121) for the reverse toposort accumulation.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "gradient as a rewrite",
     "url": "",
-    "detail": "Rule per op including reduce/expand/movement (gradient of expand is reduce, of permute is inverse permute). Pass gradient_square; test vs finite differences on 20 random graphs.",
+    "detail": "Rule per op including reduce/expand/movement (gradient of expand is reduce, of permute is inverse permute). Pass `gradient_square`; test vs finite differences on 20 random graphs.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad transcendental.py: xexp2, xlog2, xsin",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/decomp/transcendental.py#L193",
-    "detail": "Read xexp2 (193), xlog2 (219) and xsin (170) with cody_waite_reduction (115).",
+    "detail": "Read `xexp2` (193), `xlog2` (219) and `xsin` (170) with `cody_waite_reduction` (115).",
     "bot_block": false
    },
    {
@@ -1447,14 +1447,14 @@
     "kind": "read",
     "title": "llama2.c run.c: forward() and the sampler",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
-    "detail": "Read forward() (rmsnorm, RoPE, attention, SwiGLU FFN) and sample_argmax(); this is your reference.",
+    "detail": "Read `forward()` (rmsnorm, RoPE, attention, SwiGLU FFN) and `sample_argmax()`; this is your reference.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "stories15M with matching tokens",
     "url": "",
-    "detail": "Load stories15M.bin weights, run greedy decoding, compare token ids to run.c for the same prompt.",
+    "detail": "Load `stories15M.bin` weights, run greedy decoding, compare token ids to `run.c` for the same prompt.",
     "bot_block": false
    },
    {
@@ -1468,7 +1468,7 @@
     "kind": "implement",
     "title": "ResNet-18 on one image",
     "url": "",
-    "detail": "Export torchvision resnet18 weights outside your compiler, run one 224x224 image, top-1 class matches PyTorch.",
+    "detail": "Export torchvision resnet18 weights outside your compiler, run one `224x224` image, top-1 class matches PyTorch.",
     "bot_block": false
    },
    {
@@ -1481,9 +1481,9 @@
   ],
   "build": "gradient as a rewrite, own transcendentals, and three real models: MNIST training, stories15M, ResNet-18.",
   "check": [
-   "Gradients match finite differences on 20 random graphs; gradient_square passes",
+   "Gradients match finite differences on 20 random graphs; `gradient_square` passes",
    "MNIST MLP >= 97% test accuracy in < 5 min on CPU",
-   "stories15M tokens identical to run.c",
+   "stories15M tokens identical to `run.c`",
    "ResNet-18 top-1 matches PyTorch"
   ],
   "extra": [
@@ -1506,24 +1506,24 @@
    "Train an MNIST MLP and run stories15M and ResNet-18 inference with outputs matching the references."
   ],
   "stuck": [
-   "Gradient check fails: use float64 finite differences with eps around 1e-6 and relative error, and check one op at a time.",
+   "Gradient check fails: use `float64` finite differences with eps around 1e-6 and relative error, and check one op at a time.",
    "Gradients of broadcast/expand must sum over the expanded axes; forgetting this is the most common bug.",
    "Loss is NaN: log of 0 or exp overflow in softmax. Use log-sum-exp with max subtraction.",
-   "Transcendentals inaccurate at large inputs: range reduction is missing or done in float32. Measure max ULP error over a full input sweep.",
+   "Transcendentals inaccurate at large inputs: range reduction is missing or done in `float32`. Measure max ULP error over a full input sweep.",
    "Model output differs from reference: compare layer by layer with the PyTorch weights and find the first diverging tensor."
   ],
   "project": {
    "title": "kiln v1.5: MNIST, stories15M and ResNet-18 through kiln vs PyTorch",
-   "brief": "Connect the two halves: the kiln front end lowers its graph to UIR and the backend compiles it. On one machine, measure your compiler against PyTorch eager and torch.compile on three workloads: training the 784-128-10 MNIST MLP to 97% test accuracy, greedy decoding 256 tokens with stories15M, and ResNet-18 inference at batch 1 on 224x224 images. Add a ULP-error report for your transcendentals and a finite-difference gradient check for every op.",
+   "brief": "Connect the two halves: the kiln front end lowers its graph to UIR and the backend compiles it. On one machine, measure your compiler against PyTorch eager and `torch.compile` on three workloads: training the 784-128-10 MNIST MLP to 97% test accuracy, greedy decoding 256 tokens with stories15M, and ResNet-18 inference at batch 1 on `224x224` images. Add a ULP-error report for your transcendentals and a finite-difference gradient check for every op.",
    "deliverables": [
     "repo with scripts that reproduce every number from a clean checkout",
-    "README table: MNIST time-to-97%, stories15M tokens/s, ResNet-18 images/s and peak memory, for your compiler, PyTorch eager and torch.compile",
+    "README table: MNIST time-to-97%, stories15M tokens/s, ResNet-18 images/s and peak memory, for your compiler, PyTorch eager and `torch.compile`",
     "a max-ULP-error plot for exp2/log2/sin across their input ranges",
     "a 600-1200 word write-up on the hardest numerical bug and how you found the first diverging tensor"
    ],
    "rubric": {
-    "solid": "MNIST reaches 97%; stories15M greedy tokens identical to run.c; ResNet-18 top-1 matches PyTorch on 100 ImageNet validation images; every op passes gradient check.",
-    "exceptional": "Within 2x of torch.compile on at least one workload, with a profile explaining the gap; transcendentals within 2 ULP; a GPT-2 124M forward pass matching Hugging Face logits to 1e-4."
+    "solid": "MNIST reaches 97%; stories15M greedy tokens identical to `run.c`; ResNet-18 top-1 matches PyTorch on 100 ImageNet validation images; every op passes gradient check.",
+    "exceptional": "Within 2x of `torch.compile` on at least one workload, with a profile explaining the gap; transcendentals within 2 ULP; a GPT-2 124M forward pass matching Hugging Face logits to 1e-4."
    },
    "references": [
     {
@@ -1543,7 +1543,7 @@
    {
     "title": "micrograd engine.py",
     "url": "https://github.com/karpathy/micrograd/blob/master/micrograd/engine.py",
-    "note": "Scalar reverse-mode autodiff in about 100 lines: per-op _backward closures plus a reverse topological sort, the same shape as your gradient rewrite.",
+    "note": "Scalar reverse-mode autodiff in about 100 lines: per-op `_backward` closures plus a reverse topological sort, the same shape as your gradient rewrite.",
     "for": "gradient as a rewrite"
    },
    {
@@ -1626,7 +1626,7 @@
     "title": "HIPS/autograd",
     "by": "Maclaurin, Duvenaud, Johnson",
     "url": "https://github.com/HIPS/autograd",
-    "note": "The predecessor of JAX autodiff; autograd/numpy/numpy_vjps.py is a complete table of NumPy VJP rules to cross-check yours."
+    "note": "The predecessor of JAX autodiff; `autograd/numpy/numpy_vjps.py` is a complete table of NumPy VJP rules to cross-check yours."
    },
    {
     "kind": "video",
@@ -1676,7 +1676,7 @@
     "kind": "measure",
     "title": "Find your machine's peak",
     "url": "",
-    "detail": "Compute single-socket peak FLOPS (cores x freq x SIMD width x 2 FMA units x 2) and measure NumPy 1024^3 GFLOPS as a reference.",
+    "detail": "Compute single-socket peak FLOPS (cores x freq x SIMD width x 2 FMA units x 2) and measure NumPy `1024^3` GFLOPS as a reference.",
     "bot_block": false
    },
    {
@@ -1690,14 +1690,14 @@
     "kind": "implement",
     "title": "axis=GLOBAL|LOOP|UPCAST and kernel calls",
     "url": "",
-    "detail": "Parse the new axis attribute and calls that launch kernels. Pass tests/week07/kernel_fill.uir.",
+    "detail": "Parse the new axis attribute and calls that launch kernels. Pass `tests/week07/kernel_fill.uir`.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Loop reorder + tiling as rewrites",
     "url": "",
-    "detail": "Split a range into outer/inner (r → r_o*T + r_i) and permute; verify correctness with all earlier tests.",
+    "detail": "Split a range into outer/inner (r → `r_o*T + r_i`) and permute; verify correctness with all earlier tests.",
     "bot_block": false
    },
    {
@@ -1711,7 +1711,7 @@
     "kind": "implement",
     "title": "UPCAST: unroll + register accumulators",
     "url": "",
-    "detail": "UPCAST axes become unrolled scalars; add a 4x8-ish micro-kernel of accumulators.",
+    "detail": "`UPCAST` axes become unrolled scalars; add a 4x8-ish micro-kernel of accumulators.",
     "bot_block": false
    },
    {
@@ -1725,14 +1725,14 @@
     "kind": "implement",
     "title": "SIMD and pthreads",
     "url": "",
-    "detail": "Emit vector types (__attribute__((vector_size))) or vectorize pragmas; split GLOBAL axes across pthreads.",
+    "detail": "Emit vector types (`__attribute__((vector_size))`) or vectorize pragmas; split `GLOBAL` axes across pthreads.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad hand_coded_optimizations",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/heuristic.py#L8",
-    "detail": "hand_coded_optimizations (line 8): which axes it upcasts, makes local or unrolls. Compare with your choices.",
+    "detail": "`hand_coded_optimizations` (line 8): which axes it upcasts, makes local or unrolls. Compare with your choices.",
     "bot_block": false
    },
    {
@@ -1750,10 +1750,10 @@
     "bot_block": false
    }
   ],
-  "build": "Tiling, reordering, UPCAST unrolling, SIMD and pthreads in the C backend.",
+  "build": "Tiling, reordering, `UPCAST` unrolling, SIMD and pthreads in the C backend.",
   "check": [
-   "kernel_fill and all earlier tests pass",
-   "1024^3 f32 matmul >= 50% of single-socket peak, GFLOPS reported",
+   "`kernel_fill` and all earlier tests pass",
+   "`1024^3` `f32` matmul >= 50% of single-socket peak, GFLOPS reported",
    "Conv and reduce within 3x of NumPy",
    "10+ new tests"
   ],
@@ -1772,20 +1772,20 @@
   "effort": "30–45 h",
   "difficulty": 4,
   "outcomes": [
-   "Apply tiling, loop reordering and UPCAST unrolling as rewrites that keep all earlier tests passing.",
-   "Emit C that the compiler vectorizes, confirmed by reading the assembly or -Rpass=loop-vectorize output.",
-   "Split GLOBAL axes across pthreads and measure the speedup per core count.",
-   "Report 1024^3 matmul GFLOPS as a fraction of your machine's computed peak."
+   "Apply tiling, loop reordering and `UPCAST` unrolling as rewrites that keep all earlier tests passing.",
+   "Emit C that the compiler vectorizes, confirmed by reading the assembly or `-Rpass=loop-vectorize` output.",
+   "Split `GLOBAL` axes across pthreads and measure the speedup per core count.",
+   "Report `1024^3` matmul GFLOPS as a fraction of your machine's computed peak."
   ],
   "stuck": [
-   "Compiler did not vectorize: check with -Rpass=loop-vectorize or read the asm; aliasing (add restrict) and non-unit strides are the usual causes.",
+   "Compiler did not vectorize: check with `-Rpass=loop-vectorize` or read the asm; aliasing (add restrict) and non-unit strides are the usual causes.",
    "Threads slower than one core: work per thread too small, or threads write to adjacent cache lines (false sharing). Pad or block outputs.",
    "Tiling helped at one size and hurt at another: tile sizes must fit L1/L2; measure, do not guess.",
    "Benchmarks vary 20%: CPU frequency scaling and turbo. Fix the governor or report medians of many runs."
   ],
   "project": {
    "title": "kiln v1.6: Autotuner for your CPU backend",
-   "brief": "Build a search-based autotuner over your schedule space (tile sizes, loop order, unroll, threads) with a measurement cache. Compare random search and beam search on three kernels: 2048^3 fp32 GEMM, a 3x3 conv with 64 in/out channels on 56x56 (a ResNet-18 layer), and row softmax on 4096x4096. Report GFLOPS vs OpenBLAS and trials needed per method.",
+   "brief": "Build a search-based autotuner over your schedule space (tile sizes, loop order, unroll, threads) with a measurement cache. Compare random search and beam search on three kernels: `2048^3` fp32 GEMM, a `3x3` conv with 64 in/out channels on `56x56` (a ResNet-18 layer), and row softmax on `4096x4096`. Report GFLOPS vs OpenBLAS and trials needed per method.",
    "deliverables": [
     "repo with a tuner, a persistent tuning database and a replay command",
     "README with best-found GFLOPS vs trials curves per method and kernel",
@@ -1832,7 +1832,7 @@
    {
     "title": "tinygrad postrange.py",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/postrange.py",
-    "note": "Where tinygrad applies opts (UPCAST, UNROLL, LOCAL) by splitting ranges, the same split-and-permute rewrite you implement.",
+    "note": "Where tinygrad applies opts (`UPCAST`, UNROLL, `LOCAL`) by splitting ranges, the same split-and-permute rewrite you implement.",
     "for": "Loop reorder + tiling as rewrites"
    },
    {
@@ -1869,7 +1869,7 @@
     "title": "Cpu Caches and Why You Care",
     "by": "Scott Meyers",
     "url": "https://www.youtube.com/watch?v=WDIkqP4JbkE",
-    "note": "An hour on cache lines, false sharing and prefetching; watch the false sharing part before threading your GLOBAL axes."
+    "note": "An hour on cache lines, false sharing and prefetching; watch the false sharing part before threading your `GLOBAL` axes."
    },
    {
     "kind": "talk",
@@ -1935,7 +1935,7 @@
     "note": "A compact tour of memory hierarchy, vectorization and threading aimed at ML people; good for the mental model before tuning your CPU backend."
    }
   ],
-  "stretch": "Replace the autotuner's measurement loop with a learned cost model (gradient-boosted trees or a small MLP over loop features, as in TVM/Ansor) and show it reaches within 5% of the best measured schedule with 10x fewer real runs. Extend the micro-kernel to AVX-512 or NEON and report percentage of measured peak on 2048^3 GEMM next to OpenBLAS and BLIS."
+  "stretch": "Replace the autotuner's measurement loop with a learned cost model (gradient-boosted trees or a small MLP over loop features, as in TVM/Ansor) and show it reaches within 5% of the best measured schedule with 10x fewer real runs. Extend the micro-kernel to AVX-512 or NEON and report percentage of measured peak on `2048^3` GEMM next to OpenBLAS and BLIS."
  },
  {
   "id": 25,
@@ -1954,21 +1954,21 @@
     "kind": "watch",
     "title": "GPU MODE Lecture 8: CUDA Performance Checklist",
     "url": "https://github.com/gpu-mode/lectures/tree/main/lecture_008",
-    "detail": "Speaker Mark Saroufim. Run the repo's coalesce.cu, occupancy.cu, divergence.cu, tiling.cu and coarsening.cu and note each timing.",
+    "detail": "Speaker Mark Saroufim. Run the repo's `coalesce.cu`, `occupancy.cu`, `divergence.cu`, `tiling.cu` and `coarsening.cu` and note each timing.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "CUDA renderer + NVRTC via cuda-python",
     "url": "",
-    "detail": "Map GLOBAL to blockIdx, LOCAL to threadIdx, addrspace=LOCAL to __shared__, barrier to __syncthreads(). Use https://nvidia.github.io/cuda-python/ for NVRTC and launch.",
+    "detail": "Map `GLOBAL` to `blockIdx`, `LOCAL` to `threadIdx`, `addrspace=LOCAL` to `__shared__`, barrier to `__syncthreads()`. Use https://nvidia.github.io/cuda-python/ for NVRTC and launch.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad CUDARenderer and gpudims",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/cstyle.py#L423",
-    "detail": "CUDARenderer, then group_gpudims (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/gpudims.py#L44) for folding ranges into grid dims.",
+    "detail": "`CUDARenderer`, then `group_gpudims` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/gpudims.py#L44) for folding ranges into grid dims.",
     "bot_block": false
    },
    {
@@ -1982,7 +1982,7 @@
     "kind": "watch",
     "title": "GPU MODE Lecture 9: Reductions",
     "url": "https://github.com/gpu-mode/lectures/tree/main/lecture_009",
-    "detail": "Speaker Mark Saroufim. Read simple_reduce.cu, control_divergence_reduce.cu, shared_reduce.cu and reduce_coarsening.cu in order.",
+    "detail": "Speaker Mark Saroufim. Read `simple_reduce.cu`, `control_divergence_reduce.cu`, `shared_reduce.cu` and `reduce_coarsening.cu` in order.",
     "bot_block": false
    },
    {
@@ -1996,14 +1996,14 @@
     "kind": "read",
     "title": "Maharshi, Learning CUDA by optimizing softmax: A worklog",
     "url": "https://maharshi.bearblog.dev/optimizing-softmax-cuda/",
-    "detail": "Worklog on a GTX 1050Ti for a 1024x32768 fp32 softmax, starting from a PyTorch baseline. Reproduce each kernel, then make your compiler emit the fastest one.",
+    "detail": "Worklog on a GTX 1050Ti for a `1024x32768` fp32 softmax, starting from a PyTorch baseline. Reproduce each kernel, then make your compiler emit the fastest one.",
     "bot_block": true
    },
    {
     "kind": "implement",
     "title": "Reduce/elementwise schedules for GPU",
     "url": "",
-    "detail": "float4 loads, grid-stride loops and warp-shuffle reduction, emitted from your IR.",
+    "detail": "`float4` loads, grid-stride loops and warp-shuffle reduction, emitted from your IR.",
     "bot_block": false
    },
    {
@@ -2049,28 +2049,28 @@
   "difficulty": 4,
   "outcomes": [
    "Generate CUDA C from your IR and compile and launch it with NVRTC through cuda-python.",
-   "Map GLOBAL axes to blockIdx and LOCAL axes to threadIdx, with __shared__ buffers and __syncthreads() placed correctly.",
+   "Map `GLOBAL` axes to `blockIdx` and `LOCAL` axes to `threadIdx`, with `__shared__` buffers and `__syncthreads()` placed correctly.",
    "Get elementwise and reduce kernels to >= 70% of DRAM bandwidth, as reported by Nsight Compute."
   ],
   "stuck": [
    "Wrong results only at large sizes: grid-stride or bounds check missing for the last partial block.",
-   "Race conditions: __syncthreads() missing between shared-memory write and read, or placed inside divergent code.",
+   "Race conditions: `__syncthreads()` missing between shared-memory write and read, or placed inside divergent code.",
    "Low bandwidth: uncoalesced access. Make consecutive threads touch consecutive addresses; check the ncu memory workload section.",
    "Reductions wrong: tree reduction assumes power-of-two block size, or warp shuffles use the wrong mask.",
    "Timing includes NVRTC compile or host copies: time with CUDA events around the launch only, after warm-up."
   ],
   "project": {
    "title": "kiln v1.7: a CUDA backend near bandwidth peak",
-   "brief": "Add a CUDA backend to kiln and take three of its generated kernels, fp32 elementwise add on 2^28 elements, sum-reduce on 2^28 elements, and row softmax on 1024x32768, from the naive version toward the DRAM roofline. Justify each optimization step with an Nsight Compute metric and keep the generated code for every step.",
+   "brief": "Add a CUDA backend to kiln and take three of its generated kernels, fp32 elementwise add on `2^28` elements, sum-reduce on `2^28` elements, and row softmax on `1024x32768`, from the naive version toward the DRAM roofline. Justify each optimization step with an Nsight Compute metric and keep the generated code for every step.",
    "deliverables": [
     "repo with generator flags for each optimization step and an ncu-driven benchmark script",
     "README with achieved GB/s vs measured peak for each kernel and step, with exported ncu metrics",
-    "comparison against torch.add, torch.sum and torch.softmax at the same sizes",
+    "comparison against `torch.add`, `torch.sum` and `torch.softmax` at the same sizes",
     "a 600-1200 word write-up naming each step's bottleneck and the metric that showed it"
    ],
    "rubric": {
-    "solid": "Elementwise and reduce reach 80% of measured DRAM bandwidth; softmax correct and within 1.5x of torch.softmax.",
-    "exceptional": "90% of bandwidth on elementwise and reduce; softmax matches or beats torch.softmax at 1024x32768."
+    "solid": "Elementwise and reduce reach 80% of measured DRAM bandwidth; softmax correct and within 1.5x of `torch.softmax`.",
+    "exceptional": "90% of bandwidth on elementwise and reduce; softmax matches or beats `torch.softmax` at `1024x32768`."
    },
    "references": [
     {
@@ -2102,7 +2102,7 @@
    {
     "title": "NVIDIA CCCL (CUB)",
     "url": "https://github.com/NVIDIA/cccl",
-    "note": "CUB's BlockReduce and DeviceReduce are the production reduction kernels to benchmark your generated ones against.",
+    "note": "CUB's `BlockReduce` and `DeviceReduce` are the production reduction kernels to benchmark your generated ones against.",
     "for": "GPU kernel lab project"
    }
   ],
@@ -2218,49 +2218,49 @@
     "kind": "implement",
     "title": "Shared-memory tiled GEMM from your scheduler",
     "url": "",
-    "detail": "LOCAL buffers plus barrier; compare your GFLOPS with the post's kernel 3.",
+    "detail": "`LOCAL` buffers plus barrier; compare your GFLOPS with the post's kernel 3.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "siboehm Kernels 4-6 (1D and 2D blocktiling, vectorized SMEM/GMEM access)",
     "url": "https://siboehm.com/articles/22/CUDA-MMM",
-    "detail": "Register tiling and float4 loads; then skim kernels 9 (autotuning) and 10 (warptiling). The post skips 7 and 8.",
+    "detail": "Register tiling and `float4` loads; then skim kernels 9 (autotuning) and 10 (warptiling). The post skips 7 and 8.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "Register tiling + vectorized loads",
     "url": "",
-    "detail": "UPCAST on GPU = per-thread register tiles; emit float4/half2 loads.",
+    "detail": "`UPCAST` on GPU = per-thread register tiles; emit float4/half2 loads.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "PTX ISA: warp-level matrix multiply-accumulate (mma.sync) fragments",
     "url": "https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-instructions",
-    "detail": "The fragment layout tables for mma.m16n8k16 with fp16 inputs.",
+    "detail": "The fragment layout tables for `mma.m16n8k16` with fp16 inputs.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "spatters, Implementing a fast Tensor Core matmul on the Ada Architecture",
     "url": "https://www.spatters.ca/mma-matmul",
-    "detail": "Kernel 1.0 (naive mma) through 3.0 (N-stage cp.async pipeline), with ldmatrix and a permuted shared-memory layout in 2.0. Reaches 89.5% of cuBLAS on an RTX 4090 for one problem size.",
+    "detail": "Kernel 1.0 (naive mma) through 3.0 (N-stage `cp.async` pipeline), with `ldmatrix` and a permuted shared-memory layout in 2.0. Reaches 89.5% of cuBLAS on an RTX 4090 for one problem size.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad TensorCore definitions",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/tc.py#L7",
-    "detail": "The TensorCore dataclass: dtype_in, dtype_out and per-thread fragment layouts (frag_a, frag_b, frag_c), which the scheduler uses to target mma.",
+    "detail": "The TensorCore dataclass: `dtype_in`, `dtype_out` and per-thread fragment layouts (`frag_a`, `frag_b`, `frag_c`), which the scheduler uses to target mma.",
     "bot_block": false
    },
    {
     "kind": "implement",
     "title": "mma.sync emission + double buffering",
     "url": "",
-    "detail": "Emit inline-PTX mma.sync and cp.async double buffering from your scheduler; fp16 4096^3.",
+    "detail": "Emit inline-PTX `mma.sync` and `cp.async` double buffering from your scheduler; fp16 `4096^3`.",
     "bot_block": false
    },
    {
@@ -2299,11 +2299,11 @@
     "bot_block": false
    }
   ],
-  "build": "Register tiling, vectorized and double-buffered loads, mma.sync, and a fused attention kernel emitted by your compiler.",
+  "build": "Register tiling, vectorized and double-buffered loads, `mma.sync`, and a fused attention kernel emitted by your compiler.",
   "check": [
-   "fp16 4096^3 GEMM >= 70% of cuBLAS",
+   "fp16 `4096^3` GEMM >= 70% of cuBLAS",
    "Flash-attention forward >= 60% of PyTorch SDPA",
-   "mma.sync appears in compiler-generated code, not hand-written CUDA",
+   "`mma.sync` appears in compiler-generated code, not hand-written CUDA",
    "All earlier tests still pass"
   ],
   "extra": [
@@ -2320,34 +2320,34 @@
    {
     "title": "Outperforming cuBLAS on H100",
     "url": "https://cudaforfun.substack.com/p/outperforming-cublas-on-h100-a-worklog",
-    "note": "Hopper-era worklog (wgmma, TMA)."
+    "note": "Hopper-era worklog (`wgmma`, TMA)."
    }
   ],
   "effort": "50–70 h",
   "difficulty": 5,
   "outcomes": [
-   "Generate register-tiled GEMM kernels with float4 loads and cp.async double buffering from your scheduler.",
-   "Emit mma.sync with fragment layouts that pass a single 16x8x16 tile test against NumPy.",
-   "Generate a FlashAttention-2 style forward kernel with online softmax that matches a float64 reference."
+   "Generate register-tiled GEMM kernels with `float4` loads and `cp.async` double buffering from your scheduler.",
+   "Emit `mma.sync` with fragment layouts that pass a single `16x8x16` tile test against NumPy.",
+   "Generate a FlashAttention-2 style forward kernel with online softmax that matches a `float64` reference."
   ],
   "stuck": [
-   "mma.sync results scrambled: fragment layout per thread is specific; copy the PTX ISA layout tables and test a single 16x8x16 tile first.",
+   "`mma.sync` results scrambled: fragment layout per thread is specific; copy the PTX ISA layout tables and test a single `16x8x16` tile first.",
    "Shared-memory bank conflicts kill performance: check ncu bank-conflict counters and swizzle or pad the tile.",
-   "Double buffering slower: you added a sync that serializes loads and compute; use cp.async with commit/wait groups.",
-   "Flash attention numerics drift: online softmax must rescale the running sum and output when the max changes; test against a float64 reference.",
-   "Register spills (check -Xptxas -v): tile too large for the register file; lower it."
+   "Double buffering slower: you added a sync that serializes loads and compute; use `cp.async` with commit/wait groups.",
+   "Flash attention numerics drift: online softmax must rescale the running sum and output when the max changes; test against a `float64` reference.",
+   "Register spills (check `-Xptxas -v`): tile too large for the register file; lower it."
   ],
   "project": {
    "title": "Tensor-core GEMM and flash attention: within reach of cuBLAS and FA2",
    "brief": "Benchmark your compiler-emitted fp16 GEMM against cuBLAS on square sizes 1024-8192, and your fused attention forward against FlashAttention-2 (head dim 64, 16 heads, batch 4, seqlen 512-8192). Explain each remaining gap with ncu data.",
    "deliverables": [
-    "repo with generated kernels, a shape-sweep benchmark and correctness tests vs float64 references",
+    "repo with generated kernels, a shape-sweep benchmark and correctness tests vs `float64` references",
     "README with TFLOP/s vs size plots for GEMM and attention, with cuBLAS and FA2 lines",
-    "an ncu comparison of your best GEMM vs cuBLAS at 4096^3 (occupancy, pipe utilization, stall reasons)",
+    "an ncu comparison of your best GEMM vs cuBLAS at `4096^3` (occupancy, pipe utilization, stall reasons)",
     "a 600-1200 word write-up on the three optimizations that mattered most, with ablation numbers"
    ],
    "rubric": {
-    "solid": "GEMM at 60% of cuBLAS at 4096^3 fp16; attention correct and faster than unfused PyTorch attention at every tested seqlen.",
+    "solid": "GEMM at 60% of cuBLAS at `4096^3` fp16; attention correct and faster than unfused PyTorch attention at every tested seqlen.",
     "exceptional": "GEMM at 85% of cuBLAS and attention at 70% of FA2; causal masking supported; stall-reason analysis explains the remaining gap."
    },
    "references": [
@@ -2376,7 +2376,7 @@
    {
     "title": "spatters/mma-matmul",
     "url": "https://github.com/spatters/mma-matmul",
-    "note": "The source for the Ada tensor-core post: mma.sync, ldmatrix, permuted shared-memory layout and cp.async pipelining.",
+    "note": "The source for the Ada tensor-core post: `mma.sync`, `ldmatrix`, permuted shared-memory layout and `cp.async` pipelining.",
     "for": "mma.sync emission + double buffering"
    },
    {
@@ -2460,7 +2460,7 @@
     "title": "ThunderKittens: Simple, Fast, and Adorable AI Kernels",
     "by": "Spector et al.",
     "url": "https://arxiv.org/abs/2410.20399",
-    "note": "Argues 16x16 tiles as the programming primitive; relevant if your scheduler targets tiles instead of scalars."
+    "note": "Argues `16x16` tiles as the programming primitive; relevant if your scheduler targets tiles instead of scalars."
    },
    {
     "kind": "problems",
@@ -2495,7 +2495,7 @@
     "title": "Matrix Multiplication on NVIDIA's Blackwell, Part 1: Introduction",
     "by": "Modular",
     "url": "https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-1-introduction",
-    "note": "Start of a multi-part 2025 worklog that ends above cuBLAS on B200; read for tcgen05, tensor memory and 2-SM MMA."
+    "note": "Start of a multi-part 2025 worklog that ends above cuBLAS on B200; read for `tcgen05`, tensor memory and 2-SM MMA."
    },
    {
     "kind": "blog",
@@ -2523,10 +2523,10 @@
     "title": "ThunderKittens 2.0: Even Faster Kernels for Your GPUs",
     "by": "Hazy Research",
     "url": "https://hazyresearch.stanford.edu/blog/2026-02-19-tk-2",
-    "note": "Lessons from Blackwell kernels, including the measured cost of tcgen05 fences; useful for seeing where the last 10-20% of throughput goes."
+    "note": "Lessons from Blackwell kernels, including the measured cost of `tcgen05` fences; useful for seeing where the last 10-20% of throughput goes."
    }
   ],
-  "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, wgmma or tcgen05, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at 8192^3 and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."
+  "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, `wgmma` or `tcgen05`, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at `8192^3` and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."
  },
  {
   "id": 27,
@@ -2552,14 +2552,14 @@
     "kind": "implement",
     "title": "shard annotation and propagation",
     "url": "",
-    "detail": "Add shard=axis to buffers; propagate through elementwise, reduce and movement ops.",
+    "detail": "Add `shard=axis` to buffers; propagate through elementwise, reduce and movement ops.",
     "bot_block": false
    },
    {
     "kind": "read",
     "title": "tinygrad multi.py: alu_multi, reduce_multi, reshape_multi",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/multi.py#L90",
-    "detail": "How sharding propagates per op (alu_multi at line 90); reduce_multi (line 107) emits allreduce when a sharded axis is reduced.",
+    "detail": "How sharding propagates per op (`alu_multi` at line 90); `reduce_multi` (line 107) emits allreduce when a sharded axis is reduced.",
     "bot_block": false
    },
    {
@@ -2573,7 +2573,7 @@
     "kind": "read",
     "title": "NCCL user guide: Collective Operations",
     "url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html",
-    "detail": "AllReduce, AllGather and ReduceScatter semantics; call NCCL via ctypes.",
+    "detail": "AllReduce, AllGather and ReduceScatter semantics; call NCCL via `ctypes`.",
     "bot_block": false
    },
    {
@@ -2691,7 +2691,7 @@
    {
     "title": "pytorch/torchtitan",
     "url": "https://github.com/pytorch/torchtitan",
-    "note": "PyTorch-native FSDP2, TP and pipeline parallel composed on a DeviceMesh, readable end to end.",
+    "note": "PyTorch-native FSDP2, TP and pipeline parallel composed on a `DeviceMesh`, readable end to end.",
     "for": "Sharding planner project"
    }
   ],
@@ -2806,7 +2806,7 @@
     "title": "Tensor Parallelism (UvA DL notebooks, Part 4.1)",
     "by": "Phillip Lippe",
     "url": "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/scaling/JAX/tensor_parallel_simple.html",
-    "note": "Implements tensor parallelism for linear layers from first principles in JAX shard_map with runnable code; do it as the manual counterpart to compiler sharding."
+    "note": "Implements tensor parallelism for linear layers from first principles in JAX `shard_map` with runnable code; do it as the manual counterpart to compiler sharding."
    }
   ],
   "stretch": "Extend the planner to choose among data, tensor, pipeline and FSDP sharding with an ILP or DP search (as in Alpa) and overlap collectives with compute. On 4+ GPUs, show the chosen plan for a 1B-parameter transformer lies within 10% of measured best across all enumerated plans and reach at least 40% MFU."
@@ -2828,7 +2828,7 @@
     "kind": "measure",
     "title": "Baseline tokens/sec",
     "url": "",
-    "detail": "stories15M and stories110M on your compiler vs run.c, same prompt and token count.",
+    "detail": "stories15M and stories110M on your compiler vs `run.c`, same prompt and token count.",
     "bot_block": false
    },
    {
@@ -2884,14 +2884,14 @@
     "kind": "read",
     "title": "Accelerating Generative AI with PyTorch II: GPT, Fast",
     "url": "https://pytorch.org/blog/accelerating-generative-ai-2/",
-    "detail": "Llama-7B on A100: 25.5 tok/s baseline, 107.0 with torch.compile and static KV cache, then int8, speculative decoding and int4 up to 244.7 tok/s. Note what each step attacks.",
+    "detail": "Llama-7B on A100: 25.5 tok/s baseline, 107.0 with `torch.compile` and static KV cache, then int8, speculative decoding and int4 up to 244.7 tok/s. Note what each step attacks.",
     "bot_block": false
    },
    {
     "kind": "measure",
     "title": "Tokens/sec table vs llama2.c",
     "url": "",
-    "detail": "One row per optimization, with run.c as the baseline; compare your relative gains with the gpt-fast post's.",
+    "detail": "One row per optimization, with `run.c` as the baseline; compare your relative gains with the gpt-fast post's.",
     "bot_block": false
    },
    {
@@ -2902,12 +2902,12 @@
     "bot_block": false
    }
   ],
-  "build": "KV cache, batching, int8 weights and speculative decoding for llama2.c models, benchmarked against run.c, plus a project proposal.",
+  "build": "KV cache, batching, int8 weights and speculative decoding for llama2.c models, benchmarked against `run.c`, plus a project proposal.",
   "check": [
    "KV cache tokens identical to no-cache decoding",
    "int8 perplexity change reported on TinyStories validation",
    "Speculative decoding output distribution preserved (greedy: identical tokens) with acceptance rate and speedup reported",
-   "Tokens/sec table vs run.c for each optimization",
+   "Tokens/sec table vs `run.c` for each optimization",
    "One-page proposal written"
   ],
   "extra": [
@@ -2943,7 +2943,7 @@
   ],
   "project": {
    "title": "kiln v2.0: an inference server for llama2.c models",
-   "brief": "Serve stories110M with continuous batching, a paged KV cache, int8 weights and stories15M as a speculative draft. Publish a latency/throughput study at several request rates against run.c and PyTorch eager running the same weights on the same hardware.",
+   "brief": "Serve stories110M with continuous batching, a paged KV cache, int8 weights and stories15M as a speculative draft. Publish a latency/throughput study at several request rates against `run.c` and PyTorch eager running the same weights on the same hardware.",
    "deliverables": [
     "repo with the server, a load generator and reproducible benchmark scripts",
     "README with throughput vs p50/p99 latency curves, and TinyStories validation perplexity for fp32 vs int8",
@@ -2998,7 +2998,7 @@
    {
     "title": "llama.cpp",
     "url": "https://github.com/ggml-org/llama.cpp",
-    "note": "Production quantized inference; ggml's Q8_0 format and its dot kernels are a reference for your int8 path.",
+    "note": "Production quantized inference; ggml's `Q8_0` format and its dot kernels are a reference for your int8 path.",
     "for": "int8 weights"
    }
   ],
@@ -3142,7 +3142,7 @@
     "kind": "read",
     "title": "Idea A, kernel search: tinygrad beam_search",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py#L104",
-    "detail": "beam_search() in tinygrad/codegen/opt/search.py tries kernel optimizations and keeps the fastest timed candidates. Project idea: replace your hand heuristics with the same kind of search over your schedule space. Related: Ansor (https://arxiv.org/abs/2006.06762).",
+    "detail": "`beam_search()` in `tinygrad/codegen/opt/search.py` tries kernel optimizations and keeps the fastest timed candidates. Project idea: replace your hand heuristics with the same kind of search over your schedule space. Related: Ansor (https://arxiv.org/abs/2006.06762).",
     "bot_block": false
    },
    {
@@ -3257,7 +3257,7 @@
    {
     "title": "tinygrad search.py (pinned)",
     "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py",
-    "note": "Full source of beam_search, including candidate generation, timing with warmup and caching of results; compare your search loop against it.",
+    "note": "Full source of `beam_search`, including candidate generation, timing with warmup and caching of results; compare your search loop against it.",
     "for": "Idea A, kernel search"
    },
    {
@@ -3281,7 +3281,7 @@
    {
     "title": "llama2.c",
     "url": "https://github.com/karpathy/llama2.c",
-    "note": "run.c is the token-exact reference for the stories15M milestone and a small baseline workload.",
+    "note": "`run.c` is the token-exact reference for the stories15M milestone and a small baseline workload.",
     "for": "Baseline"
    }
   ],
@@ -3382,7 +3382,7 @@
     "title": "CUDA Performance Hot VS Cold Measurement",
     "by": "Lei Mao",
     "url": "https://leimao.github.io/blog/CUDA-Performance-Hot-Cold-Measurement",
-    "note": "A small C++ harness that flushes L2 with cudaMemsetAsync before each timed launch; copy its structure for the cold-cache mode of your benchmark."
+    "note": "A small C++ harness that flushes L2 with `cudaMemsetAsync` before each timed launch; copy its structure for the cold-cache mode of your benchmark."
    }
   ],
   "stretch": "Turn Idea A into a learned search: train a small cost model (gradient-boosted trees or an MLP over kernel features) on timings from your beam search, and show it reaches within 5% of full-beam kernel speed on 20+ KernelBench level-1 ops while timing at least 5x fewer candidates. Publish the dataset of (kernel, features, time) so others can reproduce."
@@ -3468,7 +3468,7 @@
    "title": "Capstone phase 2: lab notebook and ablations",
    "brief": "Implement the core idea through the harness and keep a public lab notebook: every experiment with hypothesis, profile evidence, result and decision. Finish with a full ablation table and a mid-point update post.",
    "deliverables": [
-    "repo with tagged commits for each milestone and a LAB_NOTEBOOK.md with 15+ dated entries",
+    "repo with tagged commits for each milestone and a `LAB_NOTEBOOK.md` with 15+ dated entries",
     "ablation table: each component on/off with mean and variance",
     "plots: metric over iterations, roofline position before and after",
     "a 600–1200 word mid-project update (blog post or forum thread) with current numbers and open problems"
@@ -3505,7 +3505,7 @@
    {
     "title": "gpt-fast",
     "url": "https://github.com/pytorch-labs/gpt-fast",
-    "note": "Under 1000 lines where each speedup (torch.compile, int8, speculative decoding, tensor parallel) is a flag you can toggle; a template for an ablation table.",
+    "note": "Under 1000 lines where each speedup (`torch.compile`, int8, speculative decoding, tensor parallel) is a flag you can toggle; a template for an ablation table.",
     "for": "Ablations"
    },
    {
@@ -3641,7 +3641,7 @@
     "kind": "test",
     "title": "End-to-end demo",
     "url": "",
-    "detail": "README Week 6 milestones: MNIST MLP to at least 97% test accuracy, and stories15M producing the same tokens as llama2.c run.c.",
+    "detail": "README Week 6 milestones: MNIST MLP to at least 97% test accuracy, and stories15M producing the same tokens as llama2.c `run.c`.",
     "bot_block": false
    },
    {
@@ -3663,7 +3663,7 @@
   "check": [
    "4-page report with results and negative results",
    "Harness reproduces the numbers",
-   "Compiler trains MNIST to >=97% and stories15M matches run.c tokens",
+   "Compiler trains MNIST to >=97% and stories15M matches `run.c` tokens",
    "15-minute talk with working demo recorded and published"
   ],
   "extra": [],
