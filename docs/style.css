@@ -64,3 +64,14 @@ th{font-family:var(--head);font-weight:500}
 @media (max-width:520px){.rub{grid-template-columns:1fr}.proj{padding:4px 14px 10px}}
 .n{color:var(--muted);font-size:.92em}
 .extra li{margin:8px 0}
+.toc{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--head);font-size:14px;margin:16px 0 0;padding:10px 0;border-block:1px solid var(--line);position:sticky;top:41px;background:var(--bg);z-index:1}
+.toc a{color:var(--muted);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+h2[id],section[id]{scroll-margin-top:100px}
+.pn.top{margin:0 0 20px;padding:0 0 12px;border-top:0;border-bottom:1px solid var(--line);font-size:13.5px}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-family:var(--head);font-weight:500}
+summary:hover{color:var(--accent)}
+details[open] summary{margin-bottom:8px}
+.mods li a{min-width:0}

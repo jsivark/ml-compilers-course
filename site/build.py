@@ -34,9 +34,36 @@ def page(title, body, depth=0, here=""):
 <link rel="stylesheet" href="{up}style.css"></head>
 <body><header class="top"><div class="bar"><a class="brand" href="{up}index.html">ML Compilers From Zero</a>
 <nav><a href="{up}index.html#modules"{' class="on"' if here=='modules' else ''}>Modules</a><a href="{up}assignments.html"{' class="on"' if here=='assign' else ''}>Assignments</a><a href="{up}portfolio.html"{' class="on"' if here=='portfolio' else ''}>Portfolio</a><a href="{up}projects.html"{' class="on"' if here=='projects' else ''}>Capstone</a><a href="{up}library.html"{' class="on"' if here=='library' else ''}>Library</a><a href="{up}about.html"{' class="on"' if here=='about' else ''}>About</a><a href="https://github.com/jsivark/ml-compilers-course">GitHub</a></nav></div></header>
-<main class="wrap">{body}</main>
+<main class="wrap">{linkify(body)}</main>
 <footer class="wrap foot">An independent, free rebuild of CMU 10-411 <i>Compilers for Machine Learning</i>, based on the course's public topic list and Week 1 handout. Not affiliated with CMU. <a href="{up}about.html">How this was made</a> · <a href="https://github.com/jsivark/ml-compilers-course/issues">Report a mistake</a></footer>
 </body></html>"""
+
+URL = re.compile(r"https?://[^\s<>\"']+")
+def _label(u):
+  h, _, path = u.split("://", 1)[1].partition("/")
+  h = h.removeprefix("www.")
+  parts = [x for x in path.split("/") if x]
+  if "github.com" in h and len(parts) >= 2:
+    return parts[1] + (" · " + parts[-1] if len(parts) > 2 else "") + " on GitHub"
+  if "arxiv.org" in h and parts: return "arXiv " + parts[-1]
+  lab = h + ("/" + "/".join(parts) if parts else "")
+  return lab if len(lab) <= 42 else h + "/…/" + parts[-1]
+def linkify(htm):
+  out, inside = [], False
+  for tok in re.split(r"(<[^>]+>)", htm):
+    if tok.startswith("<"):
+      t = tok.lower()
+      if t.startswith("<a ") or t.startswith("<pre"): inside = True
+      elif t.startswith("</a") or t.startswith("</pre"): inside = False
+      out.append(tok); continue
+    if inside or "http" not in tok: out.append(tok); continue
+    def rep(m):
+      u = m.group(0); tail = ""
+      while u and u[-1] in ".,;:)]": tail = u[-1] + tail; u = u[:-1]
+      raw = html.unescape(u)
+      return f'<a href="{E(raw)}" target="_blank" rel="noopener">{E(_label(raw))}</a>{tail}'
+    out.append(URL.sub(rep, tok))
+  return "".join(out)
 
 def link(t, u):
   return f'<a href="{E(u)}" target="_blank" rel="noopener">{E(t)}</a>' if u else E(t)
@@ -81,7 +108,7 @@ def module_page(m, mods):
   proj = ""
   TL = {"main": "kiln, the main project", "skill": "Skill project", "optional": "Optional project", "capstone": "Capstone", "setup": "Setup project"}
   if pr.get("track") == "merged":
-    proj = (f'<section class="proj"><h2>Project</h2><p>{E(pr.get("note"))} '
+    proj = (f'<section class="proj" id="project"><h2>Project</h2><p>{E(pr.get("note"))} '
             f'<a href="{pr["into"]:02d}.html">Go to Module {pr["into"]:02d}</a>.</p></section>')
     pr = {}
   if pr:
@@ -97,27 +124,29 @@ def module_page(m, mods):
     dl = "".join(f"<li>{E(d)}</li>" for d in pr.get("deliverables", []))
     rb = pr.get("rubric", {})
     refs = ", ".join(link(r["title"], r.get("url")) for r in pr.get("references", []))
-    proj = (f'<section class="proj"><h2>Portfolio project: {E(pr.get("title"))}</h2>{tagh}<p>{E(pr.get("brief"))}</p>'
+    proj = (f'<section class="proj" id="project"><h2>Portfolio project: {E(pr.get("title"))}</h2>{tagh}<p>{E(pr.get("brief"))}</p>'
             + (f"<h3>Deliverables</h3><ul>{dl}</ul>" if dl else "")
             + (f'<h3>Rubric</h3><dl class="rub"><dt>Solid</dt><dd>{E(rb.get("solid"))}</dd><dt>Exceptional</dt><dd>{E(rb.get("exceptional"))}</dd></dl>' if rb else "")
             + (f'<p class="hint">References: {refs}</p>' if refs else "") + "</section>")
   prev = f'<a href="{i-1:02d}.html">← {i-1:02d} {E(mods[i-1]["title"])}</a>' if i-1 in mods else "<span></span>"
   nxt = f'<a href="{i+1:02d}.html">{i+1:02d} {E(mods[i+1]["title"])} →</a>' if i+1 in mods else "<span></span>"
-  body = f"""<p class="crumb"><a href="../index.html#{p[0]}">{p[1]} · {p[2]}</a>{cw}</p>
+  body = f"""<nav class="pn top">{prev}{nxt}</nav><p class="crumb"><a href="../index.html#{p[0]}">{p[1]} · {p[2]}</a>{cw}</p>
 <h1><span class="num">{i:02d}</span>{E(m["title"])}</h1>
 <p class="lede">{E(m.get("why"))}</p>
 {f'<p class="mmeta">{meta}</p>' if meta else ''}
+<nav class="toc"><a href="#steps">Steps</a><a href="#build">Build</a>{'<a href="#project">Project</a>' if proj else ''}<a href="#help">Help</a>{'<a href="#deeper">Go deeper</a>' if (deeper or extra or m.get("stretch")) else ''}</nav>
 {f'<h2>After this module you can</h2><ul class="check">{outcomes}</ul>' if outcomes else ''}
-<h2>Steps</h2><p class="hint">Work through these in order. Each step points at one specific unit.</p>
+<h2 id="steps">Steps</h2><p class="hint">Work through these in order. Each step points at one specific unit.</p>
 <ol class="steps">{steps}</ol>
-<h2>Build</h2><p class="build">{E(m.get("build"))}</p>
+<h2 id="build">Build</h2><p class="build">{E(m.get("build"))}</p>
 {proj}
-{f'<h2>If you get stuck</h2><ul class="check">{stuck}</ul>' if stuck else ''}
-{f'<h2>Ready to move on when</h2><ul class="check">{check}</ul>' if check else ''}
-{f'<h2>Reference implementations</h2><p class="hint">Make a real attempt first. When you are stuck, or after you finish, compare your work with these.</p><ul class="extra">{sol}</ul>' if sol else ''}
-{f'<h2>Going deeper</h2><p class="hint">Optional. The best talks, papers, code and writing on this module topic, from people who shaped the field.</p>{deeper}' if deeper else ''}
-{f'<h3>More reading</h3><ul class="extra">{extra}</ul>' if extra and deeper else (f'<h2>Going deeper (optional)</h2><ul class="extra">{extra}</ul>' if extra else '')}
-{f'<h2>Stretch project</h2><p class="build">{E(m.get("stretch"))}</p>' if m.get("stretch") else ''}
+<h2 id="help">Help</h2>
+{f'<h3>If you get stuck</h3><ul class="check">{stuck}</ul>' if stuck else ''}
+{f'<h3>Ready to move on when</h3><ul class="check">{check}</ul>' if check else ''}
+{f'<details><summary>Reference implementations ({len(m.get("solutions", []))})</summary><p class="hint">Make a real attempt first. When you are stuck, or after you finish, compare your work with these.</p><ul class="extra">{sol}</ul></details>' if sol else ''}
+{'<h2 id="deeper">Go deeper <span class="n">(optional)</span></h2>' if (deeper or extra or m.get("stretch")) else ''}
+{f'<details><summary>Talks, papers, code and writing ({len(m.get("deeper", [])) + len(m.get("extra", []))})</summary>{deeper}' + (f'<h3>More reading</h3><ul class="extra">{extra}</ul>' if extra else '') + '</details>' if (deeper or extra) else ''}
+{f'<details><summary>Stretch project</summary><p class="build">{E(m.get("stretch"))}</p></details>' if m.get("stretch") else ''}
 <nav class="pn">{prev}{nxt}</nav>"""
   return page(f'{i:02d} {m["title"]} · ML Compilers From Zero', body, 1)
 
@@ -126,7 +155,7 @@ def index(mods):
   for pid, pn, name, rng, blurb in PARTS:
     rows = "".join(
       f'<li><a href="modules/{i:02d}.html"><span class="num">{i:02d}</span>{E(mods[i]["title"])}</a>'
-      f'<span class="meta">{E(mods[i].get("effort") or str(len(mods[i]["steps"])) + " steps")}{" · " + "●"*int(mods[i]["difficulty"]) if mods[i].get("difficulty") else ""}</span></li>'
+      f'<span class="meta">{E((mods[i].get("effort") or "").split(" (")[0] or str(len(mods[i]["steps"])) + " steps")}{" · " + "●"*int(mods[i]["difficulty"]) if mods[i].get("difficulty") else ""}</span></li>'
       for i in rng if i in mods)
     parts += f'<section id="{pid}"><h2>{pn} · {name}</h2><p class="sub">{E(blurb)}</p><ol class="mods">{rows}</ol></section>'
   body = f"""<h1>ML Compilers From Zero</h1>
