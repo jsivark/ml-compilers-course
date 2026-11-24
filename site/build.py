@@ -48,22 +48,56 @@ def _label(u):
   if "arxiv.org" in h and parts: return "arXiv " + parts[-1]
   lab = h + ("/" + "/".join(parts) if parts else "")
   return lab if len(lab) <= 42 else h + "/…/" + parts[-1]
+CODECH = set("()[]{}=*%^_<>\\|~")
+def _is_code(w):
+  if len(w) < 2 or not any(c.isalnum() for c in w): return False
+  if w in {"sizeof", "printf", "malloc", "calloc", "realloc", "memcpy", "strlen", "argc", "argv", "argc/argv", "malloc/free", "nullptr", "__global__", "numpy"}: return True
+  if re.fullmatch(r"[<>~]?\d+(\.\d+)?%\+?", w): return False                 # 70%, >97%
+  if re.fullmatch(r"\(([^()\[\]{}=*%^_<>\\|~]*)\)", w): return False     # (optional), (4)
+  if re.fullmatch(r"-{1,2}[A-Za-z][\w=,.-]*", w): return True            # -Wall, --links
+  if re.search(r"\.(c|h|py|cu|json|md|uir|bin|s)$", w) and "/" not in w[:-3]: return True
+  return any(c in CODECH for c in w) or w.endswith("'\\0'")
+def codeify(text):
+  """Wrap code-like words in <code> (text is already HTML-escaped)."""
+  def word(m):
+    w = html.unescape(m.group(0)); pre = post = ""
+    while w and w[-1] in ".,;:!?": post = w[-1] + post; w = w[:-1]
+    if w.startswith("(") and w.count("(") > w.count(")"): pre, w = "(", w[1:]
+    if w.endswith(")") and w.count(")") > w.count("("): post, w = ")" + post, w[:-1]
+    if not _is_code(w): return m.group(0)
+    return E(pre) + "<code>" + E(w) + "</code>" + E(post)
+  parts = re.split(r"`([^`]+)`", text)   # explicit `code` spans first
+  return "".join(f"<code>{x}</code>" if i % 2 else re.sub(r"\S+", word, x) for i, x in enumerate(parts))
+
 def linkify(htm):
   out, inside = [], False
   for tok in re.split(r"(<[^>]+>)", htm):
     if tok.startswith("<"):
       t = tok.lower()
-      if t.startswith("<a ") or t.startswith("<pre"): inside = True
-      elif t.startswith("</a") or t.startswith("</pre"): inside = False
+      if re.match(r"<(a|pre|code|title|h1)[ >]", t): inside = True
+      elif re.match(r"</(a|pre|code|title|h1)>", t): inside = False
       out.append(tok); continue
-    if inside or "http" not in tok: out.append(tok); continue
+    if inside: out.append(tok); continue
+    if "http" not in tok: out.append(codeify(tok)); continue
     def rep(m):
       u = m.group(0); tail = ""
       while u and u[-1] in ".,;:)]": tail = u[-1] + tail; u = u[:-1]
       raw = html.unescape(u)
       return f'<a href="{E(raw)}" target="_blank" rel="noopener">{E(_label(raw))}</a>{tail}'
-    out.append(URL.sub(rep, tok))
+    pieces = re.split(r"(https?://[^\s<>\"']+)", tok)
+    out.append("".join(URL.sub(rep, x) if i % 2 else codeify(x) for i, x in enumerate(pieces)))
   return "".join(out)
+
+SENT = re.compile(r"(?<!\be\.g)(?<!\bi\.e)(?<!\bvs)(?<!\bch)(?<!\bet al)(?<=[.!?])\s+(?=[A-Z(])")
+def numbered(t):
+  """Readable blocks: '(1) a (2) b' or 3+ sentences become a list; short text stays a paragraph."""
+  t = str(t or "").strip()
+  if t.startswith("(1) "):
+    items = [x.strip() for x in re.split(r"(?:^|\s)\(\d\)\s", t) if x.strip()]
+    return "<ol>" + "".join(f"<li>{E(x)}</li>" for x in items) + "</ol>"
+  sents = SENT.split(t)
+  if len(sents) < 3: return f"<p>{E(t)}</p>"
+  return '<ul class="sents">' + "".join(f"<li>{E(x)}</li>" for x in sents) + "</ul>"
 
 def link(t, u):
   return f'<a href="{E(u)}" target="_blank" rel="noopener">{E(t)}</a>' if u else E(t)
@@ -138,7 +172,7 @@ def module_page(m, mods):
 {f'<h2>After this module you can</h2><ul class="check">{outcomes}</ul>' if outcomes else ''}
 <h2 id="steps">Steps</h2><p class="hint">Work through these in order. Each step points at one specific unit.</p>
 <ol class="steps">{steps}</ol>
-<h2 id="build">Build</h2><p class="build">{E(m.get("build"))}</p>
+<h2 id="build">Build</h2><div class="build">{numbered(m.get("build"))}</div>
 {proj}
 <h2 id="help">Help</h2>
 {f'<h3>If you get stuck</h3><ul class="check">{stuck}</ul>' if stuck else ''}
@@ -146,7 +180,7 @@ def module_page(m, mods):
 {f'<details><summary>Reference implementations ({len(m.get("solutions", []))})</summary><p class="hint">Make a real attempt first. When you are stuck, or after you finish, compare your work with these.</p><ul class="extra">{sol}</ul></details>' if sol else ''}
 {'<h2 id="deeper">Go deeper <span class="n">(optional)</span></h2>' if (deeper or extra or m.get("stretch")) else ''}
 {f'<details><summary>Talks, papers, code and writing ({len(m.get("deeper", [])) + len(m.get("extra", []))})</summary>{deeper}' + (f'<h3>More reading</h3><ul class="extra">{extra}</ul>' if extra else '') + '</details>' if (deeper or extra) else ''}
-{f'<details><summary>Stretch project</summary><p class="build">{E(m.get("stretch"))}</p></details>' if m.get("stretch") else ''}
+{f'<details><summary>Stretch project</summary><div class="build">{numbered(m.get("stretch"))}</div></details>' if m.get("stretch") else ''}
 <nav class="pn">{prev}{nxt}</nav>"""
   return page(f'{i:02d} {m["title"]} · ML Compilers From Zero', body, 1)
 
@@ -165,7 +199,7 @@ def index(mods):
 <li><b>Go in order.</b> Each module assumes the ones before it. If you already know a topic, do its <i>Build</i> step anyway. If it's easy, skip ahead.</li>
 <li><b>No deadlines.</b> Move on when the build works and you can answer every “ready to move on when” question without notes.</li>
 <li><b>Get the code.</b> The assignments, tests and this site's source are on GitHub: <a href="https://github.com/jsivark/ml-compilers-course">github.com/jsivark/ml-compilers-course</a>.</li>
-<li><b>Keep one repo.</b> From Module 18 onward, you grow a single <code>./compile</code>. The <a href="assignments.html">assignments</a> come with test suites.</li>
+
 <li><b>Build one system, plus focused projects.</b> Your main project, kiln, grows from a C tensor core in Module 1 to a compiler that trains a GPT on your GPU in Module 38. Each version works on its own. Skill projects along the way teach what kiln does not cover. See the <a href="portfolio.html">portfolio</a>.</li>
 <li><b>Effort estimates are honest, not deadlines.</b> Hard modules take longer. Being stuck is normal, and every module has an “if you get stuck” section.</li>
 <li><b>Write the code yourself.</b> Use AI to explain things and to debug, not to write your compiler. The real course has the same rule.</li>

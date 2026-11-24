@@ -75,3 +75,13 @@ summary{cursor:pointer;font-family:var(--head);font-weight:500}
 summary:hover{color:var(--accent)}
 details[open] summary{margin-bottom:8px}
 .mods li a{min-width:0}
+.build ol{margin:0;padding-left:1.3em}
+.build li{margin:0 0 8px}
+.build p:last-child,.build li:last-child{margin-bottom:0}
+@media (min-width:1080px){
+  .toc{position:fixed;top:96px;left:calc(50% - 360px - 170px);width:130px;flex-direction:column;gap:10px;margin:0;padding:0 0 0 12px;border:0;border-left:1px solid var(--line);background:none}
+}
+.build ul.sents{margin:0;padding-left:1.1em}
+code{white-space:nowrap;background:var(--soft);padding:0 3px;border-radius:3px}
+pre code{background:none;padding:0;white-space:pre}
+.proj code{background:var(--bg)}
