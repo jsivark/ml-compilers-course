@@ -288,3 +288,7 @@ Keep your Week 1 interpreter as a second backend and cross-check the two.
 ## Weeks 12–14 (course wk 29–31): final project
 
 See the ideas list on the course site. Deliver code, a benchmark harness, and a 4-page report.
+
+## License
+
+Content: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Code: MIT. Reuse, remix and teach from it freely, including commercially. Just credit **jsivark — ml-compilers-course** with a link back. Linked third-party material keeps its own license. The UIR format, operation semantics and test-file naming convention come from the public [CMU 10-411 Week 1 handout](https://10-411.com/assignments/week1.pdf); the test cases in `tests/` were written for this project. See [LICENSE](LICENSE).
