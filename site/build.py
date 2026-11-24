@@ -52,6 +52,8 @@ def part_of(i):
   for p in PARTS:
     if i in p[3]: return p
 
+KILN = {}
+
 def module_page(m, mods):
   i = m["id"]; p = part_of(i)
   def step(s):
@@ -77,11 +79,25 @@ def module_page(m, mods):
   stuck = "".join(f"<li>{E(o)}</li>" for o in m.get("stuck", []))
   pr = m.get("project") or {}
   proj = ""
+  TL = {"main": "kiln, the main project", "skill": "Skill project", "optional": "Optional project", "capstone": "Capstone", "setup": "Setup project"}
+  if pr.get("track") == "merged":
+    proj = (f'<section class="proj"><h2>Project</h2><p>{E(pr.get("note"))} '
+            f'<a href="{pr["into"]:02d}.html">Go to Module {pr["into"]:02d}</a>.</p></section>')
+    pr = {}
   if pr:
+    tr = pr.get("track", "")
+    tag = TL.get(tr, "")
+    if tr == "main":
+      vs = sorted(((int(k), v) for k, v in KILN.items()), key=lambda t: t[0])
+      before = [k for k, _ in vs if k < i]; after = [k for k, _ in vs if k > i]
+      tag += (f' · {E(pr["version"])} adds {E(pr["adds"])}'
+              + (f' · builds on <a href="{before[-1]:02d}.html">{E(KILN[before[-1]])}</a>' if before else "")
+              + (f' · next: <a href="{after[0]:02d}.html">{E(KILN[after[0]])}</a>' if after else ""))
+    tagh = f'<p class="hint">{tag}</p>' if tag else ""
     dl = "".join(f"<li>{E(d)}</li>" for d in pr.get("deliverables", []))
     rb = pr.get("rubric", {})
     refs = ", ".join(link(r["title"], r.get("url")) for r in pr.get("references", []))
-    proj = (f'<section class="proj"><h2>Portfolio project: {E(pr.get("title"))}</h2><p>{E(pr.get("brief"))}</p>'
+    proj = (f'<section class="proj"><h2>Portfolio project: {E(pr.get("title"))}</h2>{tagh}<p>{E(pr.get("brief"))}</p>'
             + (f"<h3>Deliverables</h3><ul>{dl}</ul>" if dl else "")
             + (f'<h3>Rubric</h3><dl class="rub"><dt>Solid</dt><dd>{E(rb.get("solid"))}</dd><dt>Exceptional</dt><dd>{E(rb.get("exceptional"))}</dd></dl>' if rb else "")
             + (f'<p class="hint">References: {refs}</p>' if refs else "") + "</section>")
@@ -121,7 +137,7 @@ def index(mods):
 <li><b>No deadlines.</b> Move on when the build works and you can answer every “ready to move on when” question without notes.</li>
 <li><b>Get the code.</b> The assignments, tests and this site's source are on GitHub: <a href="https://github.com/jsivark/ml-compilers-course">github.com/jsivark/ml-compilers-course</a>.</li>
 <li><b>Keep one repo.</b> From Module 18 onward, you grow a single <code>./compile</code>. The <a href="assignments.html">assignments</a> come with test suites.</li>
-<li><b>Build a portfolio as you go.</b> Every module ends with a portfolio project with a rubric. Push each one to your public repo and write it up. By the end you'll have a body of work that shows real depth to hiring managers and grad-school committees. See the <a href="portfolio.html">portfolio</a>.</li>
+<li><b>Build one system, plus focused projects.</b> Your main project, kiln, grows from a C tensor core in Module 1 to a compiler that trains a GPT on your GPU in Module 38. Each version works on its own. Skill projects along the way teach what kiln does not cover. See the <a href="portfolio.html">portfolio</a>.</li>
 <li><b>Effort estimates are honest, not deadlines.</b> Hard modules take longer. Being stuck is normal, and every module has an “if you get stuck” section.</li>
 <li><b>Write the code yourself.</b> Use AI to explain things and to debug, not to write your compiler. The real course has the same rule.</li>
 </ul>
@@ -129,17 +145,25 @@ def index(mods):
   return page("ML Compilers From Zero", body, 0, "modules")
 
 def portfolio(mods):
-  rows = ""
-  for pid, pn, name, rng, _ in PARTS:
-    items = "".join(
-      f'<li><a href="modules/{i:02d}.html"><span class="num">{i:02d}</span>{E(mods[i]["project"]["title"])}</a>'
-      f'<p>{E(mods[i]["project"].get("rubric",{}).get("exceptional",""))}</p></li>'
-      for i in rng if i in mods and mods[i].get("project"))
-    if items: rows += f'<h2>{pn} · {name}</h2><ol class="pf">{items}</ol>'
-  body = ('<h1>Portfolio</h1><p class="lede">Every module ends with a project you can publish. Taken together, they are evidence of depth: a working compiler, measured kernels, reproduced papers, merged open-source contributions, and clear technical writing. Below each project is the bar for <i>exceptional</i> work.</p>'
-          '<h2>How to present it</h2><ul class="how"><li>One public GitHub repo per project, or one monorepo with clear folders. Each needs a README with how to run it, results tables and plots.</li>'
-          '<li>A write-up for each project on your blog. Explain the why, the measurements and what failed. This is the strongest signal you can send.</li>'
-          '<li>Pin your four best projects: usually the compiler, a GPU kernel worklog, a paper reproduction, and a merged PR.</li></ul>' + rows)
+  P = lambda i: mods[i]["project"]
+  def li(i, sub):
+    return (f'<li><a href="modules/{i:02d}.html"><span class="num">{i:02d}</span>{E(P(i)["title"])}</a>'
+            f'<p>{E(sub)}</p></li>')
+  by = lambda t: [i for i in sorted(mods) if mods[i].get("project", {}).get("track") == t]
+  def sec(h, intro, ids, sub):
+    if not ids: return ""
+    return f'<h2>{h}</h2><p>{intro}</p><ol class="pf">' + "".join(li(i, sub(i)) for i in ids) + "</ol>"
+  ex = lambda i: P(i).get("rubric", {}).get("exceptional", "")
+  kv = lambda i: (P(i)["version"] + " adds " + P(i)["adds"] + ".") if P(i).get("version") else "Create the repo."
+  body = ('<h1>Portfolio</h1><p class="lede">Two kinds of projects. <b>kiln</b> is one system you grow through the whole course: a small ML library with its own compiler, ending with a GPT trained on your own GPU. '
+          '<b>Skill projects</b> are done once each and teach things kiln does not cover. Every kiln version is complete, tested and publishable on its own.</p>'
+          + sec("kiln, version by version", "Tag each version in your kiln repo. If an earlier version is too messy to build on, refactor it before you move on; that is part of the work.", by("setup") + by("main"), kv)
+          + sec("Skill projects", "One repo each, or folders in one monorepo. Below each is the bar for exceptional work.", by("skill"), ex)
+          + sec("Capstone", "One capstone in three phases. Module 39 adds a research track.", by("capstone"), ex)
+          + sec("Optional projects", "For readers who want these specialisms.", by("optional"), ex)
+          + '<h2>How to present it</h2><ul class="how"><li>A README for every kiln version and skill project: how to run it, results tables and plots.</li>'
+          '<li>A write-up for each on your blog or notes site. Explain the why, the measurements and what failed. This is the strongest signal you can send.</li>'
+          '<li>Pin kiln first, then your best two or three skill projects (usually a GPU kernel worklog and mycc).</li></ul>')
   return page("Portfolio · ML Compilers From Zero", body, 0, "portfolio")
 
 def md_to_html(md):
@@ -194,6 +218,7 @@ def static(name):
 
 def main():
   mods = load()
+  KILN.update({i: m["project"]["version"] for i, m in mods.items() if m.get("project", {}).get("track") == "main"})
   if os.path.exists(OUT): shutil.rmtree(OUT)
   os.makedirs(os.path.join(OUT, "modules"))
   w = lambda p, s: open(os.path.join(OUT, p), "w").write(s)

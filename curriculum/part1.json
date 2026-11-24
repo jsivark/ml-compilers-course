@@ -129,8 +129,8 @@
    "Pip and conda in the same env cause mysterious import errors: pick one tool (uv recommended) and one env per project."
   ],
   "project": {
-   "title": "Public course repo + first blog post",
-   "brief": "Set up the repository that will hold every module's work and portfolio project for the whole course, with CI from day one. Publish a first blog post (GitHub Pages, a personal site, or similar) titled something like 'Why I'm building an ML compiler from scratch', stating your goals, your starting point, and a dated plan for the course.",
+   "title": "Set up the kiln repo, your notes site and a first post",
+   "brief": "Create a public repo named kiln with a README, a license, a Makefile and a CI workflow that builds and runs an empty test, plus a notes site or blog where you will write one page per module. kiln is the main project of this course: a small ML library with its own compiler, grown one version at a time from Module 1 to Module 38. Publish a first post saying what you are building and why.",
    "deliverables": [
     "repo with README, LOG.md, Makefile, a sanitized C test and a pytest, all green in GitHub Actions",
     "a short CONTRIBUTING-style note to yourself: branch-per-module, commit message conventions, how to tag a finished module",
@@ -145,7 +145,8 @@
      "title": "Missing Semester 2020, Lecture 6: Version Control (Git)",
      "url": "https://missing.csail.mit.edu/2020/version-control/"
     }
-   ]
+   ],
+   "track": "setup"
   },
   "solutions": [],
   "deeper": [
@@ -418,8 +419,8 @@
    "mpc parse errors are hard to read: print the AST with mpc_ast_print before debugging your evaluator."
   ],
   "project": {
-   "title": "An arena-allocated tensor runtime core in C",
-   "brief": "Write a small C library `tcore` that stores N-dimensional float32 tensors (shape, strides, offset, data) in an arena allocator, with elementwise add and mul, a naive matmul and a C test suite. Your compiler's generated C will link against it later. Benchmark creating and freeing 10^4, 10^5 and 10^6 tensors of 16, 256 and 4096 floats with the arena vs malloc/free, and explain the difference.",
+   "title": "kiln v0.1: an arena-allocated tensor core in C",
+   "brief": "Start kiln with a small C library, `tcore`, that stores N-dimensional float32 tensors (shape, strides, offset, data) in an arena allocator, with elementwise add and mul, a naive matmul and a C test suite. Every later kiln version builds on it, and the C your compiler generates in Part III will link against it. Benchmark creating and freeing 10^4, 10^5 and 10^6 tensors of 16, 256 and 4096 floats with the arena vs malloc/free, and explain the difference.",
    "deliverables": [
     "repo with tcore.h/tcore.c, a Makefile, and tests that run clean under ASan, UBSan and valgrind",
     "README with a table and plot of allocation throughput (arena vs malloc) across tensor counts and sizes",
@@ -435,7 +436,10 @@
      "url": "https://beej.us/guide/bgc/",
      "bot_block": true
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.1",
+   "adds": "the C core every later version runs on"
   },
   "solutions": [
    {
@@ -693,7 +697,8 @@
      "title": "Algorithms for Modern Hardware (Sergey Slotin)",
      "url": "https://en.algorithmica.org/hpc/"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -945,7 +950,10 @@
      "title": "Algorithms for Modern Hardware: Matrix Multiplication",
      "url": "https://en.algorithmica.org/hpc/algorithms/matmul/"
     }
-   ]
+   ],
+   "track": "merged",
+   "into": 16,
+   "note": "No separate project here. The naive and tiled matmul from this module's Build is stage 1 of the matmul worklog you finish in Module 16, so keep your code and numbers."
   },
   "solutions": [
    {
@@ -1207,7 +1215,10 @@
      "title": "LAPACK",
      "url": "https://www.netlib.org/lapack/"
     }
-   ]
+   ],
+   "track": "merged",
+   "into": 5,
+   "note": "No separate project here. The numerical-stability work moves into the Module 5 project (kiln v0.2), and blocking is covered properly by the Module 16 matmul worklog. Do this module's Build to practise the linear algebra."
   },
   "solutions": [
    {
@@ -1418,15 +1429,15 @@
    "ReLU gradcheck fails at 0 because ReLU is not differentiable there. Use inputs that are not within the step size of 0."
   ],
   "project": {
-   "title": "Forward-mode vs reverse-mode autodiff: implement both and measure",
-   "brief": "Implement forward-mode AD with dual numbers and reverse-mode AD on a tape, over the same small expression language (scalar ops and NumPy arrays). Construct functions with n inputs and m outputs and measure time and memory as n and m vary, demonstrating the n-vs-m crossover; then compute a Hessian-vector product by composing the two (forward-over-reverse).",
+   "title": "kiln v0.2: autograd, both modes, numerically stable",
+   "brief": "Give kiln a Python front end whose Tensor wraps the v0.1 C core, and add reverse-mode autograd on a tape. Also implement forward mode with dual numbers over the same ops, build functions with n inputs and m outputs, and measure time and memory as n and m vary to show the crossover. Then make it numerically sound: implement softmax, log-sum-exp and cross-entropy in naive and stable forms, show inputs where the naive form overflows, and write a gradcheck that runs in float64 and reports how error grows in float32.",
    "deliverables": [
-    "repo with both AD modes, a shared gradcheck, and tests against PyTorch or JAX",
-    "README with plots of runtime and memory vs n and m for both modes, and the HVP verified against finite differences",
-    "a 600–1200 word write-up explaining JVPs, VJPs, why deep learning uses reverse mode, and what the tape costs in memory"
+    "kiln v0.2 tagged in your repo: Tensor over the C core, reverse and forward mode, and a gradcheck",
+    "README with runtime and memory plots vs n and m for both modes, and a table of naive vs stable softmax, log-sum-exp and cross-entropy on extreme inputs",
+    "a 600–1200 word write-up explaining JVPs, VJPs, why deep learning uses reverse mode, and why the stable forms work"
    ],
    "rubric": {
-    "solid": "Both modes agree with PyTorch to 1e-8 in float64 on at least 10 test functions; crossover demonstrated in a plot.",
+    "solid": "Both modes agree with PyTorch to 1e-8 in float64 on at least 10 test functions; crossover shown in a plot; stable forms finite on inputs where the naive forms return inf or nan.",
     "exceptional": "Implements HVP and uses it in a few steps of Newton-CG on a small problem, adds gradient checkpointing to the tape and plots the memory/compute trade-off, and relates the design to JAX's jvp/vjp."
    },
    "references": [
@@ -1434,7 +1445,10 @@
      "title": "Baydin et al., Automatic Differentiation in Machine Learning: a Survey",
      "url": "https://arxiv.org/abs/1502.05767"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.2",
+   "adds": "a Python front end over the C core, with reverse-mode autograd"
   },
   "solutions": [
    {
@@ -1652,8 +1666,8 @@
    "Tensor Puzzles forbid sum and most library functions. After puzzle 2, reduce by reusing your own sum (for example a @ ones)."
   ],
   "project": {
-   "title": "A view-tracking shape tracker (a mini ShapeTracker)",
-   "brief": "Build a symbolic view system that composes reshape, permute, expand, pad, shrink and stride operations without touching data. It emits one index expression (a C string) mapping output index to input address, or reports that a copy is needed. This is the idea behind tinygrad's ShapeTracker, which you will meet again in the compiler modules. Property-test it against NumPy on random op chains.",
+   "title": "kiln v0.3: views without copying (a mini ShapeTracker)",
+   "brief": "Add a view system to kiln. Build a symbolic view system that composes reshape, permute, expand, pad, shrink and stride operations without touching data. It emits one index expression (a C string) mapping output index to input address, or reports that a copy is needed. This is the idea behind tinygrad's ShapeTracker, which you will meet again in the compiler modules. Property-test it against NumPy on random op chains.",
    "deliverables": [
     "repo with the view system, a C-expression emitter, and a randomized property test against NumPy",
     "README showing example op chains, their emitted index expressions, and how many chains merge into one view vs need a copy",
@@ -1668,7 +1682,10 @@
      "title": "tinygrad v0.9.0, tinygrad/shape/shapetracker.py",
      "url": "https://github.com/tinygrad/tinygrad/blob/v0.9.0/tinygrad/shape/shapetracker.py"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.3",
+   "adds": "views (reshape, permute, expand, pad, shrink) without copying"
   },
   "solutions": [
    {
@@ -1893,8 +1910,8 @@
    "Recursion limit on deep graphs: make the topological sort iterative."
   ],
   "project": {
-   "title": "A tiny graph IR for your autograd: visualize, optimize, codegen",
-   "brief": "Make your micrograd record an explicit graph IR, then write three passes over it: dead-code elimination, common-subexpression elimination, and a codegen pass that emits a straight-line Python (or C) function computing the forward and backward pass with no Value objects. Benchmark the generated code against the interpreted engine on an MLP. This is your first compiler.",
+   "title": "kiln v0.4: a graph IR with your first compiler passes",
+   "brief": "Make kiln record an explicit graph IR of the ops it runs, then write three passes over it: dead-code elimination, common-subexpression elimination, and a codegen pass that emits a straight-line Python (or C) function computing the forward and backward pass with no Tensor objects. Benchmark the generated code against the interpreted engine on an MLP. This is your first compiler.",
    "deliverables": [
     "repo with the IR, the three passes, and tests that the generated code matches the interpreted gradients exactly",
     "README with Graphviz renders before and after optimization and a speedup table vs the interpreted engine",
@@ -1909,7 +1926,10 @@
      "title": "karpathy/micrograd",
      "url": "https://github.com/karpathy/micrograd"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.4",
+   "adds": "a recorded graph IR with your first compiler passes"
   },
   "solutions": [
    {
@@ -2111,8 +2131,8 @@
    "Adam does not match PyTorch: check bias correction and that eps is added after the sqrt."
   ],
   "project": {
-   "title": "MiniTorch-scale framework: train a CNN and profile where time goes",
-   "brief": "Grow your Module 8 autograd into a small framework with Conv2d (via im2col), MaxPool, BatchNorm, Dropout, a DataLoader and a module system, and train a small CNN on CIFAR-10 to at least 60% test accuracy. Profile one training step, break the time down by op, then speed up the slowest op (for example a vectorized im2col or a C extension) and report the gain.",
+   "title": "kiln v0.5: train a CNN and profile where time goes",
+   "brief": "Grow kiln into a small framework with Conv2d (via im2col), MaxPool, BatchNorm, Dropout, a DataLoader and a module system, and train a small CNN on CIFAR-10 to at least 60% test accuracy. Profile one training step, break the time down by op, then speed up the slowest op (for example a vectorized im2col or a C extension) and report the gain.",
    "deliverables": [
     "repo with the framework, gradient tests against PyTorch for every op, and the training script",
     "README with loss and accuracy curves vs an identical PyTorch model, plus a per-op time breakdown before and after optimization",
@@ -2127,7 +2147,10 @@
      "title": "Horace He, Making Deep Learning Go Brrrr From First Principles",
      "url": "https://horace.io/brrr_intro.html"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.5",
+   "adds": "enough layers and tooling to train a CNN"
   },
   "solutions": [
    {
@@ -2379,8 +2402,8 @@
    "FLOP counting: a (m,k) x (k,n) matmul is 2mkn FLOPs."
   ],
   "project": {
-   "title": "A C inference engine for GPT-2 with KV cache, benchmarked",
-   "brief": "Write a single-file C (or C with OpenMP) inference engine for GPT-2 124M that loads the weights you exported from NumPy, implements a KV cache, and generates text matching your NumPy reference token for token. Measure prefill and decode throughput, compare decode tokens/s against the memory-bandwidth bound you compute from model size, and add int8 weight-only quantization with a perplexity comparison.",
+   "title": "kiln v0.5.1: GPT-2 inference with a KV cache on the kiln C core",
+   "brief": "Using the kiln C core (add the ops you need, such as layer norm, GELU and batched matmul), write an inference engine for GPT-2 124M that loads the weights you exported from NumPy, implements a KV cache, and generates text matching your NumPy reference token for token. Measure prefill and decode throughput, compare decode tokens/s against the memory-bandwidth bound you compute from model size, and add int8 weight-only quantization with a perplexity comparison.",
    "deliverables": [
     "repo with the C engine, a weight-export script, and a test that greedy output matches the NumPy reference exactly",
     "README with tokens/s for prefill and decode, with and without KV cache, fp32 vs int8, against the computed bandwidth roofline",
@@ -2399,7 +2422,10 @@
      "title": "kipply, Transformer Inference Arithmetic",
      "url": "https://kipp.ly/transformer-inference-arithmetic/"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.5.1",
+   "adds": "GPT-2 inference on the kiln C core"
   },
   "solutions": [
    {

@@ -134,7 +134,8 @@
      "title": "Triton tutorial 05: Layer Normalization",
      "url": "https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -419,7 +420,8 @@
      "title": "ThunderKittens",
      "url": "https://github.com/HazyResearch/ThunderKittens"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -711,8 +713,8 @@
    "Inductor output too long: start with a two-op function and TORCH_LOGS=output_code,schedule"
   ],
   "project": {
-   "title": "Lower your course compiler's IR through MLIR",
-   "brief": "Make your course compiler emit the tg dialect, reuse upstream linalg tiling and fusion, and run a 3-layer MLP (784-256-256-10, fp32, batch 64) on CPU through MLIR. Compare runtime with your hand-written backend and with torch.compile on the same machine. Alternative: measure TorchInductor fusion decisions (kernel count and runtime) on 5 HuggingFace models, including GPT-2 small and BERT-base, and write a minimal patch that improves one case.",
+   "title": "kiln v2.1 (optional): lower the kiln IR through MLIR",
+   "brief": "Make kiln emit the tg dialect, reuse upstream linalg tiling and fusion, and run a 3-layer MLP (784-256-256-10, fp32, batch 64) on CPU through MLIR. Compare runtime with your hand-written backend and with torch.compile on the same machine. Alternative: measure TorchInductor fusion decisions (kernel count and runtime) on 5 HuggingFace models, including GPT-2 small and BERT-base, and write a minimal patch that improves one case.",
    "deliverables": [
     "repo with the dialect, passes, FileCheck tests and an end-to-end example",
     "README with performance comparison vs. your original backend and vs. torch.compile",
@@ -731,7 +733,10 @@
      "title": "MLIR Toy tutorial",
      "url": "https://mlir.llvm.org/docs/Tutorials/Toy/"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v2.1",
+   "adds": "an optional MLIR backend"
   },
   "solutions": [
    {
@@ -974,7 +979,8 @@
      "title": "Ansor",
      "url": "https://arxiv.org/abs/2006.06762"
     }
-   ]
+   ],
+   "track": "optional"
   },
   "solutions": [
    {
@@ -1238,7 +1244,8 @@
      "title": "GPTQ",
      "url": "https://arxiv.org/abs/2210.17323"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -1493,7 +1500,8 @@
      "title": "TPU v4",
      "url": "https://arxiv.org/abs/2304.01433"
     }
-   ]
+   ],
+   "track": "optional"
   },
   "solutions": [
    {
@@ -1719,16 +1727,16 @@
    "Bubble larger than expected: compare microbatches m to stages p; the bubble fraction is (p-1)/m"
   ],
   "project": {
-   "title": "Scale a model and publish an MFU report",
-   "brief": "Train a GPT-2-style 1.3B model on 8 GPUs (A100/H100 class) using your library with 2D or 3D parallelism, and push MFU as high as you can with an ablation of each change. Optional: ring attention at 32k context, or expert parallelism for an 8-expert MoE variant.",
+   "title": "kiln v3.0: train a small GPT end to end and publish an MFU report",
+   "brief": "Train a GPT-2-style model (124M, or the largest that fits your GPU) on one GPU entirely with kiln: front end, autograd, fused kernels and your CUDA backend. Push MFU as high as you can and ablate each change. If you have access to several GPUs, add data or tensor parallelism and report scaling. Optional: ring attention at long context, or an 8-expert MoE variant.",
    "deliverables": [
-    "repo with the library, configs and launch scripts",
-    "README with MFU, tokens/s and memory tables across parallelism configs plus profiler traces",
-    "a 600–1200 word write-up on what limited scaling and how you fixed it"
+    "kiln v3.0 tagged, with training configs and a script that reproduces the run",
+    "README with MFU, tokens/s and memory, a loss curve against the same model trained in PyTorch, and profiler traces",
+    "a 600–1200 word write-up on what limited MFU and how you fixed it, looking back at which kiln versions mattered most"
    ],
    "rubric": {
-    "solid": ">=35% MFU on 8 GPUs with loss matching a reference run and an ablation table",
-    "exceptional": ">=45% MFU, or a working long-context or MoE extension, with a cost model that predicts measured step time within 15%"
+    "solid": "Loss tracks a PyTorch reference run of the same model; MFU reported with the calculation shown; ablation table for each optimization.",
+    "exceptional": "MFU within 2x of the same model trained with torch.compile on the same GPU, or a working multi-GPU run with measured scaling, plus a cost model that predicts step time within 15%."
    },
    "references": [
     {
@@ -1739,7 +1747,10 @@
      "title": "The Ultra-Scale Playbook",
      "url": "https://huggingface.co/spaces/nanotron/ultrascale-playbook"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v3.0",
+   "adds": "training a small GPT end to end, with an MFU report"
   },
   "solutions": [
    {
@@ -1975,7 +1986,7 @@
    "Interview nerves: practice out loud with a timer and explain tradeoffs as you code"
   ],
   "project": {
-   "title": "Capstone: a research-grade contribution",
+   "title": "Capstone research track: a research-grade contribution",
    "brief": "Combine a reproduction with one new result, for example a kernel paper ported to a new GPU generation or precision, or a scheduling result applied to a different compiler, and upstream the useful part. Present it as a short paper and a talk.",
    "deliverables": [
     "repo with code, scripts and data to reproduce every figure",
@@ -1995,7 +2006,10 @@
      "title": "GPU MODE",
      "url": "https://www.gpumode.com/"
     }
-   ]
+   ],
+   "track": "merged",
+   "into": 29,
+   "note": "Not a second capstone. This is the research track of the capstone (Modules 29 to 31): choose it there if you want your capstone to be a research contribution."
   },
   "solutions": [
    {

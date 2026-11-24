@@ -148,8 +148,8 @@
    "A rewritten child does not show up in the parent: rebuild the parent through the interning constructor when any source changes."
   ],
   "project": {
-   "title": "z3-checked symbolic simplifier with a rewrite tracer",
-   "brief": "Turn your rewrite engine into a checked simplifier. Encode each integer rule as a z3 query over 32-bit bitvectors (wraparound included) and refuse to load any rule that z3 cannot prove under its stated preconditions. Add a tracer that records each rule firing and renders before/after graphs.",
+   "title": "kiln v1.0: the 10-411 compiler as kiln's backend, with a z3-checked simplifier",
+   "brief": "From here on, your 10-411 compiler lives inside kiln as its backend (for example kiln/compiler), and the course test suites run against it. Turn your v0.6 rewrite engine into a checked simplifier. Encode each integer rule as a z3 query over 32-bit bitvectors (wraparound included) and refuse to load any rule that z3 cannot prove under its stated preconditions. Add a tracer that records each rule firing and renders before/after graphs.",
    "deliverables": [
     "repo with a rule file, a check_rules CLI that runs z3 on every rule, and CI that fails on an unproven rule",
     "a Graphviz or HTML trace of each rewrite step on 3 index expressions taken from your Week 5 (Module 22) output",
@@ -173,7 +173,10 @@
      "title": "Graphviz",
      "url": "https://graphviz.org/"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.0",
+   "adds": "the 10-411 compiler as kiln's backend, starting with a checked simplifier"
   },
   "solutions": [
    {
@@ -454,7 +457,7 @@
    "C and interpreter disagree only on overflow tests: clang assumed signed add cannot overflow. Do i32 arithmetic in uint32_t."
   ],
   "project": {
-   "title": "Differential fuzzer: C backend vs interpreter",
+   "title": "kiln v1.1: Differential fuzzer: C backend vs interpreter",
    "brief": "Write a random UIR program generator for the Week 1-2 op set (i32/bool, scalars and stacks, stores and loads with after, edge-case constants like INT_MIN and 0) and differential-test your C backend against your interpreter. Shrink every mismatch to a minimal reproducer and commit it as a regression test.",
    "deliverables": [
     "repo with a generator, a runner that compares both backends, and a delta-debugging reducer",
@@ -475,7 +478,10 @@
      "title": "Hypothesis documentation (property-based testing)",
      "url": "https://hypothesis.readthedocs.io/en/latest/"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.1",
+   "adds": "a differential fuzzer that becomes the backend's permanent test harness"
   },
   "solutions": [
    {
@@ -695,7 +701,7 @@
    "Timings vary run to run: warm up once, time 10+ runs and report the median."
   ],
   "project": {
-   "title": "Roofline benchmark harness for your compiler",
+   "title": "kiln v1.2: Roofline benchmark harness for your compiler",
    "brief": "Build a harness that runs the kernels your compiler can emit now (elementwise add over 2^20 f32, gemm at 64/128/256/512, conv3x3 at 32/64/128) over a size sweep, computes arithmetic intensity (flops / bytes of buffers) from the IR, and plots each on a roofline of your machine using a measured peak FLOP/s and a STREAM-style copy bandwidth. Later modules add their kernels to it.",
    "deliverables": [
     "repo with a bench CLI that writes JSON results keyed by git commit",
@@ -716,7 +722,10 @@
      "title": "Simon Boehm, Fast Multidimensional Matrix Multiplication on CPU from Scratch",
      "url": "https://siboehm.com/articles/22/Fast-MMM-on-CPU"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.2",
+   "adds": "a roofline benchmark harness that every later version reports into"
   },
   "solutions": [
    {
@@ -948,8 +957,8 @@
    "reduce_max wrong on negative inputs: the identity for max is INT_MIN (or -inf for f32), not 0."
   ],
   "project": {
-   "title": "Fusion plan search with a cost model",
-   "brief": "Expose each fuse-or-stage decision as a knob. Enumerate the plans for three rank-1 graphs you can write in Week 4 UIR, estimate bytes moved and flops for each with a cost model, measure real runtime, and report how well the model ranks the plans.",
+   "title": "kiln v1.3: Fusion plan search with a cost model",
+   "brief": "Expose each fuse-or-stage decision as a knob. Enumerate the plans for three rank-1 graphs you can write in Week 4 UIR, estimate bytes moved and flops for each with a cost model, measure real runtime, and report how well the model ranks the plans. This replaces the fixed fusion rules from v0.8.",
    "deliverables": [
     "repo with a plan enumerator, a cost model and a runner",
     "README with predicted vs measured time and Spearman rank correlation on 3 graphs at n = 2^20 f32: x*recip(sum(x)), x - max(x), and a mean-centered sum of squares",
@@ -969,7 +978,10 @@
      "title": "How to Scale Your Model: All About Rooflines",
      "url": "https://jax-ml.github.io/scaling-book/roofline/"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.3",
+   "adds": "fusion search with a cost model, replacing v0.8's fixed fusion rules"
   },
   "solutions": [
    {
@@ -1209,8 +1221,8 @@
    "rejected_reshape_size passes validation: compare the product of all dims, not the rank."
   ],
   "project": {
-   "title": "Property-tested view algebra with a z3-checked index simplifier",
-   "brief": "Use Hypothesis to generate random chains of movement ops on random shapes, check your lowered index arithmetic against the same chain in NumPy, and prove each div/mod rule with z3 under the bounds you computed. Measure how much the simplifier shrinks index expressions on conv2d and matmul.",
+   "title": "kiln v1.4: Property-tested view algebra with a z3-checked index simplifier",
+   "brief": "Use Hypothesis to generate random chains of movement ops on random shapes, check your lowered index arithmetic against the same chain in NumPy, and prove each div/mod rule with z3 under the bounds you computed. Measure how much the simplifier shrinks index expressions on conv2d and matmul. This upgrades the v0.3 view system.",
    "deliverables": [
     "repo with a Hypothesis suite (random chains up to depth 8, shapes up to rank 4) and a z3 proof for each index rule",
     "README with index-expression op counts and generated-C line counts before and after simplification for conv2d (3x3, 32x32, pad 1), matmul 64x64 and 20 random chains",
@@ -1230,7 +1242,10 @@
      "title": "Z3 theorem prover (Python bindings via z3-solver)",
      "url": "https://github.com/Z3Prover/z3"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.4",
+   "adds": "proved index simplification, upgrading the v0.3 views"
   },
   "solutions": [
    {
@@ -1498,8 +1513,8 @@
    "Model output differs from reference: compare layer by layer with the PyTorch weights and find the first diverging tensor."
   ],
   "project": {
-   "title": "MNIST, stories15M and ResNet-18 on your compiler vs PyTorch",
-   "brief": "On one machine, measure your compiler against PyTorch eager and torch.compile on three workloads: training the 784-128-10 MNIST MLP to 97% test accuracy, greedy decoding 256 tokens with stories15M, and ResNet-18 inference at batch 1 on 224x224 images. Add a ULP-error report for your transcendentals and a finite-difference gradient check for every op.",
+   "title": "kiln v1.5: MNIST, stories15M and ResNet-18 through kiln vs PyTorch",
+   "brief": "Connect the two halves: the kiln front end lowers its graph to UIR and the backend compiles it. On one machine, measure your compiler against PyTorch eager and torch.compile on three workloads: training the 784-128-10 MNIST MLP to 97% test accuracy, greedy decoding 256 tokens with stories15M, and ResNet-18 inference at batch 1 on 224x224 images. Add a ULP-error report for your transcendentals and a finite-difference gradient check for every op.",
    "deliverables": [
     "repo with scripts that reproduce every number from a clean checkout",
     "README table: MNIST time-to-97%, stories15M tokens/s, ResNet-18 images/s and peak memory, for your compiler, PyTorch eager and torch.compile",
@@ -1519,7 +1534,10 @@
      "title": "Karpathy, A Recipe for Training Neural Networks",
      "url": "https://karpathy.github.io/2019/04/25/recipe/"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.5",
+   "adds": "real models lowered from the kiln front end and run end to end"
   },
   "solutions": [
    {
@@ -1766,7 +1784,7 @@
    "Benchmarks vary 20%: CPU frequency scaling and turbo. Fix the governor or report medians of many runs."
   ],
   "project": {
-   "title": "Autotuner for your CPU backend",
+   "title": "kiln v1.6: Autotuner for your CPU backend",
    "brief": "Build a search-based autotuner over your schedule space (tile sizes, loop order, unroll, threads) with a measurement cache. Compare random search and beam search on three kernels: 2048^3 fp32 GEMM, a 3x3 conv with 64 in/out channels on 56x56 (a ResNet-18 layer), and row softmax on 4096x4096. Report GFLOPS vs OpenBLAS and trials needed per method.",
    "deliverables": [
     "repo with a tuner, a persistent tuning database and a replay command",
@@ -1787,7 +1805,10 @@
      "title": "Simon Boehm, Fast Multidimensional Matrix Multiplication on CPU from Scratch",
      "url": "https://siboehm.com/articles/22/Fast-MMM-on-CPU"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.6",
+   "adds": "an autotuner for the CPU backend"
   },
   "solutions": [
    {
@@ -2039,8 +2060,8 @@
    "Timing includes NVRTC compile or host copies: time with CUDA events around the launch only, after warm-up."
   ],
   "project": {
-   "title": "GPU kernel lab: bandwidth and reduction kernels near hardware peak",
-   "brief": "Take three compiler-generated kernels, fp32 elementwise add on 2^28 elements, sum-reduce on 2^28 elements, and row softmax on 1024x32768, from the naive version toward the DRAM roofline. Justify each optimization step with an Nsight Compute metric and keep the generated code for every step.",
+   "title": "kiln v1.7: a CUDA backend near bandwidth peak",
+   "brief": "Add a CUDA backend to kiln and take three of its generated kernels, fp32 elementwise add on 2^28 elements, sum-reduce on 2^28 elements, and row softmax on 1024x32768, from the naive version toward the DRAM roofline. Justify each optimization step with an Nsight Compute metric and keep the generated code for every step.",
    "deliverables": [
     "repo with generator flags for each optimization step and an ncu-driven benchmark script",
     "README with achieved GB/s vs measured peak for each kernel and step, with exported ncu metrics",
@@ -2060,7 +2081,10 @@
      "title": "Simon Boehm, How to Optimize a CUDA Matmul Kernel",
      "url": "https://siboehm.com/articles/22/CUDA-MMM"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v1.7",
+   "adds": "a CUDA backend near the GPU's bandwidth peak"
   },
   "solutions": [
    {
@@ -2339,7 +2363,8 @@
      "title": "Nsight Compute Profiling Guide",
      "url": "https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -2641,7 +2666,8 @@
      "title": "nccl-tests",
      "url": "https://github.com/NVIDIA/nccl-tests"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -2916,7 +2942,7 @@
    "Unfair benchmarks: match batch size, dtype, prompt length and warm-up across systems."
   ],
   "project": {
-   "title": "Small inference server for llama2.c models on your compiler",
+   "title": "kiln v2.0: an inference server for llama2.c models",
    "brief": "Serve stories110M with continuous batching, a paged KV cache, int8 weights and stories15M as a speculative draft. Publish a latency/throughput study at several request rates against run.c and PyTorch eager running the same weights on the same hardware.",
    "deliverables": [
     "repo with the server, a load generator and reproducible benchmark scripts",
@@ -2945,7 +2971,10 @@
      "title": "llama2.c",
      "url": "https://github.com/karpathy/llama2.c"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v2.0",
+   "adds": "an inference server for small LLMs"
   },
   "solutions": [
    {
@@ -3201,7 +3230,7 @@
   ],
   "project": {
    "title": "Capstone phase 1: proposal, baseline and public harness",
-   "brief": "Write a one-page proposal (problem, claim, primary metric, baseline, risks, stretch goal) and get feedback from at least one other person (forum, Discord, a peer). Publish the harness repo with baseline numbers before you write any optimization code.",
+   "brief": "Write a one-page proposal (problem, claim, primary metric, baseline, risks, stretch goal) and get feedback from at least one other person (forum, Discord, a peer). Publish the harness repo with baseline numbers before you write any optimization code. The capstone can extend kiln or stand alone. A research track is also available: see Module 39.",
    "deliverables": [
     "public repo with harness, pinned environment and baseline results",
     "one-page proposal in the repo (claim, metric, baseline, timeline, kill criteria)",
@@ -3221,7 +3250,8 @@
      "title": "How to Scale Your Model: All About Rooflines",
      "url": "https://jax-ml.github.io/scaling-book/roofline/"
     }
-   ]
+   ],
+   "track": "capstone"
   },
   "solutions": [
    {
@@ -3456,7 +3486,8 @@
      "title": "Karpathy, A Recipe for Training Neural Networks",
      "url": "https://karpathy.github.io/2019/04/25/recipe/"
     }
-   ]
+   ],
+   "track": "capstone"
   },
   "solutions": [
    {
@@ -3670,7 +3701,8 @@
      "title": "Simon Peyton Jones, How to Give a Great Research Talk",
      "url": "https://www.microsoft.com/en-us/research/academic-program/give-great-research-talk/"
     }
-   ]
+   ],
+   "track": "capstone"
   },
   "solutions": [
    {

@@ -131,7 +131,8 @@
      "title": "Crafting Interpreters ch. 15 A Virtual Machine",
      "url": "https://craftinginterpreters.com/a-virtual-machine.html"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -384,7 +385,7 @@
    "The suite refuses native arm64. On Apple Silicon Macs run it and gcc under Rosetta ('arch -x86_64 zsh'), and remember Mach-O symbols need a leading underscore. On ARM Linux use an x86-64 VM or container. Intel/AMD Linux and WSL work as is."
   ],
   "project": {
-   "title": "Three-address IR and peephole pass for mycc, measured against naive codegen",
+   "title": "mycc, stage 1: Three-address IR and peephole pass for mycc, measured against naive codegen",
    "brief": "Insert a TACKY-style three-address IR between the AST and assembly, give each temporary a stack slot, and add a peephole pass (drop push/pop pairs, redundant movs, jumps to the next label). Measure static instruction counts of the emitted assembly on the suite's chapter 1-9 valid programs before and after.",
    "deliverables": [
     "repo with mycc, the IR stage, the peephole pass, and a script that counts emitted instructions per test program",
@@ -404,7 +405,8 @@
      "title": "QBE compiler backend (a small reference backend)",
      "url": "https://c9x.me/compile/"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -662,7 +664,7 @@
    "Run each pass alone and check brili output against the unoptimized program before combining passes."
   ],
   "project": {
-   "title": "An optimizing middle-end with a measured pass pipeline",
+   "title": "mycc, stage 2: An optimizing middle-end with a measured pass pipeline",
    "brief": "Build an SSA middle-end on Bril with SCCP, GVN (the lesson 5 bonus), LICM and aggressive DCE, then study pass ordering. Report dynamic instruction counts from 'brili -p' on bril/benchmarks/core and check brili output equivalence after every pass.",
    "deliverables": [
     "repo with IR, SSA construction/destruction, 4+ optimization passes and a pass manager",
@@ -682,7 +684,8 @@
      "title": "Simple and Efficient Construction of SSA Form (Braun et al.)",
      "url": "https://compilers.cs.uni-saarland.de/projects/ssaconstr/"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -894,8 +897,8 @@
    "Substitution bugs are almost always variable capture: use de Bruijn indices or fresh names."
   ],
   "project": {
-   "title": "Equality-saturation optimizer for tensor expressions",
-   "brief": "Build an e-graph optimizer for a small tensor algebra (matmul, add, transpose, elementwise ops) with 15+ rules such as transpose-of-transpose, (AB)^T = B^T A^T, matmul associativity and distributivity. Extract with a FLOP cost model and check it finds the optimal parenthesization for 10 matrix chains of length 4-6 (compare to the textbook O(n^3) dynamic program).",
+   "title": "kiln v0.6: an equality-saturation optimizer over the kiln graph",
+   "brief": "Build an e-graph optimizer that runs on the kiln graph IR, starting with its tensor algebra (matmul, add, transpose, elementwise ops) with 15+ rules such as transpose-of-transpose, (AB)^T = B^T A^T, matmul associativity and distributivity. Extract with a FLOP cost model and check it finds the optimal parenthesization for 10 matrix chains of length 4-6 (compare to the textbook O(n^3) dynamic program).",
    "deliverables": [
     "repo with e-graph core (union-find, hashcons, rebuild), 15+ rules, and cost-based extraction",
     "README with plots of e-graph size vs iterations and FLOP reductions on 10 test expressions, with numerical-equivalence checks in NumPy",
@@ -914,7 +917,10 @@
      "title": "egg source",
      "url": "https://github.com/egraphs-good/egg"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.6",
+   "adds": "a rewrite engine (e-graph) over the kiln graph IR"
   },
   "solutions": [
    {
@@ -1169,10 +1175,10 @@
    "If Autodidax Part 4 is hard to follow, finish the dual-number step first."
   ],
   "project": {
-   "title": "Tensor autograd engine that trains a real model, with gradient-checkpointing",
-   "brief": "Extend scalar autograd to a NumPy-backed tensor library with broadcasting, reductions, matmul, softmax and cross-entropy, then train a small MLP or CNN on MNIST to a target accuracy. Add activation checkpointing and measure the memory/compute trade-off; add a forward-mode JVP and use it for a Hessian-vector product.",
+   "title": "kiln v0.7: gradients as a graph transformation, with checkpointing",
+   "brief": "Change kiln so the backward pass is built as more graph IR instead of run from a tape. Then the v0.6 rewrite engine and your passes can optimize forward and backward together. Cover broadcasting, reductions, matmul, softmax and cross-entropy, and train an MLP on MNIST through the graph path. Add activation checkpointing as a graph pass and measure the memory and compute trade-off, then compose forward and reverse mode for a Hessian-vector product.",
    "deliverables": [
-    "repo with tensor autograd, 20+ ops each with a finite-difference gradient test, and an MNIST training script",
+    "kiln v0.7 tagged: graph-built backward pass, 20+ ops each with a finite-difference gradient test, and an MNIST training script",
     "README with accuracy curves, peak-memory vs recompute plots for checkpointing, and HVP verification results",
     "a 600–1200 word write-up explaining reverse vs forward mode, broadcasting gradients, and the checkpointing trade-off"
    ],
@@ -1189,7 +1195,10 @@
      "title": "Autodidax: JAX core from scratch",
      "url": "https://jax.readthedocs.io/en/latest/autodidax.html"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.7",
+   "adds": "gradients built as a graph transformation, plus checkpointing"
   },
   "solutions": [
    {
@@ -1461,8 +1470,8 @@
    "If training does not learn, overfit a single batch first; failure there means a gradient bug."
   ],
   "project": {
-   "title": "Lazy-evaluating mini-framework with fusion and a benchmark against PyTorch CPU",
-   "brief": "Make your framework lazy: build an op graph, fuse elementwise chains and their following reduction into single generated C kernels, and reuse buffers. Train a 2-layer, 128-dim character-level transformer on Tiny Shakespeare (about 1 MB of text) for 2000 steps and compare speed and memory against your eager mode and PyTorch CPU.",
+   "title": "kiln v0.8: lazy evaluation, fusion, and a benchmark against PyTorch CPU",
+   "brief": "Make kiln lazy: build an op graph, fuse elementwise chains and their following reduction into single generated C kernels, and reuse buffers. Train a 2-layer, 128-dim character-level transformer on Tiny Shakespeare (about 1 MB of text) for 2000 steps and compare speed and memory against your eager mode and PyTorch CPU.",
    "deliverables": [
     "repo with lazy graph, fusion pass, codegen backend, memory planner, and a char-level transformer training script",
     "README with kernel-count, peak-memory and tokens/sec comparisons (eager vs fused vs PyTorch CPU) and loss curves",
@@ -1481,7 +1490,10 @@
      "title": "tinygrad",
      "url": "https://github.com/tinygrad/tinygrad"
     }
-   ]
+   ],
+   "track": "main",
+   "version": "v0.8",
+   "adds": "lazy evaluation, elementwise fusion and generated C kernels"
   },
   "solutions": [
    {
@@ -1751,7 +1763,7 @@
   ],
   "project": {
    "title": "CPU SGEMM reaching a stated fraction of peak, with a roofline report",
-   "brief": "Write a single-precision GEMM in C from naive loops to a packed, register-blocked, SIMD (AVX2/AVX-512 or NEON), multithreaded kernel. Document each optimization step with measured GFLOP/s and hardware counters, place each version on a roofline for your machine, and compare to OpenBLAS/Accelerate.",
+   "brief": "This finishes the matmul worklog you started in Module 3. Write a single-precision GEMM in C from naive loops to a packed, register-blocked, SIMD (AVX2/AVX-512 or NEON), multithreaded kernel. Document each optimization step with measured GFLOP/s and hardware counters, place each version on a roofline for your machine, and compare to OpenBLAS/Accelerate.",
    "deliverables": [
     "repo with each optimization step as a separate tagged version and a reproducible benchmark harness",
     "README with GFLOP/s vs matrix size plots, a roofline chart, and cache-miss counters per version",
@@ -1770,7 +1782,8 @@
      "title": "Brendan Gregg: Flame Graphs",
      "url": "https://www.brendangregg.com/flamegraphs.html"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
@@ -2043,7 +2056,8 @@
      "title": "CUDA C++ Programming Guide",
      "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/"
     }
-   ]
+   ],
+   "track": "skill"
   },
   "solutions": [
    {
