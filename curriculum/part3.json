@@ -1,9 +1,9 @@
 [
  {
-  "id": 18,
+  "id": 19,
   "title": "UOps, rewrites, bounds",
   "course_week": 1,
-  "why": "Every later week is a rewrite on one hash-consed graph of `(op, src, arg)` nodes. This module builds that graph, its cached dtype/shape/bounds/cost properties, and the rewrite engine you will reuse through Module 31.",
+  "why": "Every later week is a rewrite on one hash-consed graph of `(op, src, arg)` nodes. This module builds that graph, its cached dtype/shape/bounds/cost properties, and the rewrite engine you will reuse through Module 32.",
   "steps": [
    {
     "kind": "read",
@@ -125,7 +125,7 @@
    {
     "title": "tinygrad symbolic.py: symbolic",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/symbolic.py#L246",
-    "note": "The full simplifier you will grow toward in Module 22."
+    "note": "The full simplifier you will grow toward in Module 23."
    },
    {
     "title": "10-411 technical syllabus",
@@ -152,7 +152,7 @@
    "brief": "From here on, your 10-411 compiler lives inside kiln as its backend (for example kiln/compiler), and the course test suites run against it. Turn your v0.6 rewrite engine into a checked simplifier. Encode each integer rule as a z3 query over 32-bit bitvectors (wraparound included) and refuse to load any rule that z3 cannot prove under its stated preconditions. Add a tracer that records each rule firing and renders before/after graphs.",
    "deliverables": [
     "repo with a rule file, a `check_rules` CLI that runs z3 on every rule, and CI that fails on an unproven rule",
-    "a Graphviz or HTML trace of each rewrite step on 3 index expressions taken from your Week 5 (Module 22) output",
+    "a Graphviz or HTML trace of each rewrite step on 3 index expressions taken from your Week 5 (Module 23) output",
     "README table: rule count, proven/rejected, and node-count reduction on 200+ expressions (the week01-05 tests plus cases ported from tinygrad's `test_uop_symbolic.py`)",
     "a 600-1200 word write-up on one rule z3 rejected, its counterexample, and the corrected precondition"
    ],
@@ -334,7 +334,7 @@
   "stretch": "Write a rule fuzzer: generate random `UOp` expressions over bounded variables, apply your rewrite set, and check every result against the original with z3 (or exhaustive evaluation for small ranges). Report soundness bugs and measure bounds precision as the mean interval width ratio versus the true range over 10,000 random expressions, and drive it below 1.2."
  },
  {
-  "id": 19,
+  "id": 20,
   "title": "Loads, stores, memory; render C",
   "course_week": 2,
   "why": "Memory adds effects, so graph order stops being free: a load must come after the stores it observes. This is also your first backend: toposort, emit C, compile with clang, call through `ctypes`.",
@@ -583,7 +583,7 @@
   "stretch": "Add a restrict-aware emitter and an alias checker: prove from your `AFTER` graph which buffers never alias, emit `__restrict__` only for those, and show with clang `-O3 -Rpass=loop-vectorize` on 5 kernels that vectorization appears where it did not before, with measured speedup."
  },
  {
-  "id": 20,
+  "id": 21,
   "title": "Loops, floats, runtime; matmul and conv",
   "course_week": 3,
   "why": "range and end turn straight-line code into loop nests, and placing each computation in the innermost loop it depends on is the first scheduling decision. `f32` arrives, so correctness becomes a tolerance.",
@@ -648,7 +648,7 @@
     "kind": "read",
     "title": "tinygrad-notes: The trick in convolution and arange",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241208_conv.html",
-    "detail": "tinygrad builds conv from `_pool`, which is expand, permute and shrink. Preview for Module 22; the note uses an older tinygrad API.",
+    "detail": "tinygrad builds conv from `_pool`, which is expand, permute and shrink. Preview for Module 23; the note uses an older tinygrad API.",
     "bot_block": false
    },
    {
@@ -662,7 +662,7 @@
     "kind": "measure",
     "title": "Time gemm_256 in C",
     "url": "",
-    "detail": "Report GFLOP/s (`2*256^3` flops / median time over 10+ runs after a warmup) for your naive loop nest. Module 24 tries to beat this number.",
+    "detail": "Report GFLOP/s (`2*256^3` flops / median time over 10+ runs after a warmup) for your naive loop nest. Module 25 tries to beat this number.",
     "bot_block": false
    },
    {
@@ -841,7 +841,7 @@
   "stretch": "Write a loop-order autotuner for `gemm_256`: enumerate all 6 permutations of the three ranges plus 2-level tiling with tile sizes in {8,16,32,64}, compile each, and report GFLOP/s against NumPy. Target at least 30 percent of NumPy single-thread `float32` throughput with a schedule your compiler emits."
  },
  {
-  "id": 21,
+  "id": 22,
   "title": "Rangeify, reduce, materialization",
   "course_week": 4,
   "why": "Rangeify lowers shaped ops to scalar code over explicit ranges and decides which values get a buffer. Fuse-or-stage is the scheduling decision every ML compiler makes.",
@@ -967,7 +967,7 @@
    ],
    "rubric": {
     "solid": "For each graph the chosen plan is at least as fast as both no-fusion and fuse-everything; Spearman correlation of at least 0.7 between predicted and measured time across all plans.",
-    "exceptional": "Cost model includes a cache-size term fitted from your Module 20 bandwidth numbers and the correlation improves measurably; one counterintuitive case explained with measured numbers."
+    "exceptional": "Cost model includes a cache-size term fitted from your Module 21 bandwidth numbers and the correlation improves measurably; one counterintuitive case explained with measured numbers."
    },
    "references": [
     {
@@ -1105,7 +1105,7 @@
   "stretch": "Implement a cost-model-driven materializer: estimate bytes moved and recomputed flops for fuse vs stage per node, choose the minimum, and evaluate on softmax, layernorm and a 2-stage blur. Report bytes moved and wall time for all-fuse, all-stage and your model, and beat both baselines on at least two of three."
  },
  {
-  "id": 22,
+  "id": 23,
   "title": "Movement ops",
   "course_week": 5,
   "why": "reshape, permute, pad, shrink and expand never copy: each becomes index arithmetic, plus a validity mask for pad. Simplifying the resulting div/mod with bounds decides whether the generated loops are clean.",
@@ -1231,7 +1231,7 @@
    ],
    "rubric": {
     "solid": "10,000+ random chains pass; every simplification rule is z3-proven; measured reduction in index op count on conv2d and matmul.",
-    "exceptional": "Proves a general merge condition for reshape chains with z3, not just test cases; the simplification gives a measured speedup on conv2d in your Module 20 harness."
+    "exceptional": "Proves a general merge condition for reshape chains with z3, not just test cases; the simplification gives a measured speedup on conv2d in your Module 21 harness."
    },
    "references": [
     {
@@ -1382,7 +1382,7 @@
   "stretch": "Write a movement-op canonicalizer and prove it: for random chains of up to 6 movement ops on shapes with up to 4 dims, compare your generated index expressions to NumPy on every element, and count / and % ops in the emitted C. Make 100 percent of reshape-then-inverse-reshape chains compile to div/mod-free code, and report the fraction for general chains."
  },
  {
-  "id": 23,
+  "id": 24,
   "title": "Autodiff, real models",
   "course_week": 6,
   "why": "Reverse-mode gradients are just another graph rewrite, one rule per op. With file-backed weights and transcendentals you can train MNIST and run real LLMs and CNNs: your compiler starts doing actual ML.",
@@ -1667,7 +1667,7 @@
   "stretch": "Add forward-mode (jvp) and derive reverse mode from linearize plus a transpose pass, as in YOLO, then compute Hessian-vector products by composing them. Verify HVPs against finite differences on the MNIST MLP and train it with a few steps of Newton-CG; report gradient-graph size vs forward-graph size for every model in the project."
  },
  {
-  "id": 24,
+  "id": 25,
   "title": "CPU memory hierarchy, threads",
   "course_week": 7,
   "why": "Correct code is now slow code; this module makes generated C competitive by tiling, reordering, unrolling, vectorizing and threading. These are the same schedule knobs you later reuse on GPU.",
@@ -1938,7 +1938,7 @@
   "stretch": "Replace the autotuner's measurement loop with a learned cost model (gradient-boosted trees or a small MLP over loop features, as in TVM/Ansor) and show it reaches within 5% of the best measured schedule with 10x fewer real runs. Extend the micro-kernel to AVX-512 or NEON and report percentage of measured peak on `2048^3` GEMM next to OpenBLAS and BLIS."
  },
  {
-  "id": 25,
+  "id": 26,
   "title": "GPU backend",
   "course_week": 8,
   "why": "GPUs need a different mapping: GLOBAL/LOCAL axes onto grids and blocks, plus shared memory and barriers. Elementwise and reduce kernels are memory-bound, so the target is a fraction of DRAM bandwidth.",
@@ -2202,7 +2202,7 @@
   "stretch": "Add a Triton or PTX backend next to CUDA C and generate a single-pass reduction with decoupled look-back (as in CUB), then show elementwise, reduce and softmax each reaching 90% or more of measured DRAM bandwidth on two GPU generations. Publish ncu sections proving where the last 10% goes."
  },
  {
-  "id": 26,
+  "id": 27,
   "title": "Tensor cores, fast GEMM, flash attention",
   "course_week": 9,
   "why": "Fast GEMM and attention are where tiling, register blocking, async copies and tensor-core instructions all meet. Your compiler must emit them, not you.",
@@ -2536,7 +2536,7 @@
   "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, `wgmma` or `tcgen05`, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at `8192^3` and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."
  },
  {
-  "id": 27,
+  "id": 28,
   "title": "Multiple GPUs, sharding",
   "course_week": 10,
   "why": "Sharding is a type on buffers and collectives are just ops your compiler inserts. Data and tensor parallelism fall out of propagating that annotation.",
@@ -2819,7 +2819,7 @@
   "stretch": "Extend the planner to choose among data, tensor, pipeline and FSDP sharding with an ILP or DP search (as in Alpa) and overlap collectives with compute. On 4+ GPUs, show the chosen plan for a 1B-parameter transformer lies within 10% of measured best across all enumerated plans and reach at least 40% MFU."
  },
  {
-  "id": 28,
+  "id": 29,
   "title": "SOTA inference and training",
   "course_week": 11,
   "why": "Production inference is memory-bandwidth bound decoding; KV caches, batching, quantization and speculative decoding are how real stacks win. You also commit to a final project.",
@@ -2905,7 +2905,7 @@
     "kind": "implement",
     "title": "Write the one-page project proposal",
     "url": "",
-    "detail": "Goal, baseline, metric, plan (see Modules 29-31).",
+    "detail": "Goal, baseline, metric, plan (see Modules 30-32).",
     "bot_block": false
    }
   ],
@@ -3133,7 +3133,7 @@
   "stretch": "Run a 1B-class Llama model on your compiler with a paged KV cache, continuous batching, 4-bit weights (GPTQ or AWQ) and EAGLE-style drafting. Match vLLM's throughput within 25% at equal p99 latency on the same GPU and report perplexity within 2% of fp16."
  },
  {
-  "id": 29,
+  "id": 30,
   "title": "Final project: choose, baseline, harness",
   "course_week": 12,
   "why": "Projects fail from vague goals and missing measurements. Lock in one metric and a reproducible harness before optimizing anything.",
@@ -3237,7 +3237,7 @@
   ],
   "project": {
    "title": "Capstone phase 1: proposal, baseline and public harness",
-   "brief": "Write a one-page proposal (problem, claim, primary metric, baseline, risks, stretch goal) and get feedback from at least one other person (forum, Discord, a peer). Publish the harness repo with baseline numbers before you write any optimization code. The capstone can extend kiln or stand alone. A research track is also available: see Module 39.",
+   "brief": "Write a one-page proposal (problem, claim, primary metric, baseline, risks, stretch goal) and get feedback from at least one other person (forum, Discord, a peer). Publish the harness repo with baseline numbers before you write any optimization code. The capstone can extend kiln or stand alone. A research track is also available: see Module 40.",
    "deliverables": [
     "public repo with harness, pinned environment and baseline results",
     "one-page proposal in the repo (claim, metric, baseline, timeline, kill criteria)",
@@ -3395,7 +3395,7 @@
   "stretch": "Turn Idea A into a learned search: train a small cost model (gradient-boosted trees or an MLP over kernel features) on timings from your beam search, and show it reaches within 5% of full-beam kernel speed on 20+ KernelBench level-1 ops while timing at least 5x fewer candidates. Publish the dataset of (kernel, features, time) so others can reproduce."
  },
  {
-  "id": 30,
+  "id": 31,
   "title": "Final project: build and iterate",
   "course_week": 13,
   "why": "Implement the core idea in small measured steps, keeping a log of what did not work; negative results are part of the report.",
@@ -3468,7 +3468,7 @@
    "Optimizing without profiling: always record the profiler evidence that motivated a change.",
    "Many changes per commit: you will not know what helped. One change, one measurement, one log line.",
    "Ignoring negative results: log them; they are part of the report and show judgment.",
-   "Correctness drifts silently: run the full test suite on every iteration, including the interpreter cross-check from module 19.",
+   "Correctness drifts silently: run the full test suite on every iteration, including the interpreter cross-check from module 20.",
    "Stuck on one bottleneck for more than two days: log what you tried, ask in GPU MODE or tinygrad Discord, or switch to the stretch goal."
   ],
   "project": {
@@ -3611,7 +3611,7 @@
   "stretch": "Submit your optimized kernel to a GPU MODE leaderboard (https://www.gpumode.com) and place in the top 10 for its problem, or show a reproducible speedup over the current top entry. Document every submission in the lab notebook with its measured time."
  },
  {
-  "id": 31,
+  "id": 32,
   "title": "Final project: results and write-up",
   "course_week": 14,
   "why": "Writing it up as a short paper forces you to state what you claim and back it with numbers.",

@@ -1,6 +1,6 @@
 [
  {
-  "id": 10,
+  "id": 11,
   "title": "Interpreters",
   "why": "An interpreter is the simplest complete language implementation: scanner, parser, AST, evaluator. Every compiler you build later reuses these front-end pieces, and a tree-walking interpreter is the reference semantics you test compiled code against.",
   "steps": [
@@ -263,7 +263,7 @@
   "stretch": "Turn clox into a register-based VM (Lua 5.0 style) with computed-goto dispatch and NaN boxing, keeping the full Crafting Interpreters test suite green. Report `fib(35)` and a loop-heavy benchmark against stock clox and CPython 3, and break down the speedup by each change."
  },
  {
-  "id": 11,
+  "id": 12,
   "title": "Compiling to machine code",
   "why": "Turning an AST into real assembly shows what every ML compiler ultimately emits. Nora Sandler's incremental blog series plus the test suite for her book give a tight loop: one language feature at a time, each checked by a few dozen tests.",
   "steps": [
@@ -551,7 +551,7 @@
   "stretch": "Add a register allocator (linear scan or graph coloring with coalescing) and a TACKY-style three-address IR to `mycc`, then pass the book suite through chapter 20. Measure runtime and instruction count against your stack-machine output and `gcc -O0/-O1` on 5 compute-heavy C programs."
  },
  {
-  "id": 12,
+  "id": 13,
   "title": "IRs, SSA and optimization passes",
   "why": "Real compilers optimize on an intermediate representation, not the AST. CS6120 (Fall 2020, with a self-guided version) uses the Bril IR to teach control-flow graphs, dataflow analysis and SSA through small implementation tasks.",
   "steps": [
@@ -601,7 +601,7 @@
     "kind": "watch",
     "title": "CS6120 Lesson 6: LLVM -- video + task",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/6/",
-    "detail": "The task: follow the LLVM for Grad Students tutorial far enough to write a pass that changes program execution (for example, print on every floating-point division). Requires C++ and an LLVM install; optional.",
+    "detail": "The task: follow the LLVM for Grad Students tutorial far enough to write a pass that changes program execution (for example, print on every floating-point division). Requires C++ and an LLVM install; optional. New to C++ or to building LLVM passes? Do Module 2 first; its llvm-tutor setup is the starting point here.",
     "bot_block": false
    },
    {
@@ -620,9 +620,9 @@
    },
    {
     "kind": "build",
-    "title": "Lower your Module 11 compiler through a Bril-like IR",
+    "title": "Lower your Module 12 compiler through a Bril-like IR",
     "url": "https://capra.cs.cornell.edu/bril/",
-    "detail": "Read the Bril language reference, then add a three-address IR stage to `mycc` from Module 11 and run your TDCE/LVN passes before codegen.",
+    "detail": "Read the Bril language reference, then add a three-address IR stage to `mycc` from Module 12 and run your TDCE/LVN passes before codegen.",
     "bot_block": false
    }
   ],
@@ -797,13 +797,13 @@
     "title": "What I talk about when I talk about IRs",
     "by": "Max Bernstein",
     "url": "https://bernsteinbear.com/blog/irs/",
-    "note": "Practical criteria for designing an IR; compare them with the UOp graph you will build in Module 18."
+    "note": "Practical criteria for designing an IR; compare them with the UOp graph you will build in Module 19."
    }
   ],
   "stretch": "Implement SCCP, GVN-PRE (or GVN plus LICM) and Briggs-style out-of-SSA with parallel-copy sequentialization on Bril, then run a pass-ordering study: try all orderings of 4 passes over `bril/benchmarks` and report the best and worst dynamic instruction counts per benchmark. Explain at least two cases where order changes the result by more than 5%."
  },
  {
-  "id": 13,
+  "id": 14,
   "title": "Term rewriting, e-graphs and lambda calculus",
   "why": "tinygrad's optimizer is a pattern-matching rewrite engine over a graph IR (UOps and PatternMatcher); e-graphs are the principled version of that idea. Lambda calculus gives you the formal vocabulary for substitution, binding and evaluation order that rewriting depends on.",
   "steps": [
@@ -1072,7 +1072,7 @@
   "stretch": "Replace one tinygrad `PatternMatcher` simplification stage with an egglog-backed equality-saturation pass over index expressions and measure on 50 real kernels (captured with `DEBUG` output) how many ALU ops the generated code saves and how much compile time it adds. Report node counts, saturation time and any rule that causes blowup."
  },
  {
-  "id": 14,
+  "id": 15,
   "title": "Automatic differentiation",
   "why": "ML compilers differentiate programs as a graph transformation. You build forward and reverse mode yourself, then read how JAX implements `grad` as linearize plus transpose on a traced IR (Autodidax).",
   "steps": [
@@ -1134,7 +1134,7 @@
    },
    {
     "kind": "build",
-    "title": "Reverse-mode AD over your Module 13 DAG (read tinygrad mixin/gradient.py)",
+    "title": "Reverse-mode AD over your Module 14 DAG (read tinygrad mixin/gradient.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/gradient.py",
     "detail": "Read tinygrad's `gradient.py` (a rewrite-rule-based gradient), then emit gradient graphs for your own IR.",
     "bot_block": true
@@ -1223,7 +1223,7 @@
     "title": "tinygrad engine/realize.py and codegen/memory.py at the pinned commit",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/engine/realize.py",
     "note": "Shows how tinygrad runs the scheduled forward and gradient graphs; read it after `mixin/gradient.py` to see where your gradient graph gets executed.",
-    "for": "Reverse-mode AD over your Module 13 DAG",
+    "for": "Reverse-mode AD over your Module 14 DAG",
     "bot_block": true
    }
   ],
@@ -1367,7 +1367,7 @@
   "stretch": "Implement optimal binomial checkpointing (Griewank's revolve) in your tensor engine and train a 50-layer MLP where peak activation memory is `O(log n)` layers. Report measured peak memory and recompute overhead against no checkpointing and `sqrt(n)` checkpointing, and verify gradients match to 1e-6 in float64."
  },
  {
-  "id": 15,
+  "id": 16,
   "title": "Deep learning systems",
   "why": "Before compiling tensor programs you need a tensor library: strides, broadcasting, autograd on tensors, and fast kernels. MiniTorch and CMU DLSys (10-414/714) build each piece with tests.",
   "steps": [
@@ -1382,7 +1382,7 @@
     "kind": "do",
     "title": "MiniTorch Module 1: Autodiff, Tasks 1.1-1.5",
     "url": "https://minitorch.github.io/module1/module1/",
-    "detail": "Numerical derivatives, scalars, chain rule, backpropagation, training. Compare with your Module 14 code.",
+    "detail": "Numerical derivatives, scalars, chain rule, backpropagation, training. Compare with your Module 15 code.",
     "bot_block": false
    },
    {
@@ -1431,7 +1431,7 @@
     "kind": "do",
     "title": "DLSys Homework 3: NDArray backend (CPU + CUDA)",
     "url": "https://github.com/dlsyscourse/hw3",
-    "detail": "Implement `compact/setitem`, elementwise ops, reductions and tiled matmul in C++ and CUDA (`hw3.ipynb`).",
+    "detail": "Implement `compact/setitem`, elementwise ops, reductions and tiled matmul in C++ and CUDA (`hw3.ipynb`). The C++ you need (classes, templates, RAII) is covered in Module 2.",
     "bot_block": false
    }
   ],
@@ -1646,7 +1646,7 @@
   "stretch": "Add a CUDA or Metal codegen backend to your lazy framework and train a 6-layer, 384-dim char transformer on Tiny Shakespeare to validation loss under 1.6. Report tokens/sec within 3x of PyTorch eager on the same GPU, plus kernel count per step before and after fusion."
  },
  {
-  "id": 16,
+  "id": 17,
   "title": "Performance engineering",
   "why": "An ML compiler is only as good as the code it emits. MIT 6.172 covers work, caches, vectorization and measurement; Aalto PPC has you optimize one kernel step by step on CPU, which is what kernel codegen must do automatically.",
   "steps": [
@@ -1728,7 +1728,7 @@
     "bot_block": false
    }
   ],
-  "build": "A benchmarked CPU SGEMM in C (callable from your Module 15 library via `ctypes`) with a writeup plotting GFLOP/s across 6 optimization stages against theoretical peak, plus perf counter evidence (cache misses, IPC) for each stage.",
+  "build": "A benchmarked CPU SGEMM in C (callable from your Module 16 library via `ctypes`) with a writeup plotting GFLOP/s across 6 optimization stages against theoretical peak, plus perf counter evidence (cache misses, IPC) for each stage.",
   "check": [
    "You can compute your CPU's theoretical peak FLOP/s from cores, frequency, SIMD width and FMA units",
    "Your final matmul is within 2x of OpenBLAS/numpy at `2048x2048`",
@@ -1744,7 +1744,7 @@
    {
     "title": "How to Optimize a CUDA Matmul Kernel (Simon Boehm)",
     "url": "https://siboehm.com/articles/22/CUDA-MMM",
-    "note": "Bridge to GPU version in Module 17."
+    "note": "Bridge to GPU version in Module 18."
    }
   ],
   "effort": "40–60 h",
@@ -1763,7 +1763,7 @@
   ],
   "project": {
    "title": "CPU SGEMM reaching a stated fraction of peak, with a roofline report",
-   "brief": "This finishes the matmul worklog you started in Module 3. Write a single-precision GEMM in C from naive loops to a packed, register-blocked, SIMD (AVX2/AVX-512 or NEON), multithreaded kernel. Document each optimization step with measured GFLOP/s and hardware counters, place each version on a roofline for your machine, and compare to OpenBLAS/Accelerate.",
+   "brief": "This finishes the matmul worklog you started in Module 4. Write a single-precision GEMM in C from naive loops to a packed, register-blocked, SIMD (AVX2/AVX-512 or NEON), multithreaded kernel. Document each optimization step with measured GFLOP/s and hardware counters, place each version on a roofline for your machine, and compare to OpenBLAS/Accelerate.",
    "deliverables": [
     "repo with each optimization step as a separate tagged version and a reproducible benchmark harness",
     "README with GFLOP/s vs matrix size plots, a roofline chart, and cache-miss counters per version",
@@ -1928,7 +1928,7 @@
   "stretch": "Write a BLIS-style SGEMM with a hand-scheduled AVX-512 or NEON micro-kernel and an autotuner that searches block sizes (`MC`, `KC`, `NC`, `MR`, `NR`) per machine. Reach at least 85% of single-core theoretical peak and match OpenBLAS within 5% on square and skinny shapes (`2048x2048`, `4096x64`), with a Top-Down perf breakdown explaining the remaining gap."
  },
  {
-  "id": 17,
+  "id": 18,
   "title": "Parallelism and GPUs",
   "why": "ML compilers target GPUs, so you need the SIMT execution model, the memory hierarchy, and the reasons tiling and fusion matter. CS149 gives the model, GPU Puzzles drills indexing, and real CUDA kernels prepare you to emit them.",
   "steps": [
@@ -1964,7 +1964,7 @@
     "kind": "do",
     "title": "CS149 Assignment 3: A Simple CUDA Renderer",
     "url": "https://github.com/stanford-cs149/asst3",
-    "detail": "Part 1 SAXPY, Part 2 exclusive prefix sum and `find_repeats`, Part 3 circle renderer (85 of 100 points).",
+    "detail": "Part 1 SAXPY, Part 2 exclusive prefix sum and `find_repeats`, Part 3 circle renderer (85 of 100 points). CUDA is C++: review Module 2 if templates or RAII wrappers are unfamiliar.",
     "bot_block": false
    },
    {

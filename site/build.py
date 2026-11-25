@@ -14,13 +14,13 @@ E = lambda s: html.escape(str(s or ""), quote=True)
 PARTS = [
   ("start", "Start here", "Orientation", range(0, 1),
    "Set up your tools, learn how to study this material, and start the public repo and learning log that become your portfolio."),
-  ("foundations", "Part I", "Foundations", range(1, 10),
-   "What CMU's prerequisites (15-213 Computer Systems, 10-301 Machine Learning) would have taught you: C, how machines run code, the math, and deep learning from scratch."),
-  ("bridge", "Part II", "Bridge", range(10, 18),
+  ("foundations", "Part I", "Foundations", range(1, 11),
+   "What CMU's prerequisites (15-213 Computer Systems, 10-301 Machine Learning) would have taught you: C, the C++ that ML tools are written in, how machines run code, the math, and deep learning from scratch."),
+  ("bridge", "Part II", "Bridge", range(11, 19),
    "What a compiler course assumes you know: interpreters, compiling to assembly, IRs, rewriting, autodiff, ML frameworks, performance, and GPUs."),
-  ("course", "Part III", "The Course", range(18, 32),
+  ("course", "Part III", "The Course", range(19, 33),
    "The 10-411 syllabus in order. One repo, one ./compile, more capable with each module: from constant folding to tensor-core GEMMs and flash attention."),
-  ("frontier", "Part IV", "Frontier", range(32, 40),
+  ("frontier", "Part IV", "Frontier", range(33, 41),
    "From course graduate to top-lab level: the industrial tools (Triton, CUTLASS, MLIR, XLA), scheduling theory, low-precision numerics, accelerator design, training at scale, and research and open-source work."),
 ]
 KIND = {"watch": "Watch", "read": "Read", "do": "Do", "build": "Build", "implement": "Implement",
@@ -217,7 +217,7 @@ def index(mods):
 <li><b>No deadlines.</b> Move on when the build works and you can answer every “ready to move on when” question without notes.</li>
 <li><b>Get the code.</b> The assignments, tests and this site's source are on GitHub: <a href="https://github.com/jsivark/ml-compilers-course">github.com/jsivark/ml-compilers-course</a>.</li>
 
-<li><b>Build one system, plus focused projects.</b> Your main project, kiln, grows from a C tensor core in Module 1 to a compiler that trains a GPT on your GPU in Module 38. Each version works on its own. Skill projects along the way teach what kiln does not cover. See the <a href="portfolio.html">portfolio</a>.</li>
+<li><b>Build one system, plus focused projects.</b> Your main project, kiln, grows from a C tensor core in Module 1 to a compiler that trains a GPT on your GPU in Module 39. Each version works on its own. Skill projects along the way teach what kiln does not cover. See the <a href="portfolio.html">portfolio</a>.</li>
 <li><b>Effort estimates are honest, not deadlines.</b> Hard modules take longer. Being stuck is normal, and every module has an “if you get stuck” section.</li>
 <li><b>Write the code yourself.</b> Use AI to explain things and to debug, not to write your compiler. The real course has the same rule.</li>
 </ul>
@@ -244,7 +244,7 @@ def portfolio(mods):
           '<b>Skill projects</b> are done once each and teach things kiln does not cover. Every kiln version is complete, tested and publishable on its own.</p>'
           + sec("kiln, version by version", "Tag each version in your kiln repo. If an earlier version is too messy to build on, refactor it before you move on; that is part of the work.", by("setup") + by("main"), kv)
           + sec("Skill projects", "One repo each, or folders in one monorepo. Below each is the bar for exceptional work.", by("skill"), ex)
-          + sec("Capstone", "One capstone in three phases. Module 39 adds a research track.", by("capstone"), ex)
+          + sec("Capstone", "One capstone in three phases. Module 40 adds a research track.", by("capstone"), ex)
           + sec("Optional projects", "For readers who want these specialisms.", by("optional"), ex)
           + '<h2>How to present it</h2><ul class="how"><li>A README for every kiln version and skill project: how to run it, results tables and plots.</li>'
           '<li>A write-up for each on your blog or notes site. Explain the why, the measurements and what failed. This is the strongest signal you can send.</li>'

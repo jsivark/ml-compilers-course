@@ -2,26 +2,26 @@
 
 **Course website: https://jsivark.github.io/ml-compilers-course/**
 
-A free, self-paced path from intermediate Python and basic C to building your own machine-learning compiler, modelled on CMU 10-411 *Compilers for Machine Learning*. The website has all 40 modules with step-by-step instructions and portfolio projects. This repo holds the website's source and the compiler assignments with their tests.
+A free, self-paced path from intermediate Python and basic C to building your own machine-learning compiler, modelled on CMU 10-411 *Compilers for Machine Learning*. The website has all 41 modules with step-by-step instructions and portfolio projects. This repo holds the website's source and the compiler assignments with their tests.
 
 ## When the tests apply
 
-**The automated tests start at Module 18.** Modules 0–17 (orientation, foundations and bridge) have no tests here. They use the labs, puzzle sets and test suites linked from each module page, such as the CS:APP labs, Tensor Puzzles and Nora Sandler's C compiler tests.
+**The automated tests start at Module 19.** Modules 0–18 (orientation, foundations and bridge) have no tests here. They use the labs, puzzle sets and test suites linked from each module page, such as the CS:APP labs, Tensor Puzzles and Nora Sandler's C compiler tests.
 
-From Module 18 on, you build one compiler, and the tests in this repo check it. The test folders are numbered by the real course's weeks:
+From Module 19 on, you build one compiler, and the tests in this repo check it. The test folders are numbered by the real course's weeks:
 
 | Course module | Test folder | Tests | Run with |
 |---|---|---|---|
-| 18 | `tests/week01` | 66 | `python3 run_tests.py 1` |
-| 19 | `tests/week02` | 57 | `python3 run_tests.py 2` |
-| 20 | `tests/week03` | 60 | `python3 run_tests.py 3` |
-| 21 | `tests/week04` | 54 | `python3 run_tests.py 4` |
-| 22 | `tests/week05` | 60 | `python3 run_tests.py 5` |
-| 23 | `tests/week06` | 63 | `python3 run_tests.py 6` |
-| 24 | `tests/week07` | 41 | `python3 run_tests.py 7` |
-| 25–28 | none | | graded by measured milestones (see each module page) |
+| 19 | `tests/week01` | 66 | `python3 run_tests.py 1` |
+| 20 | `tests/week02` | 57 | `python3 run_tests.py 2` |
+| 21 | `tests/week03` | 60 | `python3 run_tests.py 3` |
+| 22 | `tests/week04` | 54 | `python3 run_tests.py 4` |
+| 23 | `tests/week05` | 60 | `python3 run_tests.py 5` |
+| 24 | `tests/week06` | 63 | `python3 run_tests.py 6` |
+| 25 | `tests/week07` | 41 | `python3 run_tests.py 7` |
+| 26–29 | none | | graded by measured milestones (see each module page) |
 
-Every test in Modules 18–24 has been checked against a reference implementation that follows the rules below, including the places marked *(convention)*. The tests cover normal programs, edge cases an obvious-but-wrong compiler gets wrong, and `rejected_`, `mismatch_` and `overbudget_` variants.
+Every test in Modules 19–25 has been checked against a reference implementation that follows the rules below, including the places marked *(convention)*. The tests cover normal programs, edge cases an obvious-but-wrong compiler gets wrong, and `rejected_`, `mismatch_` and `overbudget_` variants.
 
 ```
 run_tests.py        run a week's tests against ./compile (or any command)
@@ -50,7 +50,7 @@ The expected outcome comes from the filename prefix:
 | `rejected_` | `REJECTED` (invalid before it runs) |
 | `overbudget_` | `OVERBUDGET` |
 
-To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number is the test folder (the course week), not the module number: Module 18 is `1`. Every week must also keep passing all earlier weeks' tests.
+To check your compiler, run `python3 run_tests.py 1` (or 2, 3, …). The number is the test folder (the course week), not the module number: Module 19 is `1`. Every week must also keep passing all earlier weeks' tests.
 
 *(convention)* Each test is judged by the rules of its own week, and `run_tests.py` sets the environment variable `UIR_WEEK` to that week. Later weeks only add features, so this matters for exactly one test: ALU ops on vectors are an error in Week 1 (`week01/rejected_alu_on_vector.uir`) and valid from Week 4. Read `UIR_WEEK` (default: the latest week you support) to tell the two apart.
 

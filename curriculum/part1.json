@@ -57,7 +57,7 @@
     "kind": "watch",
     "title": "Missing Semester 2020, Lecture 7: Debugging and Profiling",
     "url": "https://missing.csail.mit.edu/2020/debugging-profiling/",
-    "detail": "Covers printf debugging, gdb and pdb, perf and flame graphs. Modules 1-3 use all of these.",
+    "detail": "Covers printf debugging, gdb and pdb, perf and flame graphs. Modules 1-4 use all of these.",
     "bot_block": false
    },
    {
@@ -130,7 +130,7 @@
   ],
   "project": {
    "title": "Set up the kiln repo, your notes site and a first post",
-   "brief": "Create a public repo named kiln with a README, a license, a Makefile and a CI workflow that builds and runs an empty test, plus a notes site or blog where you will write one page per module. kiln is the main project of this course: a small ML library with its own compiler, grown one version at a time from Module 1 to Module 38. Publish a first post saying what you are building and why.",
+   "brief": "Create a public repo named kiln with a README, a license, a Makefile and a CI workflow that builds and runs an empty test, plus a notes site or blog where you will write one page per module. kiln is the main project of this course: a small ML library with its own compiler, grown one version at a time from Module 1 to Module 39. Publish a first post saying what you are building and why.",
    "deliverables": [
     "repo with README, `LOG.md`, Makefile, a sanitized C test and a pytest, all green in GitHub Actions",
     "a short CONTRIBUTING-style note to yourself: branch-per-module, commit message conventions, how to tag a finished module",
@@ -190,7 +190,7 @@
     "title": "Latency Numbers Every Programmer Should Know",
     "by": "Jonas Boner (from Jeff Dean and Peter Norvig)",
     "url": "https://gist.github.com/jboner/2841832",
-    "note": "The table of cache, memory, disk and network latencies to memorize before Modules 2-3."
+    "note": "The table of cache, memory, disk and network latencies to memorize before Modules 3-4."
    },
    {
     "kind": "blog",
@@ -292,7 +292,7 @@
  },
  {
   "id": 1,
-  "title": "C, properly",
+  "title": "C",
   "why": "The compiler you build later emits C, so you must read and write it without hesitation. Pointers, arrays, structs, the heap and the build toolchain underlie every later kernel.",
   "steps": [
    {
@@ -341,7 +341,7 @@
     "kind": "read",
     "title": "Beej's Guide to C, ch. 8 Structs, ch. 11 Pointers II: Arithmetic, ch. 12 Manual Memory Allocation",
     "url": "https://beej.us/guide/bgc/",
-    "detail": "Pointer arithmetic here is the same idea as tensor strides in Module 6.",
+    "detail": "Pointer arithmetic here is the same idea as tensor strides in Module 7.",
     "bot_block": true
    },
    {
@@ -395,7 +395,7 @@
    {
     "title": "rswier/c4: c4.c",
     "url": "https://github.com/rswier/c4/blob/master/c4.c",
-    "note": "Keep for Module 11; skim now."
+    "note": "Keep for Module 12; skim now."
    },
    {
     "title": "Beej ch. 17: Multifile Projects",
@@ -557,6 +557,202 @@
  },
  {
   "id": 2,
+  "title": "C++ for C programmers",
+  "why": "PyTorch, LLVM, MLIR, CUDA and CUTLASS are written in C++, and later modules ask you to write an LLVM pass, a C++/CUDA array backend and templated GPU kernels. This module teaches the parts of modern C++ those tools use: RAII, move semantics, templates, lambdas, CMake and Python bindings. `kiln` itself stays in C.",
+  "steps": [
+   {
+    "kind": "read",
+    "title": "learncpp.com: Introduction to classes, Destructors",
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-classes/",
+    "detail": "Read the classes chapter through constructors, then the destructors lesson (`introduction-to-destructors`). Compare each class with the C struct plus init/free functions you wrote for `tcore`.",
+    "bot_block": false
+   },
+   {
+    "kind": "watch",
+    "title": "Back to Basics: RAII and the Rule of Zero (Arthur O'Dwyer, CppCon 2019)",
+    "url": "https://www.youtube.com/watch?v=7Qgd9B1KuMQ",
+    "detail": "The core idea of C++ resource management. Pause at each class he writes and list which of the five special member functions it needs.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "learncpp.com: Introduction to smart pointers and move semantics, Move constructors and move assignment, std::unique_ptr",
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-smart-pointers-move-semantics/",
+    "detail": "Then read `move-constructors-and-move-assignment` and `stdunique_ptr` from the same chapter. Type out every example and predict which constructor runs before you run it.",
+    "bot_block": false
+   },
+   {
+    "kind": "watch",
+    "title": "Back to Basics: Move Semantics, part 1 (Klaus Iglberger, CppCon 2019)",
+    "url": "https://www.youtube.com/watch?v=St0MNEU5b0o",
+    "detail": "Lvalues, rvalues, `std::move` and the moved-from state. Watch part 2 if forwarding references are still unclear.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "learncpp.com: Function templates, Class templates, Non-type template parameters",
+    "url": "https://www.learncpp.com/cpp-tutorial/function-templates/",
+    "detail": "Then `class-templates` and `non-type-template-parameters`. Templates over a dtype and a compile-time size are exactly how CUTLASS and CuTe describe tiles in Module 34.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "learncpp.com: Introduction to lambdas, Lambda captures",
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/",
+    "detail": "Then `lambda-captures`. You will pass lambdas as the elementwise op in the project.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Stanford CS106L: Standard C++ Programming, lecture slides",
+    "url": "https://web.stanford.edu/class/cs106l/",
+    "detail": "Read the slides on templates, RAII and smart pointers, and move semantics. They show the modern idioms (C++20 and later) in fewer pages than a book.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "C++ Core Guidelines: R (Resource management), C.20 and C.21, F.15 to F.18 (parameter passing)",
+    "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
+    "detail": "Read these sections only; the document is a reference. Use the rules as a review checklist for your project code.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "An Introduction to Modern CMake: Introduction to the basics, Adding features, Testing",
+    "url": "https://cliutils.gitlab.io/modern-cmake/",
+    "detail": "Learn targets, `target_link_libraries` with PUBLIC/PRIVATE, and `FetchContent`. Every C++ project from here on (LLVM passes, MLIR, nanobind) builds with CMake.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "GoogleTest Primer",
+    "url": "https://google.github.io/googletest/primer.html",
+    "detail": "Assertions, test fixtures and `TEST_F`. Pull GoogleTest into your build with `FetchContent`.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "nanobind: Installation, Setting up a build system, The nb::ndarray class",
+    "url": "https://nanobind.readthedocs.io/en/latest/",
+    "detail": "Bind one function first, then read the `ndarray` page: it shows how to share a buffer with NumPy and PyTorch without copying.",
+    "bot_block": false
+   },
+   {
+    "kind": "do",
+    "title": "llvm-tutor: build HelloWorld and OpcodeCounter",
+    "url": "https://github.com/banach-space/llvm-tutor",
+    "detail": "Build out of tree against an installed LLVM and run both passes with `opt -load-pass-plugin`. On macOS the plugin ends in `.dylib`, not `.so`. This is the setup the LLVM pass in Module 13 uses.",
+    "bot_block": false
+   }
+  ],
+  "build": "(1) A `Buffer<T>` class template that owns a heap array: rule of five written by hand, then replaced by `std::unique_ptr<T[]>` with the rule of zero, plus GoogleTest tests that count allocations to prove a move never copies. (2) Extend llvm-tutor's HelloWorld pass to print, for each function, its basic-block count and instruction count, and test it on a C file of your own with `opt`.",
+  "check": [
+   "Name the five special member functions and say which ones the compiler generates for a class holding a `std::unique_ptr` member.",
+   "Explain what `std::move` does at runtime, and what state a moved-from `std::vector` is in.",
+   "Explain why a class template's member functions are usually defined in the header.",
+   "Show the assembly on Compiler Explorer for a templated `add<float>` and a hand-written C `add_f32`, and explain why they match.",
+   "Your `Buffer<T>` tests pass under `-fsanitize=address,undefined`."
+  ],
+  "extra": [
+   {
+    "title": "cppreference.com",
+    "url": "https://en.cppreference.com/w/cpp",
+    "note": "The reference for the standard library and language; look things up here, not on forums."
+   },
+   {
+    "title": "Compiler Explorer",
+    "url": "https://godbolt.org/",
+    "note": "Check what each abstraction compiles to; the C++ habit that matters most for kernel work."
+   }
+  ],
+  "effort": "35–50 h",
+  "difficulty": 3,
+  "outcomes": [
+   "Write C++20 classes that own resources through RAII, following the rule of zero or the rule of five.",
+   "Use move semantics and `std::unique_ptr` to transfer ownership without copies, and prove it with tests.",
+   "Write function and class templates over a dtype and a compile-time size.",
+   "Build a C++ library with CMake, test it with GoogleTest and call it from Python through nanobind.",
+   "Build and run an out-of-tree LLVM pass plugin."
+  ],
+  "stuck": [
+   "Linker error `undefined reference` for a template: the template body is in a `.cpp` file. Move it to the header.",
+   "A double free after copying your class: you wrote a destructor but not the copy constructor and copy assignment. Delete them or follow the rule of zero.",
+   "Calling C from C++ fails to link: wrap the C header's declarations in `extern \"C\" { ... }`.",
+   "CMake cannot find LLVM: pass `-DLT_LLVM_INSTALL_DIR=$(llvm-config --prefix)` (or your Homebrew LLVM path) and use the same LLVM version that llvm-tutor targets.",
+   "Template error messages run for pages: read the first error only, and add a C++20 `requires` clause so the error names the broken constraint."
+  ],
+  "project": {
+   "title": "tcore++: a modern C++ tensor wrapper with Python bindings",
+   "brief": "Wrap your kiln v0.1 C core in a header-only C++20 library. `Tensor<T>` owns its storage through RAII, is movable but not implicitly copyable, supports strided views that share storage, and applies elementwise ops passed as lambdas, with `add` and `mul` that call into `tcore` for `float`. Build it with CMake, test it with GoogleTest, benchmark it with Google Benchmark against the raw C calls, and expose it to Python with nanobind so NumPy can read a tensor without copying. The goal is to show that the abstractions cost nothing at runtime.",
+   "deliverables": [
+    "repo with a CMake build, `include/tcorepp/tensor.hpp`, GoogleTest tests run under ASan and UBSan, and a nanobind module with a pytest file comparing results against NumPy",
+    "README with a Google Benchmark table comparing the C++ wrapper with direct `tcore` calls at three tensor sizes, plus one annotated Compiler Explorer snippet",
+    "a 600–1200 word write-up explaining your ownership rules, why views share storage, and which C++ features had no runtime cost and which did"
+   ],
+   "rubric": {
+    "solid": "Tests pass under sanitizers; moves proven copy-free by tests; the wrapper is within 5% of direct C calls at every size; Python can create, view and read tensors without copying.",
+    "exceptional": "C++20 concepts constrain the element type, a `std::span`-based API covers raw buffers, CI builds and tests on Linux and macOS, and the write-up explains the one place you measured a real abstraction cost and how you removed it."
+   },
+   "references": [
+    {
+     "title": "nanobind documentation",
+     "url": "https://nanobind.readthedocs.io/en/latest/"
+    },
+    {
+     "title": "Google Benchmark user guide",
+     "url": "https://github.com/google/benchmark/blob/main/docs/user_guide.md"
+    }
+   ],
+   "track": "skill"
+  },
+  "solutions": [
+   {
+    "title": "wjakob/nanobind_example",
+    "url": "https://github.com/wjakob/nanobind_example",
+    "note": "The nanobind author's minimal project: CMake plus scikit-build-core packaging. Copy its layout for the Python module.",
+    "for": "Project: nanobind module"
+   },
+   {
+    "title": "banach-space/llvm-tutor",
+    "url": "https://github.com/banach-space/llvm-tutor",
+    "note": "Each pass comes with LIT tests; read OpcodeCounter's source for how to walk functions, blocks and instructions.",
+    "for": "Build (2): extend the HelloWorld pass"
+   }
+  ],
+  "deeper": [
+   {
+    "kind": "talk",
+    "title": "CppCon 2014: Herb Sutter \"Back to the Basics! Essentials of Modern C++ Style\"",
+    "by": "Herb Sutter (CppCon)",
+    "url": "https://www.youtube.com/watch?v=xnqTKD8uD64",
+    "note": "Default habits for parameter passing, smart pointers and `auto`; the reasoning behind the Core Guidelines you read."
+   },
+   {
+    "kind": "talk",
+    "title": "Back to Basics: Move Semantics (Nicolai Josuttis, CppCon 2021)",
+    "by": "Nicolai Josuttis (CppCon)",
+    "url": "https://www.youtube.com/watch?v=Bt3zcJZIalk",
+    "note": "A second explanation of move semantics from the author of the standard reference on the topic."
+   },
+   {
+    "kind": "book",
+    "title": "A Tour of C++, third edition",
+    "by": "Bjarne Stroustrup",
+    "url": "https://www.stroustrup.com/tour3.html",
+    "note": "The whole language in about 300 pages, from its designer; read it after this module to fill gaps."
+   },
+   {
+    "kind": "book",
+    "title": "Optimizing software in C++",
+    "by": "Agner Fog",
+    "url": "https://www.agner.org/optimize/optimizing_cpp.pdf",
+    "note": "Which C++ features cost cycles and which do not; read the chapters on classes, templates and virtual functions."
+   }
+  ],
+  "stretch": "Add a `float16` element type with a constrained template specialization, and a lazy expression-template `Tensor` where `a + b * c` builds an expression tree that evaluates in one fused loop. Benchmark it against the eager version and explain the speedup in memory-traffic terms, as a preview of the fusion you build in Module 16."
+ },
+ {
+  "id": 3,
   "title": "How machines run code",
   "why": "Bits, two's complement, IEEE floats, x86-64 and the stack: the first half of CMU 15-213. You need to read the machine code your compiler's output becomes.",
   "steps": [
@@ -585,7 +781,7 @@
     "kind": "watch",
     "title": "CMU 15-213 F15 Lecture 4: Floating Point",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/04-float.pdf",
-    "detail": "Sign, exponent and fraction fields, denormals, rounding, and why float addition is not associative. Module 3 and the reduction kernels later depend on the last point.",
+    "detail": "Sign, exponent and fraction fields, denormals, rounding, and why float addition is not associative. Module 4 and the reduction kernels later depend on the last point.",
     "bot_block": false
    },
    {
@@ -816,7 +1012,7 @@
   "stretch": "Write an x86-64 disassembler for the subset of instructions that appear in your Bomb Lab binary (`mov`, `lea`, `add`, `sub`, `cmp`, `test`, `jcc`, `call`, `ret`, `push`, `pop`), producing output identical to `objdump -d` for every function in the bomb. Report coverage as the percentage of bytes in `.text` you decode correctly."
  },
  {
-  "id": 3,
+  "id": 4,
   "title": "Memory and caches",
   "why": "Cache lines, locality and TLBs explain why loop order changes runtime. Tiling, fusion and vectorization decisions later in the course depend on this module.",
   "steps": [
@@ -952,8 +1148,8 @@
     }
    ],
    "track": "merged",
-   "into": 16,
-   "note": "No separate project here. The naive and tiled matmul from this module's Build is stage 1 of the matmul worklog you finish in Module 16, so keep your code and numbers."
+   "into": 17,
+   "note": "No separate project here. The naive and tiled matmul from this module's Build is stage 1 of the matmul worklog you finish in Module 17, so keep your code and numbers."
   },
   "solutions": [
    {
@@ -1084,7 +1280,7 @@
   "stretch": "Push single-threaded SGEMM to at least 80% of your core's theoretical peak for `N=2048` and then parallelize it across all cores, comparing against OpenBLAS and BLIS on the same machine. Publish a roofline plot and a perf-counter table (L1/L2/LLC misses, IPC) for each optimization step."
  },
  {
-  "id": 4,
+  "id": 5,
   "title": "Linear algebra",
   "why": "Tensors are the data and matmul is the main workload. You need matrices both as transformations and as computations (elimination and factorization).",
   "steps": [
@@ -1134,7 +1330,7 @@
     "kind": "watch",
     "title": "MIT 18.06SC Lecture 5: Transposes, Permutations, Vector Spaces",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/transposes-permutations-vector-spaces/",
-    "detail": "Permutation matrices reappear as tensor permute in Module 6.",
+    "detail": "Permutation matrices reappear as tensor permute in Module 7.",
     "bot_block": false
    },
    {
@@ -1148,7 +1344,7 @@
     "kind": "read",
     "title": "PyTorch blog, Inside the Matrix: Visualizing Matrix Multiplication",
     "url": "https://pytorch.org/blog/inside-the-matrix/",
-    "detail": "Read sections 2 and 3 (dot product, matrix-vector, summed outer products, expressions). Leave section 4 onward (attention) for Module 9.",
+    "detail": "Read sections 2 and 3 (dot product, matrix-vector, summed outer products, expressions). Leave section 4 onward (attention) for Module 10.",
     "bot_block": false
    },
    {
@@ -1200,7 +1396,7 @@
   ],
   "project": {
    "title": "Blocked matrix algorithms and the cost of numerical stability",
-   "brief": "In NumPy, implement blocked matmul and right-looking blocked LU that only call matmul on tiles. For `N = 256`, 512, 1024 and 2048 and block sizes 32, 64 and 128, compare speed and accuracy against your unblocked versions and `scipy.linalg.lu`. Measure backward error `||PA-LU||/||A||` against condition number (1 to 1e12), with and without pivoting, and relate the blocking to the cache tiling of Module 3.",
+   "brief": "In NumPy, implement blocked matmul and right-looking blocked LU that only call matmul on tiles. For `N = 256`, 512, 1024 and 2048 and block sizes 32, 64 and 128, compare speed and accuracy against your unblocked versions and `scipy.linalg.lu`. Measure backward error `||PA-LU||/||A||` against condition number (1 to 1e12), with and without pivoting, and relate the blocking to the cache tiling of Module 4.",
    "deliverables": [
     "repo with blocked matmul and LU, tests against `numpy.linalg` on random and ill-conditioned matrices",
     "README with plots: runtime vs N vs block size, and backward error vs condition number for each variant",
@@ -1217,8 +1413,8 @@
     }
    ],
    "track": "merged",
-   "into": 5,
-   "note": "No separate project here. The numerical-stability work moves into the Module 5 project (kiln v0.2), and blocking is covered properly by the Module 16 matmul worklog. Do this module's Build to practise the linear algebra."
+   "into": 6,
+   "note": "No separate project here. The numerical-stability work moves into the Module 6 project (kiln v0.2), and blocking is covered properly by the Module 17 matmul worklog. Do this module's Build to practise the linear algebra."
   },
   "solutions": [
    {
@@ -1328,7 +1524,7 @@
   "stretch": "Implement communication-avoiding (tournament pivoting) LU or recursive LU in NumPy and compare its backward error and runtime against partial-pivoting LU across condition numbers 1 to 1e12 and N up to 4096. Reproduce the growth-factor example where partial pivoting fails (Wilkinson's matrix) and report growth factors for each method."
  },
  {
-  "id": 5,
+  "id": 6,
   "title": "Calculus and gradients",
   "why": "Autodiff is the chain rule applied mechanically. Learn it by hand on scalars first, then for vectors and matrices, because your compiler will generate backward passes.",
   "steps": [
@@ -1565,9 +1761,9 @@
   "stretch": "Implement checkpointed reverse mode (Griewank's binomial or `sqrt(n)` checkpointing) for a 1000-step recurrent function in your tape AD and plot peak memory vs recomputation FLOPs against the plain tape. Show memory falling from `O(n)` to `O(sqrt(n))` with less than 2x compute overhead, matching gradients to 1e-10 in float64."
  },
  {
-  "id": 6,
+  "id": 7,
   "title": "Tensors, broadcasting, strides",
-  "why": "A tensor is a pointer, a shape and strides. Reshape, permute and expand are pure index arithmetic, which is exactly what you will compile in Module 22.",
+  "why": "A tensor is a pointer, a shape and strides. Reshape, permute and expand are pure index arithmetic, which is exactly what you will compile in Module 23.",
   "steps": [
    {
     "kind": "read",
@@ -1802,7 +1998,7 @@
   "stretch": "Extend your view system so that any chain of reshape, permute, expand, pad and shrink is represented as a list of views, and merge adjacent views whenever they compose into one strided view. On 10,000 random op chains, report the fraction that collapse to a single view and verify every emitted index expression against NumPy."
  },
  {
-  "id": 7,
+  "id": 8,
   "title": "Neural networks from scratch",
   "why": "Loss, gradient descent and backpropagation, ending in a tiny autograd engine you wrote yourself. This engine is the seed of the tinygrad-style framework you will compile.",
   "steps": [
@@ -2011,7 +2207,7 @@
   "stretch": "Turn your graph IR into a tracing JIT: trace the MLP once, apply DCE and CSE, and emit a single C function for forward plus backward compiled with `cc -O2` and loaded via `ctypes`. Report steps per second vs the interpreted engine and vs PyTorch on CPU for a `2x16x16x1` MLP, aiming for at least 100x over the interpreter."
  },
  {
-  "id": 8,
+  "id": 9,
   "title": "Deep learning core",
   "why": "MLPs, CNNs, initialization, normalization and optimizers. These are the models your compiler must train correctly and fast.",
   "steps": [
@@ -2086,7 +2282,7 @@
     "bot_block": false
    }
   ],
-  "build": "Extend your Module 7 engine (or your Module 6 NDArray) into a tensor-level autograd with matmul, broadcast ops, sum, log-softmax and cross-entropy, plus SGD-momentum and Adam. Train a 2-layer MLP on MNIST to >97% test accuracy, and compare loss curves with an identical PyTorch model.",
+  "build": "Extend your Module 8 engine (or your Module 7 NDArray) into a tensor-level autograd with matmul, broadcast ops, sum, log-softmax and cross-entropy, plus SGD-momentum and Adam. Train a 2-layer MLP on MNIST to >97% test accuracy, and compare loss curves with an identical PyTorch model.",
   "check": [
    "makemore Part 4 notebook: every `cmp()` line reports exact or approximate `True`.",
    "Explain why Kaiming init scales weights by `gain/sqrt(fan_in)` and what happens to tanh activations without it.",
@@ -2302,7 +2498,7 @@
   "stretch": "Speedrun CIFAR-10 on your own framework: reach 94% test accuracy with the fewest GPU-seconds (or CPU-minutes) you can, porting airbench tricks one at a time. Publish an ablation table with time-to-94% per trick and the gap to airbench94 running in PyTorch on the same hardware."
  },
  {
-  "id": 9,
+  "id": 10,
   "title": "Transformers",
   "why": "The transformer is the workload that ML compilers are tuned for today: matmuls, softmax, layernorm and attention. Building one end to end shows you exactly which ops a compiler must fuse and schedule.",
   "steps": [

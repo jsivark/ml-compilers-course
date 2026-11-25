@@ -1,6 +1,6 @@
 [
  {
-  "id": 32,
+  "id": 33,
   "title": "Triton and tile-based GPU programming",
   "why": "Triton is the code TorchInductor generates for GPUs, and Liger Kernel and many FlashAttention variants are written in it. You program tiles, not threads. You already wrote a CUDA codegen backend; now add a Triton one.",
   "steps": [
@@ -293,7 +293,7 @@
   "stretch": "Add a Triton backend to your course compiler that lowers fused elementwise+reduction kernels, and show it within 10% of `torch.compile` (Inductor) on the nanoGPT forward pass at block size 1024. Report per-kernel time for both and explain any kernel where Inductor wins."
  },
  {
-  "id": 33,
+  "id": 34,
   "title": "CUTLASS, CuTe and Hopper/Blackwell features",
   "why": "The fastest H100/B200 kernels (FlashAttention-3, cuBLAS-class GEMMs) use TMA, `wgmma` and warp specialization. CUTLASS and its CuTe layout library expose these directly; Triton exposes them only partly.",
   "steps": [
@@ -308,7 +308,7 @@
     "kind": "read",
     "title": "CuTe quickstart (CUTLASS docs)",
     "url": "https://github.com/NVIDIA/cutlass/blob/main/media/docs/cpp/cute/00_quickstart.md",
-    "detail": "Then read `01_layout.md`, `02_layout_algebra.md`, `03_tensor.md` and `0x_gemm_tutorial.md` in the same folder; `0z_tma_tensors.md` before the Hopper GEMM.",
+    "detail": "Then read `01_layout.md`, `02_layout_algebra.md`, `03_tensor.md` and `0x_gemm_tutorial.md` in the same folder; `0z_tma_tensors.md` before the Hopper GEMM. CuTe is heavy template C++: review the templates part of Module 2 first.",
     "bot_block": false
    },
    {
@@ -357,7 +357,7 @@
     "kind": "read",
     "title": "ThunderKittens: Simple, Fast, and Adorable AI Kernels",
     "url": "https://arxiv.org/abs/2410.20399",
-    "detail": "Tile primitives between Triton and CUTLASS in abstraction level. Compare with what you wrote in module 32.",
+    "detail": "Tile primitives between Triton and CUTLASS in abstraction level. Compare with what you wrote in module 33.",
     "bot_block": false
    },
    {
@@ -599,7 +599,7 @@
   "stretch": "Extend the grouped GEMM to FP8 with per-128-channel scaling and a persistent tile scheduler, and match or beat DeepGEMM grouped-contiguous TFLOPS on at least 3 of its published Mixtral-like shapes on H100. Publish Nsight Compute reports for both kernels side by side."
  },
  {
-  "id": 34,
+  "id": 35,
   "title": "Industrial ML compilers: MLIR, XLA/StableHLO, TorchInductor, TVM",
   "why": "XLA, TorchInductor, TVM and MLIR-based stacks are what production ML compilers look like. You built a toy compiler; here you read how these systems split IR levels, fusion and codegen, and you build a small dialect in MLIR.",
   "steps": [
@@ -614,7 +614,7 @@
     "kind": "implement",
     "title": "j2kun mlir-tutorial: Getting started",
     "url": "https://www.jeremykun.com/2023/08/10/mlir-getting-started/",
-    "detail": "Build mlir-opt from the tutorial repo with Bazel (CMake also described). The first LLVM build takes hours; start it early.",
+    "detail": "Build mlir-opt from the tutorial repo with Bazel (CMake also described). The first LLVM build takes hours; start it early. MLIR passes are C++ built with CMake, as in Module 2.",
     "bot_block": false
    },
    {
@@ -847,7 +847,7 @@
     "title": "BrilIR: an MLIR dialect for Bril",
     "by": "CS 6120 course blog (2025)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2025fa/blog/brilir/",
-    "note": "A student project that lowers Bril through MLIR dialects to LLVM; a direct bridge from Module 12 to MLIR."
+    "note": "A student project that lowers Bril through MLIR dialects to LLVM; a direct bridge from Module 13 to MLIR."
    },
    {
     "kind": "talk",
@@ -874,7 +874,7 @@
   "stretch": "Add a transform-dialect script that tiles, fuses and vectorizes your tg-dialect MLP for CPU and reach at least 70% of the runtime of `torch.compile` (Inductor C++ backend) on the 784-256-256-10 MLP at batch 64. Then lower the same IR through the GPU dialect to NVVM and report achieved bandwidth or FLOP/s against roofline."
  },
  {
-  "id": 35,
+  "id": 36,
   "title": "Scheduling theory: polyhedral model and auto-schedulers",
   "why": "Your BEAM search picked schedules by trial. Two other approaches exist: polyhedral compilers prove which transforms are legal from dependences, and learned auto-schedulers predict runtime with a cost model. This module covers both.",
   "steps": [
@@ -1118,7 +1118,7 @@
   "stretch": "Train a single cost model on schedules from two GPUs and show that fine-tuning on 10% of the second GPU's data matches a model trained from scratch on all of it, measured by top-1 schedule runtime on 10 held-out kernels. Add polyhedral legality as a hard filter and report how many sampled schedules it removes."
  },
  {
-  "id": 36,
+  "id": 37,
   "title": "Numerics and low precision",
   "why": "LLM decoding is limited by memory bandwidth, so serving stacks store weights and activations in fp8, int4 or MX formats. This module covers how these formats lose precision and how GPTQ, AWQ and SmoothQuant recover it.",
   "steps": [
@@ -1395,7 +1395,7 @@
   "stretch": "Implement a QuaRot-style rotation plus your MXFP4 emulator and get Llama-3.2-1B W4A4 within 1.0 WikiText-2 perplexity of bf16. Write a fused Triton kernel for the rotated W4A4 matmul and report tokens/s against your W4A16 kernel."
  },
  {
-  "id": 37,
+  "id": 38,
   "title": "Accelerator architecture: systolic arrays, TPUs, dataflows",
   "why": "A compiler for a TPU-like accelerator needs a model of the hardware: dataflow, buffer sizes and array utilization. This module builds that model and a backend for it.",
   "steps": [
@@ -1626,7 +1626,7 @@
   "stretch": "Extend the simulator to model a TPU-like chip with an MXU, vector unit and HBM, and validate its predicted latency for a GPT-2 small layer against a real TPU (Colab or Cloud) within 20%. Use the validated model to propose and justify one design change that improves decode throughput by at least 1.5x at equal area proxy."
  },
  {
-  "id": 38,
+  "id": 39,
   "title": "Distributed training and inference at scale",
   "why": "Large models do not fit on one GPU. This module covers how training and serving systems shard models, what communication each scheme adds, and how to measure it.",
   "steps": [
@@ -1901,7 +1901,7 @@
   "stretch": "Implement a ZeRO++ or DualPipe-style overlap in your library and show a measured MFU gain over your 1F1B baseline on 8 GPUs, with traces showing the hidden communication. Add an automatic planner that predicts the best (dp, tp, pp) split from your cost model and matches the empirically best config on 3 model sizes."
  },
  {
-  "id": 39,
+  "id": 40,
   "title": "Research, open source and career",
   "why": "Hiring managers and grad committees look for evidence: merged PRs in real compilers, a reproduced paper, leaderboard results and clear writing. This module produces that evidence.",
   "steps": [
@@ -1923,7 +1923,7 @@
     "kind": "practice",
     "title": "Pick and reproduce a recent paper",
     "url": "https://arxiv.org/abs/2502.10517",
-    "detail": "For example KernelBench (linked), a FlashAttention variant or one of the quantization papers from Module 36. Match one headline number, then run ablations.",
+    "detail": "For example KernelBench (linked), a FlashAttention variant or one of the quantization papers from Module 37. Match one headline number, then run ablations.",
     "bot_block": false
    },
    {
@@ -2022,8 +2022,8 @@
     }
    ],
    "track": "merged",
-   "into": 29,
-   "note": "Not a second capstone. This is the research track of the capstone (Modules 29 to 31): choose it there if you want your capstone to be a research contribution."
+   "into": 30,
+   "note": "Not a second capstone. This is the research track of the capstone (Modules 30 to 32): choose it there if you want your capstone to be a research contribution."
   },
   "solutions": [
    {

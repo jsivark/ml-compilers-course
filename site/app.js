@@ -11,13 +11,19 @@
 
   // ---------- progress ----------
   var done = store.get("done", {});
+  // Module 2 (C++) was inserted in Nov 2026: shift progress saved under the old numbering once.
+  if (!store.get("numbering41", false)) {
+    var moved = {};
+    Object.keys(done).forEach(function (k) { var n = +k; moved[n >= 2 ? n + 1 : n] = done[k]; });
+    done = moved; store.set("done", done); store.set("numbering41", true);
+  }
   function paintProgress() {
     document.querySelectorAll("a[data-mod]").forEach(function (a) {
       a.classList.toggle("done", !!done[a.dataset.mod]);
     });
     var n = Object.keys(done).filter(function (k) { return done[k]; }).length;
     document.querySelectorAll("[data-progress]").forEach(function (el) {
-      el.textContent = n ? n + " of 40 modules done" : "";
+      el.textContent = n ? n + " of 41 modules done" : "";
     });
     document.querySelectorAll("[data-part-progress]").forEach(function (el) {
       var ids = el.dataset.partProgress.split(","), k = ids.filter(function (i) { return done[i]; }).length;
