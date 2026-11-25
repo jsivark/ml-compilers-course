@@ -227,7 +227,7 @@ def index(mods):
     how, mods_ = rest.split('<div id="modules">')
     body = (head + '<p class="progress" data-progress></p><div id="modules">' + mods_
             + '<details class="how-box"><summary>How to use this course</summary>' + how + "</details>")
-  return page("ML Compilers From Zero", body, 0, "modules")
+  return page("ML Compilers From Zero — a free course on machine learning compilers", body, 0, "modules")
 
 def portfolio(mods):
   P = lambda i: mods[i]["project"]
@@ -316,7 +316,19 @@ def main():
   KILN.update({i: m["project"]["version"] for i, m in mods.items() if m.get("project", {}).get("track") == "main"})
   if os.path.exists(OUT): shutil.rmtree(OUT)
   os.makedirs(os.path.join(OUT, "modules"))
-  w = lambda p, s: open(os.path.join(OUT, p), "w").write(s)
+  BASE = "https://jsivark.github.io/ml-compilers-course/"
+  HOME_D = "A free, self-paced course on machine learning compilers: from Python and C to building your own ML compiler (IR, rewrites, codegen, GPU kernels, Triton). Modelled on CMU 10-411."
+  DESC = {f"modules/{i:02d}.html": m.get("why", "").replace("`", "") for i, m in mods.items()}
+  def seo(p, s):
+    d = E((DESC.get(p) or HOME_D)[:300]); u = BASE + ("" if p == "index.html" else p)
+    t = s[s.index("<title>")+7:s.index("</title>")]
+    tags = (f'<meta name="description" content="{d}"><link rel="canonical" href="{u}">'
+            f'<meta property="og:type" content="website"><meta property="og:title" content="{t}"><meta property="og:description" content="{d}"><meta property="og:url" content="{u}">')
+    return s.replace("</title>", "</title>" + tags, 1)
+  PAGES = []
+  def w(p, s):
+    if p.endswith(".html"): s = seo(p, s); PAGES.append(p)
+    open(os.path.join(OUT, p), "w").write(s)
   w("style.css", static(STYLE))
   if PREVIEW:
     w("app.js", static("app.js"))
@@ -338,6 +350,7 @@ def main():
   for name, here, title in (("projects.html", "projects", "Capstone"), ("library.html", "library", "Library"), ("about.html", "about", "About")):
     w(name, page(f"{title} · ML Compilers From Zero", static(name), 0, here))
   for i, m in mods.items(): w(f"modules/{i:02d}.html", module_page(m, mods))
+  w("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{BASE}{'' if q == 'index.html' else q}</loc></url>\n" for q in PAGES) + "</urlset>\n")
   print(f"built {len(mods)} modules into {OUT}")
 
 if __name__ == "__main__":
