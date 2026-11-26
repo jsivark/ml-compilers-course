@@ -40,7 +40,7 @@ def page(title, body, depth=0, here="", part=""):
   up = "../" * depth
   return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)}</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2324489c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' text-anchor='middle' fill='%23f6f3ec'%3Ek%3C/text%3E%3C/svg%3E">
+<title>{E(title)}</title><link rel="icon" type="image/svg+xml" href="{up}favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap">
 <link rel="stylesheet" href="{up}style.css">{THEME_JS}{f'<meta name="base" content="{up}"><script src="{up}app.js" defer></script>' if PREVIEW else ''}</head>
 <body data-part="{part}"{' class="has-map"' if (PREVIEW and part) else ''}>{'<div class="art-bg" aria-hidden="true"></div>' if PREVIEW else ''}<header class="top"><div class="bar">{'<button class="map-btn" type="button" aria-label="Course map">☰</button>' if (PREVIEW and part) else ''}<a class="brand" href="{up}index.html">ML Compilers From Zero</a>{'<button class="menu-btn" type="button" aria-label="Menu">Menu</button>' if PREVIEW else ''}
@@ -330,6 +330,7 @@ def main():
     if p.endswith(".html"): s = seo(p, s); PAGES.append(p)
     open(os.path.join(OUT, p), "w").write(s)
   w("style.css", static(STYLE))
+  w("favicon.svg", static("favicon.svg"))
   if PREVIEW:
     w("app.js", static("app.js"))
     idx = []

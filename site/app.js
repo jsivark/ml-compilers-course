@@ -3,6 +3,36 @@
 (function () {
   var root = document.documentElement;
   root.classList.add("js");
+
+  // ---------- animated favicon (Chrome/Safari draw SVG favicons as still frames) ----------
+  (function () {
+    var link = document.querySelector('link[rel="icon"]');
+    if (!link || /firefox/i.test(navigator.userAgent)) return; // Firefox animates the SVG itself
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var c = document.createElement("canvas"); c.width = c.height = 64;
+    var g = c.getContext("2d"); if (!g) return;
+    var INK = "#24489c", PAPER = "#f6f3ec", GOLD = "#ffcf5a", T = 2400;
+    var ease = function (t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
+    function frame(now) {
+      var p = (now % T) / T; g.setTransform(2, 0, 0, 2, 0, 0); g.clearRect(0, 0, 32, 32);
+      g.fillStyle = INK; g.beginPath(); g.roundRect ? g.roundRect(0, 0, 32, 32, 7) : g.rect(0, 0, 32, 32); g.fill();
+      g.strokeStyle = "rgba(246,243,236,.45)"; g.lineWidth = 1.6; g.lineCap = "round";
+      g.beginPath(); g.moveTo(9, 9); g.lineTo(16, 23); g.moveTo(23, 9); g.lineTo(16, 23); g.stroke();
+      g.fillStyle = PAPER; [[9, 9], [23, 9]].forEach(function (n) { g.beginPath(); g.arc(n[0], n[1], 3.4, 0, 7); g.fill(); });
+      if (p < .6) { // two tensors travel down the edges
+        var e = ease(p / .6); g.globalAlpha = Math.min(1, p / .1); g.fillStyle = GOLD;
+        [[9, 9], [23, 9]].forEach(function (n) { g.beginPath(); g.arc(n[0] + (16 - n[0]) * e, 9 + 14 * e, 1.6, 0, 7); g.fill(); });
+        g.globalAlpha = 1;
+      } else { // fuse: ripple out of the op node
+        var q = (p - .6) / .4; g.globalAlpha = 1 - q; g.strokeStyle = GOLD; g.lineWidth = 1.4;
+        g.beginPath(); g.arc(16, 23, 4 + 5 * q, 0, 7); g.stroke(); g.globalAlpha = 1;
+      }
+      var hot = p > .58 && p < .75, r = hot ? 4 + 1.2 * Math.sin((p - .58) / .17 * Math.PI) : 4;
+      g.fillStyle = hot ? GOLD : PAPER; g.beginPath(); g.arc(16, 23, r, 0, 7); g.fill();
+      link.href = c.toDataURL("image/png");
+    }
+    setInterval(function () { if (!document.hidden) frame(performance.now()); }, 80);
+  })();
   var base = document.querySelector('meta[name="base"]').content; // "" or "../"
   var store = {
     get: function (k, d) { try { var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
