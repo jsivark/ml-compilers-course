@@ -21,7 +21,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad-notes: UOp is a singleton",
+    "title": "Why each tinygrad UOp exists only once (tinygrad notes)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20250119_uop_singleton.html",
     "detail": "`UOpMetaClass` keeps a cache keyed by `(op, dtype, src, arg)`, so building the same triple twice returns the same object. Then read `UOpMetaClass` at the pinned commit: https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L181. The note is from Jan 2025 and the code has moved since, so trust the source.",
     "bot_block": false
@@ -49,7 +49,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad UOp._min_max (vmin/vmax)",
+    "title": "How tinygrad tracks each value's min and max (UOp._min_max)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1058",
     "detail": "Read `_min_max` after drafting your own and note how each op derives bounds from source bounds. Then skim the tests in https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uop_vmin_vmax.py.",
     "bot_block": true
@@ -77,7 +77,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad-notes: Pattern matcher, then UPat/PatternMatcher source",
+    "title": "How tinygrad's pattern matcher works, then its source code",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241112_pm.html",
     "detail": "Read the note (written against an older tinygrad), then the pinned source: `UPat` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1429), `PatternMatcher` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1572) and `graph_rewrite` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L1877).",
     "bot_block": false
@@ -113,22 +113,22 @@
   ],
   "extra": [
    {
-    "title": "tinygrad-notes: Understanding the VIZ=1 tool",
+    "title": "Viewing tinygrad graphs with VIZ=1 (tinygrad notes)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241129_viz.html",
     "note": "Then write a Graphviz dump of your graph before and after each rewrite pass."
    },
    {
-    "title": "tinygrad test_uop_symbolic.py",
+    "title": "tinygrad's tests for symbolic simplification",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uop_symbolic.py",
     "note": "Many symbolic identities as tests; port a few to UIR."
    },
    {
-    "title": "tinygrad symbolic.py: symbolic",
+    "title": "tinygrad's symbolic simplification rules",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/symbolic.py#L246",
     "note": "The full simplifier you will grow toward in Module 23."
    },
    {
-    "title": "10-411 technical syllabus",
+    "title": "geohot's 10-411 course syllabus",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
     "note": "Week 1 section: lecture topics (bottom-up greedy rewrite engines, const folding, symbolic simplification, computer algebra systems)."
    }
@@ -180,31 +180,31 @@
   },
   "solutions": [
    {
-    "title": "tinygrad uop/uir.py: parse_uir",
+    "title": "tinygrad's text-format parser (parse_uir)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/uir.py#L158",
     "note": "tinygrad's own reader for the UIR text format, which its docstring says also parses studentgrad's hand-written `%names`, nested `(op ...)` and [stacks]; compare tokenizing, literal handling and how each line becomes a hash-consed `UOp`.",
     "for": "Tokenizer and parser"
    },
    {
-    "title": "tinygrad test/null/test_uir_render.py",
+    "title": "tinygrad's tests for the text format",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uir_render.py",
     "note": "Round-trip tests asserting `parse_uir(render_uir(x))` is x, a ready-made test pattern for your parser and interning.",
     "for": "Interned UOp(op, src, arg)"
    },
    {
-    "title": "tinygrad uop/spec.py: type_verify and spec_shared",
+    "title": "tinygrad's UOp validator (type_verify)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/spec.py#L33",
     "note": "How tinygrad expresses dtype and structure rules as a `PatternMatcher` and rejects graphs that match none; compare with your validator's reject list.",
     "for": "Lazy dtype and shape + validator"
    },
    {
-    "title": "tinygrad uop/validate.py: validate_index_with_z3",
+    "title": "tinygrad's Z3 check that indexes stay in bounds",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/validate.py#L96",
     "note": "Translates UOps to z3 with bounded variables to prove an index in range, the exact check your bounds give you cheaply; useful for differential-testing your `vmin/vmax`.",
     "for": "Bounds and index safety"
    },
    {
-    "title": "tinygrad uop/upat.py: upat_compile",
+    "title": "How tinygrad compiles patterns for speed (upat_compile)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/upat.py#L173",
     "note": "Compiles `UPat` patterns into straight Python source for speed; read after your interpreted rewrite engine works.",
     "for": "Rewrite engine"
@@ -234,14 +234,14 @@
    },
    {
     "kind": "repo",
-    "title": "LLVM ConstantRange.cpp",
+    "title": "LLVM's integer range tracking (ConstantRange.cpp)",
     "by": "LLVM project",
     "url": "https://github.com/llvm/llvm-project/blob/main/llvm/lib/IR/ConstantRange.cpp",
     "note": "Production interval arithmetic with wrap-around; read add, multiply, udiv and shl to compare with the handout's bounds table."
    },
    {
     "kind": "repo",
-    "title": "LLVM KnownBits.cpp",
+    "title": "LLVM's known-bits tracking (KnownBits.cpp)",
     "by": "LLVM project",
     "url": "https://github.com/llvm/llvm-project/blob/main/llvm/lib/Support/KnownBits.cpp",
     "note": "The bit-level domain that complements ranges; its xor/and/shl transfer functions are tighter than intervals for bit ops."
@@ -325,7 +325,7 @@
    },
    {
     "kind": "repo",
-    "title": "TVM rewrite_simplify.cc",
+    "title": "TVM's arithmetic rewrite simplifier (rewrite_simplify.cc)",
     "by": "Apache TVM",
     "url": "https://apache.googlesource.com/tvm/+/refs/tags/v0.11.0/src/arith/rewrite_simplify.cc",
     "note": "A large production rule set for index-expression simplification; read the div/mod rules and compare them to tinygrad's `symbolic.py`."
@@ -341,7 +341,7 @@
   "steps": [
    {
     "kind": "read",
-    "title": "10-411 syllabus: Week 2",
+    "title": "geohot's 10-411 syllabus: week 2 (loads, stores, memory)",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
     "detail": "Read the Week 2 section (BUFFER/ALLOC/SHRINK/LOAD/STORE/AFTER; 'Loads and stores must be fully ordered for programs to be valid') next to the README Week 2 spec, which names the buffer op extern.",
     "bot_block": false
@@ -355,7 +355,7 @@
    },
    {
     "kind": "read",
-    "title": "Russ Cox, Hardware Memory Models: 'Sequential Consistency' and 'x86 Total Store Order (x86-TSO)'",
+    "title": "Russ Cox, Hardware Memory Models: the sequential consistency and x86 sections",
     "url": "https://research.swtch.com/hwmm",
     "detail": "Only these two sections. They show why unordered memory operations can be observed out of order, which is what `AFTER` rules out.",
     "bot_block": false
@@ -383,7 +383,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad linearize (toposort to a list)",
+    "title": "How tinygrad turns a graph into an ordered list (linearize)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/late/linearizer.py#L8",
     "detail": "Read `linearize()` and `UOp.toposort` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/ops.py#L281) to see a graph turned into a straight-line list.",
     "bot_block": false
@@ -397,21 +397,21 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad renderer/cstyle.py: base_rewrite and ClangRenderer",
+    "title": "How tinygrad prints UOps as C code (ClangRenderer)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/cstyle.py#L9",
     "detail": "Read `base_rewrite` (lines 9-80) and `ClangRenderer` (line 283). Rendering is another `PatternMatcher`, from `UOp` to string.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Python ctypes: loading shared libraries and arrays",
+    "title": "Call a compiled C library from Python with ctypes",
     "url": "https://docs.python.org/3/library/ctypes.html#loading-dynamic-link-libraries",
     "detail": "Tutorial sections 'Loading dynamic link libraries', 'Specifying the required argument types (function prototypes)' and 'Arrays'. Use `dlopen` if your compiler is not in Python.",
     "bot_block": false
    },
    {
     "kind": "implement",
-    "title": "clang -O2 -shared + ctypes runtime",
+    "title": "Compile with clang into a shared library and call it with ctypes",
     "url": "",
     "detail": "Write the `.c` file to a temp dir, compile with `clang -O2 -shared`, load it, allocate buffers, call, compare with the assert. Run week01 and week02 through the C backend.",
     "bot_block": false
@@ -485,19 +485,19 @@
   },
   "solutions": [
    {
-    "title": "tinygrad runtime/support/compiler_cpu.py: ClangCompiler",
+    "title": "How tinygrad compiles C with clang (ClangCompiler)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/support/compiler_cpu.py#L5",
     "note": "The flags and invocation tinygrad uses to turn rendered C into machine code.",
     "for": "Compile with clang"
    },
    {
-    "title": "tinygrad runtime/ops_cpu.py",
+    "title": "tinygrad's CPU runtime (ops_cpu.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/ops_cpu.py",
     "note": "How tinygrad loads the compiled code and calls it with buffer pointers; compare with your `ctypes` runtime.",
     "for": "Load and call through ctypes"
    },
    {
-    "title": "tinygrad uop/spec.py: validate_index",
+    "title": "tinygrad's index bounds check (validate_index)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/spec.py#L9",
     "note": "The out-of-bounds load/store check built on `vmin/vmax`, matching `rejected_store_oob`.",
     "for": "Ordering validator"
@@ -509,7 +509,7 @@
     "for": "Interpreter support for memory"
    },
    {
-    "title": "llama2.c run.c",
+    "title": "llama2.c run.c (Llama inference in one C file)",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
     "note": "Plain C kernels with buffers passed as pointers, the shape of code your emitter should produce.",
     "for": "Toposort + C emitter"
@@ -567,7 +567,7 @@
    },
    {
     "kind": "repo",
-    "title": "Go compiler SSA schedule.go (early version)",
+    "title": "How the Go compiler orders instructions (early schedule.go)",
     "by": "Go team",
     "url": "https://go.googlesource.com/go/+/083a646f63055427c203d5600ef65f05f55783bf/src/cmd/internal/ssa/schedule.go",
     "note": "A tiny real-world block scheduler that does a plain topological sort over SSA values; a good model for your first linearizer."
@@ -590,14 +590,14 @@
   "steps": [
    {
     "kind": "read",
-    "title": "10-411 syllabus: Week 3",
+    "title": "geohot's 10-411 syllabus: week 3 (loops, floats, runtime)",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
     "detail": "`RANGE/END/RECIP`, the ranges and `ended_ranges` properties, and the note that this is likely the first week you need a rewrite engine to order the ranges.",
     "bot_block": false
    },
    {
     "kind": "implement",
-    "title": "range/end/recip/f32 in parser, types and bounds",
+    "title": "Parse and type the new range, end, recip and f32 ops",
     "url": "",
     "detail": "range n has bounds [0, n-1]; recip takes `f32` only; float literals contain '.'. REJECT `rejected_recip_int` and `rejected_range_index_oob`.",
     "bot_block": false
@@ -618,7 +618,7 @@
    },
    {
     "kind": "read",
-    "title": "Goldberg, What Every Computer Scientist Should Know About Floating-Point Arithmetic: 'Rounding Error' and 'Relative Error and Ulps'",
+    "title": "Goldberg, What Every Computer Scientist Should Know About Floating-Point Arithmetic: the rounding error sections",
     "url": "https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html",
     "detail": "Enough to justify a 1e-4 relative tolerance and to see why summation order changes a float result.",
     "bot_block": false
@@ -639,14 +639,14 @@
    },
    {
     "kind": "read",
-    "title": "CS231n conv notes: 'Implementation as Matrix Multiplication'",
+    "title": "Stanford CS231n notes: convolution as a matrix multiply",
     "url": "https://cs231n.github.io/convolutional-networks/#conv",
     "detail": "The im2col paragraph in the Convolutional Layer section. Write the six-loop direct conv on paper first.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "tinygrad-notes: The trick in convolution and arange",
+    "title": "How tinygrad builds convolution from movement ops (tinygrad notes, preview of Module 23)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241208_conv.html",
     "detail": "tinygrad builds conv from `_pool`, which is expand, permute and shrink. Preview for Module 23; the note uses an older tinygrad API.",
     "bot_block": false
@@ -667,7 +667,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "E.g. a range of size 1, an index that is safe only because of range bounds, recip of a negative, an expression that should be placed outside the inner loop.",
     "bot_block": false
@@ -682,7 +682,7 @@
   ],
   "extra": [
    {
-    "title": "tinygrad renderer/cstyle.py: RANGE rendering in base_rewrite",
+    "title": "How tinygrad prints loops as C (RANGE in base_rewrite)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/cstyle.py#L9",
     "note": "Lines 15-18: `RANGE` becomes a for loop."
    }
@@ -729,25 +729,25 @@
   },
   "solutions": [
    {
-    "title": "darknet im2col.c",
+    "title": "darknet's im2col in C",
     "url": "https://github.com/pjreddie/darknet/blob/master/src/im2col.c",
     "note": "The classic im2col loop in about 40 lines, to compare with your direct conv indexing.",
     "for": "Hand-write conv3x3.uir"
    },
    {
-    "title": "darknet convolutional_layer.c",
+    "title": "darknet's convolution layer in C",
     "url": "https://github.com/pjreddie/darknet/blob/master/src/convolutional_layer.c",
     "note": "Shows im2col followed by gemm as a full conv forward pass.",
     "for": "Hand-write conv3x3.uir"
    },
    {
-    "title": "llama2.c run.c: matmul",
+    "title": "The matmul function in llama2.c",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
     "note": "A minimal `float32` matmul loop with an accumulator, the reference shape for `gemm_256`.",
     "for": "Hand-write gemm_256.uir"
    },
    {
-    "title": "tinygrad test/null/test_linearizer.py",
+    "title": "tinygrad's tests for loop generation",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_linearizer.py",
     "note": "Tests of range placement and loop structure in tinygrad's linearizer, useful as test ideas for your ranges property.",
     "for": "Render ranges as nested for loops"
@@ -848,7 +848,7 @@
   "steps": [
    {
     "kind": "read",
-    "title": "10-411 syllabus: Week 4",
+    "title": "geohot's 10-411 syllabus: week 4 (fusion and reduce)",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
     "detail": "`REDUCE` (axis count / op), `STAGE` (temp buffer), `EXPAND`, and 'Rangeify removes shapes from all ops'.",
     "bot_block": false
@@ -862,14 +862,14 @@
    },
    {
     "kind": "read",
-    "title": "Halide (PLDI 2013) sections 1-3",
+    "title": "Halide paper, sections 1 to 3",
     "url": "https://people.csail.mit.edu/jrk/halide-pldi13.pdf",
     "detail": "Section 3, 'Scheduling Image Processing Pipelines': 3.1 walks a two-stage blur through inline, root and tiled schedules; 3.2 models a schedule as where each stage is computed and where it is stored. Skip section 5 (autotuning).",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "tinygrad-notes: Short note on operator fusion",
+    "title": "How tinygrad fuses operations (tinygrad notes)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20250117_fusion.html",
     "detail": "`a+4+3` becomes one kernel; calling `realize()` on the intermediate forces two. Written against an older tinygrad.",
     "bot_block": false
@@ -883,7 +883,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad run_rangeify and pm_apply_rangeify",
+    "title": "How tinygrad turns tensors into loops (rangeify)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/indexing.py#L181",
     "detail": "After your first version: `run_rangeify`, the `pm_apply_rangeify` matcher (line 128) and `convert_reduce_to_reduce_with_ranges` (line 104).",
     "bot_block": false
@@ -897,7 +897,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad rangeify.py: stage, _limit_bufs, remove_bufferize",
+    "title": "How tinygrad decides which buffers to keep (rangeify.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/rangeify.py#L164",
     "detail": "`stage()` wraps a value in a bufferize over fresh ranges and indexes it back; `_limit_bufs` (line 169) calls it when a kernel would exceed the device's buffer limit. `remove_bufferize` (line 46) goes the other way.",
     "bot_block": false
@@ -918,7 +918,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "E.g. x minus `max(x)` (the reduce input is used twice, so it must stage), expand of a reduce, max-reduce of all-negative values (init to `INT_MIN`, not 0).",
     "bot_block": false
@@ -933,7 +933,7 @@
   ],
   "extra": [
    {
-    "title": "Chen et al., TVM section 4 (Generating Tensor Operations)",
+    "title": "TVM paper, section 4: generating tensor operations",
     "url": "https://arxiv.org/abs/1802.04799",
     "note": "4.1 covers the tensor expression and schedule space: another take on the algorithm/schedule split."
    },
@@ -985,25 +985,25 @@
   },
   "solutions": [
    {
-    "title": "teenygrad lazy.py",
+    "title": "teenygrad's lazy tensor (lazy.py)",
     "url": "https://github.com/tinygrad/teenygrad/blob/main/teenygrad/lazy.py",
     "note": "The tiny lazy buffer that decides when to realize, the materialization question in its simplest form.",
     "for": "Materialization decision"
    },
    {
-    "title": "tinygrad codegen/indexing.py (pinned)",
+    "title": "tinygrad's index generation (indexing.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/indexing.py",
     "note": "The whole rangeify indexing file; read beyond the linked functions for how reduce ranges are created and closed.",
     "for": "Rangeify pass"
    },
    {
-    "title": "Halide apps/blur",
+    "title": "Halide's blur example (apps/blur)",
     "url": "https://github.com/halide/Halide/tree/main/apps/blur",
     "note": "The paper's two-stage blur as runnable code with several schedules, to compare fused vs staged output.",
     "for": "Materialization decision"
    },
    {
-    "title": "PyTorch Inductor scheduler.py",
+    "title": "PyTorch Inductor's fusion scheduler (scheduler.py)",
     "url": "https://github.com/pytorch/pytorch/blob/main/torch/_inductor/scheduler.py",
     "note": "Production fuse-or-not logic (`can_fuse`, `score_fusion`) for comparison with your rule.",
     "for": "Materialization decision"
@@ -1082,7 +1082,7 @@
    },
    {
     "kind": "blog",
-    "title": "What is the split strategy for large-dimensional reduction operations in Triton code generation?",
+    "title": "How Triton splits very large reductions (PyTorch forum)",
     "by": "PyTorch dev-discuss",
     "url": "https://dev-discuss.pytorch.org/t/what-is-the-split-strategy-for-large-dimensional-reduction-operations-in-triton-code-generation/1268",
     "note": "Inductor maintainers explain why one reduction becomes two kernels (split reductions) to fill the GPU; a concrete case where materializing an intermediate is the right call."
@@ -1112,7 +1112,7 @@
   "steps": [
    {
     "kind": "read",
-    "title": "ezyang, PyTorch internals: the 'strides' and 'views' part",
+    "title": "ezyang, PyTorch internals: the strides and views part",
     "url": "http://blog.ezyang.com/2019/05/pytorch-internals/",
     "detail": "The strides, views and storage part near the start of the essay (before the section on autograd and the codebase tour). Work its slicing example by hand.",
     "bot_block": false
@@ -1126,7 +1126,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad-notes: Shapetracker",
+    "title": "How tinygrad tracks shapes and strides (ShapeTracker notes)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241217_st.html",
     "detail": "Shape, strides and mask per view, and the transpose-then-reshape example whose index needs `%3` and `//3`. `ShapeTracker` has since been removed from tinygrad; the index ideas still apply.",
     "bot_block": false
@@ -1147,14 +1147,14 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad apply_movement_op and _apply_reshape",
+    "title": "How tinygrad applies reshape and other movement ops",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/indexing.py#L163",
     "detail": "Compare with your version; `_apply_reshape` is at line 147.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "tinygrad divandmod.py: fold_divmod_general",
+    "title": "How tinygrad simplifies division and modulo in indexes",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/divandmod.py#L8",
     "detail": "Rules that use bounds: mod folds when `x//y` is constant; `(x%(k*c))//c` becomes `(x//c)%k`; exact division `(q*c+k)//c` becomes `q+k//c`.",
     "bot_block": true
@@ -1168,7 +1168,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad-notes: The trick in matrix multiplication",
+    "title": "How tinygrad builds matmul from views (tinygrad notes)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241203_matmul.html",
     "detail": "Matmul as add an axis, permute, expand, multiply, sum over the shared axis.",
     "bot_block": false
@@ -1182,7 +1182,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "E.g. permute then reshape (needs div/mod), pad then shrink back to the original, expand after permute, shrink to a single element.",
     "bot_block": false
@@ -1197,7 +1197,7 @@
   ],
   "extra": [
    {
-    "title": "tinygrad test_uop_symbolic.py div/mod tests",
+    "title": "tinygrad's tests for division and modulo simplification",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_uop_symbolic.py",
     "note": "Use its div/mod cases as tests for your simplifier."
    },
@@ -1249,31 +1249,31 @@
   },
   "solutions": [
    {
-    "title": "tinygrad mixin/movement.py: MovementMixin",
+    "title": "tinygrad's movement ops (MovementMixin)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/movement.py#L12",
     "note": "The user-facing reshape/permute/pad/shrink/expand argument checks and shape rules.",
     "for": "Shapes of any rank + shape rules for 5 movement ops"
    },
    {
-    "title": "tinygrad uop/movement.py: mop_cleanup",
+    "title": "tinygrad's movement-op cleanup rules",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/movement.py#L5",
     "note": "Rules that merge and cancel chains of movement ops before indexing.",
     "for": "Movement ops as index rewrites"
    },
    {
-    "title": "tinygrad v0.9.0 shape/view.py",
+    "title": "tinygrad's older view code (v0.9.0 view.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/v0.9.0/tinygrad/shape/view.py",
     "note": "The older View class with shape, strides, offset and mask, plus reshape merging; the stride-based version of the same problem.",
     "for": "Movement ops as index rewrites"
    },
    {
-    "title": "tinygrad test/null/test_indexing.py",
+    "title": "tinygrad's indexing tests",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_indexing.py",
     "note": "Indexing tests to port as checks for your index rewrites.",
     "for": "Bounds-driven div/mod simplification"
    },
    {
-    "title": "teenygrad shape/",
+    "title": "teenygrad's shape code",
     "url": "https://github.com/tinygrad/teenygrad/tree/main/teenygrad/shape",
     "note": "A minimal `ShapeTracker` implementation small enough to read in one sitting.",
     "for": "Movement ops as index rewrites"
@@ -1310,7 +1310,7 @@
    },
    {
     "kind": "blog",
-    "title": "numpy.lib.stride_tricks.as_strided",
+    "title": "NumPy as_strided: make views with custom strides",
     "by": "NumPy",
     "url": "https://numpy.org/doc/stable/reference/generated/numpy.lib.stride_tricks.as_strided.html",
     "note": "Build sliding windows (conv) from strides alone; the warnings section shows overlapping views."
@@ -1366,7 +1366,7 @@
    },
    {
     "kind": "course",
-    "title": "Gluon tutorial: Tensor Layouts",
+    "title": "Triton Gluon tutorial: tensor layouts",
     "by": "Triton",
     "url": "https://triton-lang.org/main/getting-started/tutorials/gluon/layouts.html",
     "note": "Official tutorial where layouts are explicit in user code; shows blocked, sliced and linear layouts you will meet in GPU codegen."
@@ -1389,28 +1389,28 @@
   "steps": [
    {
     "kind": "read",
-    "title": "Autodidax Part 1, then Part 4: linearize and vjp (and grad!)",
+    "title": "Autodidax (JAX from scratch): Part 1, then Part 4 on gradients",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
     "detail": "Part 1 (interpreters, jvp) and Part 4 (linearize, vjp and grad, which build reverse mode from linearize plus transpose). Skip Part 3 (jit) for now.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Baydin et al., AD survey §3 (forward and reverse mode)",
+    "title": "Baydin et al., automatic differentiation survey, section 3: forward and reverse mode",
     "url": "https://arxiv.org/abs/1502.05767",
     "detail": "Only §3.1 (Forward Mode) and §3.2 (Reverse Mode); work the paper's reverse-mode example by hand.",
     "bot_block": false
    },
    {
     "kind": "implement",
-    "title": "Scopes {...}, url= externs, gradient op parsing",
+    "title": "Parse scopes, external weights and the gradient op",
     "url": "",
     "detail": "Value of a scope is its last binding; load `.bin` weights. Use `tests/week06/data/x.bin`.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "tinygrad pm_gradient and compute_gradient",
+    "title": "How tinygrad computes gradients (compute_gradient)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/gradient.py#L68",
     "detail": "One rule per op (lines 68-108), then `compute_gradient` (line 121) for the reverse toposort accumulation.",
     "bot_block": false
@@ -1424,14 +1424,14 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad transcendental.py: xexp2, xlog2, xsin",
+    "title": "How tinygrad computes exp, log and sin from basic ops",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/decomp/transcendental.py#L193",
     "detail": "Read `xexp2` (193), `xlog2` (219) and `xsin` (170) with `cody_waite_reduction` (115).",
     "bot_block": false
    },
    {
     "kind": "implement",
-    "title": "exp2/log2/sqrt/sin yourself",
+    "title": "Write exp2, log2, sqrt and sin yourself",
     "url": "",
     "detail": "Range reduction plus polynomial; test against NumPy over a wide grid within a few ULP.",
     "bot_block": false
@@ -1445,21 +1445,21 @@
    },
    {
     "kind": "read",
-    "title": "llama2.c run.c: forward() and the sampler",
+    "title": "llama2.c: the forward pass and the sampler",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
     "detail": "Read `forward()` (rmsnorm, RoPE, attention, SwiGLU FFN) and `sample_argmax()`; this is your reference.",
     "bot_block": false
    },
    {
     "kind": "implement",
-    "title": "stories15M with matching tokens",
+    "title": "Run the stories15M model and match llama2.c token for token",
     "url": "",
     "detail": "Load `stories15M.bin` weights, run greedy decoding, compare token ids to `run.c` for the same prompt.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "He et al., ResNet §3.3 and Table 1",
+    "title": "ResNet paper, section 3.3 and Table 1 (the architectures)",
     "url": "https://arxiv.org/abs/1512.03385",
     "detail": "Read §3.3 Network Architectures and Table 1 for the 18-layer column. Batchnorm folding for inference is not in the paper; derive it yourself.",
     "bot_block": false
@@ -1473,7 +1473,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "Gradient of max ties, of where, of division, through pad and shrink; compare each to finite differences.",
     "bot_block": false
@@ -1493,7 +1493,7 @@
     "note": "Smallest scalar reverse-mode reference."
    },
    {
-    "title": "tinygrad test_gradient.py",
+    "title": "tinygrad's gradient tests",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/null/test_gradient.py",
     "note": "Gradient test cases to port."
    }
@@ -1541,13 +1541,13 @@
   },
   "solutions": [
    {
-    "title": "micrograd engine.py",
+    "title": "micrograd's autodiff engine (engine.py)",
     "url": "https://github.com/karpathy/micrograd/blob/master/micrograd/engine.py",
     "note": "Scalar reverse-mode autodiff in about 100 lines: per-op `_backward` closures plus a reverse topological sort, the same shape as your gradient rewrite.",
     "for": "gradient as a rewrite"
    },
    {
-    "title": "tinygrad beautiful_mnist.py",
+    "title": "tinygrad's MNIST training example",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/beautiful_mnist.py",
     "note": "A complete MNIST training script on tinygrad's lazy graph and autograd, useful to compare your UIR training loop and accuracy target.",
     "for": "MNIST MLP training"
@@ -1559,7 +1559,7 @@
     "for": "gradient as a rewrite"
    },
    {
-    "title": "llm.c train_gpt2.c",
+    "title": "GPT-2 training in plain C (llm.c train_gpt2.c)",
     "url": "https://github.com/karpathy/llm.c/blob/master/train_gpt2.c",
     "note": "Hand-written forward and backward for every GPT-2 layer in plain C; check your generated backward kernels for layernorm, softmax and matmul against it.",
     "for": "stories15M / real models build"
@@ -1568,7 +1568,7 @@
     "title": "SLEEF",
     "url": "https://github.com/shibatch/sleef",
     "note": "Production vectorized libm with documented ULP bounds; compare its range reduction and polynomial choices with your exp2/log2/sin.",
-    "for": "exp2/log2/sqrt/sin yourself"
+    "for": "Write exp2, log2, sqrt and sin yourself"
    }
   ],
   "deeper": [
@@ -1658,10 +1658,24 @@
    },
    {
     "kind": "problems",
-    "title": "CMU 10-414/714 Deep Learning Systems assignments (Needle)",
+    "title": "CMU Deep Learning Systems assignments (build the Needle library)",
     "by": "Tianqi Chen, Zico Kolter",
     "url": "https://dlsyscourse.org/assignments/",
     "note": "Homework 1 has you implement reverse-mode autodiff over tensor ops in the Needle library with local tests; do it after the micrograd step."
+   },
+   {
+    "kind": "problems",
+    "title": "How much loss varies between identical training runs (CS312 assignment 1, problems 3-4)",
+    "by": "Stanford CS312 Deep Learning Alchemy",
+    "url": "https://deep-learning-alchemy.github.io/assets/assignments/a1_basics.pdf",
+    "note": "Read pages 12-14 (the Stochasticity section); no runs needed. Same handout as the CS312 assignment 1 item in Module 9. Your compiler's loss will not match PyTorch bit for bit, and this shows how big normal run-to-run noise is, so you can tell a real gradient bug from floating-point reordering."
+   },
+   {
+    "kind": "lecture",
+    "title": "Lecture 21: on-device training and compile-time backward graphs (PockEngine)",
+    "by": "MIT EfficientML, Fall 2024 (Song Han)",
+    "url": "https://www.youtube.com/watch?v=1YuD_5UQxsA",
+    "note": "PockEngine derives and prunes the backward graph as a compiler pass, the same idea you build here. Also explains why activations dominate training memory."
    }
   ],
   "stretch": "Add forward-mode (jvp) and derive reverse mode from linearize plus a transpose pass, as in YOLO, then compute Hessian-vector products by composing them. Verify HVPs against finite differences on the MNIST MLP and train it with a few steps of Newton-CG; report gradient-graph size vs forward-graph size for every model in the project."
@@ -1688,7 +1702,7 @@
    },
    {
     "kind": "implement",
-    "title": "axis=GLOBAL|LOOP|UPCAST and kernel calls",
+    "title": "Mark loop axes as global, loop or upcast, and emit kernel calls",
     "url": "",
     "detail": "Parse the new axis attribute and calls that launch kernels. Pass `tests/week07/kernel_fill.uir`.",
     "bot_block": false
@@ -1702,7 +1716,7 @@
    },
    {
     "kind": "read",
-    "title": "how-to-optimize-gemm: Optimization_1x4_3 through Optimization_4x4_15",
+    "title": "how-to-optimize-gemm: the 1x4 and 4x4 optimization steps",
     "url": "https://github.com/flame/how-to-optimize-gemm/wiki",
     "detail": "Follow the register-blocking progression and record GFLOPS at each step on your machine.",
     "bot_block": false
@@ -1716,7 +1730,7 @@
    },
    {
     "kind": "read",
-    "title": "salykova, Advanced Matrix Multiplication Optimization: sections 5, 7 and 8",
+    "title": "salykova, Advanced Matrix Multiplication Optimization on Modern Multi-Core Processors: sections 5, 7 and 8",
     "url": "https://salykova.github.io/matmul-cpu",
     "detail": "Section 5 (Kernel), 7 (Cache Blocking, with packing) and 8 (Kernel Micro-Optimizations).",
     "bot_block": false
@@ -1730,7 +1744,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad hand_coded_optimizations",
+    "title": "tinygrad's hand-written loop optimizations",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/heuristic.py#L8",
     "detail": "`hand_coded_optimizations` (line 8): which axes it upcasts, makes local or unrolls. Compare with your choices.",
     "bot_block": false
@@ -1744,7 +1758,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "Non-divisible tile sizes, tiling a range used in an index bound proof, threaded reduce correctness.",
     "bot_block": false
@@ -1764,7 +1778,7 @@
     "note": "Concise kernel-level walkthrough."
    },
    {
-    "title": "BLISlab",
+    "title": "BLISlab: build a fast matmul step by step",
     "url": "https://github.com/flame/blislab",
     "note": "Packing + micro-kernel homework."
    }
@@ -1824,19 +1838,19 @@
     "for": "SIMD and pthreads; Autotuner project baseline"
    },
    {
-    "title": "tinygrad search.py (BEAM)",
+    "title": "tinygrad's beam search over kernel options",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py",
     "note": "tinygrad's beam search over kernel opts with a timing cache, a working reference for the project's search and tuning database.",
     "for": "Autotuner project"
    },
    {
-    "title": "tinygrad postrange.py",
+    "title": "tinygrad's loop transformations (postrange.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/postrange.py",
     "note": "Where tinygrad applies opts (`UPCAST`, UNROLL, `LOCAL`) by splitting ranges, the same split-and-permute rewrite you implement.",
     "for": "Loop reorder + tiling as rewrites"
    },
    {
-    "title": "BLIS",
+    "title": "BLIS: a fast open-source matrix library",
     "url": "https://github.com/flame/blis",
     "note": "Production BLAS whose kernels/ directory holds per-architecture micro-kernels in the Goto layout.",
     "for": "UPCAST micro-kernel"
@@ -1866,7 +1880,7 @@
    },
    {
     "kind": "talk",
-    "title": "Cpu Caches and Why You Care",
+    "title": "CPU Caches and Why You Care",
     "by": "Scott Meyers",
     "url": "https://www.youtube.com/watch?v=WDIkqP4JbkE",
     "note": "An hour on cache lines, false sharing and prefetching; watch the false sharing part before threading your `GLOBAL` axes."
@@ -1894,7 +1908,7 @@
    },
    {
     "kind": "problems",
-    "title": "uops.info",
+    "title": "uops.info: latency and throughput of every x86 instruction",
     "by": "Andreas Abel, Jan Reineke",
     "url": "https://uops.info/",
     "note": "Measured latency, throughput and ports for every x86 instruction; look up your vfmadd variant to size the accumulator count."
@@ -1915,7 +1929,7 @@
    },
    {
     "kind": "course",
-    "title": "MIT 6.172 Performance Engineering of Software Systems",
+    "title": "MIT Performance Engineering of Software Systems (6.172)",
     "by": "Charles Leiserson, Julian Shun",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/",
     "note": "Lecture 1 walks matmul from Python to 50000x faster; later lectures cover caches, vectorization and multicore."
@@ -1933,6 +1947,13 @@
     "by": "Davis Blalock",
     "url": "https://dblalock.github.io/Performance-Engineering-Tutorial",
     "note": "A compact tour of memory hierarchy, vectorization and threading aimed at ML people; good for the mental model before tuning your CPU backend."
+   },
+   {
+    "kind": "lecture",
+    "title": "Lecture 11: CPU loop tricks for neural nets (reordering, tiling, unrolling, SIMD, threads)",
+    "by": "MIT EfficientML, Fall 2024 (Song Han)",
+    "url": "https://www.youtube.com/watch?v=wl1UEnIOVek",
+    "note": "A short survey of the loop rewrites you build in this module, plus memory-saving convolution tricks (im2col, Winograd, in-place depthwise). Code: github.com/mit-han-lab/parallel-computing-tutorial."
    }
   ],
   "stretch": "Replace the autotuner's measurement loop with a learned cost model (gradient-boosted trees or a small MLP over loop features, as in TVM/Ansor) and show it reaches within 5% of the best measured schedule with 10x fewer real runs. Extend the micro-kernel to AVX-512 or NEON and report percentage of measured peak on `2048^3` GEMM next to OpenBLAS and BLIS."
@@ -1945,7 +1966,7 @@
   "steps": [
    {
     "kind": "read",
-    "title": "CUDA Programming Guide §2.3 Writing SIMT Kernels (2.3.2-2.3.4)",
+    "title": "CUDA Programming Guide: thread blocks, GPU memory and coalescing (sections 2.3.2 to 2.3.4)",
     "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/writing-cuda-kernels.html",
     "detail": "2.3.2 Thread Hierarchy (incl. block synchronization), 2.3.3 memory spaces (shared memory), 2.3.4 Memory Performance (coalescing, shared-memory access patterns).",
     "bot_block": false
@@ -1966,7 +1987,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad CUDARenderer and gpudims",
+    "title": "How tinygrad prints CUDA code and picks grid sizes",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/cstyle.py#L423",
     "detail": "`CUDARenderer`, then `group_gpudims` (https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/gpudims.py#L44) for folding ranges into grid dims.",
     "bot_block": false
@@ -2015,7 +2036,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "Non-multiple-of-block sizes, barrier correctness, reduce of odd lengths.",
     "bot_block": false
@@ -2035,12 +2056,12 @@
     "note": "Warm-up puzzles in numba."
    },
    {
-    "title": "Stanford CS149 (Fall 2024) GPU lectures",
+    "title": "Stanford Parallel Computing (CS149) GPU lectures, Fall 2024",
     "url": "https://gfxcourses.stanford.edu/cs149/fall24",
     "note": "Lectures on GPU architecture and CUDA."
    },
    {
-    "title": "NVRTC documentation",
+    "title": "NVRTC: compile CUDA code at runtime",
     "url": "https://docs.nvidia.com/cuda/nvrtc/",
     "note": "Compile options and error logs."
    }
@@ -2088,7 +2109,7 @@
   },
   "solutions": [
    {
-    "title": "tinygrad ops_cuda.py",
+    "title": "tinygrad's CUDA runtime (ops_cuda.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/runtime/ops_cuda.py",
     "note": "tinygrad's CUDA runtime: NVRTC compile, module load and kernel launch with grid/block dims, a template for your launcher.",
     "for": "CUDA renderer + NVRTC via cuda-python"
@@ -2100,7 +2121,7 @@
     "for": "Reductions / kernels 4-6"
    },
    {
-    "title": "NVIDIA CCCL (CUB)",
+    "title": "NVIDIA CUB: reference GPU reductions and scans",
     "url": "https://github.com/NVIDIA/cccl",
     "note": "CUB's `BlockReduce` and `DeviceReduce` are the production reduction kernels to benchmark your generated ones against.",
     "for": "GPU kernel lab project"
@@ -2193,7 +2214,7 @@
    },
    {
     "kind": "course",
-    "title": "MIT 6.S894: Accelerated Computing (Fall 2024)",
+    "title": "MIT Accelerated Computing course (6.S894, Fall 2024)",
     "by": "Jonathan Ragan-Kelley",
     "url": "https://accelerated-computing-class.github.io/fall24",
     "note": "Public CUDA labs with write-ups, from SIMD Mandelbrot to matmul on an RTX A4000; do the early GPU labs as backend test kernels."
@@ -2209,7 +2230,7 @@
   "steps": [
    {
     "kind": "read",
-    "title": "siboehm CUDA matmul worklog: Kernels 1-3",
+    "title": "siboehm, How to Optimize a CUDA Matmul: kernels 1 to 3",
     "url": "https://siboehm.com/articles/22/CUDA-MMM",
     "detail": "Naive, global memory coalescing, shared-memory cache-blocking; generate each from your IR.",
     "bot_block": false
@@ -2223,7 +2244,7 @@
    },
    {
     "kind": "read",
-    "title": "siboehm Kernels 4-6 (1D and 2D blocktiling, vectorized SMEM/GMEM access)",
+    "title": "siboehm, How to Optimize a CUDA Matmul: kernels 4 to 6 (tiling and vector loads)",
     "url": "https://siboehm.com/articles/22/CUDA-MMM",
     "detail": "Register tiling and `float4` loads; then skim kernels 9 (autotuning) and 10 (warptiling). The post skips 7 and 8.",
     "bot_block": false
@@ -2237,7 +2258,7 @@
    },
    {
     "kind": "read",
-    "title": "PTX ISA: warp-level matrix multiply-accumulate (mma.sync) fragments",
+    "title": "PTX manual: the tensor core instruction (mma.sync) and its data layout",
     "url": "https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-instructions",
     "detail": "The fragment layout tables for `mma.m16n8k16` with fp16 inputs.",
     "bot_block": false
@@ -2251,7 +2272,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad TensorCore definitions",
+    "title": "How tinygrad describes tensor cores",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/renderer/tc.py#L7",
     "detail": "The TensorCore dataclass: `dtype_in`, `dtype_out` and per-thread fragment layouts (`frag_a`, `frag_b`, `frag_c`), which the scheduler uses to target mma.",
     "bot_block": false
@@ -2272,14 +2293,14 @@
    },
    {
     "kind": "read",
-    "title": "FlashAttention §3.1 Algorithm 1, then FA2 §3.1-3.2",
+    "title": "FlashAttention paper, Algorithm 1, then FlashAttention-2 sections 3.1 and 3.2",
     "url": "https://arxiv.org/abs/2205.14135",
     "detail": "Online softmax tiling (FA1 Alg. 1), then FA2's loop reordering and fewer non-matmul FLOPs (https://arxiv.org/abs/2307.08691).",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "flash-attention-minimal: flash.cu",
+    "title": "A minimal FlashAttention in about 100 lines of CUDA",
     "url": "https://github.com/tspeterkim/flash-attention-minimal",
     "detail": "115-line forward kernel; map each loop to a range in your IR.",
     "bot_block": false
@@ -2293,7 +2314,7 @@
    },
    {
     "kind": "test",
-    "title": "10 own tests",
+    "title": "Write 10 tests of your own",
     "url": "",
     "detail": "Odd seq lengths, causal masking, GEMM sizes not multiple of tile.",
     "bot_block": false
@@ -2380,7 +2401,7 @@
     "for": "mma.sync emission + double buffering"
    },
    {
-    "title": "pranjalssh/fast.cu",
+    "title": "fast.cu: matmul kernels that beat cuBLAS on H100",
     "url": "https://github.com/pranjalssh/fast.cu",
     "note": "Kernels from the H100 worklog that beat cuBLAS using TMA, WGMMA and warp specialization.",
     "for": "GEMM vs cuBLAS (Hopper)"
@@ -2478,7 +2499,7 @@
    },
    {
     "kind": "problems",
-    "title": "6.S894 Lab 6: Matrix Multiply with Tensor Cores",
+    "title": "MIT Accelerated Computing Lab 6: matmul with tensor cores",
     "by": "MIT 6.S894 staff",
     "url": "https://accelerated-computing-class.github.io/fall24/labs/lab6",
     "note": "Guided lab using inline PTX mma instructions and their register fragment layouts on Ampere; the cleanest structured exercise for the tensor core step."
@@ -2499,7 +2520,7 @@
    },
    {
     "kind": "blog",
-    "title": "tcgen05 for dummies",
+    "title": "tcgen05 for dummies (Blackwell tensor cores)",
     "by": "gau-nernst",
     "url": "https://gau-nernst.github.io/tcgen05",
     "note": "Plain CUDA plus PTX walkthrough of a Blackwell GEMM with TMA and mbarriers; the generation table comparing Ampere, Hopper and Blackwell paths is worth keeping."
@@ -2527,10 +2548,10 @@
    },
    {
     "kind": "assignment",
-    "title": "CS336 Assignment 2: Systems (FlashAttention-2 in Triton, profiling, DDP, sharded optimizer)",
+    "title": "Stanford CS336 assignment 2: profile a model and write FlashAttention-2 in Triton",
     "by": "Stanford CS336 (Hashimoto, Liang)",
     "url": "https://github.com/stanford-cs336/assignment2-systems",
-    "note": "Optional. Its Triton FlashAttention-2 forward and backward with tests is a good check on your own kernel."
+    "note": "Optional cross-check: run its FlashAttention-2 tests against your own fused attention, or write the Triton version yourself. The full assignment is used in Modules 33 and 39."
    }
   ],
   "stretch": "Make your scheduler emit Hopper or Blackwell code (TMA loads, `wgmma` or `tcgen05`, warp-specialized producer/consumer) and reach 80% of cuBLAS fp16 at `8192^3` and 70% of FlashAttention-3 forward at seqlen 8192. Submit the generated attention kernel to a GPU MODE leaderboard problem and report its rank."
@@ -2556,6 +2577,13 @@
     "bot_block": false
    },
    {
+    "kind": "watch",
+    "title": "Stanford CS336 lecture 8: collective operations, then data, tensor and pipeline parallelism in code",
+    "url": "https://www.youtube.com/watch?v=LHpr5ytssLo",
+    "detail": "Watch the whole lecture (about 80 minutes). Percy Liang benchmarks all-reduce and reduce-scatter with torch.distributed, then builds data, tensor and pipeline parallelism on a small MLP. The code (lecture_08.py in github.com/stanford-cs336/spring2025-lectures) runs on CPU with gloo; run it before the collective insertion pass. Lecture 7, the concepts half, is a main step in Module 39.",
+    "bot_block": false
+   },
+   {
     "kind": "implement",
     "title": "shard annotation and propagation",
     "url": "",
@@ -2564,7 +2592,7 @@
    },
    {
     "kind": "read",
-    "title": "tinygrad multi.py: alu_multi, reduce_multi, reshape_multi",
+    "title": "How tinygrad spreads ops across GPUs (multi.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/multi.py#L90",
     "detail": "How sharding propagates per op (`alu_multi` at line 90); `reduce_multi` (line 107) emits allreduce when a sharded axis is reduced.",
     "bot_block": false
@@ -2592,7 +2620,7 @@
    },
    {
     "kind": "read",
-    "title": "Megatron-LM §3 Model Parallel Transformers",
+    "title": "Megatron-LM paper, section 3: splitting a transformer across GPUs",
     "url": "https://arxiv.org/abs/1909.08053",
     "detail": "Column-parallel then row-parallel MLP with one all-reduce in the forward pass.",
     "bot_block": false
@@ -2633,7 +2661,7 @@
     "note": "Practical DP/TP/PP/ZeRO with measurements."
    },
    {
-    "title": "ZeRO",
+    "title": "ZeRO: splitting optimizer state, gradients and weights across GPUs",
     "url": "https://arxiv.org/abs/1910.02054",
     "note": "Optimizer state sharding."
    }
@@ -2678,7 +2706,7 @@
   },
   "solutions": [
    {
-    "title": "tinygrad beautiful_mnist_multigpu.py",
+    "title": "tinygrad's multi-GPU MNIST example",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/beautiful_mnist_multigpu.py",
     "note": "Data-parallel MNIST on tinygrad's shard API, the direct counterpart of the data-parallel lab.",
     "for": "Data-parallel MNIST on 2+ GPUs"
@@ -2747,7 +2775,7 @@
    },
    {
     "kind": "lecture",
-    "title": "JAX: Manual parallelism with shard_map",
+    "title": "JAX tutorial: manual parallelism with shard_map",
     "by": "JAX team",
     "url": "https://docs.jax.dev/en/latest/notebooks/shard_map.html",
     "note": "Per-device programs with explicit collectives; use it to check your inserted collectives against JAX on the same matmul."
@@ -2796,7 +2824,7 @@
    },
    {
     "kind": "talk",
-    "title": "Shardy: An MLIR-based Tensor Partitioning System (LLVM Dev Meeting 2024 slides)",
+    "title": "Shardy: an MLIR system for splitting tensors across devices (slides)",
     "by": "Bart Chrzaszcz, Zixuan Jiang",
     "url": "https://llvm.org/devmtg/2024-10/slides/techtalk/Chrzaszcz-Jiang-Shardy.pdf",
     "note": "How the GSPMD and PartIR teams merged into an axis-based sharding representation with priority-driven propagation; compare with GSPMD's attribute propagation."
@@ -2814,6 +2842,13 @@
     "by": "Phillip Lippe",
     "url": "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/scaling/JAX/tensor_parallel_simple.html",
     "note": "Implements tensor parallelism for linear layers from first principles in JAX `shard_map` with runnable code; do it as the manual counterpart to compiler sharding."
+   },
+   {
+    "kind": "lecture",
+    "title": "Lecture 20: combining parallelism strategies, automatic parallel plans, and gradient compression",
+    "by": "MIT EfficientML, Fall 2024 (Song Han)",
+    "url": "https://www.youtube.com/watch?v=lOVcPooetrM",
+    "note": "Why bandwidth and latency limit scaling, and how tools like Alpa search over parallel plans; useful cost-model background for your collective-insertion pass."
    }
   ],
   "stretch": "Extend the planner to choose among data, tensor, pipeline and FSDP sharding with an ILP or DP search (as in Alpa) and overlap collectives with compute. On 4+ GPUs, show the chosen plan for a 1B-parameter transformer lies within 10% of measured best across all enumerated plans and reach at least 40% MFU."
@@ -2861,7 +2896,7 @@
    },
    {
     "kind": "read",
-    "title": "LLM.int8() §3.1 Vector-wise Quantization",
+    "title": "LLM.int8() paper, section 3.1: one int8 scale per row or column",
     "url": "https://arxiv.org/abs/2208.07339",
     "detail": "Row/column-wise scaling; you only need per-output-channel weight scales, not the mixed-precision decomposition of §3.2.",
     "bot_block": false
@@ -2875,7 +2910,7 @@
    },
    {
     "kind": "read",
-    "title": "Leviathan et al., Speculative Decoding §2.3 and §3.1",
+    "title": "Speculative Decoding paper, sections 2.3 and 3.1",
     "url": "https://arxiv.org/abs/2211.17192",
     "detail": "§2.3 Speculative Sampling (Algorithm 1, the accept/reject rule) and §3.1 for the expected number of tokens per step.",
     "bot_block": false
@@ -2919,7 +2954,7 @@
   ],
   "extra": [
    {
-    "title": "PagedAttention / vLLM",
+    "title": "PagedAttention, the paper behind vLLM",
     "url": "https://arxiv.org/abs/2309.06180",
     "note": "Paging the KV cache."
    },
@@ -2929,7 +2964,7 @@
     "note": "Small readable serving engine."
    },
    {
-    "title": "Lilian Weng: inference optimization",
+    "title": "Lilian Weng, Large Transformer Model Inference Optimization",
     "url": "https://lilianweng.github.io/posts/2023-01-10-inference-optimization/",
     "note": "Survey."
    }
@@ -2991,13 +3026,13 @@
     "for": "KV cache; int8 weights; batching"
    },
    {
-    "title": "gpt-fast generate.py",
+    "title": "gpt-fast's generation loop (generate.py)",
     "url": "https://github.com/pytorch-labs/gpt-fast/blob/main/generate.py",
     "note": "Speculative decoding with draft model accept/reject in a few dozen lines, plus the KV-cache decode loop.",
     "for": "Speculative decoding"
    },
    {
-    "title": "tinygrad examples/llama.py",
+    "title": "tinygrad's Llama example",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/llama.py",
     "note": "LLaMA inference on tinygrad with KV cache and JIT, showing how a tensor compiler runs decode.",
     "for": "KV cache on your compiler"
@@ -3124,10 +3159,31 @@
    },
    {
     "kind": "lecture",
-    "title": "CMSC 828G Lecture 15: Inference",
+    "title": "University of Maryland ML systems course, lecture 15: inference (slides)",
     "by": "University of Maryland",
     "url": "https://www.cs.umd.edu/class/spring2025/cmsc828g/slides/15-cmsc828g-inference.pdf",
     "note": "Compact slide deck tying together KV caching, batching and parallelism for LLM inference; use it as a map before reading the vLLM and SGLang papers."
+   },
+   {
+    "kind": "lecture",
+    "title": "Lecture 10: how LLM inference works and how to make it fast",
+    "by": "Stanford CS336 (Percy Liang)",
+    "url": "https://www.youtube.com/watch?v=fcgPYo3OtV0",
+    "note": "Covers this module's topics; watch it if the Scaling Book chapter felt dense, or as a review before the KV cache and batching steps."
+   },
+   {
+    "kind": "problems",
+    "title": "Lab 1: measure rooflines, prefill vs decode, and kernel fusion on a real decoder layer",
+    "by": "MIT 6.5940 Fall 2026 (Song Han)",
+    "url": "https://hanlab.mit.edu/courses/2026-fall-65940",
+    "note": "Hands-on measurements on a Gemma-3 layer with the PyTorch profiler, torch.compile, CUDA Graphs and FlashAttention. Lab 1 (lab1_gpu_basics) is linked from the course schedule. Needs an NVIDIA GPU or Colab."
+   },
+   {
+    "kind": "lecture",
+    "title": "Lecture 15: long-context inference (attention sinks, StreamingLLM, KV cache sparsity)",
+    "by": "MIT EfficientML, Fall 2024 (Song Han)",
+    "url": "https://www.youtube.com/watch?v=kgTWKjbnrBA",
+    "note": "Extends your KV cache to long contexts: why keeping a few sink tokens keeps a sliding window stable, and how to pick which KV pages to read. Pairs with Flash-Decoding above."
    }
   ],
   "stretch": "Run a 1B-class Llama model on your compiler with a paged KV cache, continuous batching, 4-bit weights (GPTQ or AWQ) and EAGLE-style drafting. Match vLLM's throughput within 25% at equal p99 latency on the same GPU and report perplexity within 2% of fp16."
@@ -3140,28 +3196,28 @@
   "steps": [
    {
     "kind": "read",
-    "title": "10-411 syllabus: 'Weeks 12-End: Student Projects'",
+    "title": "geohot's 10-411 syllabus: the student projects section",
     "url": "https://gist.github.com/geohot/4768597d9dc536446ee2d5de1f29e89d",
     "detail": "The 10-411 syllabus heading reads 'Use your compiler to implement a paper, port it to strange hardware, mostly anything'; the final project is 25% of the grade (weeks 11-14).",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Idea A, kernel search: tinygrad beam_search",
+    "title": "Idea A, kernel search: read tinygrad's beam search",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py#L104",
     "detail": "`beam_search()` in `tinygrad/codegen/opt/search.py` tries kernel optimizations and keeps the fastest timed candidates. Project idea: replace your hand heuristics with the same kind of search over your schedule space. Related: Ansor (https://arxiv.org/abs/2006.06762).",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Idea B, Hopper/FA3-style attention: FlashAttention-3 §3",
+    "title": "Idea B, attention on H100: FlashAttention-3 section 3",
     "url": "https://arxiv.org/abs/2407.08608",
     "detail": "Section 3.1 covers producer-consumer warp specialization and pingpong scheduling. Only pick this idea if you have an H100.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Idea C, e-graph rewriting: egg paper sections 1-4",
+    "title": "Idea C, e-graph rewriting: egg paper sections 1 to 4",
     "url": "https://arxiv.org/abs/2004.03082",
     "detail": "Section 2 defines e-graphs and equality saturation, section 4.3 covers extraction. Project idea: replace your greedy rewriter with equality saturation and compare kernel cost.",
     "bot_block": false
@@ -3217,7 +3273,7 @@
   ],
   "extra": [
    {
-    "title": "tinygrad-notes: BEAM search",
+    "title": "How tinygrad's beam search works (tinygrad notes)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241203_beam.html",
     "note": "How tinygrad searches kernel optimizations."
    }
@@ -3262,13 +3318,13 @@
   },
   "solutions": [
    {
-    "title": "tinygrad search.py (pinned)",
+    "title": "tinygrad's kernel search (search.py)",
     "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/opt/search.py",
     "note": "Full source of `beam_search`, including candidate generation, timing with warmup and caching of results; compare your search loop against it.",
     "for": "Idea A, kernel search"
    },
    {
-    "title": "tinygrad process_replay.py (pinned)",
+    "title": "tinygrad's check that kernels did not change (process_replay.py)",
     "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/external/process_replay/process_replay.py",
     "note": "How tinygrad diffs generated kernels between HEAD and master in CI; a model for the correctness half of your harness.",
     "for": "Benchmark harness"
@@ -3280,7 +3336,7 @@
     "for": "Idea C, e-graph rewriting"
    },
    {
-    "title": "flash-attention-minimal",
+    "title": "A minimal FlashAttention in about 100 lines of CUDA",
     "url": "https://github.com/tspeterkim/flash-attention-minimal",
     "note": "About 100 lines of CUDA forward FlashAttention; a readable baseline before attempting the FA3 idea.",
     "for": "Idea B, attention"
@@ -3416,7 +3472,7 @@
    },
    {
     "kind": "read",
-    "title": "Scaling Book: roofline",
+    "title": "Scaling Book: rooflines",
     "url": "https://jax-ml.github.io/scaling-book/roofline/",
     "detail": "Compute arithmetic intensity and the roofline bound for your target so you know the ceiling.",
     "bot_block": false
@@ -3516,7 +3572,7 @@
     "for": "Ablations"
    },
    {
-    "title": "tinygrad process_replay.py (pinned)",
+    "title": "tinygrad's check that kernels did not change (process_replay.py)",
     "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/test/external/process_replay/process_replay.py",
     "note": "Regression checking by replaying and diffing generated kernels; adapt it for your regression suite.",
     "for": "Regression suite"
@@ -3713,19 +3769,19 @@
   },
   "solutions": [
    {
-    "title": "tinygrad beautiful_mnist.py (pinned)",
+    "title": "tinygrad's MNIST training example",
     "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/beautiful_mnist.py",
     "note": "tinygrad MNIST training script reaching 98%+; compare model, optimizer and JIT setup with your MNIST demo.",
     "for": "End-to-end demo: MNIST"
    },
    {
-    "title": "llama2.c run.c",
-    "url": "https://github.com/karpathy/llama2.c",
+    "title": "llama2.c run.c (Llama inference in one C file)",
+    "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
     "note": "The reference generator your stories15M tokens must match; also a model README with one-command reproduction.",
     "for": "End-to-end demo: stories15M"
    },
    {
-    "title": "tinygrad llama.py (pinned)",
+    "title": "tinygrad's Llama example",
     "url": "https://raw.githubusercontent.com/tinygrad/tinygrad/b91fe2773cbc1a33c38c90b55c835e26be42a335/examples/llama.py",
     "note": "How tinygrad loads LLaMA weights and samples; a compiler-side reference for the generation demo.",
     "for": "End-to-end demo: stories15M"

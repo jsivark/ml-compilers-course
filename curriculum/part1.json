@@ -6,7 +6,7 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "Missing Semester 2020, Lecture 1: Course overview + the shell",
+    "title": "Missing Semester lecture 1: get comfortable in the shell",
     "url": "https://missing.csail.mit.edu/2020/course-shell/",
     "detail": "Use the terminal on macOS or Linux. On Windows, set up WSL2 first (next step) and work inside it. Do the exercises at the bottom of the page.",
     "bot_block": false
@@ -20,56 +20,56 @@
    },
    {
     "kind": "watch",
-    "title": "Missing Semester 2020, Lecture 2: Shell Tools and Scripting",
+    "title": "Missing Semester lecture 2: shell tools and scripting",
     "url": "https://missing.csail.mit.edu/2020/shell-tools/",
     "detail": "Focus on pipes, find, grep and writing a small bash script with `set -euo pipefail`. Later modules use scripts like this for benchmark sweeps.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Missing Semester 2020, Lecture 3: Editors (Vim)",
+    "title": "Missing Semester lecture 3: learn a text editor (Vim)",
     "url": "https://missing.csail.mit.edu/2020/editors/",
     "detail": "You do not need to switch to Vim. Learn enough to edit files over ssh on a remote machine, and set up your main editor with clangd and a Python language server.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Missing Semester 2020, Lecture 6: Version Control (Git)",
+    "title": "Missing Semester lecture 6: how Git works",
     "url": "https://missing.csail.mit.edu/2020/version-control/",
     "detail": "Understand the data model (blobs, trees, commits, refs) rather than memorizing commands.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Learn Git Branching: Main tab Introduction Sequence, Remote tab first two levels",
+    "title": "Learn Git Branching: interactive Git practice in the browser",
     "url": "https://learngitbranching.js.org/",
-    "detail": "Interactive drills for commit, branch, merge, rebase and remotes. Then use one branch per module and tag each finished module.",
+    "detail": "Do the Introduction Sequence on the Main tab and the first two levels on the Remote tab. Interactive drills for commit, branch, merge, rebase and remotes. Then use one branch per module and tag each finished module.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Pro Git, ch. 2 Git Basics, ch. 3 Git Branching, sections 7.3 Stashing and 7.10 Debugging with Git",
+    "title": "Pro Git book, ch. 2-3, 7.3 and 7.10: basics, branching, stashing and debugging",
     "url": "https://git-scm.com/book/en/v2",
     "detail": "Use as a reference when something goes wrong. Learn `git log --oneline --graph`, `git stash` and `git bisect`.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Missing Semester 2020, Lecture 7: Debugging and Profiling",
+    "title": "Missing Semester lecture 7: debugging and profiling",
     "url": "https://missing.csail.mit.edu/2020/debugging-profiling/",
     "detail": "Covers printf debugging, gdb and pdb, perf and flame graphs. Modules 1-4 use all of these.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "C toolchain + debugger: LLDB tutorial or GDB docs",
+    "title": "Learn to use a debugger (LLDB on Mac, GDB on Linux)",
     "url": "https://lldb.llvm.org/use/tutorial.html",
     "detail": "Make sure clang (or gcc) and make work. Compile a buggy program with `-g -O0 -fsanitize=address`, then set a breakpoint, step, print a variable and get a backtrace. Use lldb on macOS (it ships with the Command Line Tools) and gdb on Linux or WSL (https://www.gnu.org/software/gdb/documentation/); the commands map almost one to one.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Python environment with uv (or venv)",
+    "title": "Set up Python environments with uv",
     "url": "https://docs.astral.sh/uv/",
     "detail": "Create one project environment with numpy, matplotlib, pytest and torch (the CPU build is enough). Commit `uv.lock` or `requirements.txt`.",
     "bot_block": false
@@ -97,7 +97,7 @@
    },
    {
     "kind": "do",
-    "title": "Start a learning log (Julia Evans, Get your work recognized: write a brag document)",
+    "title": "Start a learning log (Julia Evans, write a brag document)",
     "url": "https://jvns.ca/blog/brag-documents/",
     "detail": "Keep `LOG.md` in your repo with one dated entry per session: what you did, what confused you, what you will do next. Write a short public post at the end of each module.",
     "bot_block": false
@@ -194,7 +194,7 @@
    },
    {
     "kind": "blog",
-    "title": "ARCHITECTURE.md",
+    "title": "ARCHITECTURE.md: why every repo needs a short code map",
     "by": "Alex Kladov (matklad)",
     "url": "https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html",
     "note": "Short argument for a codemap file in every repo; add one to ml-compilers-log now."
@@ -222,26 +222,26 @@
    },
    {
     "kind": "repo",
-    "title": "build-your-own-x",
+    "title": "build-your-own-x: an index of from-scratch tutorials",
     "by": "CodeCrafters community",
     "url": "https://github.com/codecrafters-io/build-your-own-x",
     "note": "An index of from-scratch tutorials; bookmark the Programming Language, Database and Neural Network sections for side projects."
    },
    {
     "kind": "repo",
-    "title": "GitHub starter workflow: C/C++ with Make",
+    "title": "GitHub Actions starter workflow for a C project built with Make",
     "url": "https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml",
     "note": "The official minimal workflow that runs make on every push; compare it with your own CI file."
    },
    {
     "kind": "repo",
-    "title": "GitHub starter workflow: Python application",
+    "title": "GitHub Actions starter workflow for a Python project",
     "url": "https://github.com/actions/starter-workflows/blob/main/ci/python-app.yml",
     "note": "Official workflow that installs dependencies and runs pytest; shows the job and step layout your CI needs."
    },
    {
     "kind": "repo",
-    "title": "gdb-dashboard",
+    "title": "gdb-dashboard: a more readable GDB screen",
     "url": "https://github.com/cyrus-and/gdb-dashboard",
     "note": "A single `.gdbinit` that shows registers, source, stack and memory at each stop; a reference for a productive gdb setup."
    },
@@ -254,14 +254,14 @@
    },
    {
     "kind": "repo",
-    "title": "samply",
+    "title": "samply: a simple CPU profiler for Mac, Linux and Windows",
     "by": "Markus Stange (Mozilla)",
     "url": "https://github.com/mstange/samply",
     "note": "A sampling CPU profiler for Linux, macOS and Windows that opens results in the Firefox Profiler UI; use it as a lower-friction alternative to perf + flamegraph scripts for the profiling exercises."
    },
    {
     "kind": "repo",
-    "title": "torch-profiling-tutorial",
+    "title": "PyTorch profiling tutorial",
     "by": "Quentin Anthony",
     "url": "https://github.com/Quentin-Anthony/torch-profiling-tutorial",
     "note": "Practical walkthrough of `torch.profiler` and Nsight traces on real training code; focus on how to read a trace timeline and spot CPU launch overhead versus GPU work."
@@ -282,7 +282,7 @@
    },
    {
     "kind": "blog",
-    "title": "New zine: The Secret Rules of the Terminal",
+    "title": "The Secret Rules of the Terminal (zine)",
     "by": "Julia Evans",
     "url": "https://jvns.ca/blog/2025/06/24/new-zine--the-secret-rules-of-the-terminal/",
     "note": "Links the free blog posts behind the zine (PATH, pipe buffering, escape codes); read the linked posts to fix the confusing terminal behaviour beginners hit."
@@ -297,77 +297,77 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "CS50x 2026 Week 1: C",
+    "title": "CS50 week 1: your first C programs",
     "url": "https://cs50.harvard.edu/x/weeks/1/",
     "detail": "Watch at 1.5x if you already program. Focus on compiling with clang, types and printf format specifiers.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS50x Problem Set 1: Mario (more comfortable) and Credit",
+    "title": "CS50 problem set 1: Mario (more comfortable) and Credit",
     "url": "https://cs50.harvard.edu/x/psets/1/",
     "detail": "Do the 'more comfortable' versions; they need nested loops and integer digit arithmetic.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CS50x 2026 Week 2: Arrays",
+    "title": "CS50 week 2: arrays",
     "url": "https://cs50.harvard.edu/x/weeks/2/",
     "detail": "Focus on strings as char arrays ending in `'\\0'`, and on `argc/argv`.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS50x Problem Set 2: Caesar (or Substitution)",
+    "title": "CS50 problem set 2: Caesar (or Substitution)",
     "url": "https://cs50.harvard.edu/x/psets/2/caesar/",
     "detail": "Implement it, then rebuild with `-fsanitize=address` and introduce an out-of-bounds read to see what ASan reports.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CS50x 2026 Week 4: Memory",
+    "title": "CS50 week 4: memory and pointers",
     "url": "https://cs50.harvard.edu/x/weeks/4/",
     "detail": "Pointers, `malloc/free`, stack vs heap, valgrind. Watch all of it.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Beej's Guide to C, ch. 5-7: Pointers (Cower In Fear!), Arrays, Strings",
+    "title": "Beej's Guide to C, ch. 5-7: pointers, arrays, strings",
     "url": "https://beej.us/guide/bgc/",
     "detail": "Type out each example and predict its output before running it.",
     "bot_block": true
    },
    {
     "kind": "read",
-    "title": "Beej's Guide to C, ch. 8 Structs, ch. 11 Pointers II: Arithmetic, ch. 12 Manual Memory Allocation",
+    "title": "Beej's Guide to C, ch. 8, 11, 12: structs, pointer arithmetic, malloc and free",
     "url": "https://beej.us/guide/bgc/",
     "detail": "Pointer arithmetic here is the same idea as tensor strides in Module 7.",
     "bot_block": true
    },
    {
     "kind": "do",
-    "title": "CS50x Problem Set 4: Filter (less comfortable) and Recover",
+    "title": "CS50 problem set 4: Filter (less comfortable) and Recover",
     "url": "https://cs50.harvard.edu/x/psets/4/recover/",
     "detail": "Filter is 2-D array indexing over pixels; Recover is raw byte I/O with `fread`. Do both.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CS50x 2026 Week 5: Data Structures",
+    "title": "CS50 week 5: data structures",
     "url": "https://cs50.harvard.edu/x/weeks/5/",
     "detail": "Linked lists, trees and hash tables built from structs and pointers.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS50x Problem Set 5: Speller",
+    "title": "CS50 problem set 5: Speller (build a fast hash table)",
     "url": "https://cs50.harvard.edu/x/psets/5/speller/",
     "detail": "Write the hash table. valgrind must report zero leaks; compare your timing against the staff solution.",
     "bot_block": false
    },
    {
     "kind": "build",
-    "title": "Build Your Own Lisp, ch. 6-10 (Parsing through Q-Expressions)",
+    "title": "Build Your Own Lisp, ch. 6-10: write a small interpreter in C",
     "url": "https://buildyourownlisp.com/chapter6_parsing",
     "detail": "Chapters 6 Parsing through 10 Q-Expressions, including the bonus marks. This is your first tree-walking interpreter.",
     "bot_block": false
@@ -393,12 +393,12 @@
     "note": "Pager and B-tree in C."
    },
    {
-    "title": "rswier/c4: c4.c",
+    "title": "c4: a C compiler in four functions",
     "url": "https://github.com/rswier/c4/blob/master/c4.c",
     "note": "Keep for Module 12; skim now."
    },
    {
-    "title": "Beej ch. 17: Multifile Projects",
+    "title": "Beej's Guide to C, ch. 17: projects with many files",
     "url": "https://beej.us/guide/bgc/",
     "note": "Headers, separate compilation, the linker."
    }
@@ -443,13 +443,13 @@
   },
   "solutions": [
    {
-    "title": "BuildYourOwnLisp (author's source)",
+    "title": "Build Your Own Lisp: the author's source code",
     "url": "https://github.com/orangeduck/BuildYourOwnLisp",
     "note": "Daniel Holden's repo for the book, with the per-chapter source files; diff your chapter 6-10 code against them.",
     "for": "Build (1): Build Your Own Lisp ch. 6-10"
    },
    {
-    "title": "benhoyt/ht",
+    "title": "ht: a small hash table in C (Ben Hoyt)",
     "url": "https://github.com/benhoyt/ht",
     "note": "A small, readable open-addressing hash table in C with FNV-1a hashing and resizing, plus tests and benchmarks.",
     "for": "Build (2): generic open-addressing hash map"
@@ -461,7 +461,7 @@
     "for": "Build (2) and Problem Set 5: Speller"
    },
    {
-    "title": "chibicc",
+    "title": "chibicc: a small C compiler to read",
     "url": "https://github.com/rui314/chibicc",
     "note": "A complete C11 compiler written in clean C with one commit per feature; a model of idiomatic C data structures such as linked lists, tokens and string handling.",
     "for": "Project: tcore code style reference"
@@ -505,21 +505,21 @@
    },
    {
     "kind": "talk",
-    "title": "CppCon 2014: Mike Acton \"Data-Oriented Design and C++\"",
+    "title": "Data-Oriented Design and C++ (CppCon 2014)",
     "by": "Mike Acton (CppCon)",
     "url": "https://www.youtube.com/watch?v=rX0ItVEVjHc",
     "note": "Argues that data layout, not code, determines performance; this mindset drives tensor layout choices later."
    },
    {
     "kind": "repo",
-    "title": "stb single-file libraries",
+    "title": "stb: single-file C libraries to read and reuse",
     "by": "Sean Barrett",
     "url": "https://github.com/nothings/stb",
     "note": "Production C libraries in single headers; read `stb_ds.h` to see a generic dynamic array and hash map done with macros."
    },
    {
     "kind": "talk",
-    "title": "Designing and Evaluating Reusable Components - 2004",
+    "title": "Designing and Evaluating Reusable Components (2004 talk)",
     "by": "Casey Muratori",
     "url": "https://www.youtube.com/watch?v=ZQ5_u8Lgvyk",
     "note": "Muratori on API design for C libraries (granularity, retained vs immediate); apply it to tcore's public API."
@@ -562,63 +562,63 @@
   "steps": [
    {
     "kind": "read",
-    "title": "learncpp.com: Introduction to classes, Destructors",
+    "title": "learncpp.com: classes and destructors",
     "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-classes/",
     "detail": "Read the classes chapter through constructors, then the destructors lesson (`introduction-to-destructors`). Compare each class with the C struct plus init/free functions you wrote for `tcore`.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Back to Basics: RAII and the Rule of Zero (Arthur O'Dwyer, CppCon 2019)",
+    "title": "RAII and the Rule of Zero (Arthur O'Dwyer, CppCon 2019)",
     "url": "https://www.youtube.com/watch?v=7Qgd9B1KuMQ",
     "detail": "The core idea of C++ resource management. Pause at each class he writes and list which of the five special member functions it needs.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "learncpp.com: Introduction to smart pointers and move semantics, Move constructors and move assignment, std::unique_ptr",
+    "title": "learncpp.com: smart pointers, move semantics and std::unique_ptr",
     "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-smart-pointers-move-semantics/",
     "detail": "Then read `move-constructors-and-move-assignment` and `stdunique_ptr` from the same chapter. Type out every example and predict which constructor runs before you run it.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Back to Basics: Move Semantics, part 1 (Klaus Iglberger, CppCon 2019)",
+    "title": "Move semantics, part 1 (Klaus Iglberger, CppCon 2019)",
     "url": "https://www.youtube.com/watch?v=St0MNEU5b0o",
     "detail": "Lvalues, rvalues, `std::move` and the moved-from state. Watch part 2 if forwarding references are still unclear.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "learncpp.com: Function templates, Class templates, Non-type template parameters",
+    "title": "learncpp.com: function and class templates",
     "url": "https://www.learncpp.com/cpp-tutorial/function-templates/",
     "detail": "Then `class-templates` and `non-type-template-parameters`. Templates over a dtype and a compile-time size are exactly how CUTLASS and CuTe describe tiles in Module 34.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "learncpp.com: Introduction to lambdas, Lambda captures",
+    "title": "learncpp.com: lambdas and captures",
     "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/",
     "detail": "Then `lambda-captures`. You will pass lambdas as the elementwise op in the project.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Stanford CS106L: Standard C++ Programming, lecture slides",
+    "title": "Stanford CS106L lecture slides: standard C++ programming",
     "url": "https://web.stanford.edu/class/cs106l/",
     "detail": "Read the slides on templates, RAII and smart pointers, and move semantics. They show the modern idioms (C++20 and later) in fewer pages than a book.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "C++ Core Guidelines: R (Resource management), C.20 and C.21, F.15 to F.18 (parameter passing)",
+    "title": "C++ Core Guidelines: resource management (R), the rule of zero (C.20, C.21) and parameter passing (F.15-F.18)",
     "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
     "detail": "Read these sections only; the document is a reference. Use the rules as a review checklist for your project code.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "An Introduction to Modern CMake: Introduction to the basics, Adding features, Testing",
+    "title": "An Introduction to Modern CMake: basics, features, testing",
     "url": "https://cliutils.gitlab.io/modern-cmake/",
     "detail": "Learn targets, `target_link_libraries` with PUBLIC/PRIVATE, and `FetchContent`. Every C++ project from here on (LLVM passes, MLIR, nanobind) builds with CMake.",
     "bot_block": false
@@ -632,14 +632,14 @@
    },
    {
     "kind": "read",
-    "title": "nanobind: Installation, Setting up a build system, The nb::ndarray class",
+    "title": "nanobind: call your C++ from Python and pass arrays",
     "url": "https://nanobind.readthedocs.io/en/latest/",
     "detail": "Bind one function first, then read the `ndarray` page: it shows how to share a buffer with NumPy and PyTorch without copying.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "llvm-tutor: build HelloWorld and OpcodeCounter",
+    "title": "llvm-tutor: build your first LLVM passes (HelloWorld, OpcodeCounter)",
     "url": "https://github.com/banach-space/llvm-tutor",
     "detail": "Build out of tree against an installed LLVM and run both passes with `opt -load-pass-plugin`. On macOS the plugin ends in `.dylib`, not `.so`. This is the setup the LLVM pass in Module 13 uses.",
     "bot_block": false
@@ -707,13 +707,13 @@
   },
   "solutions": [
    {
-    "title": "wjakob/nanobind_example",
+    "title": "nanobind example project",
     "url": "https://github.com/wjakob/nanobind_example",
     "note": "The nanobind author's minimal project: CMake plus scikit-build-core packaging. Copy its layout for the Python module.",
     "for": "Project: nanobind module"
    },
    {
-    "title": "banach-space/llvm-tutor",
+    "title": "llvm-tutor source code",
     "url": "https://github.com/banach-space/llvm-tutor",
     "note": "Each pass comes with LIT tests; read OpcodeCounter's source for how to walk functions, blocks and instructions.",
     "for": "Build (2): extend the HelloWorld pass"
@@ -722,14 +722,14 @@
   "deeper": [
    {
     "kind": "talk",
-    "title": "CppCon 2014: Herb Sutter \"Back to the Basics! Essentials of Modern C++ Style\"",
+    "title": "Back to the Basics! Essentials of Modern C++ Style (CppCon 2014)",
     "by": "Herb Sutter (CppCon)",
     "url": "https://www.youtube.com/watch?v=xnqTKD8uD64",
     "note": "Default habits for parameter passing, smart pointers and `auto`; the reasoning behind the Core Guidelines you read."
    },
    {
     "kind": "talk",
-    "title": "Back to Basics: Move Semantics (Nicolai Josuttis, CppCon 2021)",
+    "title": "Move semantics in depth (Nicolai Josuttis, CppCon 2021)",
     "by": "Nicolai Josuttis (CppCon)",
     "url": "https://www.youtube.com/watch?v=Bt3zcJZIalk",
     "note": "A second explanation of move semantics from the author of the standard reference on the topic."
@@ -758,70 +758,70 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lectures 2-3: Bits, Bytes and Integers",
+    "title": "CMU 15-213 lectures 2-3 slides: bits, bytes and integers",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf",
     "detail": "Videos are in the 15-213 F15 Panopto folder (see extras). Focus on two's complement, casting and overflow.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Dive into Systems ch. 4: Binary and Data Representation",
+    "title": "Dive into Systems ch. 4: how numbers are stored in binary",
     "url": "https://diveintosystems.org/book/C4-Binary/index.html",
     "detail": "Do the inline exercises, especially signed/unsigned conversion.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS:APP Data Lab: all puzzles",
+    "title": "CS:APP Data Lab: bit-twiddling puzzles",
     "url": "http://csapp.cs.cmu.edu/3e/datalab.pdf",
     "detail": "Get `datalab-handout` from the labs page. Solve every bit and float puzzle within the op limits; run `./btest` and `./dlc` until both pass.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lecture 4: Floating Point",
+    "title": "CMU 15-213 lecture 4 slides: floating point",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/04-float.pdf",
     "detail": "Sign, exponent and fraction fields, denormals, rounding, and why float addition is not associative. Module 4 and the reduction kernels later depend on the last point.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lectures 5-6: Machine-Level Programming I-II (Basics, Control)",
+    "title": "CMU 15-213 lectures 5-6 slides: x86-64 assembly basics and control flow",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/05-machine-basics.pdf",
     "detail": "Then `06-machine-control.pdf`. Registers, `mov`, `lea`, condition codes, jumps, loops.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Dive into Systems ch. 7: x86-64 Assembly, sections 7.1-7.6",
+    "title": "Dive into Systems ch. 7.1-7.6: x86-64 assembly",
     "url": "https://diveintosystems.org/book/C7-x86_64/index.html",
     "detail": "Read 7.1 Assembly Basics through 7.6 Recursion and paste each example into Compiler Explorer.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lectures 7-9: Procedures, Data, Advanced",
+    "title": "CMU 15-213 lectures 7-9 slides: function calls, data layout and more assembly",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/07-machine-procedures.pdf",
     "detail": "Then `08-machine-data.pdf` and `09-machine-advanced.pdf`. Stack frames, calling convention, arrays/structs layout, buffer overflow.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Compiler Explorer: compile your Module 1 functions",
+    "title": "Compiler Explorer: see the assembly for your Module 1 functions",
     "url": "https://godbolt.org/",
     "detail": "Compare `-O0` and `-O2` for a sum loop, a struct field access and a recursive function. Annotate the `-O2` asm by hand.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS:APP Bomb Lab: phases 1-6",
+    "title": "CS:APP Bomb Lab: defuse six phases by reading assembly",
     "url": "http://csapp.cs.cmu.edu/3e/bomblab.pdf",
     "detail": "Use gdb (`break`, `stepi`, `x/s`, `info registers`) and `objdump -d`. For each phase, note which C construct it encodes (comparison, loop, switch, recursion, linked list).",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "cpu.land ch. 1-5: The Basics through The Translator in Your Computer",
+    "title": "cpu.land ch. 1-5: how your computer runs a program",
     "url": "https://cpu.land/the-basics",
     "detail": "Chapters 1 The Basics, 2 Slice Dat Time, 3 How to Run a Program, 4 Becoming an Elf-Lord, 5 The Translator in Your Computer: syscalls, interrupts, exec, ELF and paging.",
     "bot_block": false
@@ -837,12 +837,12 @@
   ],
   "extra": [
    {
-    "title": "15-213 F15 lecture videos (Panopto folder)",
+    "title": "CMU 15-213 Fall 2015 lecture videos",
     "url": "https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%22b96d90ae-9871-4fae-91e2-b1627b43e25e%22",
     "note": "The recorded lectures matching the slides above."
    },
    {
-    "title": "nand2tetris, projects 1-5",
+    "title": "nand2tetris projects 1-5: build a computer from logic gates",
     "url": "https://www.nand2tetris.org/course",
     "note": "Gates to CPU."
    },
@@ -852,7 +852,7 @@
     "note": "If you are on Apple Silicon."
    },
    {
-    "title": "Ian Lance Taylor, Linkers part 1",
+    "title": "Ian Lance Taylor, Linkers, part 1",
     "url": "https://www.airs.com/blog/archives/38",
     "note": "20-part series."
    }
@@ -898,19 +898,19 @@
   },
   "solutions": [
    {
-    "title": "Exely/CSAPP-Labs",
+    "title": "CS:APP lab solutions (Exely)",
     "url": "https://github.com/Exely/CSAPP-Labs",
     "note": "Solutions and notes for all CS:APP 3e labs, including Data Lab bit puzzles and Bomb Lab phase walkthroughs.",
     "for": "Data Lab and Bomb Lab"
    },
    {
-    "title": "Kiprey/Skr_Learning",
+    "title": "CS:APP lab solutions and notes (Kiprey)",
     "url": "https://github.com/Kiprey/Skr_Learning",
     "note": "Study notes with detailed CS:APP lab write-ups (Chinese) that explain the reasoning behind each Bomb Lab phase.",
     "for": "Bomb Lab phases 1-6"
    },
    {
-    "title": "Seterplus/CSAPP",
+    "title": "CS:APP lab solutions (Seterplus)",
     "url": "https://github.com/Seterplus/CSAPP",
     "note": "A second independent set of CS:APP lab solutions, useful to compare alternate Data Lab tricks.",
     "for": "Data Lab"
@@ -919,14 +919,14 @@
   "deeper": [
    {
     "kind": "talk",
-    "title": "CppCon 2017: Matt Godbolt \"What Has My Compiler Done for Me Lately? Unbolting the Compiler's Lid\"",
+    "title": "What Has My Compiler Done for Me Lately? (CppCon 2017)",
     "by": "Matt Godbolt (CppCon)",
     "url": "https://www.youtube.com/watch?v=bSkpMdDe4g4",
     "note": "The Compiler Explorer author reads x86 output live; watch the multiplication, division and loop sections before the portfolio project."
    },
    {
     "kind": "talk",
-    "title": "CppCon 2019: Chandler Carruth \"There Are No Zero-cost Abstractions\"",
+    "title": "There Are No Zero-cost Abstractions (CppCon 2019)",
     "by": "Chandler Carruth (CppCon)",
     "url": "https://www.youtube.com/watch?v=rHIkrotSwcc",
     "note": "An LLVM lead traces how calling convention and ABI rules cost real instructions; ties directly to the System V write-up."
@@ -940,14 +940,14 @@
    },
    {
     "kind": "book",
-    "title": "Optimization manuals (instruction tables, microarchitecture)",
+    "title": "Agner Fog's optimization manuals: instruction timings and CPU internals",
     "by": "Agner Fog",
     "url": "https://www.agner.org/optimize/",
     "note": "The standard reference on x86 instruction latencies and pipelines; read manual 3 (microarchitecture) for your CPU family."
    },
    {
     "kind": "problems",
-    "title": "uops.info instruction tables",
+    "title": "uops.info: measured speed of every x86 instruction",
     "by": "Andreas Abel and Jan Reineke",
     "url": "https://uops.info/",
     "note": "Measured latency, throughput and ports for every x86 instruction; look up each instruction in your `-O2` annotations."
@@ -975,10 +975,10 @@
    },
    {
     "kind": "course",
-    "title": "CMU 15-213 current offering",
+    "title": "CMU 15-213: the current course",
     "by": "CMU",
     "url": "https://www.cs.cmu.edu/~213/",
-    "note": "The live course page with current schedule and lab updates if F15 material feels dated."
+    "note": "The live course page with current schedule and lab updates if the 2015 slides feel dated."
    },
    {
     "kind": "blog",
@@ -1018,21 +1018,21 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lecture 11: The Memory Hierarchy",
+    "title": "CMU 15-213 lecture 11 slides: the memory hierarchy",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/11-memory-hierarchy.pdf",
     "detail": "Locality, the latency pyramid, why caches work.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lecture 12: Cache Memories",
+    "title": "CMU 15-213 lecture 12 slides: cache memories",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/12-cache-memories.pdf",
     "detail": "Sets, ways and lines, miss classification, and the matmul loop-order analysis at the end. This is the core lecture of the module.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Dive into Systems ch. 11: Storage and the Memory Hierarchy, sections 11.3-11.5",
+    "title": "Dive into Systems ch. 11.3-11.5: locality and caches",
     "url": "https://diveintosystems.org/book/C11-MemHierarchy/index.html",
     "detail": "Read 11.3 Locality, 11.4 Caching and 11.5 Cache Analysis and Cachegrind; do the cache-mapping exercises.",
     "bot_block": false
@@ -1046,35 +1046,35 @@
    },
    {
     "kind": "read",
-    "title": "Drepper, What Every Programmer Should Know About Memory, §3 CPU Caches and §6.2 Cache Access",
+    "title": "Drepper, What Every Programmer Should Know About Memory: section 3 (CPU caches) and 6.2 (cache access)",
     "url": "https://people.freebsd.org/~lstewart/articles/cpumemory.pdf",
     "detail": "Skip §2 (DRAM hardware) and §4-5. §6.2 has the tiled matmul with measured speedups.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS:APP Cache Lab Part A: cache simulator",
+    "title": "CS:APP Cache Lab part A: write a cache simulator",
     "url": "http://csapp.cs.cmu.edu/3e/cachelab.pdf",
     "detail": "Write `csim.c` that replays valgrind traces with LRU; match `csim-ref` on all test traces.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS:APP Cache Lab Part B: optimized transpose",
+    "title": "CS:APP Cache Lab part B: write a cache-friendly matrix transpose",
     "url": "http://csapp.cs.cmu.edu/3e/cachelab.pdf",
     "detail": "Blocked transpose for `32x32` (`<300` misses), `64x64` (`<1300`) and `61x67` (`<2000`). This is your first hand-written schedule.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CMU 15-213 F15 Lecture 17: Virtual Memory Concepts",
+    "title": "CMU 15-213 lecture 17 slides: virtual memory",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/17-vm-concepts.pdf",
     "detail": "Pages, page tables and the TLB; why large strides cause TLB misses.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Algorithms for Modern Hardware: RAM & CPU Caches chapter",
+    "title": "Algorithms for Modern Hardware: RAM and CPU caches",
     "url": "https://en.algorithmica.org/hpc/cpu-cache/",
     "detail": "Read Memory Bandwidth, Memory Latency, Cache Lines, Cache Associativity and AoS and SoA; run two of the benchmarks.",
     "bot_block": false
@@ -1090,7 +1090,7 @@
   ],
   "extra": [
    {
-    "title": "Berkeley CS61C",
+    "title": "Berkeley CS61C: machine structures course",
     "url": "https://cs61c.org/",
     "note": "Caches and SIMD labs."
    },
@@ -1105,7 +1105,7 @@
     "note": "Companion to the caches story."
    },
    {
-    "title": "15-213 F15 Lecture 10: Program Optimization",
+    "title": "CMU 15-213 lecture 10 slides: program optimization",
     "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/10-optimization.pdf",
     "note": "Loop unrolling, multiple accumulators, ILP."
    }
@@ -1153,25 +1153,25 @@
   },
   "solutions": [
    {
-    "title": "Exely/CSAPP-Labs (Cache Lab)",
+    "title": "CS:APP Cache Lab solution (Exely)",
     "url": "https://github.com/Exely/CSAPP-Labs",
     "note": "Contains a `csim.c` LRU simulator and blocked transpose solutions for the `32x32`, `64x64` and `61x67` cases with miss counts.",
     "for": "Cache Lab Parts A and B"
    },
    {
-    "title": "flame/how-to-optimize-gemm",
+    "title": "How to optimize GEMM: step-by-step matrix multiply tuning",
     "url": "https://github.com/flame/how-to-optimize-gemm",
     "note": "The BLIS group's step-by-step GEMM tutorial: each file adds one optimization (`4x4` micro-kernel, SSE, packing) with plots.",
     "for": "Project: single-core CPU SGEMM"
    },
    {
-    "title": "flame/blislab",
+    "title": "BLISlab: build a fast matrix multiply in exercises",
     "url": "https://github.com/flame/blislab",
     "note": "A teaching framework for BLIS-style GEMM with packing and a register micro-kernel in C; shows the five-loop structure of a fast SGEMM.",
     "for": "Project: register blocking and packing steps"
    },
    {
-    "title": "Seterplus/CSAPP (Cache Lab)",
+    "title": "CS:APP Cache Lab solution (Seterplus)",
     "url": "https://github.com/Seterplus/CSAPP",
     "note": "An alternate Cache Lab solution to compare transpose blocking strategies, especially the `64x64` case.",
     "for": "Cache Lab Part B"
@@ -1201,35 +1201,35 @@
    },
    {
     "kind": "talk",
-    "title": "code::dive conference 2014 - Scott Meyers: Cpu Caches and Why You Care",
+    "title": "CPU Caches and Why You Care (Scott Meyers, code::dive 2014)",
     "by": "Scott Meyers",
     "url": "https://www.youtube.com/watch?v=WDIkqP4JbkE",
     "note": "Concrete examples of false sharing and traversal order; watch for the matrix traversal and false sharing demos."
    },
    {
     "kind": "talk",
-    "title": "CppCon 2014: Chandler Carruth \"Efficiency with Algorithms, Performance with Data Structures\"",
+    "title": "Efficiency with Algorithms, Performance with Data Structures (CppCon 2014)",
     "by": "Chandler Carruth (CppCon)",
     "url": "https://www.youtube.com/watch?v=fHNmRkzxHWs",
     "note": "Why contiguous data beats pointer chasing, with cache numbers; watch the section on linked lists vs vectors."
    },
    {
     "kind": "talk",
-    "title": "CppCon 2015: Chandler Carruth \"Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My!\"",
+    "title": "Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My! (CppCon 2015)",
     "by": "Chandler Carruth (CppCon)",
     "url": "https://www.youtube.com/watch?v=nXaxk27zwlk",
     "note": "Live benchmarking with perf and reading the hot loop; copy his methodology for your loop-order measurements."
    },
    {
     "kind": "repo",
-    "title": "google/benchmark",
+    "title": "Google Benchmark: a C++ library for timing code",
     "by": "Google",
     "url": "https://github.com/google/benchmark",
     "note": "A microbenchmark library that handles warmup and statistics; use its `DoNotOptimize` idea in your C timing harness."
    },
    {
     "kind": "video",
-    "title": "BENCHMARKING in C++ (how to measure performance)",
+    "title": "How to benchmark C++ code (video)",
     "by": "The Cherno",
     "url": "https://www.youtube.com/watch?v=YG4jexlSAjc",
     "note": "A short practical intro to timing code correctly, useful before the six-loop-order plots."
@@ -1257,21 +1257,21 @@
    },
    {
     "kind": "lecture",
-    "title": "6.172 Lecture 15: Cache-Oblivious Algorithms",
+    "title": "MIT 6.172 lecture 15: cache-oblivious algorithms",
     "by": "Julian Shun (MIT OCW)",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/mit6_172f18_lec15/",
     "note": "Ideal-cache model, cache-miss analysis and recursive matmul/stencil examples; the analysis framework complements the hand-tuned blocking in the Goto papers."
    },
    {
     "kind": "problems",
-    "title": "6.172 Homework 8: Cache-Oblivious Algorithms",
+    "title": "MIT 6.172 homework 8: cache-oblivious algorithms",
     "by": "MIT OCW",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/homework-8-cache-oblivious-algorithms/",
     "note": "Programming assignment that pairs with Lecture 15; do the cache-miss counting parts before writing code."
    },
    {
     "kind": "course",
-    "title": "Performance Ninja",
+    "title": "Performance Ninja: hands-on performance tuning exercises",
     "by": "Denis Bakhvalov",
     "url": "https://github.com/dendibakh/perf-ninja",
     "note": "Free lab-based course with videos where each lab is a slow kernel to fix; the memory-bound labs (data packing, loop interchange, false sharing) map directly to this module."
@@ -1286,70 +1286,70 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "3Blue1Brown Essence of Linear Algebra ch. 1-4: Vectors, Linear combinations/span, Linear transformations, Matrix multiplication",
+    "title": "3Blue1Brown, Essence of Linear Algebra ch. 1-4: vectors, linear transformations, matrix multiplication",
     "url": "https://www.3blue1brown.com/lessons/linear-transformations",
     "detail": "Also watch the span and matrix-multiplication lessons. Goal: read a matrix's columns as where the basis vectors land.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown ch. 6-7: Determinant, Inverse matrices / column space / null space",
+    "title": "3Blue1Brown ch. 6-7: determinants, inverses, column space and null space",
     "url": "https://www.3blue1brown.com/lessons/determinant",
     "detail": "Then watch the inverse matrices lesson.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown ch. 9, 13-14: Dot products, Change of basis, Eigenvectors",
+    "title": "3Blue1Brown ch. 9, 13-14: dot products, change of basis, eigenvectors",
     "url": "https://www.3blue1brown.com/lessons/dot-products",
     "detail": "Then the change of basis and eigenvectors lessons. Skip cross products.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 18.06SC Lecture 1: The Geometry of Linear Equations",
+    "title": "MIT 18.06 lecture 1: the geometry of linear equations",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/the-geometry-of-linear-equations/",
     "detail": "Watch the lecture, then do the session's problem set and check against the solutions.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 18.06SC Lectures 2-3: Elimination with Matrices; Multiplication and Inverse Matrices",
+    "title": "MIT 18.06 lectures 2-3: elimination, matrix multiplication and inverses",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/elimination-with-matrices/",
     "detail": "Then `multiplication-and-inverse-matrices/`. Lecture 3 covers four ways to multiply matrices (row, column, columns times rows, blocks), which map to different kernel loop orders.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 18.06SC Lecture 4: Factorization into A = LU",
+    "title": "MIT 18.06 lecture 4: LU factorization",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/factorization-into-a-lu/",
     "detail": "Count the operations and confirm elimination costs about `n^3/3` multiply-adds.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 18.06SC Lecture 5: Transposes, Permutations, Vector Spaces",
+    "title": "MIT 18.06 lecture 5: transposes, permutations, vector spaces",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/transposes-permutations-vector-spaces/",
     "detail": "Permutation matrices reappear as tensor permute in Module 7.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 18.06SC Lectures 6, 10: Column Space and Nullspace; The Four Fundamental Subspaces",
+    "title": "MIT 18.06 lectures 6 and 10: column space, nullspace and the four subspaces",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/ax-b-and-the-four-subspaces/column-space-and-nullspace/",
     "detail": "Then `the-four-fundamental-subspaces/`. Do both problem sets.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "PyTorch blog, Inside the Matrix: Visualizing Matrix Multiplication",
+    "title": "Inside the Matrix: visualizing matrix multiplication (PyTorch blog)",
     "url": "https://pytorch.org/blog/inside-the-matrix/",
     "detail": "Read sections 2 and 3 (dot product, matrix-vector, summed outer products, expressions). Leave section 4 onward (attention) for Module 10.",
     "bot_block": false
    },
    {
     "kind": "build",
-    "title": "Pure-Python linear algebra library",
+    "title": "Write a small linear algebra library in pure Python",
     "url": "https://numpy.org/doc/stable/reference/routines.linalg.html",
     "detail": "Implement it as specified in build; use `numpy.linalg` only as the oracle in tests.",
     "bot_block": false
@@ -1370,7 +1370,7 @@
     "note": "More formal treatment."
    },
    {
-    "title": "MIT 18.06SC Unit II: Least squares, determinants, eigenvalues",
+    "title": "MIT 18.06 unit II: least squares, determinants, eigenvalues",
     "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/least-squares-determinants-and-eigenvalues/",
     "note": "Continue if you enjoy it."
    },
@@ -1418,25 +1418,25 @@
   },
   "solutions": [
    {
-    "title": "Reference LAPACK dgetrf2.f",
+    "title": "Reference LAPACK LU code (dgetrf2.f)",
     "url": "https://github.com/Reference-LAPACK/lapack/blob/master/SRC/dgetrf2.f",
     "note": "The reference recursive LU with partial pivoting; compare its pivot search and row swaps with your pure-Python version.",
     "for": "Build: LU with partial pivoting"
    },
    {
-    "title": "fastai/numerical-linear-algebra",
+    "title": "fast.ai numerical linear algebra notebooks",
     "url": "https://github.com/fastai/numerical-linear-algebra",
     "note": "Rachel Thomas's notebooks with worked NumPy code for LU, pivoting, stability and blocked algorithms.",
     "for": "Build and Project: LU and blocked algorithms"
    },
    {
-    "title": "mitmath/1806",
+    "title": "MIT 18.06 course notebooks",
     "url": "https://github.com/mitmath/1806",
     "note": "MIT 18.06 course repo with Julia notebooks and problem-set solutions on elimination, LU and the four subspaces.",
     "for": "18.06 problem sets"
    },
    {
-    "title": "flame/how-to-optimize-gemm",
+    "title": "How to optimize GEMM: step-by-step matrix multiply tuning",
     "url": "https://github.com/flame/how-to-optimize-gemm",
     "note": "Shows blocked matmul built up in steps; the blocking structure transfers directly to the NumPy tiled version.",
     "for": "Project: blocked matmul"
@@ -1452,7 +1452,7 @@
    },
    {
     "kind": "course",
-    "title": "Matrix Calculus for Machine Learning and Beyond (MIT 18.S096)",
+    "title": "Matrix Calculus for Machine Learning and Beyond (MIT course)",
     "by": "Alan Edelman and Steven G. Johnson",
     "url": "https://ocw.mit.edu/courses/18-s096-matrix-calculus-for-machine-learning-and-beyond-january-iap-2023/",
     "note": "The derivatives of matrix functions you need for autodiff in Part II; watch lectures 1-4."
@@ -1473,7 +1473,7 @@
    },
    {
     "kind": "course",
-    "title": "Cornell CS 4220: Numerical Analysis (Spring 2022)",
+    "title": "Cornell CS 4220: numerical analysis course",
     "by": "David Bindel",
     "url": "https://www.cs.cornell.edu/courses/cs4220/2022sp/",
     "note": "Bindel's lecture notes on LU, conditioning and backward error; read the linear systems weeks for the project's stability analysis."
@@ -1501,21 +1501,21 @@
    },
    {
     "kind": "course",
-    "title": "MIT 18.065: Matrix Methods in Data Analysis, Signal Processing, and Machine Learning",
+    "title": "MIT 18.065: matrix methods for data and machine learning (Gilbert Strang)",
     "by": "Gilbert Strang (MIT OCW)",
     "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/",
     "note": "Lecture videos and problem sets that go from SVD and low-rank approximation to backprop and convolution; watch the SVD and low-rank lectures first."
    },
    {
     "kind": "course",
-    "title": "CS 6210: Matrix Computations (Fall 2025)",
+    "title": "Cornell CS 6210: matrix computations course",
     "by": "David Bindel (Cornell)",
     "url": "https://www.cs.cornell.edu/courses/cs6210/2025fa/",
     "note": "Current notes and slides on floating point, blocking, LU/QR and conditioning; the early floating-point and performance lectures cover bf16 and why blocked algorithms matter."
    },
    {
     "kind": "course",
-    "title": "Math 221: Matrix Computations / Numerical Linear Algebra (Fall 2024)",
+    "title": "Berkeley Math 221: numerical linear algebra course",
     "by": "James Demmel (UC Berkeley)",
     "url": "https://people.eecs.berkeley.edu/~demmel/ma221_Fall24/",
     "note": "Full lecture notes from the author of Applied Numerical Linear Algebra; Lecture 2 on roundoff and low precision for ML is the most relevant part."
@@ -1530,42 +1530,42 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "3Blue1Brown, Essence of Calculus ch. 1-2: The essence of calculus; The paradox of the derivative",
+    "title": "3Blue1Brown, Essence of Calculus ch. 1-2: what a derivative is",
     "url": "https://www.3blue1brown.com/lessons/essence-of-calculus",
     "detail": "Chapter 2 is the next lesson, `/lessons/derivatives`.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown, Essence of Calculus ch. 3-4: Derivative formulas through geometry; Visualizing the chain rule and product rule",
+    "title": "3Blue1Brown, Essence of Calculus ch. 3-4: derivative rules and the chain rule",
     "url": "https://www.3blue1brown.com/lessons/chain-rule-and-product-rule",
     "detail": "Chapter 3 is `/lessons/derivatives-power-rule`. Pause on the chain rule section and redo it on paper for `sin(x^2)`.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Karpathy, Hacker's guide to Neural Networks, Chapter 1: Real-valued Circuits",
+    "title": "Karpathy, Hacker's Guide to Neural Networks, ch. 1: gradients as circuits",
     "url": "https://karpathy.github.io/neuralnets/",
     "detail": "Code the add, multiply and sigmoid gates with forward and backward in Python, then check each against a numerical gradient.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Parr & Howard, The Matrix Calculus You Need For Deep Learning: Introduction through Generalization of the Jacobian",
+    "title": "The Matrix Calculus You Need For Deep Learning: up to the Jacobian",
     "url": "https://explained.ai/matrix-calculus/",
     "detail": "Covers the scalar rule review, partial derivatives, and the Jacobian. Work the Jacobian examples by hand.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Parr & Howard: element-wise binary operators, scalar expansion, vector sum reduction, the chain rules",
+    "title": "The Matrix Calculus You Need For Deep Learning: element-wise ops, sums and the chain rules",
     "url": "https://explained.ai/matrix-calculus/#sec:1.4.2",
     "detail": "The sum-reduction and scalar-expansion results are the backward rules for sum and expand in your autograd.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Parr & Howard: the gradient of neuron activation and of the neural network loss function",
+    "title": "The Matrix Calculus You Need For Deep Learning: gradients of a neuron and a loss",
     "url": "https://explained.ai/matrix-calculus/#sec:1.5",
     "detail": "Derive `dL/dW` and `dL/db` for one linear+ReLU layer and check them numerically.",
     "bot_block": false
@@ -1579,7 +1579,7 @@
    },
    {
     "kind": "do",
-    "title": "Gradient check harness",
+    "title": "Write a gradient checker",
     "url": "https://cs231n.github.io/neural-networks-3/#gradient-checks",
     "detail": "Write `gradcheck(f, x)` in NumPy using the centered difference, float64 and relative error as the CS231n notes describe. Use it on your matmul, softmax and log-softmax derivations.",
     "bot_block": false
@@ -1595,7 +1595,7 @@
   ],
   "extra": [
    {
-    "title": "MIT 18.S096 Matrix Calculus for Machine Learning and Beyond (IAP 2023)",
+    "title": "MIT 18.S096: Matrix Calculus for Machine Learning and Beyond",
     "url": "https://ocw.mit.edu/courses/18-s096-matrix-calculus-for-machine-learning-and-beyond-january-iap-2023/",
     "note": "Lectures 1-3 treat derivatives as linear operators, Jacobians, and finite-difference checks."
    },
@@ -1648,25 +1648,25 @@
   },
   "solutions": [
    {
-    "title": "micrograd engine.py",
+    "title": "micrograd engine.py: a tiny autodiff engine",
     "url": "https://github.com/karpathy/micrograd/blob/master/micrograd/engine.py",
     "note": "Reference backward rules for `add`, `mul`, `pow`, `relu` as closures; compare your local-gradient formulas line by line.",
     "for": "Karpathy Hacker's guide gates and the scalar gradcheck"
    },
    {
-    "title": "PyTorch derivatives.yaml",
+    "title": "PyTorch derivatives.yaml: the derivative of every PyTorch op",
     "url": "https://github.com/pytorch/pytorch/blob/main/tools/autograd/derivatives.yaml",
     "note": "The production table of backward formulas for every ATen op; search for `mm`, `sum`, `expand`, `softmax` and `log_softmax` to check your derivations.",
     "for": "Build: matmul, sum(axis), broadcast add, softmax, cross-entropy backward"
    },
    {
-    "title": "mattjj/autodidact",
+    "title": "autodidact: a minimal autograd to read",
     "url": "https://github.com/mattjj/autodidact",
     "note": "A small teaching reimplementation of HIPS autograd with both a tape and vector-Jacobian product definitions for NumPy ops.",
     "for": "Project: reverse-mode AD on a tape"
    },
    {
-    "title": "JAX Autodidax",
+    "title": "JAX Autodidax: build JAX's core from scratch",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
     "note": "Builds forward mode (`jvp`), reverse mode via linearize and transpose, and their composition from scratch; the `jvp` and `vjp` sections match the project's Hessian-vector product.",
     "for": "Project: forward-mode, reverse-mode and forward-over-reverse HVP"
@@ -1675,7 +1675,7 @@
   "deeper": [
    {
     "kind": "repo",
-    "title": "HIPS/autograd",
+    "title": "autograd: the original Python autodiff library",
     "by": "Maclaurin, Duvenaud, Johnson",
     "url": "https://github.com/HIPS/autograd",
     "note": "The NumPy autodiff library that inspired JAX; read `autograd/numpy/numpy_vjps.py` for `vjp` rules of broadcasting and reductions."
@@ -1689,21 +1689,21 @@
    },
    {
     "kind": "book",
-    "title": "Parallel Computing and Scientific Machine Learning (18.337 notes)",
+    "title": "Parallel Computing and Scientific Machine Learning (MIT 18.337 notes)",
     "by": "Chris Rackauckas",
     "url": "https://book.sciml.ai/",
     "note": "The forward-mode and reverse-mode AD lectures implement dual numbers and adjoints and explain when each wins."
    },
    {
     "kind": "repo",
-    "title": "JAX ad.py (JVP and transpose machinery)",
+    "title": "JAX source: how forward and reverse mode autodiff are implemented (ad.py)",
     "by": "Google JAX team",
     "url": "https://github.com/google/jax/blob/main/jax/_src/interpreters/ad.py",
     "note": "See how a real system derives reverse mode by transposing linear JVPs; focus on `JVPTrace` and `backward_pass`."
    },
    {
     "kind": "course",
-    "title": "CMU 10-414/714 Deep Learning Systems",
+    "title": "CMU Deep Learning Systems course",
     "by": "Tianqi Chen, Zico Kolter",
     "url": "https://dlsyscourse.org/",
     "note": "Lectures 4-5 on automatic differentiation build reverse mode as extending the computational graph, the design your compiler will use."
@@ -1717,7 +1717,7 @@
    },
    {
     "kind": "lecture",
-    "title": "CSC321 Lecture 10: Automatic Differentiation",
+    "title": "Toronto CSC321 lecture 10 slides: automatic differentiation",
     "by": "Roger Grosse",
     "url": "https://www.cs.toronto.edu/~rgrosse/courses/csc321_2018/slides/lec10.pdf",
     "note": "Slides that walk through building a minimal autodiff library in the style of autograd, with the `vjp`-per-primitive structure."
@@ -1738,14 +1738,14 @@
    },
    {
     "kind": "lecture",
-    "title": "Lecture 3: Automatic Differentiation & Backprop (CS4787)",
+    "title": "Cornell CS4787 lecture 3: automatic differentiation and backprop",
     "by": "Cornell CS4787 (Chris De Sa)",
     "url": "https://www.cs.cornell.edu/courses/cs4787/2025fa/lectures/lecture3.html",
     "note": "Runnable lecture notes contrasting forward and reverse mode with cost analysis; focus on the memory cost of reverse mode."
    },
    {
     "kind": "lecture",
-    "title": "CS480/680 notes: Automatic Differentiation",
+    "title": "Waterloo CS480/680 notes: automatic differentiation",
     "by": "Yaoliang Yu (University of Waterloo)",
     "url": "https://cs.uwaterloo.ca/~y328yu/teaching/480/480-note-ad.pdf",
     "note": "Compact 2024 notes with a clean complexity comparison of forward and reverse mode; work through the time/space tradeoff section."
@@ -1755,7 +1755,7 @@
     "title": "Learn autodiff (Parts 1 and 2: scalars, then vectors and reverse mode)",
     "by": "Simone Scardapane",
     "url": "https://sscardapane.github.io/learn-autodiff",
-    "note": "Build reverse-mode autodiff step by step, from scalar graphs to vector Jacobians; do Part 2 after the Parr and Howard notes."
+    "note": "Build reverse-mode autodiff step by step, from scalar graphs to vector Jacobians; do Part 2 after The Matrix Calculus You Need For Deep Learning."
    }
   ],
   "stretch": "Implement checkpointed reverse mode (Griewank's binomial or `sqrt(n)` checkpointing) for a 1000-step recurrent function in your tape AD and plot peak memory vs recomputation FLOPs against the plain tape. Show memory falling from `O(n)` to `O(sqrt(n))` with less than 2x compute overhead, matching gradients to 1e-10 in float64."
@@ -1767,35 +1767,35 @@
   "steps": [
    {
     "kind": "read",
-    "title": "Rougier, From Python to NumPy, chapter \"Anatomy of an array\"",
+    "title": "From Python to NumPy: anatomy of an array",
     "url": "https://www.labri.fr/perso/nrougier/from-python-to-numpy/#anatomy-of-an-array",
     "detail": "Sections: memory layout, views and copies. Run every snippet.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Alex Riley (ajcr), An Illustrated Guide to Shape and Strides, parts 1-3",
+    "title": "An Illustrated Guide to Shape and Strides, parts 1-3",
     "url": "https://ajcr.net/stride-guide-part-1/",
     "detail": "Part 2 (`/stride-guide-part-2/`) covers transpose and C vs Fortran order; part 3 (`/stride-guide-part-3/`) covers `as_strided`. Compute each stride by hand before printing it.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Rougier, chapter \"Code vectorization\": Uniform vectorization",
+    "title": "From Python to NumPy: code vectorization",
     "url": "https://www.labri.fr/perso/nrougier/from-python-to-numpy/#code-vectorization",
     "detail": "Do the Game of Life section. Skip temporal and spatial vectorization on the first pass.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "numpy-100 #1-40",
+    "title": "100 NumPy exercises: #1-40",
     "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises.md",
     "detail": "No hints. Mark each one that relies on strides, broadcasting or views.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Edward Yang, PyTorch internals, first part (tensors, strides, storage, dispatch, extension points)",
+    "title": "Edward Yang, PyTorch internals (first part: tensors, strides, storage)",
     "url": "https://blog.ezyang.com/2019/05/pytorch-internals/",
     "detail": "The post is in two parts. Stop when it moves to working in the PyTorch codebase; the stride and storage diagrams are what you need here.",
     "bot_block": false
@@ -1816,7 +1816,7 @@
    },
    {
     "kind": "do",
-    "title": "numpy-100 stride exercises: #75, #76, #81, #84, #87",
+    "title": "100 NumPy exercises: stride tricks (#75, #76, #81, #84, #87)",
     "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises.md",
     "detail": "Sliding-window averages, shifted rows, contiguous `3x3` blocks and `4x4` block sums. Solve each with `numpy.lib.stride_tricks.as_strided` and write down the strides you passed.",
     "bot_block": false
@@ -1832,17 +1832,17 @@
   ],
   "extra": [
    {
-    "title": "fast.ai Part 2, Lessons 11-12",
+    "title": "fast.ai Part 2, lessons 11-12",
     "url": "https://course.fast.ai/Lessons/part2.html",
     "note": "Lesson 11 builds matrix multiplication from scratch; lesson 12 is mean-shift clustering."
    },
    {
-    "title": "numpy-100 #41-100",
+    "title": "100 NumPy exercises: #41-100",
     "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises.md",
     "note": "The remaining exercises."
    },
    {
-    "title": "NumPy docs: Broadcasting",
+    "title": "NumPy docs: how broadcasting works",
     "url": "https://numpy.org/doc/stable/user/basics.broadcasting.html",
     "note": "The exact rules."
    }
@@ -1875,7 +1875,7 @@
    },
    "references": [
     {
-     "title": "tinygrad v0.9.0, tinygrad/shape/shapetracker.py",
+     "title": "tinygrad ShapeTracker source (v0.9.0): views and strides without copying",
      "url": "https://github.com/tinygrad/tinygrad/blob/v0.9.0/tinygrad/shape/shapetracker.py"
     }
    ],
@@ -1885,25 +1885,25 @@
   },
   "solutions": [
    {
-    "title": "numpy-100 with solutions",
+    "title": "100 NumPy exercises with solutions",
     "url": "https://github.com/rougier/numpy-100/blob/master/100_Numpy_exercises_with_solutions.md",
     "note": "Rougier's own answers to all 100 exercises, including the `as_strided` solutions for #75, #76, #81, #84 and #87.",
-    "for": "numpy-100 #1-40 and stride exercises"
+    "for": "100 NumPy exercises #1-40 and stride tricks"
    },
    {
-    "title": "NumPy stride_tricks source",
+    "title": "NumPy stride_tricks source code",
     "url": "https://github.com/numpy/numpy/blob/main/numpy/lib/_stride_tricks_impl.py",
     "note": "The real `as_strided`, `broadcast_to` and `sliding_window_view`; `broadcast_to` shows stride-0 expand in production code.",
     "for": "Build: expand and broadcasting; stride exercises"
    },
    {
-    "title": "teenygrad tensor.py",
+    "title": "teenygrad tensor.py: a small tensor library to read",
     "url": "https://github.com/tinygrad/teenygrad/blob/main/teenygrad/tensor.py",
     "note": "A short tinygrad-style Tensor whose reshape, permute, expand, pad and shrink are movement ops; compare its broadcasting helper to yours.",
     "for": "Build: NDArray movement ops; Project: mini ShapeTracker"
    },
    {
-    "title": "MiniTorch (module 2: tensors)",
+    "title": "MiniTorch module 2: build tensors yourself",
     "url": "https://minitorch.github.io/",
     "note": "The tensor module docs walk through strides, `index_to_position` and `broadcast_index` with tests you can run against your own `NDArray`.",
     "for": "Build: NDArray indexing, strides and broadcasting"
@@ -1933,14 +1933,14 @@
    },
    {
     "kind": "repo",
-    "title": "CuTe layout docs (CUTLASS)",
+    "title": "CuTe layout docs (NVIDIA CUTLASS)",
     "by": "NVIDIA",
     "url": "https://github.com/NVIDIA/cutlass/blob/main/media/docs/cpp/cute/01_layout.md",
     "note": "Hierarchical `shape:stride` layouts used in real GPU kernels; read the coordinate-to-index mapping section and compare to your `NDArray`."
    },
    {
     "kind": "repo",
-    "title": "einops",
+    "title": "einops: readable tensor reshapes",
     "by": "Alex Rogozhnikov",
     "url": "https://github.com/arogozhnikov/einops",
     "note": "`rearrange` and `reduce` expressed as named axis patterns; reimplement `rearrange` on top of your reshape and permute."
@@ -1961,21 +1961,21 @@
    },
    {
     "kind": "course",
-    "title": "CMU 10-414/714 hw1-hw3",
+    "title": "CMU Deep Learning Systems homeworks 1-3: build a tensor library",
     "by": "Tianqi Chen, Zico Kolter",
     "url": "https://dlsyscourse.org/",
     "note": "Homework 3 has you build an `NDArray` backend with strides, `compact()` and device kernels; the closest graded version of this module's build."
    },
    {
     "kind": "lecture",
-    "title": "Tensor internals (Deep Learning course, slides 1.6)",
+    "title": "Tensor internals (lecture slides)",
     "by": "Francois Fleuret (University of Geneva)",
     "url": "https://fleuret.org/dlc/materials/dlc-slides-1-6-tensor-internals.pdf",
     "note": "Short slide deck showing storage, offset and strides, and how view, transpose and broadcasting (stride 0) avoid copies; good warm-up before writing your own strided tensor."
    },
    {
     "kind": "talk",
-    "title": "Simplifying GPU Programming with Parametric Tile-Level Tensors in Mojo (LLVM Dev Meeting 2024)",
+    "title": "Tile-level tensors for GPU programming in Mojo (LLVM Dev Meeting 2024)",
     "by": "Taei (Modular)",
     "url": "https://llvm.org/devmtg/2024-10/slides/techtalk/Taei-Simplifying-GPU-Programming-with-Parametric-Tile-Level-Tensors-In-Mojo.pdf",
     "note": "Slides on compile-time layouts and tiled tensors in a compiler; compare their layout algebra with CuTe layouts."
@@ -2011,42 +2011,42 @@
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown, ch. 2: Gradient descent, how neural networks learn",
+    "title": "3Blue1Brown ch. 2: gradient descent, how neural networks learn",
     "url": "https://www.3blue1brown.com/lessons/gradient-descent",
     "detail": "Cost as a function of all weights; the gradient as the direction to step.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown, ch. 3-4: What is backpropagation really doing?; Backpropagation calculus",
+    "title": "3Blue1Brown ch. 3-4: what backpropagation is doing, and its calculus",
     "url": "https://www.3blue1brown.com/lessons/backpropagation",
     "detail": "Chapter 4 is /lessons/backpropagation-calculus.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Karpathy, The spelled-out intro to neural networks and backpropagation: building micrograd (0:00-1:09:02)",
+    "title": "Karpathy, building micrograd, first half (0:00-1:09:02)",
     "url": "https://www.youtube.com/watch?v=VMj-3S1tku0",
     "detail": "Derivatives, the `Value` object, and manual backprop through an expression and a neuron. Type the code yourself.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Karpathy micrograd video, 1:09:02-end",
+    "title": "Karpathy, building micrograd, second half (1:09:02 to end)",
     "url": "https://www.youtube.com/watch?v=VMj-3S1tku0&t=4142s",
     "detail": "Per-op backward, topological sort, the bug when a node is used twice (1:22:28), PyTorch comparison, MLP and training loop. Note where gradients must be zeroed before each step.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "CS231n notes: Backpropagation, Intuitions",
+    "title": "CS231n notes: backpropagation intuitions",
     "url": "https://cs231n.github.io/optimization-2/",
     "detail": "Read \"Patterns in backward flow\" (add distributes, max routes, multiply swaps) and the vectorized gradients section.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Michael Nielsen, NNDL ch. 2: How the backpropagation algorithm works",
+    "title": "Michael Nielsen, Neural Networks and Deep Learning, ch. 2: how backpropagation works",
     "url": "http://neuralnetworksanddeeplearning.com/chap2.html",
     "detail": "The four fundamental equations in matrix form. Map each one to a line of your engine.",
     "bot_block": false
@@ -2060,7 +2060,7 @@
    },
    {
     "kind": "build",
-    "title": "Train on moons (micrograd demo.ipynb)",
+    "title": "Train a small network on the moons dataset (micrograd demo)",
     "url": "https://github.com/karpathy/micrograd/blob/master/demo.ipynb",
     "detail": "The demo uses an SVM max-margin loss and reaches 100% training accuracy. Reproduce its decision boundary with your engine.",
     "bot_block": false
@@ -2081,12 +2081,12 @@
     "note": "Forward-mode vs reverse-mode."
    },
    {
-    "title": "Nielsen NNDL ch. 1",
+    "title": "Michael Nielsen, Neural Networks and Deep Learning, ch. 1",
     "url": "http://neuralnetworksanddeeplearning.com/chap1.html",
     "note": "MNIST with a plain MLP."
    },
    {
-    "title": "Tsoding, nn.h",
+    "title": "nn.h: a tiny neural network library in C (Tsoding)",
     "url": "https://github.com/tsoding/nn.h",
     "note": "A small neural network library in C; compare after porting your engine."
    }
@@ -2119,7 +2119,7 @@
    },
    "references": [
     {
-     "title": "karpathy/micrograd",
+     "title": "micrograd: Karpathy's tiny autograd engine",
      "url": "https://github.com/karpathy/micrograd"
     }
    ],
@@ -2129,25 +2129,25 @@
   },
   "solutions": [
    {
-    "title": "micrograd engine.py and nn.py",
+    "title": "micrograd nn.py and engine.py",
     "url": "https://github.com/karpathy/micrograd/blob/master/micrograd/nn.py",
     "note": "Karpathy's reference Neuron, Layer, MLP; diff against your rebuild after closing the video.",
     "for": "Rebuild micrograd from memory"
    },
    {
-    "title": "teenygrad mlops.py",
+    "title": "teenygrad mlops.py: forward and backward for each op",
     "url": "https://github.com/tinygrad/teenygrad/blob/main/teenygrad/mlops.py",
     "note": "Each op as a `Function` with forward and backward, the tensor-level successor to micrograd's closures.",
     "for": "Project: graph IR and per-op backward"
    },
    {
-    "title": "JAX Autodidax",
+    "title": "JAX Autodidax: build JAX's core from scratch",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
     "note": "Part 3 (jaxprs) shows tracing a Python function into a typed graph IR, the same move your project makes before DCE, CSE and codegen.",
     "for": "Project: graph IR, passes and codegen"
    },
    {
-    "title": "nn-zero-to-hero notebooks",
+    "title": "Neural Networks: Zero to Hero notebooks",
     "url": "https://github.com/karpathy/nn-zero-to-hero",
     "note": "Karpathy's own notebooks for the micrograd lecture, with the exact code at each point of the video.",
     "for": "Karpathy micrograd video"
@@ -2163,14 +2163,14 @@
    },
    {
     "kind": "repo",
-    "title": "teenygrad",
+    "title": "teenygrad: a small deep learning library to read",
     "by": "George Hotz and tinygrad team",
     "url": "https://github.com/tinygrad/teenygrad",
     "note": "About 1000 lines that run the tinygrad frontend on NumPy; the step between micrograd and the framework you will compile."
    },
    {
     "kind": "repo",
-    "title": "HIPS/autograd",
+    "title": "autograd: the original Python autodiff library",
     "by": "Maclaurin, Duvenaud, Johnson",
     "url": "https://github.com/HIPS/autograd",
     "note": "Tracing NumPy calls with boxed values, a design alternative to micrograd's `Value` class; read `tracer.py` and `core.py`."
@@ -2191,14 +2191,14 @@
    },
    {
     "kind": "repo",
-    "title": "geohot/ai-notebooks",
+    "title": "George Hotz's AI notebooks",
     "by": "George Hotz",
     "url": "https://github.com/geohot/ai-notebooks",
     "note": "Hotz's from-scratch notebooks, including MNIST from scratch in NumPy, written during the streams that led to tinygrad."
    },
    {
     "kind": "repo",
-    "title": "miniMNIST-c",
+    "title": "miniMNIST-c: a neural network for MNIST in plain C",
     "by": "procedural",
     "url": "https://github.com/procedural/miniMNIST-c",
     "note": "A small MNIST network in plain C with only the standard library; compare its training loop with your micrograd port."
@@ -2213,70 +2213,70 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "Karpathy, The spelled-out intro to language modeling: building makemore (Part 1, bigram model)",
+    "title": "Karpathy, makemore part 1: a bigram language model",
     "url": "https://www.youtube.com/watch?v=PaCmpygFfXo",
     "detail": "Counting vs neural bigram model. Watch for the `keepdim` broadcasting bug Karpathy points out.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Karpathy, Building makemore Part 2: MLP",
+    "title": "Karpathy, makemore part 2: an MLP language model",
     "url": "https://www.youtube.com/watch?v=TCH_1BHY58I",
     "detail": "Embeddings, minibatches, learning-rate search, train/dev/test splits. Type the code yourself.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "CS231n notes: Neural Networks Part 1 (Setting up the Architecture)",
+    "title": "CS231n notes: neural network architecture",
     "url": "https://cs231n.github.io/neural-networks-1/",
     "detail": "Activation functions and representational power.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Karpathy, Building makemore Part 3: Activations & Gradients, BatchNorm",
+    "title": "Karpathy, makemore part 3: activations, gradients and BatchNorm",
     "url": "https://www.youtube.com/watch?v=P6sfmUTpUmc",
     "detail": "Kaiming init, saturated tanh, BatchNorm. Reproduce the activation and gradient histograms.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "CS231n notes: Neural Networks Part 2 and 3 (data, init, BN, regularization; learning and evaluation)",
+    "title": "CS231n notes: data, initialization, regularization and training",
     "url": "https://cs231n.github.io/neural-networks-2/",
     "detail": "Then `neural-networks-3/` for gradient checks, SGD with momentum and Adam.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Karpathy, Building makemore Part 4: Becoming a Backprop Ninja",
+    "title": "Karpathy, makemore part 4: write backprop by hand",
     "url": "https://www.youtube.com/watch?v=q8SA3rM6ckI",
     "detail": "Do the notebook's 4 exercises: manual backward through the whole network, cross-entropy in one step, BatchNorm in one step, then all together. The `cmp()` helper checks each gradient against PyTorch.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Karpathy, Building makemore Part 5: Building a WaveNet",
+    "title": "Karpathy, makemore part 5: build a WaveNet",
     "url": "https://www.youtube.com/watch?v=t3YJ5hKiMQ0",
     "detail": "`torch.nn`-style module structure and shape debugging.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "CS231n notes: Convolutional Neural Networks",
+    "title": "CS231n notes: convolutional neural networks",
     "url": "https://cs231n.github.io/convolutional-networks/",
     "detail": "Conv layer output-size arithmetic and the \"implementation as matrix multiplication\" (`im2col`) part of the Convolutional Layer section.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS231n Assignment 1 (2025): kNN, Softmax, Two-Layer Net, Image Features, Fully Connected Nets",
+    "title": "CS231n assignment 1: classifiers and fully connected nets from scratch",
     "url": "https://cs231n.github.io/assignments2025/assignment1/",
     "detail": "Vectorize every loss and gradient. The fully vectorized versions are the point.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS231n Assignment 2 (2025): BatchNorm, Dropout, CNNs, PyTorch on CIFAR-10, RNN captioning",
+    "title": "CS231n assignment 2: BatchNorm, dropout, CNNs and PyTorch on CIFAR-10",
     "url": "https://cs231n.github.io/assignments2025/assignment2/",
     "detail": "Optional. Do at least Q3 (`ConvolutionalNetworks.ipynb`); the naive conv forward and backward are the loops a compiler later rewrites.",
     "bot_block": false
@@ -2307,7 +2307,7 @@
     "note": "Conv and pooling implemented from scratch."
    },
    {
-    "title": "Stanford CS229 lecture playlist",
+    "title": "Stanford CS229 machine learning lectures",
     "url": "https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU",
     "note": "Classical ML theory, if you want it."
    }
@@ -2350,25 +2350,25 @@
   },
   "solutions": [
    {
-    "title": "makemore Part 4 backprop notebook",
+    "title": "makemore part 4 notebook: backprop by hand",
     "url": "https://github.com/karpathy/nn-zero-to-hero/blob/master/lectures/makemore/makemore_part4_backprop.ipynb",
     "note": "Karpathy's notebook for the Backprop Ninja exercises; the lecture video walks through each solution.",
     "for": "makemore Part 4 exercises"
    },
    {
-    "title": "karpathy/makemore",
+    "title": "makemore source code",
     "url": "https://github.com/karpathy/makemore",
     "note": "The finished makemore with bigram, MLP, RNN and transformer models in one file.",
     "for": "makemore Parts 1-5"
    },
    {
-    "title": "teenygrad tensor.py",
+    "title": "teenygrad tensor.py: a small tensor library to read",
     "url": "https://github.com/tinygrad/teenygrad/blob/main/teenygrad/tensor.py",
     "note": "Tensor-level `conv2d`, `log_softmax`, `sparse_categorical_crossentropy` and pooling built from movement and reduce ops.",
     "for": "Build: tensor autograd; Project: Conv2d and MaxPool"
    },
    {
-    "title": "dlsyscourse hw2",
+    "title": "CMU Deep Learning Systems homework 2",
     "url": "https://github.com/dlsyscourse/hw2",
     "note": "Starter code and tests for building `nn.Module`, `BatchNorm`, `Dropout`, SGD-momentum, Adam and a `DataLoader` in needle; the tests check your implementation.",
     "for": "Project: module system, BatchNorm, optimizers, DataLoader"
@@ -2384,7 +2384,7 @@
    },
    {
     "kind": "paper",
-    "title": "Delving Deep into Rectifiers (Kaiming init)",
+    "title": "Delving Deep into Rectifiers (the Kaiming init paper)",
     "by": "He, Zhang, Ren, Sun",
     "url": "https://arxiv.org/abs/1502.01852",
     "note": "Section 2.2 derives the `sqrt(2/fan_in)` initialization from variance propagation."
@@ -2412,14 +2412,14 @@
    },
    {
     "kind": "paper",
-    "title": "Deep Residual Learning",
+    "title": "Deep Residual Learning (the ResNet paper)",
     "by": "He, Zhang, Ren, Sun",
     "url": "https://arxiv.org/abs/1512.03385",
     "note": "Residual connections, the architecture your CNN project should try once plain conv stacks plateau."
    },
    {
     "kind": "repo",
-    "title": "cifar10-airbench",
+    "title": "cifar10-airbench: very fast CIFAR-10 training",
     "by": "Keller Jordan",
     "url": "https://github.com/KellerJordan/cifar10-airbench",
     "note": "94% on CIFAR-10 in a few seconds on one A100; read `airbench94.py` to see which tricks matter for speed."
@@ -2454,45 +2454,52 @@
    },
    {
     "kind": "lecture",
-    "title": "CSEP 590A Lecture 3: Optimization for deep learning (Winter 2026)",
+    "title": "UW CSEP 590A lecture 3 slides: optimization for deep learning",
     "by": "University of Washington",
     "url": "https://courses.cs.washington.edu/courses/csep590a/26wi/schedule/wi26_lecture3_live.pdf",
     "note": "Initialization schemes, batch, layer and group normalization, and optimizers in one deck; use it as a checklist when your CNN stops training."
    },
    {
     "kind": "course",
-    "title": "6.7960 Deep Learning (Fall 2024, lecture videos, notes, problem sets)",
+    "title": "MIT 6.7960 Deep Learning (videos, notes, problem sets)",
     "by": "MIT OpenCourseWare",
     "url": "https://ocw.mit.edu/courses/6-7960-deep-learning-fall-2024/",
     "note": "A full graduate deep learning course with videos and problem sets; use its problem sets to test yourself after CS231n Assignment 2."
    },
    {
     "kind": "course",
-    "title": "6.S191 Introduction to Deep Learning (2025)",
+    "title": "MIT 6.S191 Introduction to Deep Learning",
     "by": "MIT",
     "url": "https://introtodeeplearning.com/2025/index.html",
     "note": "Short recorded lectures with labs; a quick refresher on the overall landscape before the CNN project."
    },
    {
+    "kind": "problems",
+    "title": "Stanford CS312 prediction quiz: guess how training changes after a small code change",
+    "by": "Stanford CS312 (Hashimoto, Kotha)",
+    "url": "https://deep-learning-alchemy.github.io/quiz-basics.html",
+    "note": "Optional, about 40 minutes, runs in the browser with no GPU. Answer the 8 questions cold, then read the answer slides: https://deep-learning-alchemy.github.io/assets/quizzes/basics_answer_slides.pdf"
+   },
+   {
     "kind": "course",
-    "title": "CS312 Deep Learning Alchemy: lectures 2-6 (basics, scaling, optimization, µP, Muon, loss landscapes)",
+    "title": "Stanford CS312 lecture slides: hyperparameters, scaling laws, optimizers, µP and Muon",
     "by": "Stanford CS312 (Hashimoto, Kotha)",
     "url": "https://deep-learning-alchemy.github.io/",
-    "note": "Optional. Predict-then-check view of why training works; take the Basics quiz (quiz-basics.html) cold first, then check the answer slides."
+    "note": "Optional. Slides only, no recordings yet. Lectures 2-4 match the Muon and tuning-playbook readings above."
    },
    {
     "kind": "assignment",
-    "title": "CS312 A1 Basics: hyperparameter tuning and scaling",
+    "title": "Stanford CS312 assignment 1: learn what normal training looks like on a small language model",
     "by": "Stanford CS312 (Hashimoto, Kotha)",
     "url": "https://github.com/deep-learning-alchemy/assignments/tree/a1_release",
-    "note": "Optional, needs a GPU. Handout: https://deep-learning-alchemy.github.io/assets/assignments/a1_basics.pdf. Do it if you want hands-on LR and batch-size sweeps on a small LM."
+    "note": "Optional and heavy: about 170 short runs on an H100 (30+ GPU-hours). If you do it, problems 5-6 (loss-curve shape, activation and gradient RMS across layers) help you spot a broken implementation. Handout: https://deep-learning-alchemy.github.io/assets/assignments/a1_basics.pdf"
    },
    {
     "kind": "assignment",
-    "title": "CS312 A2-A3: hyperparameter invariants and loss landscapes",
+    "title": "Stanford CS312 assignment 2: how learning rate and weight decay should change as you train on more data",
     "by": "Stanford CS312 (Hashimoto, Kotha)",
     "url": "https://github.com/deep-learning-alchemy/assignments/tree/a2_release",
-    "note": "Optional. A3 is on branch a3_release. Pairs with the Muon readings above."
+    "note": "Optional and heavy. Part (a) of each problem uses the provided sweeps; the full assignment adds about 166 H100 runs. Pairs with the Muon readings above. Handout: https://deep-learning-alchemy.github.io/assets/assignments/a2_hyperparameter_scaling.pdf"
    }
   ],
   "stretch": "Speedrun CIFAR-10 on your own framework: reach 94% test accuracy with the fewest GPU-seconds (or CPU-minutes) you can, porting airbench tricks one at a time. Publish an ablation table with time-to-94% per trick and the gap to airbench94 running in PyTorch on the same hardware."
@@ -2504,21 +2511,21 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "3Blue1Brown, Deep Learning ch. 5: Transformers, the tech behind LLMs",
+    "title": "3Blue1Brown, Deep Learning ch. 5: what a transformer is",
     "url": "https://www.3blue1brown.com/lessons/gpt",
     "detail": "Embeddings, unembedding, softmax with temperature.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown, Deep Learning ch. 6: Attention in transformers, step-by-step",
+    "title": "3Blue1Brown, Deep Learning ch. 6: attention, step by step",
     "url": "https://www.3blue1brown.com/lessons/attention",
     "detail": "Q, K and V as matmuls, masking, multi-head attention.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "3Blue1Brown, Deep Learning ch. 7: How might LLMs store facts",
+    "title": "3Blue1Brown, Deep Learning ch. 7: how the MLP layers store facts",
     "url": "https://www.3blue1brown.com/lessons/mlp",
     "detail": "The MLP block and its parameter count.",
     "bot_block": false
@@ -2532,14 +2539,14 @@
    },
    {
     "kind": "watch",
-    "title": "Karpathy, Let's build GPT: from scratch, in code, spelled out",
+    "title": "Karpathy, Let's build GPT: from scratch, in code",
     "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
     "detail": "Type the code in a notebook through the full Shakespeare model. At 'the mathematical trick in self-attention', stop and derive it yourself.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "nanoGPT: train shakespeare_char",
+    "title": "Train a small character-level GPT with nanoGPT (shakespeare_char)",
     "url": "https://github.com/karpathy/nanoGPT",
     "detail": "Run `config/train_shakespeare_char.py` as in the README (best val loss 1.4697, about 3 minutes on one A100). Read `model.py` and map each part to the video.",
     "bot_block": false
@@ -2560,7 +2567,14 @@
    },
    {
     "kind": "read",
-    "title": "karpathy/llama2.c: run.c",
+    "title": "Stanford CS312 LLMs 101 handout, section 4: the parts of a Llama-style transformer",
+    "url": "https://deep-learning-alchemy.github.io/assets/slides/llms_101_handout.pdf",
+    "detail": "Covers RMSNorm, RoPE, SwiGLU and QK-norm. Read section 4 (pp. 11-19, about an hour) right before run.c. For each part, write down how it differs from the GPT-2 block you just built and the tensor shapes it takes. Optional: section 3.9 on why bf16 and torch.compile change floating-point results.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "llama2.c run.c: a whole Llama forward pass in one C file",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
     "detail": "Read `matmul`, `rmsnorm`, `softmax` and `forward()`. This is the shape of code your compiler will emit.",
     "bot_block": false
@@ -2588,14 +2602,9 @@
     "note": "The original paper."
    },
    {
-    "title": "Karpathy, llm.c: train_gpt2.c",
+    "title": "Karpathy, llm.c train_gpt2.c: GPT-2 training in plain C",
     "url": "https://github.com/karpathy/llm.c/blob/master/train_gpt2.c",
     "note": "GPT-2 forward and backward in plain C."
-   },
-   {
-    "title": "Stanford CS336 Assignment 1",
-    "url": "https://github.com/stanford-cs336/assignment1-basics",
-    "note": "BPE tokenizer and transformer LM from scratch."
    },
    {
     "title": "Karpathy, Let's build the GPT Tokenizer",
@@ -2632,7 +2641,7 @@
    },
    "references": [
     {
-     "title": "karpathy/llama2.c",
+     "title": "llama2.c: Llama inference in one C file",
      "url": "https://github.com/karpathy/llama2.c"
     },
     {
@@ -2646,7 +2655,7 @@
   },
   "solutions": [
    {
-    "title": "jaymody/picoGPT gpt2.py",
+    "title": "picoGPT gpt2.py: GPT-2 in NumPy",
     "url": "https://github.com/jaymody/picoGPT/blob/main/gpt2.py",
     "note": "The reference NumPy GPT-2 forward pass your build must match token for token.",
     "for": "Build: NumPy GPT-2 124M forward"
@@ -2658,19 +2667,19 @@
     "for": "Let's build GPT; nanoGPT shakespeare_char"
    },
    {
-    "title": "llm.c train_gpt2.py",
+    "title": "llm.c train_gpt2.py: the PyTorch reference",
     "url": "https://github.com/karpathy/llm.c/blob/master/train_gpt2.py",
     "note": "Writes GPT-2 weights to a flat binary that `train_gpt2.c` reads; the same export plan your C engine needs.",
     "for": "Project: weight export script"
    },
    {
-    "title": "karpathy/llama2.c run.c",
+    "title": "llama2.c run.c",
     "url": "https://github.com/karpathy/llama2.c/blob/master/run.c",
     "note": "Single-file C inference with KV cache, matmul with OpenMP and an int8 `runq.c` variant in the same repo.",
     "for": "Project: C inference engine with KV cache and int8"
    },
    {
-    "title": "gpt-fast",
+    "title": "gpt-fast: fast LLM inference in plain PyTorch",
     "url": "https://github.com/pytorch-labs/gpt-fast",
     "note": "Under 1000 lines of PyTorch with int8 and int4 weight-only quantization and measured tokens/s; compare your quantization error and speed.",
     "for": "Project: int8 weight-only quantization"
@@ -2707,7 +2716,7 @@
    },
    {
     "kind": "repo",
-    "title": "flash-attention-minimal",
+    "title": "flash-attention-minimal: FlashAttention in about 100 lines of CUDA",
     "by": "Peter Kim",
     "url": "https://github.com/tspeterkim/flash-attention-minimal",
     "note": "FlashAttention forward in about 100 lines of CUDA; read it after the paper to see the tiling as code."
@@ -2742,44 +2751,44 @@
    },
    {
     "kind": "paper",
-    "title": "Fast Transformer Decoding: One Write-Head is All You Need (MQA)",
+    "title": "Fast Transformer Decoding: One Write-Head is All You Need (multi-query attention)",
     "by": "Noam Shazeer",
     "url": "https://arxiv.org/abs/1911.02150",
     "note": "Shows decode is bound by KV cache reads and cuts them by sharing K and V across heads."
    },
    {
     "kind": "paper",
-    "title": "Efficient Memory Management for LLM Serving with PagedAttention (vLLM)",
+    "title": "Efficient Memory Management for LLM Serving with PagedAttention (the vLLM paper)",
     "by": "Kwon et al.",
     "url": "https://arxiv.org/abs/2309.06180",
     "note": "Paged KV cache allocation; read section 4 after your engine's contiguous KV cache works."
    },
    {
     "kind": "repo",
-    "title": "modded-nanogpt",
+    "title": "modded-nanogpt: the speedrun record for training a small GPT",
     "by": "Keller Jordan and contributors",
     "url": "https://github.com/KellerJordan/modded-nanogpt",
     "note": "The nanoGPT speedrun record log; each entry is a measured trick (Muon, rotary, FlexAttention) on the 124M model."
    },
    {
     "kind": "repo",
-    "title": "nanochat",
+    "title": "nanochat: a full small ChatGPT-style pipeline in one repo",
     "by": "Andrej Karpathy",
     "url": "https://github.com/karpathy/nanochat",
     "note": "A full tokenizer-to-chat-UI LLM pipeline in one small repo; read the inference engine for a KV-cached decode loop."
    },
    {
     "kind": "course",
-    "title": "Stanford CS336: Language Modeling from Scratch",
+    "title": "Stanford CS336: Language Modeling from Scratch (course page)",
     "by": "Percy Liang, Tatsunori Hashimoto",
     "url": "https://stanford-cs336.github.io/spring2025/",
-    "note": "Assignment 2 (systems) has you write a Triton FlashAttention and profile; lectures on GPUs and kernels follow this module."
+    "note": "Hub for lectures, lecture traces and handouts. Videos: https://www.youtube.com/playlist?list=PLoROMvodv4rOY23Y0BoGoBGgQ1zmU_MT_. Assignment 2 (systems) has you write a Triton FlashAttention; lectures on GPUs and kernels follow this module."
    },
    {
     "kind": "blog",
     "title": "Inside vLLM: Anatomy of a High-Throughput LLM Inference System",
     "by": "Aleksa Gordic",
-    "url": "https://vllm.ai/blog/2025-09-05-anatomy-of-vllm",
+    "url": "https://www.aleksagordic.com/blog/vllm",
     "note": "2025 code-level walk through vLLM's engine core, paged attention, continuous batching, prefix caching and speculative decoding; read parts 1-2 for the scheduler and KV cache manager."
    },
    {
@@ -2791,7 +2800,7 @@
    },
    {
     "kind": "repo",
-    "title": "LLMs-from-scratch",
+    "title": "LLMs-from-scratch: build a GPT in PyTorch, chapter by chapter",
     "by": "Sebastian Raschka",
     "url": "https://github.com/rasbt/LLMs-from-scratch",
     "note": "Chapter notebooks building a GPT in PyTorch; the bonus folders on KV cache, GQA and MLA are the parts most relevant to inference kernels."
@@ -2805,17 +2814,31 @@
    },
    {
     "kind": "assignment",
-    "title": "CS312 A4-A5: stability across depth/time, extending model capacity",
+    "title": "Stanford CS312 assignment 4, problem 1: remove pre-norm, QK-norm, RoPE or residuals and see what breaks",
     "by": "Stanford CS312 (Hashimoto, Kotha)",
     "url": "https://github.com/deep-learning-alchemy/assignments/tree/a4_release",
-    "note": "Optional. A5 is on branch a5_release. Lectures 7-9 cover residual signal propagation, attention vs SSMs, depth vs width."
+    "note": "Optional. Uses supplied training runs, so no GPU training is needed. You measure activation and gradient RMS across depth for nine ablations, which shows why each op a compiler must fuse is there. Handout: https://deep-learning-alchemy.github.io/assets/assignments/a4_architecture1.pdf"
    },
    {
     "kind": "assignment",
-    "title": "CS336 Assignment 1: Basics (BPE tokenizer, transformer LM, AdamW, training loop)",
+    "title": "Stanford CS336 assignment 1: build and train a Llama-style transformer without PyTorch's built-in layers",
     "by": "Stanford CS336 (Hashimoto, Liang)",
     "url": "https://github.com/stanford-cs336/assignment1-basics",
-    "note": "Optional alternative to the GPT-2 reproduction: graded tests for every component."
+    "note": "Optional alternative to the GPT-2 reproduction. You write RMSNorm, SwiGLU, RoPE, attention, AdamW and the training loop, all checked by tests. Sections 3-5 matter most; the BPE tokenizer in section 2 is optional."
+   },
+   {
+    "kind": "lecture",
+    "title": "Stanford CS336 lecture 2: PyTorch tensors and counting FLOPs and memory",
+    "by": "Percy Liang (Stanford CS336)",
+    "url": "https://www.youtube.com/watch?v=msHyYioAyNE",
+    "note": "Optional. Strides, dtypes, the 2mnk matmul FLOP count, the 6N training rule and memory for parameters, optimizer state and activations. Pairs with kipply's inference arithmetic."
+   },
+   {
+    "kind": "lecture",
+    "title": "Stanford CS336 lecture 3: how modern LLM architectures are chosen",
+    "by": "Tatsunori Hashimoto (Stanford CS336)",
+    "url": "https://www.youtube.com/watch?v=ptFiH_bHnJw",
+    "note": "Optional. Survey of the choices since GPT-2: pre-norm, RMSNorm, SwiGLU, RoPE, MQA and GQA, and model shape ratios."
    }
   ],
   "stretch": "Add batched decoding and grouped-query or multi-query style KV sharing to your C engine, then write a roofline plot of decode tokens/s vs batch size from 1 to 64. Show where decode crosses from memory-bound to compute-bound, and stay within 70% of the bandwidth bound at batch 1."

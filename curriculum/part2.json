@@ -69,14 +69,14 @@
    },
    {
     "kind": "do",
-    "title": "Crafting Interpreters ch. 15-17: VM, Scanning on Demand, Compiling Expressions",
+    "title": "Crafting Interpreters ch. 15-17: build a bytecode VM and compile expressions to it",
     "url": "https://craftinginterpreters.com/compiling-expressions.html",
     "detail": "Build the stack VM and the single-pass Pratt compiler in C. At the end of ch. 17 clox evaluates expressions only; functions arrive in ch. 24 Calls and Functions.",
     "bot_block": false
    },
    {
     "kind": "build",
-    "title": "Measure tree-walk vs bytecode",
+    "title": "Measure how much faster bytecode is than tree-walking",
     "url": "https://craftinginterpreters.com/contents.html",
     "detail": "If you stopped at ch. 17, time both implementations on the same large generated arithmetic expression evaluated many times. If you reached ch. 24, time `fib(30)` in both. Record the numbers for the write-up.",
     "bot_block": false
@@ -191,7 +191,7 @@
    },
    {
     "kind": "blog",
-    "title": "(How to Write a (Lisp) Interpreter (in Python))",
+    "title": "How to Write a Lisp Interpreter in Python",
     "by": "Peter Norvig",
     "url": "https://norvig.com/lispy.html",
     "note": "A full Scheme interpreter in about 100 lines of Python; a useful contrast in minimalism with jlox."
@@ -205,7 +205,7 @@
    },
    {
     "kind": "repo",
-    "title": "wren",
+    "title": "wren: a small scripting language with a readable bytecode VM",
     "by": "Robert Nystrom and contributors",
     "url": "https://github.com/wren-lang/wren",
     "note": "A production-quality descendant of clox's design; read `src/vm/wren_vm.c` to see NaN boxing and fibers in a real VM."
@@ -226,7 +226,7 @@
    },
    {
     "kind": "talk",
-    "title": "A deep dive into dispatching techniques (slides)",
+    "title": "A deep dive into interpreter dispatch techniques (slides)",
     "by": "Jonathan Mueller, think-cell",
     "url": "https://www.think-cell.com/assets/think-cell_talk_a-deep-dive-into-dispatching-techniques.pdf",
     "note": "Slides walking a bytecode VM from switch dispatch through computed goto to tail-call threading, with generated assembly for each; focus on the tail-call section."
@@ -269,84 +269,84 @@
   "steps": [
    {
     "kind": "read",
-    "title": "x86 Assembly Guide (UVA CS216)",
+    "title": "x86 Assembly Guide (University of Virginia CS216)",
     "url": "https://www.cs.virginia.edu/~evans/cs216/guides/x86.html",
     "detail": "The guide covers 32-bit x86 registers and `mov/push/pop/call/ret`; the test suite needs x86-64, so also compile tiny C programs on Compiler Explorer with x86-64 `gcc -O0` and read the output.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Install the test suite and run --check-setup",
+    "title": "Install the compiler test suite and check your setup",
     "url": "https://github.com/nlsandler/writing-a-c-compiler-tests",
     "detail": "Clone `nlsandler/writing-a-c-compiler-tests` and run '`./test_compiler --check-setup`'. The suite follows the book's chapters, not the blog: it needs an x86-64 toolchain (native on Intel/AMD Linux and in WSL; Rosetta on Apple Silicon Macs; an x86-64 VM or container on ARM Linux), '`int main(void)`', and the gcc-like driver plus `--lex/--parse/--validate/--tacky/--codegen` stage flags described in the README.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 1: Integers -> run './test_compiler ./mycc --chapter 1'",
+    "title": "Writing a C Compiler blog, part 1: Integers, then run the chapter 1 tests",
     "url": "https://norasandler.com/2017/11/29/Write-a-Compiler.html",
     "detail": "Lexer, parser and code emission for '`int main(void){return 2;}`'. The blog emits 32-bit x86; Part 1 itself recommends adapting to 64-bit, and the suite requires it. Use `--latest-only` while iterating, then rerun without it to catch regressions.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 2: Unary Operators -> run './test_compiler ./mycc --chapter 2'",
+    "title": "Writing a C Compiler blog, part 2: Unary Operators, then run the chapter 2 tests",
     "url": "https://norasandler.com/2017/12/05/Write-a-Compiler-2.html",
     "detail": "Add negation, bitwise complement and logical not. Each AST node maps to a short instruction template.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 3: Binary Operators -> run './test_compiler ./mycc --chapter 3'",
+    "title": "Writing a C Compiler blog, part 3: Binary Operators, then run the chapter 3 tests",
     "url": "https://norasandler.com/2017/12/15/Write-a-Compiler-3.html",
     "detail": "Add `+ - * /`. The blog rewrites the grammar into `exp/term/factor` levels; the chapter 3 tests also include `%` (`mod.c`). Intermediate values live on the stack (`push/pop`).",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 4: Even More Binary Operators -> run './test_compiler ./mycc --chapter 4'",
+    "title": "Writing a C Compiler blog, part 4: More Binary Operators, then run the chapter 4 tests",
     "url": "https://norasandler.com/2017/12/28/Write-a-Compiler-4.html",
     "detail": "Add relational and short-circuiting `&&` and `||`, using labels and conditional jumps.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 5: Local Variables -> run './test_compiler ./mycc --chapter 5'",
+    "title": "Writing a C Compiler blog, part 5: Local Variables, then run the chapter 5 tests",
     "url": "https://norasandler.com/2018/01/08/Write-a-Compiler-5.html",
     "detail": "Introduce stack frames, base-pointer-relative variable slots and a variable map; reject undeclared and redeclared variables.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 6: Conditionals -> run './test_compiler ./mycc --chapter 6'",
+    "title": "Writing a C Compiler blog, part 6: Conditionals, then run the chapter 6 tests",
     "url": "https://norasandler.com/2018/02/25/Write-a-Compiler-6.html",
     "detail": "`if` statements and the ternary operator.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 7: Compound Statements -> run './test_compiler ./mycc --chapter 7'",
+    "title": "Writing a C Compiler blog, part 7: Compound Statements, then run the chapter 7 tests",
     "url": "https://norasandler.com/2018/03/14/Write-a-Compiler-7.html",
     "detail": "Block scoping and shadowing; free stack space when a scope closes.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 8: Loops -> run './test_compiler ./mycc --chapter 8'",
+    "title": "Writing a C Compiler blog, part 8: Loops, then run the chapter 8 tests",
     "url": "https://norasandler.com/2018/04/10/Write-a-Compiler-8.html",
     "detail": "`for`, `while` and `do` loops plus `break` and `continue`; track the current loop's labels.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 9: Functions -> run './test_compiler ./mycc --chapter 9'",
+    "title": "Writing a C Compiler blog, part 9: Functions, then run the chapter 9 tests",
     "url": "https://norasandler.com/2018/06/27/Write-a-Compiler-9.html",
     "detail": "The blog uses the 32-bit `cdecl` convention; implement the x86-64 System V convention instead (first six integer arguments in registers, 16-byte stack alignment at call). The chapter 9 tests include 'libraries' cases that link your code with gcc-compiled C.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Sandler Part 10: Global Variables (optional; chapter 10 tests need static/extern)",
+    "title": "Writing a C Compiler blog, part 10: Global Variables (optional)",
     "url": "https://norasandler.com/2019/02/18/Write-a-Compiler-10.html",
     "detail": "File-scope variables in `.data/.bss`. The suite's chapter 10 tests also require `static` and `extern`, which the blog does not cover; treat chapter 10 as optional.",
     "bot_block": false
@@ -385,7 +385,7 @@
    "The suite refuses native arm64. On Apple Silicon Macs run it and gcc under Rosetta ('`arch -x86_64 zsh`'), and remember Mach-O symbols need a leading underscore. On ARM Linux use an x86-64 VM or container. Intel/AMD Linux and WSL work as is."
   ],
   "project": {
-   "title": "mycc, stage 1: Three-address IR and peephole pass for mycc, measured against naive codegen",
+   "title": "mycc, stage 1: a three-address IR and peephole pass, measured against naive codegen",
    "brief": "Insert a TACKY-style three-address IR between the AST and assembly, give each temporary a stack slot, and add a peephole pass (drop `push/pop` pairs, redundant movs, jumps to the next label). Measure static instruction counts of the emitted assembly on the suite's chapter 1-9 valid programs before and after.",
    "deliverables": [
     "repo with `mycc`, the IR stage, the peephole pass, and a script that counts emitted instructions per test program",
@@ -398,7 +398,7 @@
    },
    "references": [
     {
-     "title": "writing-a-c-compiler-tests",
+     "title": "Test suite for Writing a C Compiler",
      "url": "https://github.com/nlsandler/writing-a-c-compiler-tests"
     },
     {
@@ -416,19 +416,19 @@
     "for": "chapters 1-9 against writing-a-c-compiler-tests"
    },
    {
-    "title": "nqcc (blog-era compiler)",
+    "title": "nqcc (the compiler from the author's earlier blog series)",
     "url": "https://github.com/nlsandler/nqcc",
     "note": "The original OCaml compiler that accompanies the 2017-2019 blog series, useful for checking the 32-bit codegen templates per part.",
     "for": "blog Parts 1-10"
    },
    {
-    "title": "chibicc",
+    "title": "chibicc: a small C compiler built up in readable commits",
     "url": "https://github.com/rui314/chibicc",
     "note": "Rui Ueyama's C compiler with one small commit per feature emitting x86-64; walk its early history to compare how each operator, local and function call is lowered.",
     "for": "Parts 2-9, especially System V calls"
    },
    {
-    "title": "8cc",
+    "title": "8cc: the same author's earlier small C compiler",
     "url": "https://github.com/rui314/8cc",
     "note": "Rui Ueyama's earlier self-hosting C compiler; `gen.c` shows a complete x86-64 System V argument-passing implementation.",
     "for": "Part 9 calling convention"
@@ -444,7 +444,7 @@
    },
    {
     "kind": "talk",
-    "title": "CppCon 2017: Matt Godbolt \"What Has My Compiler Done for Me Lately? Unbolting the Compiler's Lid\"",
+    "title": "What Has My Compiler Done for Me Lately? (Matt Godbolt talk)",
     "by": "CppCon",
     "url": "https://www.youtube.com/watch?v=bSkpMdDe4g4",
     "note": "Shows what gcc and clang actually emit for common C patterns at `-O0` vs `-O2`; watch it before comparing `mycc` output to gcc."
@@ -465,7 +465,7 @@
    },
    {
     "kind": "repo",
-    "title": "x86-64 System V psABI",
+    "title": "x86-64 System V calling convention spec (psABI)",
     "by": "x86-psABIs group",
     "url": "https://gitlab.com/x86-psABIs/x86-64-ABI",
     "note": "The normative calling-convention document; read section 3.2 on stack frames and parameter classification."
@@ -486,21 +486,21 @@
    },
    {
     "kind": "repo",
-    "title": "QBE compiler backend",
+    "title": "QBE: a small compiler backend",
     "by": "Quentin Carbonneaux",
     "url": "https://c9x.me/compile/",
     "note": "A small SSA backend (about 10% of LLVM's scope) you can target instead of raw assembly; read its IL docs."
    },
    {
     "kind": "repo",
-    "title": "cproc",
+    "title": "cproc: a small C compiler built on QBE",
     "by": "Michael Forney",
     "url": "https://github.com/michaelforney/cproc",
     "note": "A C11 compiler that emits QBE IL; shows how a compact front end separates from codegen."
    },
    {
     "kind": "book",
-    "title": "Optimization manuals",
+    "title": "Agner Fog's CPU optimization manuals",
     "by": "Agner Fog",
     "url": "https://www.agner.org/optimize/",
     "note": "Manual 2 (optimizing assembly) and the instruction tables tell you what your emitted instructions cost on real CPUs."
@@ -514,24 +514,17 @@
    },
    {
     "kind": "blog",
-    "title": "Cranelift, Part 1: Instruction Selection",
+    "title": "A New Backend for Cranelift, Part 1: Instruction Selection",
     "by": "Chris Fallin",
     "url": "https://cfallin.org/blog/2020/09/18/cranelift-isel-1/",
     "note": "How a production backend lowers IR to machine instructions by tree matching; read it after you have a naive codegen to see what the next step looks like."
    },
    {
     "kind": "course",
-    "title": "Code Generation for Data Processing (WS 2025/26)",
+    "title": "Code Generation for Data Processing (TUM, winter 2025/26)",
     "by": "Alexis Engelke, TUM",
     "url": "https://db.in.tum.de/teaching/ws2526/codegen",
     "note": "Recent lecture slides plus a script covering LLVM-IR, instruction selection, register allocation, JIT and vectorization; the register allocation and JIT lectures fit this module best."
-   },
-   {
-    "kind": "blog",
-    "title": "A New Backend for Cranelift, Part 1: Instruction Selection",
-    "by": "Chris Fallin",
-    "url": "https://hacks.mozilla.org/2020/10/a-new-backend-for-cranelift-part-1-instruction-selection/",
-    "note": "How a production code generator lowers IR to machine instructions by tree matching; read after Sandler part 9."
    },
    {
     "kind": "blog",
@@ -542,7 +535,7 @@
    },
    {
     "kind": "lecture",
-    "title": "CSE 401 Back-end lecture (Autumn 2025)",
+    "title": "Compiler back-end lecture (UW CSE 401, Autumn 2025)",
     "by": "University of Washington",
     "url": "https://courses.cs.washington.edu/courses/cse401/25au/lectures/Q-backend.pdf",
     "note": "Instruction selection, scheduling and graph-coloring register allocation in one deck."
@@ -557,56 +550,56 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "CS6120 Lesson 1: Welcome & Overview",
+    "title": "Cornell CS6120 Lesson 1: course welcome and overview",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/1/",
     "detail": "Read the lesson and the self-guided page (`cs6120/2020fa/self-guided/`), which explains how to do the course without enrollment.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS6120 Lesson 2: Representing Programs -- video + task",
+    "title": "CS6120 Lesson 2: Representing Programs (video and task)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/2/",
     "detail": "Install `bril2json` and `brili`. Do the task: write a Bril benchmark, and write a small tool that loads Bril JSON (for example, counts `add` instructions). Then form basic blocks and a CFG as the lesson derives.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS6120 Lesson 3: Local Analysis & Optimization -- video + task",
+    "title": "CS6120 Lesson 3: Local Analysis and Optimization (video and task)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/3/",
     "detail": "Implement trivial dead code elimination (iterate to convergence) and local value numbering. Compare dynamic instruction counts with '`brili -p`' on the benchmarks.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS6120 Lesson 4: Data Flow -- video + task",
+    "title": "CS6120 Lesson 4: Data Flow (video and task)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/4/",
     "detail": "The task asks for at least one dataflow analysis; do the bonus generic worklist solver and instantiate it for reaching definitions and live variables.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS6120 Lesson 5: Global Analysis & SSA -- video + task part 1 (dominators)",
+    "title": "CS6120 Lesson 5: Global Analysis and SSA, task part 1 (dominators)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/5/",
     "detail": "Find dominators, build the dominator tree and compute dominance frontiers; test against brute-force path enumeration.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS6120 Lesson 5 task part 2: into and out of SSA",
+    "title": "CS6120 Lesson 5 task part 2: convert into and out of SSA",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/5/",
     "detail": "Implement into-SSA and out-of-SSA. Check SSA form with the lesson's `is_ssa.py` and run the midpoint under `brili`, which supports `phi`. Watch for variables undefined on some paths.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "CS6120 Lesson 6: LLVM -- video + task",
+    "title": "CS6120 Lesson 6: LLVM (video and task)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/6/",
     "detail": "The task: follow the LLVM for Grad Students tutorial far enough to write a pass that changes program execution (for example, print on every floating-point division). Requires C++ and an LLVM install; optional. New to C++ or to building LLVM passes? Do Module 2 first; its llvm-tutor setup is the starting point here.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS6120 Lesson 7: Loop Optimization -- video + task",
+    "title": "CS6120 Lesson 7: Loop Optimization (video and task)",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/lesson/7/",
     "detail": "Implement natural loop detection and LICM on Bril (the lesson's recommended choice) and evaluate it on the Bril benchmarks.",
     "bot_block": false
@@ -677,7 +670,7 @@
    },
    "references": [
     {
-     "title": "Cornell CS 6120 Fall 2020 self-guided",
+     "title": "Cornell CS6120 self-guided course (Fall 2020)",
      "url": "https://www.cs.cornell.edu/courses/cs6120/2020fa/self-guided/"
     },
     {
@@ -766,14 +759,14 @@
    },
    {
     "kind": "course",
-    "title": "CS6120 self-guided (Fall 2023)",
+    "title": "Cornell CS6120 self-guided course (Fall 2023)",
     "by": "Adrian Sampson",
     "url": "https://www.cs.cornell.edu/courses/cs6120/2023fa/self-guided/",
     "note": "The later revision of the course with updated lessons and videos; use it for topics after lesson 11 such as alias analysis and GC."
    },
    {
     "kind": "blog",
-    "title": "Land ahoy: leaving the Sea of Nodes",
+    "title": "Land ahoy: leaving the Sea of Nodes (why V8 changed its IR)",
     "by": "V8 team",
     "url": "https://v8.dev/blog/leaving-the-sea-of-nodes",
     "note": "Why V8 replaced its Sea of Nodes IR with a CFG-based IR (Turboshaft); a rare production postmortem on IR design to read against the Simple/Sea of Nodes material."
@@ -837,14 +830,14 @@
    },
    {
     "kind": "do",
-    "title": "egg tutorials (Rust docs) or a Python reimplementation",
+    "title": "egg tutorials (Rust), or a Python reimplementation",
     "url": "https://docs.rs/egg/latest/egg/tutorials/index.html",
     "detail": "The docs have three parts: background, getting started, explanations. Either follow them in Rust or write a tiny Python e-graph (union-find, hashcons, rebuild) for arithmetic.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "tinygrad docs: UOp",
+    "title": "tinygrad docs: UOp, the IR tinygrad rewrites",
     "url": "https://docs.tinygrad.org/developer/uop/",
     "detail": "Read how tinygrad represents computation as `UOp(op, src, arg)` graphs. The pattern matcher is not documented there; read it in `ops.py` in the next step.",
     "bot_block": false
@@ -873,7 +866,7 @@
   ],
   "extra": [
    {
-    "title": "egglog",
+    "title": "egglog: e-graphs combined with Datalog",
     "url": "https://github.com/egraphs-good/egglog",
     "note": "egraphs + Datalog, from the same group as egg."
    },
@@ -924,25 +917,25 @@
   },
   "solutions": [
    {
-    "title": "egg math test suite",
+    "title": "egg test suite for math rewrites",
     "url": "https://github.com/egraphs-good/egg/blob/main/tests/math.rs",
     "note": "egg's own arithmetic rule set with constant folding, conditional rewrites and analyses; compare your rules and extraction results to it.",
     "for": "e-graph step and check (a*2)/2 == a"
    },
    {
-    "title": "tinygrad symbolic rules (pinned)",
+    "title": "tinygrad symbolic rewrite rules",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/uop/symbolic.py",
     "note": "The real `PatternMatcher` rule sets for constant folding and algebraic simplification at the commit the module pins; check your greedy rules against these.",
     "for": "pattern-rewrite engine step"
    },
    {
-    "title": "egglog-python",
+    "title": "egglog-python: egglog from Python",
     "url": "https://github.com/egraphs-good/egglog-python",
     "note": "Python bindings for egglog with documented examples; run your project rule set through it to cross-check saturation results.",
     "for": "build and project: tensor-expression e-graph"
    },
    {
-    "title": "Tensat",
+    "title": "Tensat source code",
     "url": "https://github.com/uwplse/tensat",
     "note": "Equality saturation for tensor graph rewriting with ILP extraction, written on egg; the research-grade version of the module project.",
     "for": "project: tensor algebra optimizer"
@@ -972,7 +965,7 @@
    },
    {
     "kind": "blog",
-    "title": "Cranelift aegraph RFC",
+    "title": "Cranelift aegraph design proposal (RFC)",
     "by": "Chris Fallin (Bytecode Alliance)",
     "url": "https://github.com/bytecodealliance/rfcs/blob/main/accepted/cranelift-egraph.md",
     "note": "How a production compiler adopted an acyclic e-graph for its mid-end and bounded blowup; read the motivation and design sections."
@@ -1007,7 +1000,7 @@
    },
    {
     "kind": "repo",
-    "title": "Herbie",
+    "title": "Herbie: rewrites floating-point formulas for accuracy using e-graphs",
     "by": "Pavel Panchekha, Zachary Tatlock and contributors",
     "url": "https://herbie.uwplse.org/",
     "note": "A floating-point accuracy optimizer built on e-graphs; try its web demo to see rewriting with an accuracy cost function."
@@ -1028,7 +1021,7 @@
    },
    {
     "kind": "talk",
-    "title": "aegraphs: Acyclic E-graphs for Efficient Optimization in a Production Compiler (EGRAPHS 2023 slides)",
+    "title": "aegraphs: Acyclic E-graphs for Efficient Optimization in a Production Compiler (slides)",
     "by": "Chris Fallin",
     "url": "https://cfallin.org/pubs/egraphs2023_aegraphs_slides.pdf",
     "note": "Invited-talk slides on the e-graph variant Cranelift ships; focus on why it avoids full saturation and how extraction is kept cheap."
@@ -1049,7 +1042,7 @@
    },
    {
     "kind": "lecture",
-    "title": "Equality saturation (COMP 520 slides, 2025)",
+    "title": "Equality saturation lecture slides (McGill COMP 520, 2025)",
     "by": "McGill University",
     "url": "https://www.cs.mcgill.ca/~cs520/2025/slides/eqsat.pdf",
     "note": "Lecture slides covering e-nodes, e-classes and rebuilding, with DialEgg (egglog for MLIR) as a case study."
@@ -1078,14 +1071,14 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "Karpathy: The spelled-out intro to neural networks and backpropagation: building micrograd",
+    "title": "Karpathy: building micrograd, a spelled-out intro to backpropagation",
     "url": "https://www.youtube.com/watch?v=VMj-3S1tku0",
     "detail": "Code along to build micrograd's scalar `Value` class with `backward()`.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "micrograd repo: reproduce engine.py and pass the tests",
+    "title": "micrograd repo: rebuild engine.py and pass the tests",
     "url": "https://github.com/karpathy/micrograd",
     "detail": "Re-implement `engine.py` from memory and check gradients against PyTorch as in `test/test_engine.py`.",
     "bot_block": false
@@ -1113,7 +1106,7 @@
    },
    {
     "kind": "read",
-    "title": "Autodidax Part 1: Transformations as interpreters (standard evaluation, jvp, vmap)",
+    "title": "Autodidax (JAX's core rebuilt from scratch) Part 1: transformations as interpreters",
     "url": "https://docs.jax.dev/en/latest/autodidax.html",
     "detail": "Code along: primitives, the interpreter stack, and the JVP and `vmap` tracers.",
     "bot_block": false
@@ -1134,7 +1127,7 @@
    },
    {
     "kind": "build",
-    "title": "Reverse-mode AD over your Module 14 DAG (read tinygrad mixin/gradient.py)",
+    "title": "Write reverse-mode AD over your Module 14 DAG (read tinygrad's gradient.py)",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/mixin/gradient.py",
     "detail": "Read tinygrad's `gradient.py` (a rewrite-rule-based gradient), then emit gradient graphs for your own IR.",
     "bot_block": true
@@ -1149,7 +1142,7 @@
   ],
   "extra": [
    {
-    "title": "MIT 18.S096 Matrix Calculus for ML",
+    "title": "Matrix Calculus for Machine Learning (MIT 18.S096)",
     "url": "https://ocw.mit.edu/courses/18-s096-matrix-calculus-for-machine-learning-and-beyond-january-iap-2023/",
     "note": "Rigorous Jacobian/adjoint view."
    },
@@ -1188,7 +1181,7 @@
    },
    "references": [
     {
-     "title": "micrograd",
+     "title": "micrograd source",
      "url": "https://github.com/karpathy/micrograd"
     },
     {
@@ -1214,13 +1207,13 @@
     "for": "micrograd video and engine.py reimplementation"
    },
    {
-    "title": "HIPS/autograd",
+    "title": "HIPS/autograd: a small NumPy autodiff library",
     "url": "https://github.com/HIPS/autograd",
     "note": "A compact, production-quality NumPy autodiff library with reverse mode, forward mode and VJP definitions for hundreds of NumPy ops, including broadcasting unbroadcast logic.",
     "for": "Build (forward and reverse mode) and the tensor autograd project"
    },
    {
-    "title": "tinygrad engine/realize.py and codegen/memory.py at the pinned commit",
+    "title": "tinygrad realize.py: where the scheduled gradient graph runs",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/engine/realize.py",
     "note": "Shows how tinygrad runs the scheduled forward and gradient graphs; read it after `mixin/gradient.py` to see where your gradient graph gets executed.",
     "for": "Reverse-mode AD over your Module 14 DAG",
@@ -1258,7 +1251,7 @@
    },
    {
     "kind": "repo",
-    "title": "Enzyme",
+    "title": "Enzyme: automatic differentiation of LLVM IR",
     "by": "EnzymeAD",
     "url": "https://github.com/EnzymeAD/Enzyme",
     "note": "The working LLVM/MLIR AD plugin from the paper; browse the test cases to see gradients of real C loops."
@@ -1272,7 +1265,7 @@
    },
    {
     "kind": "paper",
-    "title": "Compiling machine learning programs via high-level tracing (JAX, SysML 2018)",
+    "title": "Compiling machine learning programs via high-level tracing (the JAX paper)",
     "by": "Roy Frostig, Matthew Johnson, Chris Leary",
     "url": "https://mlsys.org/Conferences/doc/2018/146.pdf",
     "note": "The original 4-page JAX paper: tracing to an IR, then composing `grad` and `jit` as transformations."
@@ -1351,14 +1344,14 @@
    },
    {
     "kind": "lecture",
-    "title": "CSC421 Lecture 6 reading: Automatic Differentiation",
+    "title": "Automatic Differentiation lecture notes (Roger Grosse, Toronto CSC421)",
     "by": "Roger Grosse (University of Toronto)",
     "url": "https://www.cs.toronto.edu/~rgrosse/courses/csc421_2019/readings/L06%20Automatic%20Differentiation.pdf",
     "note": "Concise notes that build a simplified version of HIPS Autograd step by step; good companion while doing the module's from-scratch engine."
    },
    {
     "kind": "lecture",
-    "title": "L46 Principles of ML Systems: Automatic Differentiation slides",
+    "title": "Automatic Differentiation slides (Cambridge L46, Principles of ML Systems)",
     "by": "University of Cambridge",
     "url": "https://www.cl.cam.ac.uk/teaching/2324/L46/slides/3_23_24_AutoDiff.pdf",
     "note": "Systems-flavoured slides from a 2023-24 ML systems course, linking AD modes to how frameworks implement them."
@@ -1408,28 +1401,28 @@
    },
    {
     "kind": "watch",
-    "title": "CMU DLSys Lectures 3-5: Manual Neural Networks / Backprop, Automatic Differentiation, Automatic Differentiation Implementation",
+    "title": "CMU Deep Learning Systems lectures 3-5: backprop and automatic differentiation",
     "url": "https://dlsyscourse.org/lectures/",
     "detail": "Compare needle's computational-graph design with MiniTorch's.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "DLSys Homework 1: needle autodiff",
+    "title": "Deep Learning Systems Homework 1: autodiff for the needle library",
     "url": "https://github.com/dlsyscourse/hw1",
     "detail": "Implement forward and backward for needle ops and reverse-mode AD with a topological sort (`hw1.ipynb`).",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "DLSys Lectures 10, 12, 13: Hardware Acceleration for Linear Algebra, Hardware Acceleration + GPUs, Hardware Acceleration Implementation",
+    "title": "Deep Learning Systems lectures 10, 12, 13: hardware acceleration and GPUs",
     "url": "https://dlsyscourse.org/lectures/",
     "detail": "Focus on the strided `NDArray` backend design and tiling.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "DLSys Homework 3: NDArray backend (CPU + CUDA)",
+    "title": "Deep Learning Systems Homework 3: write the array backend for CPU and CUDA",
     "url": "https://github.com/dlsyscourse/hw3",
     "detail": "Implement `compact/setitem`, elementwise ops, reductions and tiled matmul in C++ and CUDA (`hw3.ipynb`). The C++ you need (classes, templates, RAII) is covered in Module 2.",
     "bot_block": false
@@ -1450,7 +1443,7 @@
     "bot_block": true
    },
    {
-    "title": "DLSys Homework 4 (CNNs, RNNs)",
+    "title": "Deep Learning Systems Homework 4 (CNNs and RNNs)",
     "url": "https://github.com/dlsyscourse/hw4",
     "note": "Further model work on your backend."
    }
@@ -1483,7 +1476,7 @@
    },
    "references": [
     {
-     "title": "CMU 10-414/714 Deep Learning Systems",
+     "title": "CMU Deep Learning Systems course (10-414/714)",
      "url": "https://dlsyscourse.org/"
     },
     {
@@ -1497,7 +1490,7 @@
   },
   "solutions": [
    {
-    "title": "teenygrad",
+    "title": "teenygrad: a tiny tinygrad",
     "url": "https://github.com/tinygrad/teenygrad",
     "note": "A roughly 1000-line lazy tensor framework from the tinygrad authors with views, a lazy graph and an autograd `Function` layer; the closest small reference for the lazy-fusion project.",
     "for": "Build and the lazy mini-framework project"
@@ -1509,14 +1502,14 @@
     "for": "MiniTorch Modules 0-4"
    },
    {
-    "title": "tinygrad codegen/memory.py at the pinned commit",
+    "title": "tinygrad memory.py",
     "url": "https://github.com/tinygrad/tinygrad/blob/b91fe2773cbc1a33c38c90b55c835e26be42a335/tinygrad/codegen/memory.py",
     "note": "tinygrad's buffer-reuse planner, a compact reference for the liveness-based memory planner in the project rubric.",
     "for": "Project memory planner",
     "bot_block": true
    },
    {
-    "title": "nanoGPT",
+    "title": "nanoGPT: Karpathy's minimal GPT training code",
     "url": "https://github.com/karpathy/nanoGPT",
     "note": "A reference char-level Shakespeare transformer config and training loop whose loss curve you can match with your framework.",
     "for": "Project char-level transformer training"
@@ -1574,7 +1567,7 @@
    },
    {
     "kind": "repo",
-    "title": "ggml",
+    "title": "ggml: the C tensor library behind llama.cpp",
     "by": "ggml-org (Georgi Gerganov)",
     "url": "https://github.com/ggml-org/ggml",
     "note": "A C tensor library with a static compute graph and preplanned memory, the engine behind llama.cpp; read `ggml.c`'s graph build and allocator."
@@ -1602,7 +1595,7 @@
    },
    {
     "kind": "course",
-    "title": "TinyTorch",
+    "title": "TinyTorch: a course on building an ML framework from scratch",
     "by": "Vijay Janapa Reddi et al. (Harvard)",
     "url": "https://mlsysbook.ai/tinytorch",
     "note": "A free 20-module curriculum building a PyTorch-style framework from tensors to transformers in pure Python with memory and performance profiling built in; a good alternative track to minitorch/needle."
@@ -1616,7 +1609,7 @@
    },
    {
     "kind": "blog",
-    "title": "tinygrad-notes",
+    "title": "tinygrad-notes: a guide to tinygrad internals",
     "by": "Di Zhu (mesozoic-egg)",
     "url": "https://mesozoic-egg.github.io/tinygrad-notes/20241231_intro.html",
     "note": "Study notes on tinygrad internals that trace an elementwise add through UOps, scheduling and codegen; use DEBUG levels as shown to follow along in the course's pinned tinygrad."
@@ -1637,7 +1630,7 @@
    },
    {
     "kind": "course",
-    "title": "CMU 15-779: Advanced Topics in Machine Learning Systems (LLM Edition)",
+    "title": "Advanced Topics in ML Systems, LLM edition (CMU 15-779)",
     "by": "Zhihao Jia (CMU)",
     "url": "https://www.cs.cmu.edu/~zhihaoj2/15-779/",
     "note": "Fall 2025 slides on how models are lowered to kernels, ML compilers, parallelization and serving; use it as the step after dlsys."
@@ -1652,70 +1645,70 @@
   "steps": [
    {
     "kind": "watch",
-    "title": "MIT 6.172 Lecture 1: Introduction and Matrix Multiplication",
+    "title": "MIT Performance Engineering (6.172) lecture 1: Introduction and Matrix Multiplication",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/lecture-1-intro-and-matrix-multiplication/",
     "detail": "The speedup ladder for matmul: Python, Java, C, loop order, compiler flags, parallel loops, tiling, vectorization.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 6.172 Lecture 2: Bentley Rules for Optimizing Work",
+    "title": "MIT 6.172 lecture 2: Bentley Rules for Optimizing Work",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/lecture-2-bentley-rules-for-optimizing-work/",
     "detail": "A catalog of work-reducing transforms; many of them are compiler passes.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 6.172 Lecture 4: Assembly Language and Computer Architecture",
+    "title": "MIT 6.172 lecture 4: Assembly Language and Computer Architecture",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/lecture-4-assembly-language-computer-architecture/",
     "detail": "x86-64 assembly, pipelines and vector units.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 6.172 Lecture 5: C to Assembly",
+    "title": "MIT 6.172 lecture 5: C to Assembly",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/lecture-5-c-to-assembly/",
     "detail": "How clang lowers C to LLVM IR and then to assembly.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "MIT 6.172 Lecture 9: What Compilers Can and Cannot Do",
+    "title": "MIT 6.172 lecture 9: What Compilers Can and Cannot Do",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/lecture-9-what-compilers-can-and-cannot-do/",
     "detail": "What the compiler can prove and what it cannot, including aliasing, inlining and vectorization limits.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "MIT 6.172 HW2: Profiling Serial Merge Sort and HW3: Vectorization",
+    "title": "MIT 6.172 homeworks 2 and 3: profile merge sort, then vectorize",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/pages/assignments/",
     "detail": "HW2 uses perf and cachegrind to profile a merge sort. HW3 has you read clang vectorization reports and get loops to vectorize.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Aalto PPC Chapter 2: Case study, V0-V7 with the Asm pages",
+    "title": "Aalto Programming Parallel Computers ch. 2: case study, versions V0-V7",
     "url": "https://ppc.cs.aalto.fi/ch2/",
     "detail": "V0 Baseline, V1 Linear reading, V2 Instruction-level parallelism, V3 Vector instructions, V4 Reuse data in registers, V5 More register reuse, V6 Prefetching, V7 Better use of cache memory.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Aalto PPC exercises CP1, CP2a, CP2b, CP2c, CP3a",
+    "title": "Aalto exercises CP1, CP2a, CP2b, CP2c, CP3a (correlated pairs)",
     "url": "https://ppc-exercises.cs.aalto.fi/en/course/open2026",
     "detail": "CP1 CPU baseline, CP2a instruction-level parallelism, CP2b multicore parallelism, CP2c vectorization, CP3a fast solution with doubles. Submit to the grader and record runtime per version.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Aalto PPC exercise IS4 (image segmentation, fast solution) or MF1 (median filter, CPU baseline)",
+    "title": "Aalto exercise IS4 (image segmentation) or MF1 (median filter)",
     "url": "https://ppc-exercises.cs.aalto.fi/en/course/open2026",
     "detail": "One more problem with a different access pattern. Optional.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "Algorithmica HPC: Matrix Multiplication case study",
+    "title": "Algorithmica: Matrix Multiplication case study",
     "url": "https://en.algorithmica.org/hpc/algorithms/matmul/",
     "detail": "Baseline, transposition, vectorization, register reuse, kernel design, blocking. The author reaches about 50x over naive and BLAS-level speed on a Zen 2 CPU.",
     "bot_block": false
@@ -1737,7 +1730,7 @@
   ],
   "extra": [
    {
-    "title": "MIT 6.172 Lecture 8: Analysis of Multithreaded Algorithms",
+    "title": "MIT 6.172 lecture 8: Analysis of Multithreaded Algorithms",
     "url": "https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/resources/lecture-8-analysis-of-multithreaded-algorithms/",
     "note": "Work/span analysis."
    },
@@ -1775,11 +1768,11 @@
    },
    "references": [
     {
-     "title": "how-to-optimize-gemm",
+     "title": "how-to-optimize-gemm: step-by-step CPU matmul",
      "url": "https://github.com/flame/how-to-optimize-gemm"
     },
     {
-     "title": "Brendan Gregg: Flame Graphs",
+     "title": "Flame graphs (Brendan Gregg)",
      "url": "https://www.brendangregg.com/flamegraphs.html"
     }
    ],
@@ -1787,7 +1780,7 @@
   },
   "solutions": [
    {
-    "title": "matmul.c (Aman Salykov)",
+    "title": "matmul.c: a fast CPU matmul in C (Aman Salykov)",
     "url": "https://github.com/salykova/matmul.c",
     "note": "A pure-C BLIS-style SGEMM (packing, cache blocking, AVX2 FMA micro-kernel, OpenMP) that the author benchmarks against OpenBLAS; the write-up is at salykova.github.io/matmul-cpu.",
     "for": "Hand-optimized CPU matmul build and project"
@@ -1799,13 +1792,13 @@
     "for": "Build: GFLOP/s per stage with perf evidence"
    },
    {
-    "title": "how-to-optimize-gemm (FLAME group)",
+    "title": "how-to-optimize-gemm: step-by-step CPU matmul (FLAME group)",
     "url": "https://github.com/flame/how-to-optimize-gemm",
     "note": "Robert van de Geijn's group's step-by-step GEMM optimization with each version as its own file, from naive to packed `4x4` SIMD micro-kernel.",
     "for": "Micro-kernel and packing steps"
    },
    {
-    "title": "BLIS",
+    "title": "BLIS: a high-performance BLAS library",
     "url": "https://github.com/flame/blis",
     "note": "The production BLIS framework; read the haswell sgemm micro-kernel to see what the last 2x looks like.",
     "for": "Project, closing the gap to OpenBLAS"
@@ -1828,21 +1821,21 @@
    },
    {
     "kind": "talk",
-    "title": "CppCon 2015: Chandler Carruth \"Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My!\"",
+    "title": "Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My! (Chandler Carruth talk)",
     "by": "Chandler Carruth",
     "url": "https://www.youtube.com/watch?v=nXaxk27zwlk",
     "note": "Live perf and benchmark work, including the `DoNotOptimize/clobber` trick from the stuck list."
    },
    {
     "kind": "talk",
-    "title": "\"Performance Matters\" by Emery Berger",
+    "title": "Performance Matters (Emery Berger talk)",
     "by": "Emery Berger",
     "url": "https://www.youtube.com/watch?v=r-TLSBdHe1A",
     "note": "Why layout effects make naive benchmarks lie, and causal profiling with Coz; watch before trusting small speedups."
    },
    {
     "kind": "talk",
-    "title": "CppCon 2014: Mike Acton \"Data-Oriented Design and C++\"",
+    "title": "Data-Oriented Design and C++ (Mike Acton talk)",
     "by": "Mike Acton",
     "url": "https://www.youtube.com/watch?v=rX0ItVEVjHc",
     "note": "The case for designing around data layout and cache lines; the cache-miss arithmetic in the first half is the useful part."
@@ -1863,7 +1856,7 @@
    },
    {
     "kind": "book",
-    "title": "Agner Fog's optimization manuals",
+    "title": "Agner Fog's CPU optimization manuals",
     "by": "Agner Fog",
     "url": "https://www.agner.org/optimize/",
     "note": "Instruction tables and microarchitecture guides; use the tables to compute FMA throughput for your peak FLOP/s."
@@ -1884,14 +1877,14 @@
    },
    {
     "kind": "repo",
-    "title": "uops.info",
+    "title": "uops.info: instruction latency and throughput tables",
     "by": "Andreas Abel, Jan Reineke",
     "url": "https://uops.info/",
     "note": "Measured latency, throughput and port usage per instruction per CPU; check your micro-kernel's FMA and load ports."
    },
    {
     "kind": "blog",
-    "title": "Performance Matters (Travis Downs)",
+    "title": "Performance Matters (Travis Downs blog)",
     "by": "Travis Downs",
     "url": "https://travisdowns.github.io/",
     "note": "Microarchitecture investigations such as store buffer and AVX frequency effects; read the posts on AVX-512 downclocking."
@@ -1905,14 +1898,14 @@
    },
    {
     "kind": "repo",
-    "title": "google/benchmark",
+    "title": "google/benchmark: a C++ microbenchmark library",
     "by": "Google",
     "url": "https://github.com/google/benchmark",
     "note": "A microbenchmark harness with warmup, repetition statistics and `DoNotOptimize` built in."
    },
    {
     "kind": "blog",
-    "title": "SIMD City: Auto-vectorisation",
+    "title": "SIMD City: how compilers auto-vectorize loops (Matt Godbolt blog post)",
     "by": "Matt Godbolt",
     "url": "https://m.xania.org/202512/20-simd-city",
     "note": "Day 20 of the series; shows when GCC and Clang vectorize a loop and why target flags change the output, a good bridge to hand-written SIMD."
@@ -1934,28 +1927,28 @@
   "steps": [
    {
     "kind": "read",
-    "title": "Stanford CS149 slides, Lectures 1-3: Why Parallelism? Why Efficiency?, A Modern Multi-Core Processor, Multi-Core Architecture Part II + ISPC",
+    "title": "Stanford CS149 slides, lectures 1-3: why parallelism, multi-core CPUs and ISPC",
     "url": "https://gfxcourses.stanford.edu/cs149/fall24/lecture/",
     "detail": "Multi-core, SIMD, hardware multithreading, latency vs bandwidth. The page at this URL is labeled the Fall 2022 offering.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "CS149 Assignment 1: Programs 1-6 (fractal with threads, SIMD intrinsics, ISPC, sqrt, saxpy, k-means)",
+    "title": "CS149 Assignment 1: speed up six programs with threads, SIMD and ISPC",
     "url": "https://github.com/stanford-cs149/asst1",
     "detail": "Program 1 threads, 2 SIMD intrinsics, 3 ISPC (including tasks), 4 iterative sqrt, 5 BLAS saxpy, 6 k-means. Write the analysis each program asks for.",
     "bot_block": false
    },
    {
     "kind": "read",
-    "title": "CS149 slides, Lecture 7: GPU Architecture and CUDA Programming",
+    "title": "CS149 slides, lecture 7: GPU Architecture and CUDA Programming",
     "url": "https://gfxcourses.stanford.edu/cs149/fall24/lecture/",
     "detail": "CUDA abstractions and how they map to hardware: threads, blocks, warps, shared memory.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "GPU Puzzles 1-14 (Map, Zip, Guards, Map 2D, Broadcast, Blocks, Blocks 2D, Shared, Pooling, Dot Product, 1D Convolution, Prefix Sum, Axis Sum, Matrix Multiply)",
+    "title": "GPU Puzzles 1-14: practice CUDA indexing, from Map to Matrix Multiply",
     "url": "https://github.com/srush/GPU-Puzzles",
     "detail": "Run in Colab with Numba's CUDA simulator. Puzzles 1-14.",
     "bot_block": false
@@ -1969,7 +1962,7 @@
    },
    {
     "kind": "read",
-    "title": "NVIDIA CUDA Programming Guide: 1.2 Programming Model and 2.3 Writing SIMT Kernels",
+    "title": "NVIDIA CUDA Programming Guide: Programming Model (1.2) and Writing SIMT Kernels (2.3)",
     "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
     "detail": "Read the programming model, then the SIMT kernel chapter for memory spaces, shared memory and coalescing.",
     "bot_block": false
@@ -1986,6 +1979,13 @@
     "title": "Making Deep Learning Go Brrrr From First Principles (Horace He)",
     "url": "https://horace.io/brrr_intro.html",
     "detail": "Compute, memory-bandwidth and overhead as the three costs, and why fusing memory-bound ops helps.",
+    "bot_block": false
+   },
+   {
+    "kind": "watch",
+    "title": "Stanford CS336 lecture 5: how GPUs work and how fusion and tiling make kernels fast",
+    "url": "https://www.youtube.com/watch?v=6OBtO9niT00",
+    "detail": "Watch the full lecture (about 75 minutes) by Tatsu Hashimoto. It ties the roofline model, operator fusion, recomputation, coalescing and tiling to ML workloads, then builds FlashAttention from those tricks. Keep the slides open (https://github.com/stanford-cs336/spring2025-lectures/blob/main/nonexecutable/2025%20Lecture%205%20-%20GPUs.pdf) and note which tricks your fused-kernel generator in the next step will use.",
     "bot_block": false
    },
    {
@@ -2037,7 +2037,7 @@
   ],
   "project": {
    "title": "GPU kernel suite: matmul and fused softmax vs cuBLAS",
-   "brief": "Write a GPU SGEMM through progressive optimizations and a fused, numerically stable online-softmax kernel. Benchmark against cuBLAS (or MPS on Apple) and explain the gap with profiler evidence. Integrate the kernels as a backend for your module-15 framework.",
+   "brief": "Write a GPU SGEMM through progressive optimizations and a fused, numerically stable online-softmax kernel. Benchmark against cuBLAS (or MPS on Apple) and explain the gap with profiler evidence. Integrate the kernels as a backend for your Module 16 framework.",
    "deliverables": [
     "repo with each kernel version, correctness tests vs a reference, and a benchmark script",
     "README with GFLOP/s and GB/s plots vs size, percentage of cuBLAS, and Nsight Compute screenshots or metrics tables",
@@ -2067,7 +2067,7 @@
     "for": "How to Optimize a CUDA Matmul Kernel, kernels 1-6, and the SGEMM project"
    },
    {
-    "title": "GPU-Puzzles-answers (Isamu Isozaki)",
+    "title": "GPU Puzzles answers (Isamu Isozaki)",
     "url": "https://github.com/isamu-isozaki/GPU-Puzzles-answers",
     "note": "A completed notebook with answers to all 14 puzzles in Numba.",
     "for": "GPU Puzzles 1-14"
@@ -2085,7 +2085,7 @@
     "for": "SGEMM project beyond kernel 6"
    },
    {
-    "title": "CCCL (CUB, Thrust)",
+    "title": "CCCL: NVIDIA's CUB and Thrust libraries",
     "url": "https://github.com/NVIDIA/cccl",
     "note": "CUB's block and device scan and reduce are the production reference for the asst3 prefix sum and your reductions.",
     "for": "CS149 asst3 Part 2 and the exclusive-scan outcome"
@@ -2149,21 +2149,21 @@
    },
    {
     "kind": "problems",
-    "title": "LeetGPU",
+    "title": "LeetGPU: GPU kernel practice problems in the browser",
     "by": "LeetGPU",
     "url": "https://leetgpu.com/",
     "note": "Graded GPU kernel problems (CUDA, Triton and more) run on real GPUs in the browser; useful without owning a GPU."
    },
    {
     "kind": "problems",
-    "title": "GPU MODE reference kernels (KernelBot leaderboards)",
+    "title": "GPU MODE reference kernels and leaderboards",
     "by": "GPU MODE",
     "url": "https://github.com/gpu-mode/reference-kernels",
     "note": "Problem definitions and reference implementations for the GPU MODE competitive kernel leaderboards."
    },
    {
     "kind": "problems",
-    "title": "KernelBench",
+    "title": "KernelBench: a benchmark of GPU kernel tasks",
     "by": "Scaling Intelligence Lab (Stanford)",
     "url": "https://github.com/ScalingIntelligence/KernelBench",
     "note": "250 PyTorch workloads to replace with faster custom kernels; try the Level 1 problems with your own CUDA."
@@ -2184,14 +2184,14 @@
    },
    {
     "kind": "repo",
-    "title": "CUTLASS",
+    "title": "CUTLASS: NVIDIA's CUDA templates for matmul",
     "by": "NVIDIA",
     "url": "https://github.com/NVIDIA/cutlass",
     "note": "Production templated GEMMs; read the examples directory to see the warp-tiled, tensor-core version of your SGEMM."
    },
    {
     "kind": "lecture",
-    "title": "Stanford CS149 Fall 2025 lectures",
+    "title": "Stanford CS149 Fall 2025 lecture slides and readings",
     "by": "Kayvon Fatahalian, Kunle Olukotun (Stanford)",
     "url": "https://gfxcourses.stanford.edu/cs149/fall25/lecture/",
     "note": "The newest offering of the course already used here; check it for updated GPU and DSL lectures not in the fall24 set."
@@ -2212,7 +2212,7 @@
    },
    {
     "kind": "blog",
-    "title": "CUDA MODE lecture notes",
+    "title": "GPU MODE lecture notes (Christian Mills)",
     "by": "Christian Mills",
     "url": "https://christianjmills.com/series/notes/cuda-mode-notes.html",
     "note": "Written notes for the GPU MODE lectures; useful for skimming a lecture before watching or for review."
