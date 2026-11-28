@@ -1985,7 +1985,7 @@
    {
     "kind": "read",
     "title": "A Recipe for Training Neural Networks (Karpathy)",
-    "url": "http://karpathy.github.io/2019/04/25/recipe/",
+    "url": "https://karpathy.github.io/2019/04/25/recipe/",
     "detail": "Apply its process to reproductions: inspect the data, overfit a small case first, and verify each step before scaling.",
     "bot_block": false
    },

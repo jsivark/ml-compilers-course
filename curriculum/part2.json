@@ -1520,7 +1520,7 @@
     "kind": "blog",
     "title": "PyTorch internals",
     "by": "Edward Z. Yang",
-    "url": "http://blog.ezyang.com/2019/05/pytorch-internals/",
+    "url": "https://blog.ezyang.com/2019/05/pytorch-internals/",
     "note": "How a real framework separates tensor, storage, strides and dispatch; the strides and autograd sections map straight onto your library."
    },
    {
@@ -2223,6 +2223,13 @@
     "by": "NVIDIA",
     "url": "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/",
     "note": "NVIDIA's own APOD guide; read the memory optimization chapters (coalescing, shared memory bank conflicts, occupancy) next to the programming guide."
+   },
+   {
+    "kind": "blog",
+    "title": "AI Flame Graphs",
+    "by": "Brendan Gregg",
+    "url": "https://www.brendangregg.com/blog/2024-10-29/ai-flame-graphs.html",
+    "note": "Extends CPU flame graphs to show GPU/accelerator instruction samples under the full software stack; read it to see where the flame graph idea goes once kernels are involved."
    }
   ],
   "stretch": "Extend your SGEMM to tensor cores (WMMA or `mma.sync` with FP16/BF16 inputs, FP32 accumulate) with async copies and double buffering, and reach at least 80% of cuBLAS HGEMM at `4096x4096`. Submit your kernel to a GPU MODE leaderboard problem and report the ranking along with Nsight Compute evidence for the remaining gap."

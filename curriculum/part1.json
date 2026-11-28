@@ -2,12 +2,12 @@
  {
   "id": 0,
   "title": "Orientation and toolkit",
-  "why": "Every later module assumes you can use a terminal, version your work with git, debug C, rebuild a Python environment and read papers efficiently. Set this up once here so it does not slow you down later. The repo you create holds every module's work.",
+  "why": "Every later module assumes you can use a terminal, version your work with git, debug C, rebuild a Python environment, read papers and, above all, measure performance honestly. From Module 4 to the end, almost every project ends in a speed claim, so this module has you build the small benchmark tool you will use for all of them. The repo you create here, `kiln`, holds every module's work.",
   "steps": [
    {
     "kind": "watch",
-    "title": "Missing Semester lecture 1: get comfortable in the shell",
-    "url": "https://missing.csail.mit.edu/2020/course-shell/",
+    "title": "Missing Semester: get comfortable in the shell",
+    "url": "https://missing.csail.mit.edu/2026/course-shell/",
     "detail": "Use the terminal on macOS or Linux. On Windows, set up WSL2 first (next step) and work inside it. Do the exercises at the bottom of the page.",
     "bot_block": false
    },
@@ -20,22 +20,22 @@
    },
    {
     "kind": "watch",
-    "title": "Missing Semester lecture 2: shell tools and scripting",
-    "url": "https://missing.csail.mit.edu/2020/shell-tools/",
-    "detail": "Focus on pipes, find, grep and writing a small bash script with `set -euo pipefail`. Later modules use scripts like this for benchmark sweeps.",
+    "title": "Missing Semester: the command-line environment",
+    "url": "https://missing.csail.mit.edu/2026/command-line-environment/",
+    "detail": "Pipes, environment variables, job control and dotfiles. Pay attention to environment variables: the project's experiment changes nothing but the environment and measures the effect.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Missing Semester lecture 3: learn a text editor (Vim)",
-    "url": "https://missing.csail.mit.edu/2020/editors/",
-    "detail": "You do not need to switch to Vim. Learn enough to edit files over ssh on a remote machine, and set up your main editor with clangd and a Python language server.",
+    "title": "Missing Semester: set up your editor and tools",
+    "url": "https://missing.csail.mit.edu/2026/development-environment/",
+    "detail": "You do not need to switch editors. Set up your main editor with clangd (C) and a Python language server, and learn enough Vim to edit a file over ssh.",
     "bot_block": false
    },
    {
     "kind": "watch",
-    "title": "Missing Semester lecture 6: how Git works",
-    "url": "https://missing.csail.mit.edu/2020/version-control/",
+    "title": "Missing Semester: how Git works",
+    "url": "https://missing.csail.mit.edu/2026/version-control/",
     "detail": "Understand the data model (blobs, trees, commits, refs) rather than memorizing commands.",
     "bot_block": false
    },
@@ -47,17 +47,10 @@
     "bot_block": false
    },
    {
-    "kind": "read",
-    "title": "Pro Git book, ch. 2-3, 7.3 and 7.10: basics, branching, stashing and debugging",
-    "url": "https://git-scm.com/book/en/v2",
-    "detail": "Use as a reference when something goes wrong. Learn `git log --oneline --graph`, `git stash` and `git bisect`.",
-    "bot_block": false
-   },
-   {
     "kind": "watch",
-    "title": "Missing Semester lecture 7: debugging and profiling",
-    "url": "https://missing.csail.mit.edu/2020/debugging-profiling/",
-    "detail": "Covers printf debugging, gdb and pdb, perf and flame graphs. Modules 1-4 use all of these.",
+    "title": "Missing Semester: debugging and profiling",
+    "url": "https://missing.csail.mit.edu/2026/debugging-profiling/",
+    "detail": "printf debugging, debuggers, sanitizers and profilers. Modules 1-4 use all of these.",
     "bot_block": false
    },
    {
@@ -68,10 +61,38 @@
     "bot_block": false
    },
    {
+    "kind": "read",
+    "title": "Makefile Tutorial: write a small Makefile",
+    "url": "https://makefiletutorial.com/",
+    "detail": "Read Getting Started, Targets, Variables and Phony targets. That is enough for the project's `make test` and `make bench` targets.",
+    "bot_block": false
+   },
+   {
     "kind": "do",
     "title": "Set up Python environments with uv",
     "url": "https://docs.astral.sh/uv/",
-    "detail": "Create one project environment with numpy, matplotlib, pytest and torch (the CPU build is enough). Commit `uv.lock` or `requirements.txt`.",
+    "detail": "Create one project environment for kiln with numpy, matplotlib and pytest (PyTorch comes later, in Module 7). Commit `uv.lock`. The project's `kbench.py` and its tests run in this environment.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Python argparse tutorial: give your script command-line options",
+    "url": "https://docs.python.org/3/howto/argparse.html",
+    "detail": "Read up to 'Short options'. kbench needs `-n`, `--warmup` and everything after `--` as the command (`nargs=argparse.REMAINDER`). For running that command and capturing its output, read the `subprocess.run` section of https://docs.python.org/3/library/subprocess.html.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "pytest: write and run your first tests",
+    "url": "https://docs.pytest.org/en/stable/getting-started.html",
+    "detail": "Read the whole page (about 15 minutes). The project's `tests/test_kbench.py` uses plain `assert` and, for the CSV test, the `tmp_path` fixture shown there.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "Matplotlib quick start: make your first plot",
+    "url": "https://matplotlib.org/stable/users/explain/quick_start.html",
+    "detail": "Read up to 'Styling Artists'. You need one line plot with error bars (`ax.errorbar`), axis labels and `fig.savefig`.",
     "bot_block": false
    },
    {
@@ -83,73 +104,116 @@
    },
    {
     "kind": "read",
-    "title": "Julia Evans, How to ask good questions",
-    "url": "https://jvns.ca/blog/good-questions/",
-    "detail": "Before asking anyone for help, write down what you tried, the exact error and a minimal reproduction.",
+    "title": "Mytkowicz et al., Producing Wrong Data Without Doing Anything Obviously Wrong!",
+    "url": "https://users.cs.northwestern.edu/~robby/courses/322-2013-spring/mytkowicz-wrong-data.pdf",
+    "detail": "The ASPLOS 2009 paper showing that the size of your environment variables and the link order can change a benchmark's speed enough to flip a conclusion. Read sections 1-4; the project asks you to reproduce the environment-size effect.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "LLVM benchmarking tips: how to get stable timings",
+    "url": "https://llvm.org/docs/Benchmarking.html",
+    "detail": "A short page from the LLVM developers on reducing noise: fixed CPU frequency, pinning to a core, quiet machine. Apply what your OS allows and record what you could not control.",
     "bot_block": false
    },
    {
     "kind": "do",
-    "title": "Join the GPU MODE community",
-    "url": "https://discord.gg/gpumode",
-    "detail": "A Discord server for GPU kernel and ML systems work; its talks are also on YouTube. Read the pinned messages before posting.",
+    "title": "hyperfine: a command-line benchmarking tool",
+    "url": "https://github.com/sharkdp/hyperfine",
+    "detail": "Install it (`brew install hyperfine` on macOS, `sudo apt install hyperfine` on Debian/Ubuntu) and time any command with `hyperfine --warmup 3 'cmd'`. Your own tool in the project does the same job; use hyperfine to check its numbers.",
+    "bot_block": false
+   },
+   {
+    "kind": "read",
+    "title": "GitHub Actions quickstart: run checks on every push",
+    "url": "https://docs.github.com/en/actions/writing-workflows/quickstart",
+    "detail": "Make the demo workflow run once, then write your own `ci.yml`. To install uv and run pytest in CI, follow https://docs.astral.sh/uv/guides/integration/github/.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "Start a learning log (Julia Evans, write a brag document)",
     "url": "https://jvns.ca/blog/brag-documents/",
-    "detail": "Keep `LOG.md` in your repo with one dated entry per session: what you did, what confused you, what you will do next. Write a short public post at the end of each module.",
+    "detail": "Keep `LOG.md` in kiln with one dated entry per session: what you did, what confused you, what you will do next. This is your only log; write one short public post per module from it. The easiest place to publish is GitHub Pages (quickstart: https://docs.github.com/en/pages/quickstart).",
     "bot_block": false
    }
   ],
-  "build": "A public GitHub repo `ml-compilers-log` with a README (goals, schedule, hardware), `LOG.md`, a `modules/` directory, a Makefile target that compiles and runs a sanitized C hello-world, a pytest that passes, and a GitHub Actions CI workflow that runs both on every push.",
+  "build": "The kiln repo described in the project below: README, `LOG.md`, a Makefile, a sanitized C test and a pytest, green in GitHub Actions, plus `bench/kbench.py` and the environment-size experiment.",
   "check": [
    "Write a one-line shell pipeline that prints the 5 largest files under a directory.",
    "Explain the difference between a commit, a branch and a tag in git's data model.",
    "Use gdb or lldb to find the line of a segfault in a 20-line C program without adding printfs.",
-   "Recreate your Python environment from scratch on a clean machine (or container) from your lockfile alone.",
-   "Summarize a paper after Keshav's first pass in five sentences (the five Cs)."
+   "Recreate your Python environment from scratch from your lockfile alone.",
+   "Explain why you report the median of many runs instead of a single run or the mean, and what warmup runs are for.",
+   "Name two things outside your code that can change its measured speed, and how you controlled or recorded each."
   ],
   "extra": [],
-  "effort": "10–15 h",
+  "effort": "12–18 h",
   "difficulty": 1,
   "outcomes": [
    "Write shell pipelines and small bash scripts, locally and over ssh.",
    "Use git branches and tags, and recover from a bad merge with `git reflog`.",
    "Compile C with `-g` and `-fsanitize=address` and find a crash with gdb or lldb.",
    "Rebuild your Python environment from a lockfile.",
-   "Read a paper with Keshav's three-pass method and write a five-sentence summary."
+   "Benchmark a program with warmup, repeated runs and a recorded environment, and report a median with its spread."
   ],
   "stuck": [
    "WSL slow or files missing: keep the repo under `~/` in Linux, not `/mnt/c`; open it with `code .` from WSL.",
    "macOS 'gdb' won't run: use lldb, which ships with the Xcode Command Line Tools; the commands map almost one to one (lldb's GDB-to-LLDB command map helps).",
    "git 'detached HEAD' or a messy merge: run `git status` and `git log --oneline --graph --all` before anything else; `git reflog` can recover almost anything.",
    "Limit tooling setup (dotfiles, themes) to two evenings, then start Module 1.",
-   "Pip and conda in the same env cause mysterious import errors: pick one tool (uv recommended) and one env per project."
+   "Pip and conda in the same env cause mysterious import errors: pick one tool (uv recommended) and one env per project.",
+   "Timings jump around between runs: close other apps, plug in the laptop, run more repetitions and report the spread. On macOS you cannot pin cores or fix the frequency; record that in the README instead of hiding it."
   ],
   "project": {
-   "title": "Set up the kiln repo, your notes site and a first post",
-   "brief": "Create a public repo named kiln with a README, a license, a Makefile and a CI workflow that builds and runs an empty test, plus a notes site or blog where you will write one page per module. kiln is the main project of this course: a small ML library with its own compiler, grown one version at a time from Module 1 to Module 39. Publish a first post saying what you are building and why.",
+   "title": "kiln v0.0: the repo and a benchmark tool you will use all course",
+   "brief": "kiln is the one repo for this whole course. It grows into a small ML library with its own compiler: tensors in Module 1, autograd in Module 6, a graph IR in Module 8, and from Module 19 the course compiler (`./compile`) becomes its backend. Module exercises and skill projects go in `labs/NN-name/` inside the same repo. In this module you set it up and build `kbench`, a small timing tool, then use it to reproduce a real result: changing only the size of the environment can change how fast a program runs.",
+   "steps": [
+    "Create a public GitHub repo named `kiln` with these files and folders: `README.md`, `LICENSE` (MIT is fine), `LOG.md`, `Makefile`, `bench/`, `labs/00-setup/`, `tests/`, and the `pyproject.toml` and `uv.lock` from the uv step.",
+    "In `labs/00-setup/`, write `sum.c`: fill an array of 10 million ints with small values (for example `i % 100`), add them into a `long long` total (an `int` total would overflow), and print it. Make it take about 0.1-0.5 s; if it is faster, repeat the loop. In the Makefile add two targets: `make sum` builds `./sum` with `-O2` for timing, and `make test` builds a separate `./sum_asan` with `-g -fsanitize=address,undefined`, runs it and checks the printed total.",
+    "Write `bench/kbench.py`. Running `python bench/kbench.py -n 20 --warmup 3 -- ./sum` should run the command 3 times without timing it, then 20 times timing each run with `time.perf_counter()` around `subprocess.run`, and append one row to `results.csv`. Add a `--label` option whose text is stored in the row, so you can tell runs apart later. The row holds: the command, number of runs, median, min, max, the interquartile range (the spread of the middle half of the runs: `statistics.quantiles(times, n=4)` gives the quartiles), the git commit (`git rev-parse --short HEAD`), the compiler version (first line of `cc --version`), the OS (`platform.platform()`) and the CPU model (`platform.processor()`, or `sysctl -n machdep.cpu.brand_string` on macOS, `/proc/cpuinfo` on Linux). Then add `make bench`, which builds `./sum` and runs kbench on it; let `make bench RUNS=3` set `-n` so CI can run a quick version.",
+    "Write `tests/test_kbench.py` with pytest. Put the median and interquartile-range math in plain functions so you can test them on fixed lists such as `[1, 2, 3, 4, 100]`, and check that one run writes a CSV row with every column filled.",
+    "Time the same `./sum` with hyperfine (`hyperfine --warmup 3 -N ./sum`). The two medians should agree within a few percent; if not, find out why. Note both numbers in `labs/00-setup/README.md`.",
+    "The experiment: in a bash loop, `for N in $(seq 0 64 4096)`, run `python bench/kbench.py -n 20 --warmup 3 --label $N -- env \"PAD=$(head -c $N /dev/zero | tr '\\0' x)\" ./sum`. Each run adds a dummy environment variable of N x's; keep the quotes, or the shell may mangle it. That is 65 sizes and takes about 10 minutes. Then write a short Python script that reads `results.csv`, takes the rows with these labels, and plots median time (min and max as error bars) against N into `labs/00-setup/env_size.png`.",
+    "Write about one page in `labs/00-setup/README.md`: what you measured, the plot, whether the change across N is bigger than the run-to-run spread, and what you could not control (other apps, laptop power mode, CPU frequency). The paper saw its effect with variables on the stack; if you see nothing, say so and show the noise. An honest null result passes.",
+    "Add `.github/workflows/ci.yml` (start from the GitHub Actions C starter workflow in Go deeper) that on every push installs uv, then runs `make test`, `uv run pytest`, and `make bench RUNS=3` as a quick check that the tool still works. Do not trust timings from CI machines.",
+    "Publish one short post (500-1000 words) on GitHub Pages, a blog or similar: what kiln will become, your study schedule, and your environment-size result with the plot. Link it from the README."
+   ],
    "deliverables": [
-    "repo with README, `LOG.md`, Makefile, a sanitized C test and a pytest, all green in GitHub Actions",
-    "a short CONTRIBUTING-style note to yourself: branch-per-module, commit message conventions, how to tag a finished module",
-    "a 600–1000 word blog post on your goals and plan, linked from the README"
+    "public `kiln` repo with the layout above, all green in GitHub Actions",
+    "`bench/kbench.py` with its pytest, checked against hyperfine",
+    "`labs/00-setup/README.md` with the environment-size plot and write-up",
+    "`LOG.md` with at least 3 dated entries, and one published post linked from the README"
    ],
    "rubric": {
-    "solid": "CI passes on push; README states the plan; `LOG.md` has at least 3 dated entries; blog post is published and linked.",
-    "exceptional": "Reproducible environment (`uv.lock` or a devcontainer) that CI builds from scratch, and a `make bench` target that writes timings to CSV for use in later modules."
+    "solid": "CI is green; kbench reports median, min, max and interquartile range and records the environment; it agrees with hyperfine; the plot exists and the write-up compares the effect to the noise honestly.",
+    "exceptional": "Also pins the process to one core and fixes the CPU frequency where the OS allows (Linux `taskset` and `cpupower`), repeats the experiment with link order changed (the paper's second effect), and gives a bootstrap confidence interval for each median."
    },
    "references": [
     {
-     "title": "Missing Semester 2020, Lecture 6: Version Control (Git)",
-     "url": "https://missing.csail.mit.edu/2020/version-control/"
+     "title": "Mytkowicz et al., Producing Wrong Data Without Doing Anything Obviously Wrong!",
+     "url": "https://users.cs.northwestern.edu/~robby/courses/322-2013-spring/mytkowicz-wrong-data.pdf"
+    },
+    {
+     "title": "hyperfine: a command-line benchmarking tool",
+     "url": "https://github.com/sharkdp/hyperfine"
+    },
+    {
+     "title": "LLVM benchmarking tips",
+     "url": "https://llvm.org/docs/Benchmarking.html"
     }
    ],
    "track": "setup"
   },
   "solutions": [],
   "deeper": [
+   {
+    "kind": "book",
+    "title": "Pro Git",
+    "by": "Scott Chacon, Ben Straub",
+    "url": "https://git-scm.com/book/en/v2",
+    "note": "The reference when git goes wrong: chapters 2-3 for basics and branching, 7.3 for stashing, 7.10 for `git bisect`."
+   },
    {
     "kind": "repo",
     "title": "The Art of Command Line",
@@ -163,13 +227,6 @@
     "by": "Julia Evans",
     "url": "https://jvns.ca/blog/2024/01/26/inside-git/",
     "note": "Walks through the actual files in `.git` so the `blob/tree/commit` model from Lecture 6 becomes concrete."
-   },
-   {
-    "kind": "blog",
-    "title": "Wizard Zines",
-    "by": "Julia Evans",
-    "url": "https://wizardzines.com/",
-    "note": "Short illustrated guides; the free comics on git, perf, strace and debugging are worth printing."
    },
    {
     "kind": "blog",
@@ -197,60 +254,7 @@
     "title": "ARCHITECTURE.md: why every repo needs a short code map",
     "by": "Alex Kladov (matklad)",
     "url": "https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html",
-    "note": "Short argument for a codemap file in every repo; add one to ml-compilers-log now."
-   },
-   {
-    "kind": "blog",
-    "title": "A Recipe for Training Neural Networks",
-    "by": "Andrej Karpathy",
-    "url": "https://karpathy.github.io/2019/04/25/recipe/",
-    "note": "Its habit of small verified steps applies to compiler work too; read the 'become one with the data' and 'overfit' sections."
-   },
-   {
-    "kind": "blog",
-    "title": "GPU Glossary",
-    "by": "Modal",
-    "url": "https://modal.com/gpu-glossary",
-    "note": "A linked glossary of GPU hardware and software terms; skim the Device Hardware section now to see where the course ends up."
-   },
-   {
-    "kind": "book",
-    "title": "How to Scale Your Model",
-    "by": "Google DeepMind (Austin et al.)",
-    "url": "https://jax-ml.github.io/scaling-book/",
-    "note": "The roofline-first view of LLM training and inference on TPUs and GPUs; read Part 1 (Rooflines) as a preview of the course's goal."
-   },
-   {
-    "kind": "repo",
-    "title": "build-your-own-x: an index of from-scratch tutorials",
-    "by": "CodeCrafters community",
-    "url": "https://github.com/codecrafters-io/build-your-own-x",
-    "note": "An index of from-scratch tutorials; bookmark the Programming Language, Database and Neural Network sections for side projects."
-   },
-   {
-    "kind": "repo",
-    "title": "GitHub Actions starter workflow for a C project built with Make",
-    "url": "https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml",
-    "note": "The official minimal workflow that runs make on every push; compare it with your own CI file."
-   },
-   {
-    "kind": "repo",
-    "title": "GitHub Actions starter workflow for a Python project",
-    "url": "https://github.com/actions/starter-workflows/blob/main/ci/python-app.yml",
-    "note": "Official workflow that installs dependencies and runs pytest; shows the job and step layout your CI needs."
-   },
-   {
-    "kind": "repo",
-    "title": "gdb-dashboard: a more readable GDB screen",
-    "url": "https://github.com/cyrus-and/gdb-dashboard",
-    "note": "A single `.gdbinit` that shows registers, source, stack and memory at each stop; a reference for a productive gdb setup."
-   },
-   {
-    "kind": "course",
-    "title": "The Missing Semester of Your CS Education (2026 lectures)",
-    "by": "Anish Athalye, Jon Gjengset, Jose Javier Gonzalez Ortiz (MIT)",
-    "url": "https://missing.csail.mit.edu/2026/",
-    "note": "The January 2026 rewrite of the course; the debugging/profiling and packaging lectures are new, so read those even if you know the 2020 version."
+    "note": "Short argument for a code map file in every repo; add one to kiln now and keep it current as kiln grows."
    },
    {
     "kind": "repo",
@@ -261,31 +265,30 @@
    },
    {
     "kind": "repo",
-    "title": "PyTorch profiling tutorial",
-    "by": "Quentin Anthony",
-    "url": "https://github.com/Quentin-Anthony/torch-profiling-tutorial",
-    "note": "Practical walkthrough of `torch.profiler` and Nsight traces on real training code; focus on how to read a trace timeline and spot CPU launch overhead versus GPU work."
+    "title": "GitHub Actions starter workflow for a C project built with Make",
+    "url": "https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml",
+    "note": "The official minimal workflow that runs make on every push; compare it with your own CI file."
+   },
+   {
+    "kind": "talk",
+    "title": "You and Your Research",
+    "by": "Richard Hamming",
+    "url": "https://www.cs.virginia.edu/~robins/YouAndYourResearch.html",
+    "note": "Hamming's 1986 talk on why some people do important work and most do not. Read it once now and again before the capstone."
    },
    {
     "kind": "blog",
-    "title": "Profiling in PyTorch (Part 1): A Beginner's Guide to torch.profiler",
-    "by": "Hugging Face",
-    "url": "https://huggingface.co/blog/torch-profiler",
-    "note": "Shows the wait/warmup/active schedule and how to read the exported trace; a good first exposure to GPU profiling before the course reaches kernels."
-   },
-   {
-    "kind": "blog",
-    "title": "AI Flame Graphs",
-    "by": "Brendan Gregg",
-    "url": "https://www.brendangregg.com/blog/2024-10-29/ai-flame-graphs.html",
-    "note": "Extends CPU flame graphs to show GPU/accelerator instruction samples under the full software stack; read it to see where the flame graph idea goes once kernels are involved."
-   },
-   {
-    "kind": "blog",
-    "title": "The Secret Rules of the Terminal (zine)",
+    "title": "Julia Evans, How to ask good questions",
     "by": "Julia Evans",
-    "url": "https://jvns.ca/blog/2025/06/24/new-zine--the-secret-rules-of-the-terminal/",
-    "note": "Links the free blog posts behind the zine (PATH, pipe buffering, escape codes); read the linked posts to fix the confusing terminal behaviour beginners hit."
+    "url": "https://jvns.ca/blog/good-questions/",
+    "note": "Before asking anyone for help, write down what you tried, the exact error and a minimal reproduction."
+   },
+   {
+    "kind": "blog",
+    "title": "Join the GPU MODE community",
+    "by": "GPU MODE",
+    "url": "https://discord.gg/gpumode",
+    "note": "A Discord server for GPU kernel and ML systems work; its talks are also on YouTube. Read the pinned messages before posting."
    }
   ],
   "stretch": "Build a reproducible dev environment for the whole course: a Dockerfile or Nix flake that pins clang, gdb, perf, Python and uv, plus a CI matrix (Linux x86-64 and macOS arm64) that builds and tests every module directory. Measure cold-start setup time on a fresh machine and get it under 10 minutes, documented in the README."
@@ -420,7 +423,7 @@
   ],
   "project": {
    "title": "kiln v0.1: an arena-allocated tensor core in C",
-   "brief": "Start kiln with a small C library, `tcore`, that stores N-dimensional float32 tensors (shape, strides, offset, data) in an arena allocator, with elementwise add and mul, a naive matmul and a C test suite. Every later kiln version builds on it, and the C your compiler generates in Part III will link against it. Benchmark creating and freeing `10^4`, `10^5` and `10^6` tensors of 16, 256 and 4096 floats with the arena vs `malloc/free`, and explain the difference.",
+   "brief": "Start kiln with a small C library, `tcore`, that stores N-dimensional float32 tensors (shape, strides, offset, data) in an arena allocator, with elementwise add and mul, a naive matmul and a C test suite. Every later kiln version builds on it, and the C your compiler generates in Part III will link against it. Benchmark creating and freeing `10^4`, `10^5` and `10^6` tensors of 16, 256 and 4096 floats with the arena vs `malloc/free`, and explain the difference. Time each case with your `kbench` tool from Module 0.",
    "deliverables": [
     "repo with `tcore.h/tcore.c`, a Makefile, and tests that run clean under ASan, UBSan and valgrind",
     "README with a table and plot of allocation throughput (arena vs `malloc`) across tensor counts and sizes",
@@ -773,7 +776,7 @@
    {
     "kind": "do",
     "title": "CS:APP Data Lab: bit-twiddling puzzles",
-    "url": "http://csapp.cs.cmu.edu/3e/datalab.pdf",
+    "url": "https://csapp.cs.cmu.edu/3e/datalab.pdf",
     "detail": "Get `datalab-handout` from the labs page. Solve every bit and float puzzle within the op limits; run `./btest` and `./dlc` until both pass.",
     "bot_block": false
    },
@@ -815,7 +818,7 @@
    {
     "kind": "do",
     "title": "CS:APP Bomb Lab: defuse six phases by reading assembly",
-    "url": "http://csapp.cs.cmu.edu/3e/bomblab.pdf",
+    "url": "https://csapp.cs.cmu.edu/3e/bomblab.pdf",
     "detail": "Use gdb (`break`, `stepi`, `x/s`, `info registers`) and `objdump -d`. For each phase, note which C construct it encodes (comparison, loop, switch, recursion, linked list).",
     "bot_block": false
    },
@@ -833,7 +836,8 @@
    "Bomb Lab: all 6 phases defused without an explosion (phases 1-4 are worth 10 points each, 5-6 are worth 15).",
    "Explain why `(int)(unsigned)-1` and `-1 > 0u` behave as they do.",
    "Explain why `0.1+0.2 != 0.3` and why summing floats in a different order changes the result.",
-   "Given a 10-line asm function, write the C that produced it."
+   "Given a 10-line asm function, write the C that produced it.",
+   "Explain your Module 0 environment-size result using what you now know about the stack: where environment variables sit in a new process's memory, and how their size shifts the alignment of stack variables."
   ],
   "extra": [
    {
@@ -1054,14 +1058,14 @@
    {
     "kind": "do",
     "title": "CS:APP Cache Lab part A: write a cache simulator",
-    "url": "http://csapp.cs.cmu.edu/3e/cachelab.pdf",
+    "url": "https://csapp.cs.cmu.edu/3e/cachelab.pdf",
     "detail": "Write `csim.c` that replays valgrind traces with LRU; match `csim-ref` on all test traces.",
     "bot_block": false
    },
    {
     "kind": "do",
     "title": "CS:APP Cache Lab part B: write a cache-friendly matrix transpose",
-    "url": "http://csapp.cs.cmu.edu/3e/cachelab.pdf",
+    "url": "https://csapp.cs.cmu.edu/3e/cachelab.pdf",
     "detail": "Blocked transpose for `32x32` (`<300` misses), `64x64` (`<1300`) and `61x67` (`<2000`). This is your first hand-written schedule.",
     "bot_block": false
    },
@@ -1129,7 +1133,7 @@
    "title": "Single-core CPU SGEMM: from naive to a large fraction of peak",
    "brief": "Starting from your naive C matmul, optimize single-threaded float32 GEMM for square N from 256 to 2048 step by step: loop order, cache tiling, register blocking with a micro-kernel, SIMD (AVX2/NEON intrinsics or auto-vectorization) and packing. Compute your core's theoretical peak (FMA units x SIMD width x 2 x clock) and plot each version's GFLOP/s as a fraction of it, next to OpenBLAS or Accelerate restricted to one thread.",
    "deliverables": [
-    "repo with each optimization step as its own function or commit, a correctness test against a reference, and a benchmark script",
+    "repo with each optimization step as its own function or commit, a correctness test against a reference, and a benchmark script that times each version with your `kbench` tool from Module 0",
     "README with a GFLOP/s vs N plot for all versions and the BLAS baseline, and your peak-FLOPs calculation",
     "a 600–1200 word write-up explaining which step removed which bottleneck, backed by cache-miss counts or a roofline argument"
    ],
@@ -1921,7 +1925,7 @@
     "kind": "blog",
     "title": "Let's talk about the PyTorch dispatcher",
     "by": "Edward Yang",
-    "url": "http://blog.ezyang.com/2020/09/lets-talk-about-the-pytorch-dispatcher/",
+    "url": "https://blog.ezyang.com/2020/09/lets-talk-about-the-pytorch-dispatcher/",
     "note": "Follow-on to PyTorch internals showing how one tensor op routes through autograd, device and dtype kernels."
    },
    {
@@ -2500,6 +2504,20 @@
     "by": "Stanford CS312 (Hashimoto, Kotha)",
     "url": "https://github.com/deep-learning-alchemy/assignments/tree/a2_release",
     "note": "Optional and heavy. Part (a) of each problem uses the provided sweeps; the full assignment adds about 166 H100 runs. Pairs with the Muon readings above. Handout: https://deep-learning-alchemy.github.io/assets/assignments/a2_hyperparameter_scaling.pdf"
+   },
+   {
+    "kind": "repo",
+    "title": "PyTorch profiling tutorial",
+    "by": "Quentin Anthony",
+    "url": "https://github.com/Quentin-Anthony/torch-profiling-tutorial",
+    "note": "Practical walkthrough of `torch.profiler` and Nsight traces on real training code; focus on how to read a trace timeline and spot CPU launch overhead versus GPU work."
+   },
+   {
+    "kind": "blog",
+    "title": "Profiling in PyTorch (Part 1): A Beginner's Guide to torch.profiler",
+    "by": "Hugging Face",
+    "url": "https://huggingface.co/blog/torch-profiler",
+    "note": "Shows the wait/warmup/active schedule and how to read the exported trace; a good first exposure to GPU profiling before the course reaches kernels."
    }
   ],
   "stretch": "Speedrun CIFAR-10 on your own framework: reach 94% test accuracy with the fewest GPU-seconds (or CPU-minutes) you can, porting airbench tricks one at a time. Publish an ablation table with time-to-94% per trick and the gap to airbench94 running in PyTorch on the same hardware."

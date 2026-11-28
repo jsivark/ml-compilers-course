@@ -4,11 +4,14 @@ on:
   pull_request:
   schedule:
     - cron: "0 6 * * 1"   # weekly link check, Mondays
+permissions:
+  contents: read
 jobs:
   content:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: { persist-credentials: false }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Style and structure
@@ -18,3 +21,5 @@ jobs:
         run: python3 tools/check_content.py --links
       - name: Site builds
         run: python3 site/build.py
+      - name: Built site matches committed docs/
+        run: git diff --exit-code -- docs/ && test -z "$(git status --porcelain -- docs/)"

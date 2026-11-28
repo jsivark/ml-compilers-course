@@ -11,7 +11,7 @@ The expected outcome comes from the filename prefix:
 Each run sets UIR_WEEK=<week> in the environment, so a compiler can apply that week's
 rules (only week01/rejected_alu_on_vector.uir needs it: ALU ops on vectors become valid in week 4).
 """
-import argparse, glob, os, shlex, shutil, subprocess, sys
+import argparse, glob, os, shlex, shutil, signal, subprocess, sys
 
 def expected(path):
   b = os.path.basename(path)
@@ -37,10 +37,15 @@ env = dict(os.environ, UIR_WEEK=str(a.week))
 ok = 0
 for f in files:
   rel = os.path.relpath(f)
+  # own session, so a timeout kills the compiler and anything it started
+  p = subprocess.Popen(shlex.split(a.compiler) + [rel], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env, start_new_session=True)
   try:
-    r = subprocess.run(shlex.split(a.compiler) + [rel], capture_output=True, text=True, timeout=a.timeout, env=env)
-    got = (r.stdout.strip().split() or ["(no output)"])[0]
+    out, _ = p.communicate(timeout=a.timeout)
+    got = (out.strip().split() or ["(no output)"])[0]
   except subprocess.TimeoutExpired:
+    try: os.killpg(p.pid, signal.SIGKILL)
+    except ProcessLookupError: pass
+    p.communicate()
     got = "TIMEOUT"
   exp = expected(f); good = got == exp; ok += good
   if a.v or not good: print(f"{'ok  ' if good else 'FAIL'} {rel}: expected {exp}, got {got}")

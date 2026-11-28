@@ -68,6 +68,14 @@
   });
   paintProgress();
 
+  // ---------- light/dark toggle ----------
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".theme")) return;
+    var n = root.dataset.theme == "dark" ? "light" : "dark";
+    root.dataset.theme = n;
+    try { localStorage.setItem("theme", n); } catch (err) {}
+  });
+
   // ---------- phone menu and course-map drawer ----------
   document.addEventListener("click", function (e) {
     if (e.target.closest(".menu-btn")) { document.body.classList.toggle("menu-open"); return; }
@@ -94,7 +102,9 @@
              .sort(function (a, b) { return (a.k === "module" ? 0 : 1) - (b.k === "module" ? 0 : 1); });
         hits = hits.slice(0, 40); sel = Math.min(sel, Math.max(hits.length - 1, 0));
         list.innerHTML = hits.length ? hits.map(function (r, i) {
-          return '<li' + (i === sel ? ' class="sel"' : "") + '><a href="' + (r.u.indexOf("http") === 0 ? r.u : base + r.u) + '"' + (r.u.indexOf("http") === 0 ? ' target="_blank" rel="noopener"' : "") + '><span class="sk">' + r.k + '</span>' + esc(r.t) + '<span class="sm">' + esc(r.m) + "</span></a></li>";
+          var u = String(r.u), ext = /^https?:\/\//i.test(u);
+          var href = ext ? u : /^modules\/\d\d\.html(#\w+)?$/.test(u) ? base + u : "#";
+          return '<li' + (i === sel ? ' class="sel"' : "") + '><a href="' + esc(href) + '"' + (ext ? ' target="_blank" rel="noopener"' : "") + '><span class="sk">' + esc(r.k) + '</span>' + esc(r.t) + '<span class="sm">' + esc(r.m) + "</span></a></li>";
         }).join("") : "<li class='muted'>No matches</li>";
       }
       input.addEventListener("input", function () { sel = 0; render(); });
@@ -125,8 +135,15 @@
   var today = new Date().toISOString().slice(0, 10);
   var art = store.get("art", null);
   if (art && !art.lic) art = null; // refresh entries saved before credits included date and licence
+  // https only, on the museum's own host or a subdomain of it
+  function okUrl(u, host) {
+    try { var x = new URL(u); return x.protocol === "https:" && (x.hostname === host || x.hostname.slice(-host.length - 1) === "." + host); }
+    catch (e) { return false; }
+  }
+  function okArt(a) { return !!a && okUrl(a.img, "clevelandart.org") && okUrl(a.link, "clevelandart.org"); }
+  if (art && !okArt(art)) art = null; // drop a cached record with an unexpected link or image host
   function showArt(a) {
-    if (!a || !a.img) return;
+    if (!okArt(a)) return;
     var im = new Image();
     im.onload = function () {
       var bg = document.querySelector(".art-bg");
@@ -161,6 +178,7 @@
       // skip text pages, fragments and very long or thin images (scrolls, strips) that make poor backgrounds
       var w = +o.images.web.width, h = +o.images.web.height;
       if (/\b(text|folio|fragment|leaf|calligraphy|inscription)\b/i.test(o.title) || (w && h && (w / h > 2.2 || w / h < 0.45))) throw new Error("skip");
+      if (!okUrl(o.images.web.url, "clevelandart.org") || !okUrl(o.url, "clevelandart.org")) throw new Error("bad url");
       return { title: o.title, by: (o.creators[0] && o.creators[0].description || "").replace(/\s*\(.*\)$/, ""), date: (o.creation_date || "").replace(/\s*\(.*$/, ""), img: o.images.web.url, link: o.url, src: "Cleveland Museum of Art", lic: "CC0" };
     });
   }

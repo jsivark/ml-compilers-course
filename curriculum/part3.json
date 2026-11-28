@@ -702,7 +702,7 @@
   ],
   "project": {
    "title": "kiln v1.2: Roofline benchmark harness for your compiler",
-   "brief": "Build a harness that runs the kernels your compiler can emit now (elementwise add over `2^20` `f32`, gemm at 64/128/256/512, conv3x3 at 32/64/128) over a size sweep, computes arithmetic intensity (flops / bytes of buffers) from the IR, and plots each on a roofline of your machine using a measured peak FLOP/s and a STREAM-style copy bandwidth. Later modules add their kernels to it.",
+   "brief": "Grow your Module 0 `kbench` tool into a harness that runs the kernels your compiler can emit now (elementwise add over `2^20` `f32`, gemm at 64/128/256/512, conv3x3 at 32/64/128) over a size sweep, computes arithmetic intensity (flops / bytes of buffers) from the IR, and plots each on a roofline of your machine using a measured peak FLOP/s and a STREAM-style copy bandwidth. Later modules add their kernels to it.",
    "deliverables": [
     "repo with a bench CLI that writes JSON results keyed by git commit",
     "a generated HTML or notebook page: roofline plot, GFLOP/s vs size, history across commits",
@@ -1113,7 +1113,7 @@
    {
     "kind": "read",
     "title": "ezyang, PyTorch internals: the strides and views part",
-    "url": "http://blog.ezyang.com/2019/05/pytorch-internals/",
+    "url": "https://blog.ezyang.com/2019/05/pytorch-internals/",
     "detail": "The strides, views and storage part near the start of the essay (before the section on autograd and the codebase tour). Work its slicing example by hand.",
     "bot_block": false
    },

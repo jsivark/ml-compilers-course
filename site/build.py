@@ -3,7 +3,7 @@
 
   python3 site/build.py
 """
-import html, json, os, re, shutil
+import base64, hashlib, html, json, os, re, shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "curriculum")
@@ -24,7 +24,9 @@ PARTS = [
    "From course graduate to top-lab level: the industrial tools (Triton, CUTLASS, MLIR, XLA), scheduling theory, low-precision numerics, accelerator design, training at scale, and research and open-source work."),
 ]
 KIND = {"watch": "Watch", "read": "Read", "do": "Do", "build": "Build", "implement": "Implement",
-        "test": "Test", "measure": "Measure"}
+        "test": "Test", "measure": "Measure", "practice": "Practice"}
+KO = ["lecture", "course", "talk", "video", "paper", "book", "blog", "repo", "problems"]
+KN = {"lecture": "Lectures", "course": "Courses", "talk": "Talks", "video": "Videos", "paper": "Papers", "book": "Books", "blog": "Blogs and articles", "repo": "Code to read", "problems": "Problem sets", "assignment": "Assignments"}
 
 EXTRA_JS = ""
 TOGGLE = ""
@@ -33,13 +35,17 @@ PREVIEW = True
 MAP = {}  # depth -> course map html (preview)
 if True:
   THEME_JS = "<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>"
-  TOGGLE = '<button class="theme" type="button" aria-label="Switch light or dark" onclick="var d=document.documentElement,n=d.dataset.theme==\'dark\'?\'light\':\'dark\';d.dataset.theme=n;try{localStorage.setItem(\'theme\',n)}catch(e){}">◐</button>'
+  TOGGLE = '<button class="theme" type="button" aria-label="Switch light or dark">◐</button>'  # handled in app.js
+_THEME_HASH = base64.b64encode(hashlib.sha256(THEME_JS[len("<script>"):-len("</script>")].encode()).digest()).decode()
+CSP = ("default-src 'self'; script-src 'self' 'sha256-" + _THEME_HASH + "'; style-src 'self' https://fonts.googleapis.com; "
+       "font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://openaccess-api.clevelandart.org; "
+       "base-uri 'none'; form-action 'none'; object-src 'none'")
 
 
 def page(title, body, depth=0, here="", part=""):
   up = "../" * depth
   return f"""<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="{CSP}"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><link rel="icon" type="image/svg+xml" href="{up}favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap">
 <link rel="stylesheet" href="{up}style.css">{THEME_JS}{f'<meta name="base" content="{up}"><script src="{up}app.js" defer></script>' if PREVIEW else ''}</head>
@@ -137,20 +143,14 @@ def module_page(m, mods):
   ex = lambda x: f"<li>{E(x)}</li>" if isinstance(x, str) else f'<li>{link(x["title"], x.get("url"))}{" — " + E(x["note"]) if x.get("note") else ""}</li>'
   extra = "".join(ex(x) for x in m.get("extra", []))
   sol = "".join(f'<li>{link(x["title"], x.get("url"))}{" <span class=n>(" + E(x["for"]) + ")</span>" if x.get("for") else ""}{"<br><span class=n>" + E(x["note"]) + "</span>" if x.get("note") else ""}</li>' for x in m.get("solutions", []))
-  KO = ["lecture", "course", "talk", "video", "paper", "book", "blog", "repo", "problems"]
-  KN = {"lecture": "Lectures", "course": "Courses", "talk": "Talks", "video": "Videos", "paper": "Papers", "book": "Books", "blog": "Blogs and articles", "repo": "Code to read", "problems": "Problem sets"}
   groups = {}
   for x in m.get("deeper", []): groups.setdefault(x.get("kind", "blog"), []).append(x)
-  def shelf(xs):
-    return '<div class="shelf">' + "".join(
-      f'<a class="bk" href="{E(x.get("url") or "#")}" target="_blank" rel="noopener" title="{E(x.get("note", ""))}">'
-      f'<span class="bt">{E(x["title"])}</span><span class="ba">{E(x.get("by", ""))}</span></a>' for x in xs) + "</div>"
   deeper = "".join(
-    f'<h3>{KN.get(k, k.title())}</h3><ul class="extra">' + "".join(
+    f'<h3>{E(KN.get(k, k.title()))}</h3><ul class="extra">' + "".join(
       f'<li>{link(x["title"], x.get("url"))}{" <span class=n>· " + E(x["by"]) + "</span>" if x.get("by") else ""}{"<br><span class=n>" + E(x["note"]) + "</span>" if x.get("note") else ""}</li>' for x in groups[k]) + "</ul>"
     for k in sorted(groups, key=lambda k: KO.index(k) if k in KO else 99))
-  cw = f' · 10-411 week {m["course_week"]}' if m.get("course_week") else ""
-  meta = " · ".join(x for x in [m.get("effort") and f'about {m["effort"]}', m.get("difficulty") and "difficulty " + "●"*int(m["difficulty"]) + "○"*(5-int(m["difficulty"]))] if x)
+  cw = f' · 10-411 week {int(m["course_week"])}' if m.get("course_week") else ""
+  meta = " · ".join(x for x in [m.get("effort") and f'about {E(m["effort"])}', m.get("difficulty") and "difficulty " + "●"*int(m["difficulty"]) + "○"*(5-int(m["difficulty"]))] if x)
   outcomes = "".join(f"<li>{E(o)}</li>" for o in m.get("outcomes", []))
   stuck = "".join(f"<li>{E(o)}</li>" for o in m.get("stuck", []))
   pr = m.get("project") or {}
@@ -171,9 +171,11 @@ def module_page(m, mods):
               + (f' · next: <a href="{after[0]:02d}.html">{E(KILN[after[0]])}</a>' if after else ""))
     tagh = f'<p class="hint">{tag}</p>' if tag else ""
     dl = "".join(f"<li>{E(d)}</li>" for d in pr.get("deliverables", []))
+    ps = "".join(f"<li>{E(d)}</li>" for d in pr.get("steps", []))
     rb = pr.get("rubric", {})
     refs = ", ".join(link(r["title"], r.get("url")) for r in pr.get("references", []))
     proj = (f'<section class="proj" id="project"><h2>Portfolio project: {E(pr.get("title"))}</h2>{tagh}<p>{E(pr.get("brief"))}</p>'
+            + (f"<h3>Steps</h3><ol>{ps}</ol>" if ps else "")
             + (f"<h3>Deliverables</h3><ul>{dl}</ul>" if dl else "")
             + (f'<h3>Rubric</h3><dl class="rub"><dt>Solid</dt><dd>{E(rb.get("solid"))}</dd><dt>Exceptional</dt><dd>{E(rb.get("exceptional"))}</dd></dl>' if rb else "")
             + (f'<p class="hint">References: {refs}</p>' if refs else "") + "</section>")
@@ -257,8 +259,9 @@ def md_to_html(md):
   def inline(s):
     s = E(s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
-    s = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'<a href="\2">\1</a>', s)
-    s = re.sub(r'(?<!href=")(?<![">])(https?://[^\s<)*]+)', r'<a href="\1">\1</a>', s)
+    # one pass, so a URL inside [text](url) is never linked a second time
+    s = re.sub(r'\[([^\]]+)\]\((https?://[^)\s]+)\)|(?<![">])(https?://[^\s<)*]+)',
+               lambda m: f'<a href="{m[2]}">{m[1]}</a>' if m[2] else f'<a href="{m[3]}">{m[3]}</a>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", s)
     s = re.sub(r"\*([^*]+)\*", r"<i>\1</i>", s)
     return s
@@ -343,6 +346,11 @@ def main():
       if pr.get("title"): idx.append({"k": "project", "t": pr["title"], "m": mt, "u": u + "#project"})
       for x in m.get("deeper", []) + m.get("solutions", []):
         if x.get("url"): idx.append({"k": x.get("kind", "code"), "t": x["title"] + (" · " + x["by"] if x.get("by") else ""), "m": mt, "u": x["url"]})
+    kinds = {"module", "project", "step", "code"} | set(KIND) | set(KN)
+    for r in idx:
+      if not (re.fullmatch(r"https?://[^\s<>\"'`]+", r["u"]) or re.fullmatch(r"modules/\d\d\.html(#\w+)?", r["u"])):
+        raise ValueError(f"search.json: bad url {r['u']!r} in {r['m']!r}")
+      if r["k"] not in kinds: raise ValueError(f"search.json: bad kind {r['k']!r} in {r['m']!r}")
     w("search.json", json.dumps(idx, ensure_ascii=False))
   w(".nojekyll", "")
   w("index.html", index(mods))
